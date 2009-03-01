@@ -1,7 +1,7 @@
-Writer2LaTeX version 0.9.4
-==========================
+Writer2LaTeX version 1.0 beta
+=============================
 
-This is the distribution of Writer2LaTeX version 0.9.4
+This is the distribution of Writer2LaTeX version 1.0 beta
 
 Latest version can be found at the web site
   http://writer2latex.sourceforge.net
@@ -14,5 +14,5 @@ Bugs and feature requests should be reported to
   henrikjust (at) openoffice.org
   
 
-February 2009
+March 2009
 Henrik Just
