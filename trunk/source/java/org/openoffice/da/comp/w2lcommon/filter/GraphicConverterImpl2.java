@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-10-07)
+ *  Version 1.0 (2009-03-02)
  *
  */
  
@@ -93,15 +93,16 @@ public class GraphicConverterImpl2 implements GraphicConverter {
         // We don't support cropping and resizing
         if (bCrop || bResize) { return false; }
 
-        // We currently only support conversion of svm into pdf
+        // We currently support conversion of bitmaps and svm into pdf and eps
         // Trying wmf causes an IllegalArgumentException "URL seems to be an unsupported one"
         // Seems to be an OOo bug; workaround: Use temporary files..??
-        boolean bSupportsSource = MIMETypes.SVM.equals(sSourceMime);
-           /*MIMETypes.PNG.equals(sSourceMime) || MIMETypes.JPEG.equals(sSourceMime) ||
+        boolean bSupportsSource = MIMETypes.SVM.equals(sSourceMime) ||
+           MIMETypes.PNG.equals(sSourceMime) || MIMETypes.JPEG.equals(sSourceMime) ||
            MIMETypes.GIF.equals(sSourceMime) || MIMETypes.TIFF.equals(sSourceMime) ||
-           MIMETypes.BMP.equals(sSourceMime) || MIMETypes.WMF.equals(sSourceMime) ||
-           MIMETypes.SVM.equals(sSourceMime);*/
-        return bSupportsSource && MIMETypes.PDF.equals(sTargetMime);
+           MIMETypes.BMP.equals(sSourceMime);
+           //  || MIMETypes.WMF.equals(sSourceMime)
+        boolean bSupportsTarget = MIMETypes.PDF.equals(sTargetMime) || MIMETypes.EPS.equals(sTargetMime);
+        return bSupportsSource && bSupportsTarget;
     }
 	
     public byte[] convert(byte[] source, String sSourceMime, String sTargetMime) {

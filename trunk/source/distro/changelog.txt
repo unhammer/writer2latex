@@ -2,6 +2,13 @@ Changelog for Writer2LaTeX version 0.5 -> 1.0
 
 ---------- version 1.0 beta ----------
 
+[w2l] Added support for bitmap graphics with backend=dvips
+
+[all] No longer create source distribution (SourceForge provides tarballs generated
+  directly from SVN)
+
+[all] Added german description to filters
+
 [w2l] Bugfix: Fixed crash for tables with fewer columns than rows
 
 ---------- version 0.9.4 -----------

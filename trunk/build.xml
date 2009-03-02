@@ -2,7 +2,7 @@
   ############################################################################
   # This is the Ant build file for writer2latex
   # Original: Sep 2004 (mgn)
-  # version 1.0 (2008-12-02)
+  # version 1.0 (2009-03-02)
   ############################################################################
 -->
 <project name="w2l" default="help" basedir=".">
@@ -34,9 +34,9 @@
 
     <!-- configure the directories -->
     <property name="jarfile" value="writer2latex"/>
-    <property name="basename" value="writer2latex09"/>
-    <property name="distrofile" value="${basename}4.zip" />
-    <property name="sourcedistrofile" value="${basename}4source.zip" />
+    <property name="basename" value="writer2latex10"/>
+    <property name="distrofile" value="${basename}beta.zip" />
+    <!--<property name="sourcedistrofile" value="${basename}source.zip" />-->
     <property name="src" location="source/java"/>
     <property name="source.distro" location="source/distro" />
     <property name="classes" location="target/classes"/>
@@ -212,9 +212,9 @@
         </zip>		
 		
         <!-- Pack the source distribution -->
-        <zip destfile="${target.lib}/${sourcedistrofile}">
+        <!--<zip destfile="${target.lib}/${sourcedistrofile}">
             <zipfileset dir="." includes="source/**/*,build.xml" prefix="${basename}" /> 
-        </zip>
+        </zip>-->
 			 
     </target>
 

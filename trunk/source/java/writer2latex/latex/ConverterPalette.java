@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-17) 
+ *  Version 1.0 (2009-03-02) 
  *
  */
 
@@ -266,7 +266,7 @@ public final class ConverterPalette extends ConverterBase {
         if (!config.noPreamble()) {
             // Create document class declaration
 	        result.append("% This file was converted to LaTeX by Writer2LaTeX ver. "+ConverterFactory.getVersion()).nl()
-                  .append("% see http://www.hj-gym.dk/~hj/writer2latex for more info").nl();
+                  .append("% see http://writer2latex.sourceforge.net for more info").nl();
             result.append("\\documentclass");
             if (!globalOptions.isEmpty()) {
                 result.append("[").append(globalOptions.toString()).append("]");

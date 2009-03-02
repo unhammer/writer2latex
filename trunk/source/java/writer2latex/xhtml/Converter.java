@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-16)
+ *  Version 1.0 (2009-03-02)
  *
  */
 
@@ -460,7 +460,7 @@ public class Converter extends ConverterBase {
              "This file was converted to xhtml by "
              + (ofr.isText() ? "Writer" : (ofr.isSpreadsheet() ? "Calc" : "Impress"))
              + "2xhtml ver. " + ConverterFactory.getVersion() +
-             ". See http://www.hj-gym.dk/~hj/writer2latex for more info."),
+             ". See http://writer2latex.sourceforge.net for more info."),
              rootElement.getFirstChild());
 		
         // Apply page formatting (using first master page)
