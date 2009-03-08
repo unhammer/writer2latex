@@ -15,7 +15,8 @@
     <name lang="da">Writer2LaTeX eksportfiltre</name>
     <name lang="en">Writer2LaTeX export filters</name>
     <name lang="de">Writer2Latex Exportfilter</name>
-    <name lang="de">Filtres d'exportation Writer2LaTeX</name>
+    <name lang="es">Writer2LaTeX filtros para exportar</name>
+    <name lang="fr">Filtres d'exportation Writer2LaTeX</name>
     <name lang="ru">Фильтры экспорта Writer2LaTeX</name>
     <name lang="uk">Фільтри експорту Writer2LaTeX</name>
   </display-name>
@@ -24,6 +25,7 @@
     <src xlink:href="description/desc_da.txt" lang="da" />
     <src xlink:href="description/desc_en.txt" lang="en" />
     <src xlink:href="description/desc_de.txt" lang="de" />
+    <src xlink:href="description/desc_es.txt" lang="es" />
     <src xlink:href="description/desc_fr.txt" lang="fr" />
     <src xlink:href="description/desc_ru.txt" lang="ru" />
     <src xlink:href="description/desc_uk.txt" lang="uk" />

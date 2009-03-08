@@ -2,6 +2,12 @@ Changelog for Writer2LaTeX version 0.5 -> 1.0
 
 ---------- version 1.0 beta ----------
 
+[w2l] Bugfix: Added missing hyperlink targets for frames and graphics
+
+[w2x] Bugfix: Fixed null pointer exception for text frames without height attribute
+
+[w2l] Added spanish translation from Emilio José Juárez Pérez
+
 [w2l] Added support for bitmap graphics with backend=dvips
 
 [all] No longer create source distribution (SourceForge provides tarballs generated

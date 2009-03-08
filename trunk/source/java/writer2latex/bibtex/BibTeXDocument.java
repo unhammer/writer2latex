@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-17)
+ *  Version 1.0 (2009-03-08)
  *
  */
 
@@ -120,7 +120,7 @@ public class BibTeXDocument implements Document {
         // BibTeX files are plain ascii
         OutputStreamWriter osw = new OutputStreamWriter(os,"ASCII");
         osw.write("%% This file was converted to BibTeX by Writer2BibTeX ver. "+ConverterFactory.getVersion()+".\n");
-        osw.write("%% See http://www.hj-gym.dk/~hj/writer2latex for more info.\n");
+        osw.write("%% See http://writer2latex.sourceforge.net for more info.\n");
         osw.write("\n");
         Enumeration enumeration = entries.elements();
         while (enumeration.hasMoreElements()) {

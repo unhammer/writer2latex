@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-03-02)
+ *  Version 1.0 (2009-03-08)
  *
  */
  
@@ -60,6 +60,7 @@ public class GraphicConverterImpl2 implements GraphicConverter {
     private XComponentContext xComponentContext;
     private Hashtable importFilter;
     private Hashtable exportFilter;
+    private EPSCleaner epsCleaner;
 
     public GraphicConverterImpl2(XComponentContext xComponentContext) {
         this.xComponentContext = xComponentContext;
@@ -87,6 +88,8 @@ public class GraphicConverterImpl2 implements GraphicConverter {
         exportFilter.put(MIMETypes.TIFF,"draw_tif_Export");
         exportFilter.put(MIMETypes.WMF,"draw_wmf_Export");
         exportFilter.put(MIMETypes.PDF,"draw_pdf_Export");
+        
+        epsCleaner = new EPSCleaner();
     }
 	
     public boolean supportsConversion(String sSourceMime, String sTargetMime, boolean bCrop, boolean bResize) {
@@ -109,8 +112,6 @@ public class GraphicConverterImpl2 implements GraphicConverter {
         // Open a hidden sdraw document
         XMultiComponentFactory xMCF = xComponentContext.getServiceManager();
 
-org.openoffice.da.comp.w2lcommon.helper.MessageBox msgBox = new org.openoffice.da.comp.w2lcommon.helper.MessageBox(xComponentContext);
-
         try {
             // Load the graphic into a new draw document as xDocument
             // using a named filter
@@ -119,7 +120,6 @@ org.openoffice.da.comp.w2lcommon.helper.MessageBox msgBox = new org.openoffice.d
 
             XComponentLoader xComponentLoader = (XComponentLoader)
                 UnoRuntime.queryInterface(XComponentLoader.class, desktop);
-//msgBox.showMessage("Graphics","Trying to load using filter name "+importFilter.get(sSourceMime));
 
             PropertyValue[] fileProps = new PropertyValue[3];
             fileProps[0] = new PropertyValue();
@@ -187,30 +187,28 @@ org.openoffice.da.comp.w2lcommon.helper.MessageBox msgBox = new org.openoffice.d
 
             byte[] result = outputStream.getBuffer();
             xDocument.dispose(); 
-				
-            return result;
+            
+            if (MIMETypes.EPS.equals(sTargetMime)) {
+            	return epsCleaner.cleanEps(result);
+            }
+            else {
+            	return result;
+            }
  
         }
         catch (com.sun.star.beans.PropertyVetoException e) {
-msgBox.showMessage("Exception",e.toString());
         }
         catch (com.sun.star.beans.UnknownPropertyException e) {
-msgBox.showMessage("Exception",e.toString());
         }
         catch (com.sun.star.io.IOException e) {
-msgBox.showMessage("Exception",e.toString());
         }
         catch (com.sun.star.lang.IllegalArgumentException e) {
-msgBox.showMessage("Exception",e.toString());
         }
         catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-msgBox.showMessage("Exception",e.toString());
         }
         catch (com.sun.star.lang.WrappedTargetException e) {
-msgBox.showMessage("Exception",e.toString());
         }
         catch (com.sun.star.uno.Exception e) {
-msgBox.showMessage("Exception",e.toString());
         }
 
         // Conversion failed, for whatever reason

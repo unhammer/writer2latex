@@ -16,12 +16,14 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
+ *  
+ *  Version 1.0 (2009-03-08)
  */
 
-// Version 1.0 (2008-11-22)
+// 
  
 package org.openoffice.da.comp.w2lcommon.filter;
 
@@ -51,12 +53,9 @@ import writer2latex.api.MIMETypes;
  */
 public class GraphicConverterImpl1 implements GraphicConverter {
 
-    // Signatures for start and end in exp
-    private byte[] psStart;
-    private byte[] psEnd;
-    
-    
     private XGraphicProvider xGraphicProvider;
+    
+    private EPSCleaner epsCleaner;
 	
     public GraphicConverterImpl1(XComponentContext xComponentContext) {
         try {
@@ -69,13 +68,8 @@ public class GraphicConverterImpl1 implements GraphicConverter {
             System.err.println("Failed to get XGraphicProvider object");
             xGraphicProvider = null;
         }
-        try {
-            psStart = "%!PS-Adobe".getBytes("US-ASCII");
-            psEnd = "%%EOF".getBytes("US-ASCII");
-        }
-        catch (java.io.UnsupportedEncodingException ex) {
-            // US-ASCII *is* supported :-)
-        }
+        
+        epsCleaner = new EPSCleaner();
             
     }
 	
@@ -136,7 +130,7 @@ public class GraphicConverterImpl1 implements GraphicConverter {
             xTarget.closeOutput();
             xTarget.flush();
             if (MIMETypes.EPS.equals(sTargetMime)) {
-                return cleanEps(xTarget.getBuffer());
+                return epsCleaner.cleanEps(xTarget.getBuffer());
             }
             else {
                 return xTarget.getBuffer();
@@ -156,39 +150,5 @@ public class GraphicConverterImpl1 implements GraphicConverter {
         }
     } 
 	
-    private byte[] cleanEps(byte[] blob) {
-        int n = blob.length;
-
-        int nStart = 0;
-        for (int i=0; i<n; i++) {
-            if (match(blob,psStart,i)) {
-                nStart=i;
-                break;
-            }
-        }
-
-        int nEnd = n;
-        for (int i=nStart; i<n; i++) {
-            if (match(blob,psEnd,i)) {
-                nEnd=i+psEnd.length;
-                break;
-            }
-        }
-		
-        byte[] newBlob = new byte[nEnd-nStart];
-        System.arraycopy(blob,nStart,newBlob,0,nEnd-nStart);
-        return newBlob;        
-    }
-	
-    private boolean match(byte[] blob, byte[] sig, int nStart) {
-        int n = sig.length;
-        if (nStart+n>=blob.length) { return false; }
-        for (int i=0; i<n; i++) {
-            if (blob[nStart+i]!=sig[i]) { return false; }
-        }
-        return true;
-    }
-
-
 }
 

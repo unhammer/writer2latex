@@ -14,6 +14,7 @@
     <name lang="da">Writer2xhtml eksportfiltre</name>
     <name lang="en">Writer2xhtml export filters</name>
     <name lang="de">Writer2xhtml Exportfilter</name>
+    <name lang="es">Writer2xhtml filtros para exportar</name>
     <name lang="fr">Filtres d'exportation Writer2xhtml</name>
     <name lang="ru">Фильтры экспорта Writer2xhtml</name>
     <name lang="uk">Фільтри експорту Writer2xhtml</name>
@@ -23,6 +24,7 @@
     <src xlink:href="description/desc_da.txt" lang="da" />
     <src xlink:href="description/desc_en.txt" lang="en" />
     <src xlink:href="description/desc_de.txt" lang="de" />
+    <src xlink:href="description/desc_es.txt" lang="es" />
     <src xlink:href="description/desc_fr.txt" lang="fr" />
     <src xlink:href="description/desc_ru.txt" lang="ru" />
     <src xlink:href="description/desc_uk.txt" lang="uk" />

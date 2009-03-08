@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-17)
+ *  Version 1.0 (2009-03-08)
  *
  */
  
@@ -251,8 +251,8 @@ public class DrawConverter extends ConverterHelper {
         }
 
         Element frame = getFrame(node);
-        //String sName = frame.getAttribute(XMLString.DRAW_NAME);
-        palette.getFieldCv().addTarget(frame,"|graphics",ldp);
+        String sName = frame.getAttribute(XMLString.DRAW_NAME);
+        palette.getFieldCv().addTarget(sName,"|graphic",ldp);
         String sAnchor = frame.getAttribute(XMLString.TEXT_ANCHOR_TYPE);
 
         // TODO: Recognize Jex equations (needs further testing of Jex)
@@ -421,8 +421,8 @@ public class DrawConverter extends ConverterHelper {
 	
     private void handleDrawTextBox(Element node, LaTeXDocumentPortion ldp, Context oc) {
         Element frame = getFrame(node);
-        //String sName = frame.getAttribute(XMLString.DRAW_NAME);
-        palette.getFieldCv().addTarget(frame,"|frame",ldp);
+        String sName = frame.getAttribute(XMLString.DRAW_NAME);
+        palette.getFieldCv().addTarget(sName,"|frame",ldp);
         String sAnchor = frame.getAttribute(XMLString.TEXT_ANCHOR_TYPE);
         //if (oc.isInFrame() || "as-char".equals(sAnchor)) {
         if ("as-char".equals(sAnchor)) {

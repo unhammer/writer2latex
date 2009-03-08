@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-12-15)
+ *  Version 1.0 (2009-03-08)
  *
  */
  
@@ -760,7 +760,7 @@ public class DrawConverter extends ConverterHelper {
     	// We thus have to subtract the borders and padding to get the correct width
         StyleWithProperties style = ofr.getFrameStyle(node.getAttribute(XMLString.DRAW_STYLE_NAME));
         
-        String sWidth = Misc.getAttribute(node,XMLString.SVG_WIDTH);
+        String sWidth = node.getAttribute(XMLString.SVG_WIDTH);
         if (sWidth.length()>0) {
         	if (style!=null) {
         		// Subtract padding
@@ -782,7 +782,7 @@ public class DrawConverter extends ConverterHelper {
             props.addValue("width",scale(sWidth));
         }
         
-        String sHeight = Misc.getAttribute(node,XMLString.SVG_HEIGHT);
+        String sHeight = node.getAttribute(XMLString.SVG_HEIGHT);
         if (sHeight.length()>0 && !bOnlyWidth) {
         	if (style!=null) {
         		// Subtract padding
