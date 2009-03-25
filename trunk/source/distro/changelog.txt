@@ -2,6 +2,10 @@ Changelog for Writer2LaTeX version 0.5 -> 1.0
 
 ---------- version 1.0 beta ----------
 
+[w2x] Added german translation from Raphael Fetzer
+
+[w2x] Do not export character formatting in toc
+
 [w2l] Bugfix: Added missing hyperlink targets for frames and graphics
 
 [w2x] Bugfix: Fixed null pointer exception for text frames without height attribute

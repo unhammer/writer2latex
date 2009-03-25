@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-22)
+ *  Version 1.0 (2009-03-10)
  *
  */
 
@@ -1470,9 +1470,14 @@ public class TextConverter extends ConverterHelper {
     }
 	
     private void handleSpan(Node onode, Node hnode) {
-        String sStyleName = Misc.getAttribute(onode,XMLString.TEXT_STYLE_NAME);
-        Element span = createInline((Element) hnode,sStyleName);
-        traverseInlineText (onode,span);
+    	if (!bInToc) {
+    		String sStyleName = Misc.getAttribute(onode,XMLString.TEXT_STYLE_NAME);
+    		Element span = createInline((Element) hnode,sStyleName);
+    		traverseInlineText(onode,span);
+    	}
+    	else {
+    		traverseInlineText(onode,hnode);
+    	}
     }
 
     private void traversePCDATA(Node onode, Node hnode) {

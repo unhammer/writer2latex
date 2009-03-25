@@ -6,7 +6,7 @@ rem Last modified july 2007
 
 rem Please edit the following line to contain the full path to Writer2LaTeX:
 
-set W2LPATH="c:\writer2latex09"
+set W2LPATH="c:\writer2latex10"
 
 rem If the Java executable is not in your path, please edit the following
 rem line to contain the full path and file name
@@ -17,3 +17,4 @@ set JAVAEXE="java"
 
 set W2LPATH=
 set JAVAEXE=
+
