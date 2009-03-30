@@ -83,27 +83,27 @@ public class TextConverter extends ConverterHelper {
     private int nLastSplitLevel = 1; // The outline level at which the last split occured
     private int nDontSplitLevel = 0; // if > 0 splitting is forbidden
     boolean bAfterHeading=false; // last element was a top level heading
-    protected Stack sections = new Stack(); // stack of nested sections
+    protected Stack<Node> sections = new Stack<Node>(); // stack of nested sections
     Element[] currentHeading = new Element[7]; // Last headings (repeated when splitting)
 
     // Counters for generated numbers
     private ListCounter outlineNumbering;
-    private Hashtable listCounters = new Hashtable();
+    private Hashtable<String, ListCounter> listCounters = new Hashtable<String, ListCounter>();
     private String sCurrentListLabel = null;
     
     // Mode used to handle floats (depends on source doc type and config)
     private int nFloatMode; 
 	
     // Data used for index bookkeeping
-    private Vector indexes = new Vector();
+    private Vector<IndexData> indexes = new Vector<IndexData>();
 
     // Data used to handle Alphabetical Index
-    Vector index = new Vector(); // All words for the index
+    Vector<AlphabeticalEntry> index = new Vector<AlphabeticalEntry>(); // All words for the index
     private int nIndexIndex = -1; // Current index used for id's (of form idxN) 
     private int nAlphabeticalIndex = -1; // File containing alphabetical index
 
     // Data used to handle Table of Contents
-    private Vector tocEntries = new Vector(); // All potential(!) toc items
+    private Vector<TocEntry> tocEntries = new Vector<TocEntry>(); // All potential(!) toc items
     private int nTocFileIndex = -1; // file index for main toc
     private Element currentChapter = null; // Node for the current chapter (level 1) heading
     private int nTocIndex = -1; // Current index for id's (of form tocN)
@@ -116,8 +116,8 @@ public class TextConverter extends ConverterHelper {
     private String sEntCitStyle = null;
 
     // Gather the footnotes and endnotes
-    private LinkedList footnotes = new LinkedList();
-    private LinkedList endnotes = new LinkedList();
+    private LinkedList<Node> footnotes = new LinkedList<Node>();
+    private LinkedList<Node> endnotes = new LinkedList<Node>();
 
     // Sometimes we have to create an inlinenode in a block context
     // (labels for footnotes and endnotes)
@@ -169,7 +169,7 @@ public class TextConverter extends ConverterHelper {
         // Generate all indexes
         int nIndexCount = indexes.size();
         for (int i=0; i<nIndexCount; i++) {
-            generateToc((IndexData) indexes.get(i));
+            generateToc(indexes.get(i));
         }
 		
         // Generate navigation links
@@ -214,7 +214,7 @@ public class TextConverter extends ConverterHelper {
                 // Get the last heading of level <= split level for this file
                 TocEntry entryCurrent = null;				
                 for (int i=nLen-1; i>=0; i--) {
-                    TocEntry entry = (TocEntry) tocEntries.get(i);
+                    TocEntry entry = tocEntries.get(i);
                     if (XMLString.TEXT_H.equals(entry.onode.getTagName()) && entry.nFileIndex==nIndex && entry.nOutlineLevel<=nSplit) {
                         entryCurrent = entry; break;
                     }
@@ -237,7 +237,7 @@ public class TextConverter extends ConverterHelper {
 				
                 int nPrevFileIndex = 0;
                 for (int i=0; i<nLen; i++) {
-                    TocEntry entry = (TocEntry) tocEntries.get(i);
+                    TocEntry entry = tocEntries.get(i);
 
                     if (entry.nFileIndex>nPrevFileIndex+1) {
                         // Skipping a file index means we have passed an index
@@ -660,7 +660,7 @@ public class TextConverter extends ConverterHelper {
         else if (style!=null) {
             // Get existing or create new counter
             if (listCounters.containsKey(style.getName())) {
-                return (ListCounter) listCounters.get(style.getName());
+                return listCounters.get(style.getName());
             }
             else {
                 ListCounter counter = new ListCounter(style);
@@ -1066,7 +1066,7 @@ public class TextConverter extends ConverterHelper {
         // Find the chapter
         if (tocReader.isByChapter() && chapter!=null) {
             for (int i=0; i<nLen; i++) {
-                TocEntry entry = (TocEntry) tocEntries.get(i);
+                TocEntry entry = tocEntries.get(i);
                 if (entry.onode==chapter) { nStart=i; break; }
             }
             
@@ -1074,7 +1074,7 @@ public class TextConverter extends ConverterHelper {
 
         // Generate entries
         for (int i=nStart; i<nLen; i++) {
-            TocEntry entry = (TocEntry) tocEntries.get(i);
+            TocEntry entry = tocEntries.get(i);
             String sNodeName = entry.onode.getTagName();
             if (XMLString.TEXT_H.equals(sNodeName)) {
                 int nLevel = getOutlineLevel(entry.onode);
@@ -1219,8 +1219,8 @@ public class TextConverter extends ConverterHelper {
             }
             for (int i = 0; i<=nIndexIndex; i++) {
                 for (int j = i+1; j<=nIndexIndex ; j++) {
-                    AlphabeticalEntry entryi = (AlphabeticalEntry) index.get(i);
-                    AlphabeticalEntry entryj = (AlphabeticalEntry) index.get(j);
+                    AlphabeticalEntry entryi = index.get(i);
+                    AlphabeticalEntry entryj = index.get(j);
                     if (collator.compare(entryi.sWord, entryj.sWord) > 0) {
                         index.set(i,entryj);
                         index.set(j,entryi);
@@ -1243,7 +1243,7 @@ public class TextConverter extends ConverterHelper {
             int nColIndex = -1;
             for (int i=0; i<=nIndexIndex; i++) {
                 if (i%nColEntries==0) { nColIndex++; } 
-                AlphabeticalEntry entry = (AlphabeticalEntry) index.get(i);
+                AlphabeticalEntry entry = index.get(i);
                 Element p = createParagraph(td[nColIndex],sEntryStyleName);
                 Element a = converter.createLink("idx"+entry.nIndex);
                 p.appendChild(a);
@@ -1517,7 +1517,7 @@ public class TextConverter extends ConverterHelper {
     public void insertFootnotes(Node hnode) {
         int n = footnotes.size();
         for (int i=0; i<n; i++) {
-            Node footnote = (Node) footnotes.get(i);
+            Node footnote = footnotes.get(i);
             String sId = Misc.getAttribute(footnote,XMLString.TEXT_ID); 
             Node citation = Misc.getChildByTagName(footnote,XMLString.TEXT_FOOTNOTE_CITATION);
             if (citation==null) { // try oasis
@@ -1552,7 +1552,7 @@ public class TextConverter extends ConverterHelper {
         int n = endnotes.size();
         if (nSplit>0 && n>0) { hnode = converter.nextOutFile(); }
         for (int i=0; i<n; i++) {
-            Node endnote = (Node) endnotes.get(i);
+            Node endnote = endnotes.get(i);
             String sId = Misc.getAttribute(endnote,XMLString.TEXT_ID); 
             Node citation = Misc.getChildByTagName(endnote,XMLString.TEXT_ENDNOTE_CITATION);
             if (citation==null) { // try oasis

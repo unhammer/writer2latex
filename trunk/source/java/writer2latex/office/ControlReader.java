@@ -42,7 +42,7 @@ public class ControlReader {
     private String sId; // a control is identified by id
     private Element control; // the control element
     private Element controlType; // the type specific child element
-    private Vector items = new Vector(); // the options/items of a list/combobox
+    private Vector<Node> items = new Vector<Node>(); // the options/items of a list/combobox
 	
     /** <p>The constructor reads the content of a control element</p>
      *  The representation in OpenDocument differs slightly from OOo 1.x.

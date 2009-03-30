@@ -48,7 +48,7 @@ public class IndexConverter extends ConverterHelper {
 
     private boolean bContainsAlphabeticalIndex = false;
 	
-    private Vector postponedIndexMarks = new Vector();
+    private Vector<Element> postponedIndexMarks = new Vector<Element>();
 	
     /** <p>Construct a new <code>IndexConverter</code>.
      * @param config the configuration to use 
@@ -201,7 +201,7 @@ public class IndexConverter extends ConverterHelper {
             // Type out all postponed index marks
             int n = postponedIndexMarks.size();
             for (int i=0; i<n; i++) {
-                handleAlphabeticalIndexMark((Element) postponedIndexMarks.get(i),ldp,oc);
+                handleAlphabeticalIndexMark(postponedIndexMarks.get(i),ldp,oc);
             }
             postponedIndexMarks.clear();
         }

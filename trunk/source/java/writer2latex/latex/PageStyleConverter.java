@@ -157,7 +157,7 @@ public class PageStyleConverter extends StyleConverter {
         context.setInHeaderFooter(true);
 		
 
-        Enumeration styles = ofr.getMasterPages().getStylesEnumeration();
+        Enumeration<Object> styles = ofr.getMasterPages().getStylesEnumeration();
         ldp.append("% Pages styles").nl();
         if (!config.useFancyhdr()) {
             ldp.append("\\makeatletter").nl();
@@ -385,7 +385,7 @@ public class PageStyleConverter extends StyleConverter {
         boolean bIncludeHead = false;
         boolean bIncludeFoot = false;
         // Look through all applied page layouts and use largest heights
-        Enumeration masters = ofr.getMasterPages().getStylesEnumeration();
+        Enumeration<Object> masters = ofr.getMasterPages().getStylesEnumeration();
         while (masters.hasMoreElements()) {
             MasterPage master = (MasterPage) masters.nextElement();
             if (styleNames.containsName(getDisplayName(master.getName()))) {

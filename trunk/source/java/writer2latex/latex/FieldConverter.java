@@ -60,12 +60,12 @@ public class FieldConverter extends ConverterHelper {
     private ExportNameCollection seqrefnames = new ExportNameCollection(true);
 	
     // sequence declarations (maps name->text:sequence-decl element)
-    private Hashtable seqDecl = new Hashtable();
+    private Hashtable<String, Node> seqDecl = new Hashtable<String, Node>();
     // first usage of sequence (maps name->text:sequence element)
-    private Hashtable seqFirst = new Hashtable();
+    private Hashtable<String, Element> seqFirst = new Hashtable<String, Element>();
 	
-    private Vector postponedReferenceMarks = new Vector();
-    private Vector postponedBookmarks = new Vector();
+    private Vector<Element> postponedReferenceMarks = new Vector<Element>();
+    private Vector<Element> postponedBookmarks = new Vector<Element>();
 
     private boolean bUseHyperref = false;
     private boolean bUsesPageCount = false;
@@ -128,11 +128,11 @@ public class FieldConverter extends ConverterHelper {
         // The number format is fetched from the first occurence of the
         // sequence in the text, while the outline level and the separation
         // character are fetched from the declaration
-        Enumeration names = seqFirst.keys();
+        Enumeration<String> names = seqFirst.keys();
         while (names.hasMoreElements()) {
             // Get first text:sequence element
-            String sName = (String) names.nextElement();
-            Element first = (Element) seqFirst.get(sName);
+            String sName = names.nextElement();
+            Element first = seqFirst.get(sName);
             // Collect data
             String sNumFormat = Misc.getAttribute(first,XMLString.STYLE_NUM_FORMAT);
             if (sNumFormat==null) { sNumFormat="1"; }
@@ -525,13 +525,13 @@ public class FieldConverter extends ConverterHelper {
             // Type out all postponed reference marks
             int n = postponedReferenceMarks.size();
             for (int i=0; i<n; i++) {
-                handleReferenceMark((Element) postponedReferenceMarks.get(i),ldp,oc);
+                handleReferenceMark(postponedReferenceMarks.get(i),ldp,oc);
             }
             postponedReferenceMarks.clear();
             // Type out all postponed bookmarks
             n = postponedBookmarks.size();
             for (int i=0; i<n; i++) {
-                handleBookmark((Element) postponedBookmarks.get(i),ldp,oc);
+                handleBookmark(postponedBookmarks.get(i),ldp,oc);
             }
             postponedBookmarks.clear();
         }

@@ -145,7 +145,7 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     private static final int SAVE_IMAGES_IN_SUBDIR = 57;
     private static final int DEBUG = 58;
 
-    protected LinkedList customPreamble = new LinkedList();
+    protected LinkedList<String> customPreamble = new LinkedList<String>();
     protected StyleMap par = new StyleMap();
     protected StyleMap parBlock = new StyleMap();
     protected StyleMap text = new StyleMap();
@@ -153,7 +153,7 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     protected StyleMap listItem = new StyleMap();
     protected StyleMap textAttr = new StyleMap();
     protected HeadingMap headingMap = new HeadingMap(5);
-    protected Hashtable mathSymbols = new Hashtable();
+    protected Hashtable<String, String> mathSymbols = new Hashtable<String, String>();
     protected ReplacementTrie stringReplace = new ReplacementTrie();
 	
     public LaTeXConfig() {
@@ -365,10 +365,10 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     
     protected void writeInner(Document dom) {
         // Write math symbol map
-        Enumeration msEnum = mathSymbols.keys();
+        Enumeration<String> msEnum = mathSymbols.keys();
         while (msEnum.hasMoreElements()) {
-            String sName = (String) msEnum.nextElement();
-            String sLatex = (String) mathSymbols.get(sName);
+            String sName = msEnum.nextElement();
+            String sLatex = mathSymbols.get(sName);
             Element msNode = dom.createElement("math-symbol-map");
             msNode.setAttribute("name",sName);
 	        msNode.setAttribute("latex",sLatex);
@@ -413,9 +413,9 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     }
 
     private void writeStyleMap(Document dom, StyleMap sm, String sFamily) {
-        Enumeration smEnum = sm.getNames();
+        Enumeration<String> smEnum = sm.getNames();
         while (smEnum.hasMoreElements()) {
-            String sName = (String) smEnum.nextElement();
+            String sName = smEnum.nextElement();
             Element smNode = dom.createElement("style-map");
             smNode.setAttribute("name",sName);
 	        smNode.setAttribute("family",sFamily);
@@ -434,11 +434,11 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
         }
     }
 
-    private void writeContent(Document dom, LinkedList list, String sElement) {
+    private void writeContent(Document dom, LinkedList<String> list, String sElement) {
         Element node = dom.createElement(sElement);
         int nLen = list.size();
         for (int i=0; i<nLen; i++) {
-            node.appendChild( dom.createTextNode( (String) list.get(i) ) );
+            node.appendChild( dom.createTextNode( list.get(i) ) );
         }
         dom.getDocumentElement().appendChild(node);
     }
@@ -528,7 +528,7 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     public boolean splitToplevelSections() { return ((BooleanOption) options[SPLIT_TOPLEVEL_SECTIONS]).getValue(); }
     public boolean saveImagesInSubdir() { return ((BooleanOption) options[SAVE_IMAGES_IN_SUBDIR]).getValue(); }
 	
-    public Hashtable getMathSymbols() { return mathSymbols; }
+    public Hashtable<String, String> getMathSymbols() { return mathSymbols; }
 
     public StyleMap getParStyleMap() { return par; }
     public StyleMap getParBlockStyleMap() { return parBlock; }
@@ -537,7 +537,7 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     public StyleMap getListItemStyleMap() { return listItem; }
     public StyleMap getTextAttributeStyleMap() { return textAttr; }
     public HeadingMap getHeadingMap() { return headingMap; }
-    public LinkedList getCustomPreamble() { return customPreamble; }
+    public LinkedList<String> getCustomPreamble() { return customPreamble; }
 
 }
 

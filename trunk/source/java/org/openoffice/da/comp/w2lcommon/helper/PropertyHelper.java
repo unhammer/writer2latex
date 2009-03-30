@@ -35,14 +35,14 @@ import com.sun.star.beans.PropertyValue;
  */
 public class PropertyHelper {
 
-    private Hashtable data;
+    private Hashtable<String, Object> data;
 	
     public PropertyHelper() {
-        data = new Hashtable();
+        data = new Hashtable<String, Object>();
     }
 
     public PropertyHelper(PropertyValue[] props) {
-        data = new Hashtable();
+        data = new Hashtable<String, Object>();
         int nLen = props.length;
         for (int i=0; i<nLen; i++) {
             data.put(props[i].Name,props[i].Value);
@@ -57,7 +57,7 @@ public class PropertyHelper {
         return data.get(sName);
     }
 	
-    public Enumeration keys() {
+    public Enumeration<String> keys() {
         return data.keys();
     }
 	
@@ -65,9 +65,9 @@ public class PropertyHelper {
         int nSize = data.size();
         PropertyValue[] props = new PropertyValue[nSize];
         int i=0;
-        Enumeration keys = keys();
+        Enumeration<String> keys = keys();
         while (keys.hasMoreElements()) {
-            String sKey = (String) keys.nextElement();
+            String sKey = keys.nextElement();
             props[i] = new PropertyValue();
             props[i].Name = sKey;
             props[i++].Value = get(sKey);

@@ -2,14 +2,15 @@
   ############################################################################
   # This is the Ant build file for writer2latex
   # Original: Sep 2004 (mgn)
-  # version 1.0 (2009-03-02)
+  # version 1.2 (2009-03-30)
   ############################################################################
 -->
 <project name="w2l" default="help" basedir=".">
 
     <!-- set this property to the location of your SO/OOo installation -->
 	<!--<property name="OFFICE_HOME" location="c:/Program Files/OpenOffice.org 2.4"/>-->
-	<property name="OFFICE_HOME" location="/opt/openoffice.org2.4" />
+	<property name="OFFICE_HOME" location="/opt/openoffice.org/basis3.0" />
+	<property name="URE_HOME" location="/opt/openoffice.org/ure" />
 
     <description>writer2latex - build file</description>
 
@@ -34,8 +35,8 @@
 
     <!-- configure the directories -->
     <property name="jarfile" value="writer2latex"/>
-    <property name="basename" value="writer2latex10"/>
-    <property name="distrofile" value="${basename}beta.zip" />
+    <property name="basename" value="writer2latex11"/>
+    <property name="distrofile" value="${basename}1.zip" />
     <!--<property name="sourcedistrofile" value="${basename}source.zip" />-->
     <property name="src" location="source/java"/>
     <property name="source.distro" location="source/distro" />
@@ -48,8 +49,10 @@
     <!-- classpath for the application; needs java-uno classes -->
     <path id="main.class.path"> 
         <!-- java uno classes -->
+    	<filelist dir="${URE_HOME}/share/java"
+	        files="jurt.jar,juh.jar,ridl.jar"/>
         <filelist dir="${OFFICE_HOME}/program/classes"
-            files="jurt.jar,unoil.jar,ridl.jar,juh.jar"/>
+    		files="unoil.jar"/>
         <!-- additional uno interfaces generated from idl -->
         <pathelement path="${source.idl}/writer2latex"/>
         <pathelement path="${source.idl}/writer2xhtml"/>
@@ -67,7 +70,7 @@
         <javac srcdir="${src}" 
                destdir="${classes}"
                encoding="us-ascii"
-        	   source="1.4"
+        	   source="1.5"
                debug="on">
             <classpath refid="main.class.path"/>
         </javac>
@@ -185,11 +188,36 @@
         <!-- delete the jar for this extension -->
         <delete file="${tmp}/writer2xhtml-filter.jar" />
 
+        <!-- Third extension: writer4latex.oxt -->
+    	
+        <!-- Create jar with relevant files  -->
+        <jar jarfile="${tmp}/writer4latex.jar">
+            <fileset dir="${classes}">
+                <patternset>
+                	<include name="org/openoffice/da/comp/w2lcommon/helper/**/*"/>
+                	<include name="org/openoffice/da/comp/writer4latex/**/*"/>
+                </patternset>
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Class-Path" value="jaxp.jar parser.jar"/>
+                <!-- OOo needs this to register the filter: -->
+                <attribute name="RegistrationClassName" value="org.openoffice.da.comp.writer4latex.W4LRegistration" />
+            </manifest>
+        </jar>
+        
+    	<!-- Pack extension -->
+        <zip destfile="${target.lib}/writer4latex.oxt">
+            <zipfileset dir="source/oxt/writer4latex" prefix="" />
+            <zipfileset dir="${tmp}" includes="writer4latex.jar" />
+        </zip>
+
+    	<!-- delete the jar for this extension -->
+        <delete file="${tmp}/writer4latex.jar" />
 		
-        <!-- Third extension: xhtml-config-package.oxt (xhtml sample configuration package) -->
+        <!-- Fourth extension: xhtml-config-package.oxt (xhtml sample configuration package) -->
 
         <zip destfile="${target.lib}/xhtml-config-sample.oxt" basedir="source/oxt/xhtml-config-sample"/>
-		
             
     </target>
 	
@@ -208,7 +236,7 @@
 		
             <!-- Add jar and oxt's -->
             <zipfileset dir="${target.lib}" prefix="${basename}"
-             includes="${jarfile}.jar,writer2latex.oxt,writer2xhtml.oxt,xhtml-config-sample.oxt"/>
+             includes="${jarfile}.jar,writer2latex.oxt,writer2xhtml.oxt,writer4latex.oxt,xhtml-config-sample.oxt"/>
         </zip>		
 		
         <!-- Pack the source distribution -->

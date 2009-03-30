@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<oor:component-schema oor:name="Options"
+  oor:package="org.openoffice.da.Writer4LaTeX"
+  xml:lang="en-US"
+  xmlns:oor="http://openoffice.org/2001/registry"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <templates>
+        <group oor:name="Application">
+            <prop oor:name="Executable" oor:type="xs:string" />
+            <prop oor:name="Options" oor:type="xs:string" />
+        </group>
+    </templates>
+    <component>
+        <group oor:name="Applications">
+            <node-ref oor:name="LaTeX" oor:node-type="Application" />
+            <node-ref oor:name="PdfLaTeX" oor:node-type="Application" />
+            <node-ref oor:name="XeLaTeX" oor:node-type="Application" />
+            <node-ref oor:name="BibTeX" oor:node-type="Application" />
+            <node-ref oor:name="Makeindex" oor:node-type="Application" />
+            <node-ref oor:name="Oolatex" oor:node-type="Application" />
+            <node-ref oor:name="Dvips" oor:node-type="Application" />
+            <node-ref oor:name="DVIViewer" oor:node-type="Application" />
+            <node-ref oor:name="PostscriptViewer" oor:node-type="Application" />
+            <node-ref oor:name="PdfViewer" oor:node-type="Application" />
+        </group>
+    </component>
+</oor:component-schema>		

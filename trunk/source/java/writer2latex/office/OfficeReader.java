@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-09-22)
+ *  Version 1.2 (2008-09-30)
  *
  */
 
@@ -115,16 +115,10 @@ public class OfficeReader {
 	    Node child = node.getFirstChild();
         while (child!=null) {
             if (child.getNodeType()==Node.ELEMENT_NODE) {
-                if (child.getNodeName().equals(XMLString.TEXT_SPAN)) {
+                if (isTextElement(child)) {
                     if (!isWhitespaceContent(child)) { return false; }
                 }
-                else if (child.getNodeName().equals(XMLString.TEXT_A)) {
-                    if (!isWhitespaceContent(child)) { return false; }
-                }
-                else if (child.getNodeName().equals(XMLString.TEXT_BIBLIOGRAPHY_MARK)) {
-                    if (!isWhitespaceContent(child)) { return false; }
-                }
-                else if (!isTextElement(child)) {
+                else {
                     return false; // found non-text content!
                 }
             }
@@ -282,32 +276,32 @@ public class OfficeReader {
     //private String sFirstMasterPageName = null;
 	
     // All indexes
-    private Hashtable indexes = new Hashtable();
-    private HashSet indexSourceStyles = new HashSet();
-    private HashSet figureSequenceNames = new HashSet();
-    private HashSet tableSequenceNames = new HashSet();
+    private Hashtable<Element, Object> indexes = new Hashtable<Element, Object>();
+    private HashSet<String> indexSourceStyles = new HashSet<String>();
+    private HashSet<String> figureSequenceNames = new HashSet<String>();
+    private HashSet<String> tableSequenceNames = new HashSet<String>();
     private String sAutoFigureSequenceName = null;
     private String sAutoTableSequenceName = null;
 	
     // Map paragraphs to sequence names (caption helper)
-    private Hashtable sequenceNames = new Hashtable();
+    private Hashtable<Element, String> sequenceNames = new Hashtable<Element, String>();
 	
     // Map sequence reference names to sequence names
-    private Hashtable seqrefNames = new Hashtable();
+    private Hashtable<String, String> seqrefNames = new Hashtable<String, String>();
 	
     // All references
-    private HashSet footnoteRef = new HashSet();
-    private HashSet endnoteRef = new HashSet();
-    private HashSet referenceRef = new HashSet();
-    private HashSet bookmarkRef = new HashSet();
-    private HashSet sequenceRef = new HashSet();
+    private HashSet<String> footnoteRef = new HashSet<String>();
+    private HashSet<String> endnoteRef = new HashSet<String>();
+    private HashSet<String> referenceRef = new HashSet<String>();
+    private HashSet<String> bookmarkRef = new HashSet<String>();
+    private HashSet<String> sequenceRef = new HashSet<String>();
 	
     // Reference marks and bookmarks contained in headings
-    private HashSet referenceHeading = new HashSet();
-    private HashSet bookmarkHeading = new HashSet();
+    private HashSet<String> referenceHeading = new HashSet<String>();
+    private HashSet<String> bookmarkHeading = new HashSet<String>();
 	
     // All internal hyperlinks
-    private HashSet links = new HashSet();
+    private HashSet<String> links = new HashSet<String>();
 	
     // Forms
     private FormsReader forms = new FormsReader();
@@ -468,7 +462,7 @@ public class OfficeReader {
      * @return the iso language
      */ 
     public String getMajorityLanguage() {
-        Hashtable langs = new Hashtable();
+        Hashtable<Object, Integer> langs = new Hashtable<Object, Integer>();
 
         // Read the default language from the default paragraph style
         String sDefaultLang = null;
@@ -478,7 +472,7 @@ public class OfficeReader {
         }
 
         // Collect languages from paragraph styles
-        Enumeration enumeration = getParStyles().getStylesEnumeration();
+        Enumeration<Object> enumeration = getParStyles().getStylesEnumeration();
         while (enumeration.hasMoreElements()) {
             style = (StyleWithProperties) enumeration.nextElement();
             String sLang = style.getProperty(XMLString.FO_LANGUAGE);
@@ -486,7 +480,7 @@ public class OfficeReader {
             if (sLang!=null) {
                 int nCount = 1;
                 if (langs.containsKey(sLang)) {
-                    nCount = ((Integer) langs.get(sLang)).intValue()+1;
+                    nCount = langs.get(sLang).intValue()+1;
                 }
                 langs.put(sLang,new Integer(nCount));
             }
@@ -498,7 +492,7 @@ public class OfficeReader {
         enumeration = langs.keys();
         while (enumeration.hasMoreElements()) {
             String sLang = (String) enumeration.nextElement();
-            int nCount = ((Integer) langs.get(sLang)).intValue();
+            int nCount = langs.get(sLang).intValue();
             if (nCount>nMaxCount) {
                 nMaxCount = nCount;
                 sMajorityLanguage = sLang;
@@ -571,7 +565,7 @@ public class OfficeReader {
      *  @return the sequence name or null
      */
     public String getSequenceName(Element par) {
-        return sequenceNames.containsKey(par) ? (String) sequenceNames.get(par) : null;
+        return sequenceNames.containsKey(par) ? sequenceNames.get(par) : null;
     }
 	
     /** <p>Get the sequence name associated with a reference name</p>
@@ -579,7 +573,7 @@ public class OfficeReader {
      *  @return the sequence name or null
      */
     public String getSequenceFromRef(String sRefName) {
-        return (String) seqrefNames.get(sRefName);
+        return seqrefNames.get(sRefName);
     }
 	
 	
@@ -1129,14 +1123,14 @@ public class OfficeReader {
        
     }
 	
-    private void collectRefName(HashSet ref, Element node) {
+    private void collectRefName(HashSet<String> ref, Element node) {
         String sRefName = node.getAttribute(XMLString.TEXT_REF_NAME);
         if (sRefName!=null && sRefName.length()>0) {
             ref.add(sRefName);
         }
     }
 	
-    private void collectMarkInHeading(HashSet marks, Element node) {
+    private void collectMarkInHeading(HashSet<String> marks, Element node) {
         String sName = node.getAttribute(XMLString.TEXT_NAME);
         if (sName!=null && sName.length()>0) {
             Element par = getParagraph(node);

@@ -120,7 +120,7 @@ public class OfficeDocument
     private OfficeZip zip = null;
        
     /** Collection to keep track of the embedded objects in the document. */
-    private Map embeddedObjects = null;
+    private Map<String, EmbeddedObject> embeddedObjects = null;
 
     /**
      *  Default constructor.
@@ -320,10 +320,10 @@ public class OfficeDocument
      *
      * @return An <code>Iterator</code> of <code>EmbeddedObject</code> objects.
      */
-    public Iterator getEmbeddedObjects() {
+    public Iterator<EmbeddedObject> getEmbeddedObjects() {
         
         if (embeddedObjects == null && manifestDoc != null) {            
-            embeddedObjects = new HashMap();           
+            embeddedObjects = new HashMap<String, EmbeddedObject>();           
             
             // Need to read the manifest file and construct a list of objects                       
             NodeList nl = manifestDoc.getElementsByTagName(TAG_MANIFEST_FILE);
@@ -400,7 +400,7 @@ public class OfficeDocument
         }
         
         if (embeddedObjects.containsKey(name)) {
-            return (EmbeddedObject)embeddedObjects.get(name);
+            return embeddedObjects.get(name);
         }
         else {
             return null;
@@ -419,7 +419,7 @@ public class OfficeDocument
         }
         
         if (embeddedObjects == null) {
-            embeddedObjects = new HashMap();
+            embeddedObjects = new HashMap<String, EmbeddedObject>();
         }
         
         embeddedObjects.put(embObj.getName(), embObj);
@@ -734,9 +734,9 @@ public class OfficeDocument
         Element manifestRoot = manifestDoc.getDocumentElement();
                    
         // The EmbeddedObjects come first.
-        Iterator embObjs = getEmbeddedObjects();
+        Iterator<EmbeddedObject> embObjs = getEmbeddedObjects();
         while (embObjs.hasNext()) {
-            EmbeddedObject obj = (EmbeddedObject)embObjs.next();
+            EmbeddedObject obj = embObjs.next();
             obj.writeManifestData(manifestDoc);
             
             obj.write(zip);

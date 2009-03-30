@@ -35,17 +35,17 @@ import java.util.Hashtable;
     is simply the set of attributes of an element). </p> 
   */
 public class PropertySet {
-    private Hashtable properties = new Hashtable();
+    private Hashtable<String, String> properties = new Hashtable<String, String>();
     private String sName;
 
     public PropertySet() {
-        properties = new Hashtable();
+        properties = new Hashtable<String, String>();
         sName="";
     }
 	
     public String getProperty(String sPropName) {
         if (sPropName!=null) {
-            String sValue = (String) properties.get(sPropName);
+            String sValue = properties.get(sPropName);
             if (sValue!=null && sValue.endsWith("inch")) {
                 // Cut of inch to in
                 return sValue.substring(0,sValue.length()-2);
@@ -86,10 +86,10 @@ public class PropertySet {
 	
     public String toString() {
         String s="";
-        Enumeration keys = properties.keys();
+        Enumeration<String> keys = properties.keys();
         while (keys.hasMoreElements()) {
-            String sKey = (String) keys.nextElement();
-            String sValue = (String) properties.get(sKey);
+            String sKey = keys.nextElement();
+            String sValue = properties.get(sKey);
             s += sKey+"="+sValue+" ";
         }
         return s;

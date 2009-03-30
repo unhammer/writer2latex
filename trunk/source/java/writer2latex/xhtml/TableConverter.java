@@ -46,7 +46,7 @@ public class TableConverter extends ConverterHelper {
 
     // The collection of all table names
     // TODO: Navigation should be handled here rather than in Converter.java
-    protected Vector sheetNames = new Vector();
+    protected Vector<String> sheetNames = new Vector<String>();
 	
     public TableConverter(OfficeReader ofr, XhtmlConfig config, Converter converter) {
         super(ofr,config,converter);

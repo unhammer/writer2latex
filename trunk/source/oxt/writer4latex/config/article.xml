@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- article.xml
+     This is a configuration file for Writer4LaTeX.
+     It contains a lot of style mappings, which correspond to
+     the template LaTeX-article.stw.
+     Some definitions have been chosen for compatibility with tex4ht
+ -->
+
+<config>
+  <!-- Options. These can be adjusted to add support for various packages -->
+  <option name="no_preamble" value="false" />
+  <option name="documentclass" value="article" />
+  <option name="global_options" value="" />
+  <option name="backend" value="generic" />
+  <option name="inputencoding" value="ascii" />
+  <option name="multilingual" value="true" />
+  <option name="greek_math" value="true" />
+  <option name="use_ooomath" value="true" />
+  <option name="use_pifont" value="false" />
+  <option name="use_ifsym" value="false" />
+  <option name="use_wasysym" value="false" />
+  <option name="use_bbding" value="false" />
+  <option name="use_eurosym" value="false" />
+  <option name="use_tipa" value="false" />
+  <option name="use_color" value="true" />
+  <option name="use_colortbl" value="false" />
+  <option name="use_hyperref" value="true" />
+  <option name="use_endnotes" value="false" />
+  <option name="use_ulem" value="false" />
+  <option name="use_lastpage" value="true" />
+  <option name="use_bibtex" value="true" />
+  <option name="bibtex_style" value="plain" />
+  <option name="formatting" value="ignore_most" />
+  <option name="page_formatting" value="ignore_all" />
+  <option name="ignore_empty_paragraphs" value="true" />
+  <option name="ignore_hard_page_breaks" value="false" />
+  <option name="ignore_hard_line_breaks" value="false" />
+  <option name="ignore_double_spaces" value="true" />
+  <option name="debug" value="false" />
+  
+  <custom-preamble>\newtheorem{theorem}{Theorem}</custom-preamble>
+	
+  <!-- Style maps: These rules defines how styles in OOo are mapped to LaTeX code.
+       Where possible, predefined styles from OOo are used. This include:
+       * Paragraph styles "Title", "Heading 2-6", "Quotations", "Preformatted Text",
+         "List Heading", "List Contents", "Text body", "First line indent",
+         "Table Heading", "Table contents", "Horizontal line"
+       * Text styles Emphasis, Teletype-->
+	   
+  <!-- Definitions for headings. Note that \part{} is not a heading in OOo because
+       it's not part of the outline numbering.
+       Also note that Heading 1 is not used (reserved for \chapter in book and
+       report classes). 
+  -->
+  <style-map name="part" class="paragraph" before="\part{" after="}" line-break="false" />
+  <style-map name="part" class="list" before="" after="" />
+  <style-map name="part" class="listitem" before="" after="" />
+  
+  <heading-map max-level="6">
+    <heading-level-map writer-level="1" name="section" level="1" />
+    <heading-level-map writer-level="2" name="section" level="1" />
+    <heading-level-map writer-level="3" name="subsection" level="2" />
+    <heading-level-map writer-level="4" name="subsubsection" level="3" />
+    <heading-level-map writer-level="5" name="paragraph" level="4" />
+    <heading-level-map writer-level="6" name="subparagraph" level="5" />
+  </heading-map>
+  
+  <!-- Defintions for \maketitle. At least one of the styles Title, Author, Date
+       in any order will give correct results.
+       Uses a predefined style from OOo for the title -->
+  <style-map name="Title" class="paragraph" before="\title{" after="}" line-break="false" />
+  <style-map name="author" class="paragraph" before="\author{" after="}" line-break="false" />
+  <style-map name="date" class="paragraph" before="\date{" after="}" line-break="false" />
+  <style-map name="Title" class="paragraph-block" next="author;date" before="" after="\maketitle" />
+  <style-map name="author" class="paragraph-block" next="Title;date" before="" after="\maketitle" />
+  <style-map name="date" class="paragraph-block" next="Title;author" before="" after="\maketitle" />
+  
+  <!-- Definitions for the abstract. The abstract can contain any number of paragraphs -->
+  <style-map name="abstract title" class="paragraph" before="\renewcommand\abstractname{" after="}" line-break="false" />
+  <style-map name="abstract" class="paragraph" before="" after="" />
+  <style-map name="abstract" class="paragraph-block" next="abstract" before="\begin{abstract}" after="\end{abstract}" />
+
+  <!-- Definitions for standard LaTeX environments. Several paragraphs will be
+       conbined into a single environment. -->
+  
+  <!-- flushleft -->
+  <style-map name="flushleft" class="paragraph-block" next="flushleft" before="\begin{flushleft}" after="\end{flushleft}" />
+  <style-map name="flushleft" class="paragraph" before="" after="" />
+  
+  <!-- flushright -->
+  <style-map name="flushright" class="paragraph-block" next="flushright" before="\begin{flushright}" after="\end{flushright}" />
+  <style-map name="flushright" class="paragraph" before="" after="" />
+
+  <!-- center -->
+  <style-map name="center" class="paragraph-block" next="center" before="\begin{center}" after="\end{center}" />
+  <style-map name="center" class="paragraph" before="" after="" />
+
+  <!-- quote -->
+  <style-map name="quote" class="paragraph-block" next="quote" before="\begin{quote}" after="\end{quote}" />
+  <style-map name="quote" class="paragraph" before="" after="" />
+
+  <!-- quotation; using predefined style from OOo -->
+  <style-map name="Quotations" class="paragraph-block" next="Quotations" before="\begin{quotation}" after="\end{quotation}" />
+  <style-map name="Quotations" class="paragraph" before="" after="" />
+
+  <!-- verse -->
+  <style-map name="verse" class="paragraph-block" next="verse" before="\begin{verse}" after="\end{verse}" />
+  <style-map name="verse" class="paragraph" before="" after="" />
+
+  <!-- verbatim; using predefined style from OOo. Note the attribute verbatim,
+       which instructs OOo to output the content verbatim (characters not
+       available in the inputencoding will be replaced by question marks; non-
+       character content will be lost). -->
+  <style-map name="Preformatted Text" class="paragraph-block" next="Preformatted Text" before="\begin{verbatim}" after="\end{verbatim}" />
+  <style-map name="Preformatted Text" class="paragraph" before="" after="" verbatim="true" />
+
+  <!-- Definitions for some standard OOo paragraph styles -->
+  <style-map name="Text body" class="paragraph" before="" after="" />
+  <style-map name="First line indent" class="paragraph" before="" after="" />
+  <style-map name="Table Heading" class="paragraph" before="\textbf{" after="}" line-break="false" />
+  <style-map name="Table Contents" class="paragraph" before="" after="" />
+  <style-map name="Horizontal Line" class="paragraph" before="" after="\begin{center}\hrule\end{center}" />
+
+  <!-- Definitions for text styles.
+       Uses a predefined OOo style for \emph and \texttt -->
+  <style-map name="obeylines-h" class="text" before="" after="" />  
+  <style-map name="verb" class="text" before="\verb|" after="|" verbatim="true" />  
+  <style-map name="Emphasis" class="text" before="\emph{" after="}" />
+  <style-map name="Strong Emphasis" class="text" before="\textbf{" after="}" />
+  <style-map name="textrm" class="text" before="\textrm{" after="}" />
+  <style-map name="textsf" class="text" before="\textsf{" after="}" />
+  <style-map name="Teletype" class="text" before="\texttt{" after="}" />
+  <style-map name="texttt" class="text" before="\texttt{" after="}" />
+  <style-map name="textup" class="text" before="\textup{" after="}" />
+  <style-map name="textsl" class="text" before="\textsl{" after="}" />
+  <style-map name="textit" class="text" before="\textit{" after="}" />
+  <style-map name="textsc" class="text" before="\textsc{" after="}" />
+  <style-map name="textmd" class="text" before="\textmd{" after="}" />
+  <style-map name="textbf" class="text" before="\textbf{" after="}" />
+  <style-map name="tiny" class="text" before="{\tiny " after="}" />
+  <style-map name="scriptsize" class="text" before="{\scriptsize " after="}" />
+  <style-map name="footnotesize" class="text" before="{\footnotesize " after="}" />
+  <style-map name="small" class="text" before="{\small " after="}" />
+  <style-map name="normalsize" class="text" before="{\normalsize " after="}" />
+  <style-map name="large" class="text" before="{\large " after="}" />
+  <style-map name="Large" class="text" before="{\Large " after="}" />
+  <style-map name="LARGE" class="text" before="{\LARGE " after="}" />
+  <style-map name="huge" class="text" before="{\huge " after="}" />
+  <style-map name="Huge" class="text" before="{\Huge " after="}" />
+
+  <!-- Definitions for a theorem environment -->  
+  <style-map name="theorem" class="paragraph" before="" after="" />
+  <style-map name="theorem" class="list" before="" after="" />
+  <style-map name="theorem" class="listitem" before="\begin{theorem}" after="\end{theorem}" />
+
+  <!-- Definitions for description list. Uses predefined styles from OOo -->
+  <style-map name="List Heading" class="paragraph-block" next="List Heading;List Contents" before="\begin{description}" after="\end{description}"/>
+  <style-map name="List Heading" class="paragraph" before="\item[" after="]" line-break="false" />
+  <style-map name="List Contents" class="paragraph" before="" after="" />
+
+  <!-- Definitions for itemize and enumerate -->
+  <style-map name="itemize" class="paragraph" before="" after="" />
+  <style-map name="enumerate" class="paragraph" before="" after="" />
+  
+  <!-- Definitions for verbatim LaTeX code -->
+  <style-map name="LaTeX" class="paragraph" before="" after="" verbatim="true" />
+  <style-map name="LaTeX" class="text" before="" after="" verbatim="true" />
+
+</config>
+

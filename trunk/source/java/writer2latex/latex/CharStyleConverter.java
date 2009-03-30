@@ -43,7 +43,7 @@ import writer2latex.latex.util.StyleMap;
 public class CharStyleConverter extends StyleConverter {
 
     // Cache of converted font declarations
-    private Hashtable fontDecls = new Hashtable();
+    private Hashtable<String, String> fontDecls = new Hashtable<String, String>();
 	
     // Which formatting should we export?
     private boolean bIgnoreHardFontsize;
@@ -434,7 +434,7 @@ public class CharStyleConverter extends StyleConverter {
             String sFontFamilyGeneric = fd.getFontFamilyGeneric();			
             fontDecls.put(sName,nfssFamily(sFontFamily,sFontFamilyGeneric,sFontPitch));
         }
-        return (String) fontDecls.get(sName);
+        return fontDecls.get(sName);
     }
 
     // The remaining methods are static helpers to convert single style properties

@@ -32,7 +32,7 @@ import java.util.Hashtable;
 // Collection of export names
 // Used for mapping named collections to simpler names (only A-Z, a-z and 0-9)
 public class ExportNameCollection{
-    private Hashtable exportNames = new Hashtable();
+    private Hashtable<String, String> exportNames = new Hashtable<String, String>();
     private String sPrefix;
     private boolean bAcceptNumbers;
 	
@@ -45,7 +45,7 @@ public class ExportNameCollection{
         this("",b);
     }
 	
-    public Enumeration keys() {
+    public Enumeration<String> keys() {
         return exportNames.keys();
     }
     
@@ -89,7 +89,7 @@ public class ExportNameCollection{
     public String getExportName(String sName) {
         // add the name, if it does not exist
         if (!containsName(sName)) { addName(sName); }
-        return sPrefix + (String) exportNames.get(sName);
+        return sPrefix + exportNames.get(sName);
     }
 
     public boolean containsName(String sName) {

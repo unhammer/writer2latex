@@ -87,7 +87,7 @@ public abstract class OptionsDialogBase extends DialogBase implements
         this.xMSF = null; // must be set properly by subclass
         mediaProps = null;
         sConfigNames = null;
-        lockedOptions = new HashSet();
+        lockedOptions = new HashSet<String>();
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -163,7 +163,7 @@ public abstract class OptionsDialogBase extends DialogBase implements
     private String[] sConfigNames;
 	
     // Set of locked controls
-    private HashSet lockedOptions;
+    private HashSet<String> lockedOptions;
 	
 	
     //////////////////////////////////////////////////////////////////////////

@@ -83,10 +83,10 @@ public class PageStyleConverter extends StyleConverterHelper {
      */
     public String getStyleDeclarations(String sIndent) {
         StringBuffer buf = new StringBuffer();
-        Enumeration names = styleNames.keys();
+        Enumeration<String> names = styleNames.keys();
         while (names.hasMoreElements()) {
             // This will be master pages for presentations only
-            String sDisplayName = (String) names.nextElement();
+            String sDisplayName = names.nextElement();
             MasterPage style = (MasterPage)
                 getStyles().getStyleByDisplayName(sDisplayName);
             StyleInfo info = new StyleInfo();

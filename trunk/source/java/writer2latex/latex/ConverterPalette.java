@@ -226,10 +226,10 @@ public final class ConverterPalette extends ConverterBase {
         mathmlCv.appendDeclarations(packages,declarations);
 
         // Add custom preamble
-        LinkedList customPreamble = config.getCustomPreamble();
+        LinkedList<String> customPreamble = config.getCustomPreamble();
         int nCPLen = customPreamble.size();
         for (int i=0; i<nCPLen; i++) {
-            declarations.append( (String) customPreamble.get(i) ).nl();
+            declarations.append( customPreamble.get(i) ).nl();
         }
 
         // Set \title, \author and \date (for \maketitle)

@@ -33,10 +33,10 @@ import writer2latex.util.Misc;
 
 /** Container class representing a style family in OOo */
 public class OfficeStyleFamily {
-    private Hashtable styles = new Hashtable();
+    private Hashtable<String, Object> styles = new Hashtable<String, Object>();
     private Class styleClass;
 	
-    private Hashtable displayNames = new Hashtable();
+    private Hashtable<String, String> displayNames = new Hashtable<String, String>();
 	
     private OfficeStyle defaultStyle = null;
 
@@ -80,7 +80,7 @@ public class OfficeStyleFamily {
      */
     public OfficeStyle getStyleByDisplayName(String sDisplayName) {
         if (sDisplayName==null) { return null; }
-        else { return getStyle((String) displayNames.get(sDisplayName)); }
+        else { return getStyle(displayNames.get(sDisplayName)); }
     }
 	
     /** Get the display name for the style with the specified name.
@@ -101,7 +101,7 @@ public class OfficeStyleFamily {
     /** Get all named styles in the family (ie. excluding the default style)
      *  @return an enumeration of all styles represented by OfficeStyle objects
      */
-    public Enumeration getStylesEnumeration(){
+    public Enumeration<Object> getStylesEnumeration(){
         return styles.elements();
     }
 	

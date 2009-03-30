@@ -378,7 +378,7 @@ public abstract class ExportFilterBase implements
             }
 
             // Write out files
-            Iterator docEnum = dataOut.iterator();
+            Iterator<OutputFile> docEnum = dataOut.iterator();
 			
             // Remove the file name part of the url
             String sNewURL = null;
@@ -393,7 +393,7 @@ public abstract class ExportFilterBase implements
             }
 			
             while (docEnum.hasNext() && sURL.startsWith("file:")) {
-                OutputFile docOut      = (OutputFile)docEnum.next();
+                OutputFile docOut      = docEnum.next();
 
                 if (dataOut.getMasterDocument()==docOut) {
                     // The master document is written to the XOutStream supplied

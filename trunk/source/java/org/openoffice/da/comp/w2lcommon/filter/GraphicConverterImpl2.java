@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-03-08)
+ *  Version 1.2 (2009-03-26)
  *
  */
  
@@ -58,14 +58,14 @@ import writer2latex.api.MIMETypes;
 public class GraphicConverterImpl2 implements GraphicConverter {
 
     private XComponentContext xComponentContext;
-    private Hashtable importFilter;
-    private Hashtable exportFilter;
+    private Hashtable<String,String> importFilter;
+    private Hashtable<String,String> exportFilter;
     private EPSCleaner epsCleaner;
 
     public GraphicConverterImpl2(XComponentContext xComponentContext) {
         this.xComponentContext = xComponentContext;
 
-        importFilter = new Hashtable();
+        importFilter = new Hashtable<String,String>();
         importFilter.put(MIMETypes.BMP, "BMP - MS Windows");
         //importFilter.put(MIMETypes.EMF, "EMF - MS Windows Metafile");
         importFilter.put(MIMETypes.EPS, "EPS - Encapsulated PostScript");
@@ -76,7 +76,7 @@ public class GraphicConverterImpl2 implements GraphicConverter {
         importFilter.put(MIMETypes.TIFF, "TIF - Tag Image File");
         importFilter.put(MIMETypes.WMF, "WMF - MS Windows Metafile");
 		
-        exportFilter = new Hashtable();
+        exportFilter = new Hashtable<String,String>();
         exportFilter.put(MIMETypes.BMP,"draw_bmp_Export");
         //exportFilter.put(MIMETypes.EMF,"draw_emf_Export");
         exportFilter.put(MIMETypes.EPS,"draw_eps_Export");

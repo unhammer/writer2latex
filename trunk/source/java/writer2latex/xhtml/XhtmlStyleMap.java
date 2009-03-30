@@ -30,10 +30,10 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 
 public class XhtmlStyleMap {
-    private Hashtable blockElement = new Hashtable();
-    private Hashtable blockCss = new Hashtable();
-    private Hashtable element = new Hashtable();
-    private Hashtable css = new Hashtable();
+    private Hashtable<String, String> blockElement = new Hashtable<String, String>();
+    private Hashtable<String, String> blockCss = new Hashtable<String, String>();
+    private Hashtable<String, String> element = new Hashtable<String, String>();
+    private Hashtable<String, String> css = new Hashtable<String, String>();
 	
     public void put(String sName, String sBlockElement, String sBlockCss, String sElement, String sCss) {
         blockElement.put(sName,sBlockElement);
@@ -47,22 +47,22 @@ public class XhtmlStyleMap {
     }
 	
     public String getBlockElement(String sName) {
-        return (String) blockElement.get(sName);
+        return blockElement.get(sName);
     }
 
     public String getBlockCss(String sName) {
-        return (String) blockCss.get(sName);
+        return blockCss.get(sName);
     }
 	
     public String getElement(String sName) {
-        return (String) element.get(sName);
+        return element.get(sName);
     }
 
     public String getCss(String sName) {
-        return (String) css.get(sName);
+        return css.get(sName);
     }
 	
-    public Enumeration getNames() {
+    public Enumeration<String> getNames() {
         return element.keys();
     }
 	

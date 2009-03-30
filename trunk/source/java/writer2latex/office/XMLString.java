@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-10)
+ *  Version 1.2 (2009-03-26)
  *
  */
 
@@ -204,6 +204,10 @@ public class XMLString {
     public static final String STYLE_REPEAT="style:repeat";
     public static final String STYLE_POSITION="style:position";
     public static final String STYLE_ADJUSTMENT="style:adjustment";
+    public static final String STYLE_LANGUAGE_COMPLEX="style:language-complex";
+    public static final String STYLE_COUNTRY_COMPLEX="style:country-complex";
+    public static final String STYLE_LANGUAGE_ASIAN="style:language-asian";
+    public static final String STYLE_COUNTRY_ASIAN="style:country-asian";
 
     // table namespace - elements
     public static final String TABLE_="table:";

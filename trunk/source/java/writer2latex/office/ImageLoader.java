@@ -65,7 +65,7 @@ public final class ImageLoader {
     private boolean bAcceptOtherFormats = true;
     private String sDefaultFormat = null;
     private String sDefaultVectorFormat = null;
-    private HashSet acceptedFormats = new HashSet();
+    private HashSet<String> acceptedFormats = new HashSet<String>();
 
     public ImageLoader(OfficeDocument oooDoc, String sOutFileName, boolean bExtractEPS) {
         this.oooDoc = oooDoc;

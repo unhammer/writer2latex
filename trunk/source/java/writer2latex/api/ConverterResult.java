@@ -44,7 +44,7 @@ public interface ConverterResult {
      *  <code>ConverterResult</code>. This <em>includes</em> the master document.
      *  @return  an <code>Iterator</code> of all files
      */
-    public Iterator iterator();
+    public Iterator<OutputFile> iterator();
     
     /** Write all files of the <code>ConverterResult</code> to a directory.
      *  Subdirectories are created as required by the individual

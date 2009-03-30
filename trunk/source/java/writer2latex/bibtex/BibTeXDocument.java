@@ -51,7 +51,7 @@ public class BibTeXDocument implements Document {
     private static final String FILE_EXTENSION = ".bib";
 	
     private String sName;
-    private Hashtable entries = new Hashtable();
+    private Hashtable<String, BibMark> entries = new Hashtable<String, BibMark>();
     private ExportNameCollection exportNames = new ExportNameCollection(true);
     private I18n i18n;
 
@@ -122,9 +122,9 @@ public class BibTeXDocument implements Document {
         osw.write("%% This file was converted to BibTeX by Writer2BibTeX ver. "+ConverterFactory.getVersion()+".\n");
         osw.write("%% See http://writer2latex.sourceforge.net for more info.\n");
         osw.write("\n");
-        Enumeration enumeration = entries.elements();
+        Enumeration<BibMark> enumeration = entries.elements();
         while (enumeration.hasMoreElements()) {
-            BibMark entry = (BibMark) enumeration.nextElement();
+            BibMark entry = enumeration.nextElement();
             osw.write("@");
             osw.write(entry.getEntryType().toUpperCase());
             osw.write("{");

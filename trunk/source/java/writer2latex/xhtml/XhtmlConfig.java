@@ -191,9 +191,9 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     }
 	
     private void writeXStyleMap(Document dom, XhtmlStyleMap sm, String sFamily) {
-        Enumeration smEnum = sm.getNames();
+        Enumeration<String> smEnum = sm.getNames();
         while (smEnum.hasMoreElements()) {
-            String sName = (String) smEnum.nextElement();
+            String sName = smEnum.nextElement();
             Element smNode = dom.createElement("xhtml-style-map");
             smNode.setAttribute("name",sName);
 	        smNode.setAttribute("family",sFamily);

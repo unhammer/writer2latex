@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Addons" oor:package="org.openoffice.Office">
+<!-- Defines the menus and toolbars provided by Writer4LaTeX -->
+<node oor:name="AddonUI">
+    <node oor:name="OfficeMenuBar">
+        <node oor:name="org.openoffice.da.writer4latex" oor:op="replace">
+            <prop oor:name="Context" oor:type="xs:string">
+                <value>com.sun.star.text.TextDocument</value>
+            </prop>
+            <prop oor:name="Title" oor:type="xs:string">
+                <value>Writer4LaTeX</value>
+            </prop>
+            <prop oor:name="Target" oor:type="xs:string">
+                <value>_self</value>
+            </prop>
+            <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                <value/>
+            </prop>
+            <node oor:name="Submenu">
+                <node oor:name="menu1" oor:op="replace">
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Run LaTeX...</value>
+                        <value xml:lang="da">K&#x00F8;r LaTeX...</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>org.openoffice.da.writer4latex:ProcessDocument</value>
+                    </prop>
+                    <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                        <value/>
+                    </prop>
+                </node>
+                <node oor:name="menu2" oor:op="replace">
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Run LaTeX directly</value>
+                        <value xml:lang="da">K&#x00F8;r LaTeX direkte</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>org.openoffice.da.writer4latex:ProcessDirectly</value>
+                    </prop>
+                    <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                        <value/>
+                    </prop>
+                </node>
+                <node oor:name="menu3" oor:op="replace">
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">View Log files</value>
+                        <value xml:lang="da">Vis logfiler</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>org.openoffice.da.writer4latex:ViewLog</value>
+                    </prop>
+                    <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                        <value/>
+                    </prop>
+                </node>
+                <!--later:
+                <node oor:name="menu4" oor:op="replace">
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Use BibTeX files...</value>
+                        <value xml:lang="da">Anvend BibTeX filer...</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>org.openoffice.da.writer4latex:UseBibTeX</value>
+                    </prop>
+                    <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                        <value/>
+                    </prop>
+                </node>
+                -->
+                <node oor:name="menu5" oor:op="replace">
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>private:separator</value>
+                    </prop>
+                </node>
+                <node oor:name="menu6" oor:op="replace">
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Import LaTeX...</value>
+                        <value xml:lang="da">Importer LaTeX...</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>org.openoffice.da.writer4latex:ImportLaTeX</value>
+                    </prop>
+                    <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                        <value/>
+                    </prop>
+                </node>
+                <!--later:
+                <node oor:name="menu7" oor:op="replace">
+                    <prop oor:name="Context" oor:type="xs:string">
+                        <value>com.sun.star.text.TextDocument</value>
+                    </prop>
+                    <prop oor:name="Title" oor:type="xs:string">
+                        <value xml:lang="en-US">Import BibTeX...</value>
+                        <value xml:lang="da">Importer BibTeX...</value>
+                    </prop>
+                    <prop oor:name="Target" oor:type="xs:string">
+                        <value>_self</value>
+                    </prop>
+                    <prop oor:name="URL" oor:type="xs:string">
+                        <value>org.openoffice.da.writer4latex:ImportBibTeX</value>
+                    </prop>
+                    <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                        <value/>
+                    </prop>
+                </node>
+                -->
+            </node>
+        </node>
+    </node>
+</node>
+
+</oor:component-data> 

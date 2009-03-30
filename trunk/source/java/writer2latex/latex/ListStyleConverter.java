@@ -37,7 +37,7 @@ import writer2latex.latex.util.Context;
  */
 public class ListStyleConverter extends StyleConverter {
     boolean bNeedSaveEnumCounter = false;
-    private Hashtable listStyleLevelNames = new Hashtable();
+    private Hashtable<String, String[]> listStyleLevelNames = new Hashtable<String, String[]>();
 
     /** <p>Constructs a new <code>ListStyleConverter</code>.</p>
      */
@@ -99,7 +99,7 @@ public class ListStyleConverter extends StyleConverter {
                 ba.add("\\liststyle"+styleNames.getExportName(getDisplayName(sStyleName))+"\n","");
             }
             if (nLevel<=4) {
-                String sCounterName = ((String[]) listStyleLevelNames.get(sStyleName))[nLevel]; 
+                String sCounterName = listStyleLevelNames.get(sStyleName)[nLevel]; 
                 if (bContinue && style.isNumber(nLevel)) {
                     bNeedSaveEnumCounter = true;
                     ba.add("\\setcounter{saveenum}{\\value{"+sCounterName+"}}\n","");

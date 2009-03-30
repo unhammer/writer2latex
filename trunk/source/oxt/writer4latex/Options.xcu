@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<oor:component-data oor:name="Options"
+  oor:package="org.openoffice.da.Writer4LaTeX"
+  xml:lang="en-US"
+  xmlns:oor="http://openoffice.org/2001/registry"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <node oor:name="Applications">
+        <node oor:name="LaTeX" oor:type="xs:string">
+            <prop oor:name="Executable">
+                <value>latex</value>
+            </prop>
+            <prop oor:name="Options">
+                <value>--interaction=batchmode %s</value>
+            </prop>
+        </node>
+        <node oor:name="PdfLaTeX" oor:type="xs:string">
+            <prop oor:name="Executable">
+                <value>pdflatex</value>
+            </prop>
+            <prop oor:name="Options">
+                <value>--interaction=batchmode %s</value>
+            </prop>
+        </node>
+        <node oor:name="XeLaTeX" oor:type="xs:string">
+            <prop oor:name="Executable">
+                <value>xelatex</value>
+            </prop>
+            <prop oor:name="Options">
+                <value>--interaction=batchmode %s</value>
+            </prop>
+        </node>
+        <node oor:name="BibTeX" oor:type="xs:string">
+            <prop oor:name="Executable">
+                <value>bibtex</value>
+            </prop>
+            <prop oor:name="Options">
+                <value>%s</value>
+            </prop>
+        </node>
+        <node oor:name="Makeindex" oor:type="xs:string">
+            <prop oor:name="Executable">
+                <value>makeindex</value>
+            </prop>
+            <prop oor:name="Options">
+                <value>%s</value>
+            </prop>
+        </node>
+        <node oor:name="Oolatex" oor:type="xs:string">
+            <prop oor:name="Executable">
+                <value>oolatex</value>
+            </prop>
+            <prop oor:name="Options">
+                <value>%s</value>
+            </prop>
+        </node>
+        <node oor:name="Dvips" oor:type="xs:string">
+            <prop oor:name="Executable">
+                <value>dvips</value>
+            </prop>
+            <prop oor:name="Options">
+                <value>%s</value>
+            </prop>
+        </node>
+        <node oor:name="DVIViewer" oor:type="xs:string">
+            <prop oor:name="Executable">
+                <value>evince</value>
+            </prop>
+            <prop oor:name="Options">
+                <value>%s</value>
+            </prop>
+        </node>
+        <node oor:name="PostscriptViewer" oor:type="xs:string">
+            <prop oor:name="Executable">
+                <value>evince</value>
+            </prop>
+            <prop oor:name="Options">
+                <value>%s</value>
+            </prop>
+        </node>
+        <node oor:name="PdfViewer" oor:type="xs:string">
+            <prop oor:name="Executable">
+                <value>evince</value>
+            </prop>
+            <prop oor:name="Options">
+                <value>%s</value>
+            </prop>
+        </node>
+    </node>
+</oor:component-data>

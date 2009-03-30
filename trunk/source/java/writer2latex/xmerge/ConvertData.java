@@ -64,7 +64,7 @@ public class ConvertData implements ConverterResult {
     /**
      *  Vector of <code>OutputFile</code> objects.
      */
-	private Vector v = new Vector();
+	private Vector<OutputFile> v = new Vector<OutputFile>();
 	
     /** Master doc */
     private OutputFile masterDoc = null;
@@ -137,7 +137,7 @@ public class ConvertData implements ConverterResult {
      *  @return  The <code>Iterator</code> to access the
      *           <code>Vector</code> of <code>OutputFile</code> objects.
      */
-    public Iterator iterator() {
+    public Iterator<OutputFile> iterator() {
         return v.iterator();
 	}
 
@@ -154,9 +154,9 @@ public class ConvertData implements ConverterResult {
     
     public void write(File dir) throws IOException {
         if (dir!=null && !dir.exists()) throw new IOException("Directory does not exist");
-        Iterator docEnum = iterator();
+        Iterator<OutputFile> docEnum = iterator();
         while (docEnum.hasNext()) {
-            OutputFile docOut = (OutputFile) docEnum.next();
+            OutputFile docOut = docEnum.next();
             String sDirName = "";
             String sFileName = docOut.getFileName();
             File subdir = dir;

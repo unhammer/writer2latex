@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-03-08)
+ *  Version 1.2 (2009-03-26)
  *
  */
  
@@ -56,7 +56,7 @@ public class DrawConverter extends ConverterHelper {
     private boolean bNeedOOoLaTeXPreamble = false;
 
     // Keep track of floating frames (images, textboxes...)
-    private Stack floatingFramesStack = new Stack();
+    private Stack<LinkedList<Element>> floatingFramesStack = new Stack<LinkedList<Element>>();
 	
     private Element getFrame(Element onode) {
         if (ofr.isOpenDocument()) return (Element) onode.getParentNode();
@@ -65,7 +65,7 @@ public class DrawConverter extends ConverterHelper {
 	
     public DrawConverter(OfficeReader ofr, LaTeXConfig config, ConverterPalette palette) {
         super(ofr,config,palette);
-        floatingFramesStack.push(new LinkedList());
+        floatingFramesStack.push(new LinkedList<Element>());
     }
 
     public void appendDeclarations(LaTeXDocumentPortion pack, LaTeXDocumentPortion decl) {
@@ -301,7 +301,7 @@ public class DrawConverter extends ConverterHelper {
             handleDrawImageAsChar(node,ldp,oc);
         }
         else {
-            ((LinkedList) floatingFramesStack.peek()).add(node);
+            floatingFramesStack.peek().add(node);
         }
     }
 	
@@ -429,7 +429,7 @@ public class DrawConverter extends ConverterHelper {
             makeDrawTextBox(node, ldp, oc);
         }
         else {
-            ((LinkedList) floatingFramesStack.peek()).add(node);
+            floatingFramesStack.peek().add(node);
         }
     }
 	
@@ -461,7 +461,7 @@ public class DrawConverter extends ConverterHelper {
         if (!bIsCaption) {
             ldp.append("\\begin{minipage}{").append(sWidth).append("}").nl();
         }
-        floatingFramesStack.push(new LinkedList());
+        floatingFramesStack.push(new LinkedList<Element>());
         palette.getBlockCv().traverseBlockText(node,ldp,ic);
         flushFloatingFrames(ldp,ic);
         floatingFramesStack.pop();
@@ -477,7 +477,7 @@ public class DrawConverter extends ConverterHelper {
     
     public void flushFloatingFrames(LaTeXDocumentPortion ldp, Context oc) {
 	    // todo: fix language
-        LinkedList floatingFrames = (LinkedList) floatingFramesStack.peek();
+        LinkedList floatingFrames = floatingFramesStack.peek();
         int n = floatingFrames.size();
         if (n==0) { return; }
         for (int i=0; i<n; i++) {

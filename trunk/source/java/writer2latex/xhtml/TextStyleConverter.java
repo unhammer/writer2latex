@@ -60,9 +60,9 @@ public class TextStyleConverter extends StyleWithPropertiesConverterHelper {
     // Bookkeeping for anchors
     private ExportNameCollection anchorStyleNames = new ExportNameCollection(true);
     private ExportNameCollection anchorVisitedStyleNames = new ExportNameCollection(true);
-    private Hashtable anchorCombinedStyleNames = new Hashtable();
-    private Hashtable orgAnchorStyleNames = new Hashtable();
-    private Hashtable orgAnchorVisitedStyleNames = new Hashtable();
+    private Hashtable<String, String> anchorCombinedStyleNames = new Hashtable<String, String>();
+    private Hashtable<String, String> orgAnchorStyleNames = new Hashtable<String, String>();
+    private Hashtable<String, String> orgAnchorVisitedStyleNames = new Hashtable<String, String>();
 
     /** Create a new <code>TextStyleConverter</code>
      *  @param ofr an <code>OfficeReader</code> to read style information from
@@ -111,7 +111,7 @@ public class TextStyleConverter extends StyleWithPropertiesConverterHelper {
             orgAnchorStyleNames.put(sExportName,sStyleName);
             orgAnchorVisitedStyleNames.put(sExportName,sVisitedStyleName);
         }
-        info.sClass = (String)anchorCombinedStyleNames.get(sName);
+        info.sClass = anchorCombinedStyleNames.get(sName);
     }
 	
     /** <p>Convert style information for used styles</p>
@@ -144,11 +144,11 @@ public class TextStyleConverter extends StyleWithPropertiesConverterHelper {
             }
 
             // Remaining link styles...
-            Enumeration enumer = anchorCombinedStyleNames.elements();
+            Enumeration<String> enumer = anchorCombinedStyleNames.elements();
             while (enumer.hasMoreElements()) {
-                String sExportName = (String) enumer.nextElement();
-                String sStyleName = (String) orgAnchorStyleNames.get(sExportName);
-                String sVisitedStyleName = (String) orgAnchorVisitedStyleNames.get(sExportName);
+                String sExportName = enumer.nextElement();
+                String sStyleName = orgAnchorStyleNames.get(sExportName);
+                String sVisitedStyleName = orgAnchorVisitedStyleNames.get(sExportName);
 
                 StyleWithProperties style = ofr.getTextStyle(sStyleName);
 

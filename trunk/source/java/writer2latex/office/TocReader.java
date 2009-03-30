@@ -53,7 +53,7 @@ public class TocReader {
 	
     Element indexTitleTemplate = null;
     Element[] tocEntryTemplate = new Element[11];
-    Hashtable indexSourceStyles = new Hashtable();
+    Hashtable<String, Integer> indexSourceStyles = new Hashtable<String, Integer>();
     
 
 
@@ -163,7 +163,7 @@ public class TocReader {
     /** <p>Get a set view of all index source styles</p>
      *  @return a set of all index source style names
      */
-    public Set getIndexSourceStyles() { return indexSourceStyles.keySet(); }
+    public Set<String> getIndexSourceStyles() { return indexSourceStyles.keySet(); }
 	
     /** <p>Get the level associated with a specific index source style</p>
      *  @param sStyleName the style name of the index source style
@@ -171,7 +171,7 @@ public class TocReader {
      */
     public int getIndexSourceStyleLevel(String sStyleName) {
         if (indexSourceStyles.containsKey(sStyleName)) {
-            return ((Integer) indexSourceStyles.get(sStyleName)).intValue();
+            return indexSourceStyles.get(sStyleName).intValue();
         }
         else {
             return -1;

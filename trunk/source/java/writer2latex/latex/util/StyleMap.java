@@ -30,7 +30,7 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 
 public class StyleMap {
-    private Hashtable items = new Hashtable();
+    private Hashtable<String, StyleMapItem> items = new Hashtable<String, StyleMapItem>();
 	
     public void put(String sName, String sBefore, String sAfter, boolean bLineBreak, boolean bVerbatim) {
         StyleMapItem item = new StyleMapItem();
@@ -67,32 +67,32 @@ public class StyleMap {
     }
 	
     public String getBefore(String sName) {
-        return ((StyleMapItem) items.get(sName)).sBefore;
+        return items.get(sName).sBefore;
     }
 
     public String getAfter(String sName) {
-        return ((StyleMapItem) items.get(sName)).sAfter;
+        return items.get(sName).sAfter;
     }
 	
     public String getNext(String sName) {
-        String sNext = ((StyleMapItem) items.get(sName)).sNext;
+        String sNext = items.get(sName).sNext;
         return sNext.substring(1,sNext.length()-1);
     }
 
     public boolean isNext(String sName, String sNext) {
-        String sNext1 = ((StyleMapItem) items.get(sName)).sNext;
+        String sNext1 = items.get(sName).sNext;
         return sNext1.indexOf(";"+sNext+";")>-1;
     }
 	
     public boolean getLineBreak(String sName) {
-        return contains(sName) && ((StyleMapItem) items.get(sName)).bLineBreak;
+        return contains(sName) && items.get(sName).bLineBreak;
     }
 
     public boolean getVerbatim(String sName) {
-        return contains(sName) && ((StyleMapItem) items.get(sName)).bVerbatim;
+        return contains(sName) && items.get(sName).bVerbatim;
     }
 
-    public Enumeration getNames() {
+    public Enumeration<String> getNames() {
         return items.keys();
     }
 	

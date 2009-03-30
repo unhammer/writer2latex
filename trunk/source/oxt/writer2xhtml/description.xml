@@ -4,7 +4,7 @@
 			 
   <identifier value="org.openoffice.da.writer2xhtml.oxt" />
   
-  <version value="1.0" />
+  <version value="1.1.1" />
   
   <dependencies>
     <OpenOffice.org-minimal-version value="2.2" d:name="OpenOffice.org 2.2"/>
@@ -21,13 +21,13 @@
   </display-name>
   
   <extension-description>
-    <src xlink:href="description/desc_da.txt" lang="da" />
-    <src xlink:href="description/desc_en.txt" lang="en" />
-    <src xlink:href="description/desc_de.txt" lang="de" />
-    <src xlink:href="description/desc_es.txt" lang="es" />
-    <src xlink:href="description/desc_fr.txt" lang="fr" />
-    <src xlink:href="description/desc_ru.txt" lang="ru" />
-    <src xlink:href="description/desc_uk.txt" lang="uk" />
+    <src xlink:href="desc_da.txt" lang="da" />
+    <src xlink:href="desc_en.txt" lang="en" />
+    <src xlink:href="desc_de.txt" lang="de" />
+    <src xlink:href="desc_es.txt" lang="es" />
+    <src xlink:href="desc_fr.txt" lang="fr" />
+    <src xlink:href="desc_ru.txt" lang="ru" />
+    <src xlink:href="desc_uk.txt" lang="uk" />
   </extension-description>
 
 </description> 

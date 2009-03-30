@@ -81,15 +81,15 @@ public class Converter extends ConverterBase {
 
     // The xhtml output file(s)
     protected int nType = XhtmlDocument.XHTML10; // the doctype
-    Vector outFiles;
+    Vector<XhtmlDocument> outFiles;
     private int nOutFileIndex;
     private XhtmlDocument htmlDoc; // current outfile
     private Document htmlDOM; // current DOM, usually within htmlDoc
     private boolean bNeedHeaderFooter = false;
 
     // Hyperlinks
-    Hashtable targets = new Hashtable();
-    LinkedList links = new LinkedList();
+    Hashtable<String, Integer> targets = new Hashtable<String, Integer>();
+    LinkedList<LinkDescriptor> links = new LinkedList<LinkDescriptor>();
     // Strip illegal characters from internal hyperlink targets
     private ExportNameCollection targetNames = new ExportNameCollection(true);
     
@@ -136,7 +136,7 @@ public class Converter extends ConverterBase {
     public void convertInner() throws IOException {      
         sTargetFileName = Misc.trimDocumentName(sTargetFileName,XhtmlDocument.getExtension(nType));
 		
-        outFiles = new Vector();
+        outFiles = new Vector<XhtmlDocument>();
         nOutFileIndex = -1;
 
         bNeedHeaderFooter = ofr.isSpreadsheet() || ofr.isPresentation() || config.getXhtmlSplitLevel()>0 || config.getXhtmlUplink().length()>0;
@@ -178,10 +178,10 @@ public class Converter extends ConverterBase {
         textCv.insertEndnotes(htmlDoc.getContentNode());
 
         // Resolve links
-        ListIterator iter = links.listIterator();
+        ListIterator<LinkDescriptor> iter = links.listIterator();
         while (iter.hasNext()) {
-            LinkDescriptor ld = (LinkDescriptor) iter.next();
-            Integer targetIndex = (Integer) targets.get(ld.sId);
+            LinkDescriptor ld = iter.next();
+            Integer targetIndex = targets.get(ld.sId);
             if (targetIndex!=null) {
                 int nTargetIndex = targetIndex.intValue();
                 if (nTargetIndex == ld.nIndex) { // same file
@@ -196,7 +196,7 @@ public class Converter extends ConverterBase {
 
         // Export styles (temp.)
         for (int i=0; i<=nOutFileIndex; i++) {
-            Document dom = ((XhtmlDocument) outFiles.get(i)).getContentDOM();
+            Document dom = outFiles.get(i).getContentDOM();
             NodeList hlist = dom.getElementsByTagName("head");
             Node styles = styleCv.exportStyles(dom);
             if (styles!=null) {
@@ -208,7 +208,7 @@ public class Converter extends ConverterBase {
         if (ofr.isSpreadsheet()) {
             for (int i=0; i<=nOutFileIndex; i++) {
 
-                XhtmlDocument doc = (XhtmlDocument) outFiles.get(i);
+                XhtmlDocument doc = outFiles.get(i);
                 Document dom = doc.getContentDOM();
                 Element header = doc.getHeaderNode();
                 Element footer = doc.getFooterNode();
@@ -233,12 +233,12 @@ public class Converter extends ConverterBase {
                 int nSheets = tableCv.sheetNames.size();
                 for (int j=0; j<nSheets; j++) {
                     if (config.xhtmlCalcSplit()) {
-                        addNavigationLink(dom,headerPar,(String) tableCv.sheetNames.get(j),j);
-                        addNavigationLink(dom,footerPar,(String) tableCv.sheetNames.get(j),j);
+                        addNavigationLink(dom,headerPar,tableCv.sheetNames.get(j),j);
+                        addNavigationLink(dom,footerPar,tableCv.sheetNames.get(j),j);
                     }
                     else {
-                        addInternalNavigationLink(dom,headerPar,(String) tableCv.sheetNames.get(j),"tableheading"+j);
-                        addInternalNavigationLink(dom,footerPar,(String) tableCv.sheetNames.get(j),"tableheading"+j);
+                        addInternalNavigationLink(dom,headerPar,tableCv.sheetNames.get(j),"tableheading"+j);
+                        addInternalNavigationLink(dom,footerPar,tableCv.sheetNames.get(j),"tableheading"+j);
 	                }
                 }
                 
@@ -248,7 +248,7 @@ public class Converter extends ConverterBase {
         }
         else if (ofr.isPresentation() || config.getXhtmlSplitLevel()>0) {
             for (int i=0; i<=nOutFileIndex; i++) {
-                XhtmlDocument doc = (XhtmlDocument) outFiles.get(i);
+                XhtmlDocument doc = outFiles.get(i);
                 Document dom = doc.getContentDOM();
                 //Element content = doc.getContentNode();
 
@@ -304,7 +304,7 @@ public class Converter extends ConverterBase {
         }
         else if (config.getXhtmlUplink().length()>0) {
             for (int i=0; i<=nOutFileIndex; i++) {
-                XhtmlDocument doc = (XhtmlDocument) outFiles.get(i);
+                XhtmlDocument doc = outFiles.get(i);
                 Document dom = doc.getContentDOM();
                 //Element content = doc.getContentNode();
 
@@ -430,7 +430,7 @@ public class Converter extends ConverterBase {
     // Use another document. TODO: This is very ugly; clean it up!!!
     public void changeOutFile(int nIndex) {
         nOutFileIndex = nIndex;
-        htmlDoc = (XhtmlDocument) outFiles.get(nIndex);
+        htmlDoc = outFiles.get(nIndex);
         htmlDOM = htmlDoc.getContentDOM();
     }
 	
@@ -537,7 +537,7 @@ public class Converter extends ConverterBase {
 
         // Recreate nested sections, if any
         if (!textCv.sections.isEmpty()) {
-            Iterator iter = textCv.sections.iterator();
+            Iterator<Node> iter = textCv.sections.iterator();
             while (iter.hasNext()) {
                 Element section = (Element) iter.next();
                 String sStyleName = Misc.getAttribute(section,XMLString.TEXT_STYLE_NAME);

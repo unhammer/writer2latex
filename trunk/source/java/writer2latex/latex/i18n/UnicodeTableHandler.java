@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-17) 
+ *  Version 1.2 (2009-03-26) 
  * 
  */
 
@@ -31,9 +31,10 @@ import java.util.Hashtable;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-// Helper classs: SAX handler to parse symbols.xml from jar
-class UnicodeTableHandler extends DefaultHandler{
-    private Hashtable tableSet; // collection of all tables
+/** Helper classs: SAX handler to parse symbols.xml from jar
+ */
+public class UnicodeTableHandler extends DefaultHandler{
+    private Hashtable<String,UnicodeTable> tableSet; // collection of all tables
     private UnicodeTable table; // the current table
     private String sSymbolSets;
     private boolean bGlobalReadThisSet;
@@ -42,7 +43,12 @@ class UnicodeTableHandler extends DefaultHandler{
     private int nFontencs = 0; // The currently active fontencodings
     private boolean b8bit = false;
     
-    UnicodeTableHandler(Hashtable tableSet, String sSymbolSets){
+    /** Create a new <code>UnicodeTableHandler</code>
+     * 
+     * @param tableSet		the <code>Hashtable</code> to fill with tables read from the file
+     * @param sSymbolSets	string containing table names to read (separated by |)
+     */
+    public UnicodeTableHandler(Hashtable<String,UnicodeTable> tableSet, String sSymbolSets){
         this.sSymbolSets = sSymbolSets;
         this.tableSet = tableSet;
     }
@@ -63,7 +69,7 @@ class UnicodeTableHandler extends DefaultHandler{
         }
         else if (qName.equals("special-symbol-set")) {
             // start a new special symbol set; this requires a new table
-            table = new UnicodeTable((UnicodeTable) tableSet.get("root"));
+            table = new UnicodeTable(tableSet.get("root"));
             tableSet.put(attributes.getValue("name"),table);
 
             // Read it if it requires nothing, or something we read

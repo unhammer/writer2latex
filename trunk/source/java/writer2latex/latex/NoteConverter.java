@@ -53,7 +53,7 @@ public class NoteConverter extends ConverterHelper {
     private boolean bContainsEndnotes = false;
     private boolean bContainsFootnotes = false;
     // Keep track of footnotes (inside minipage etc.), that should be typeset later
-    private LinkedList postponedFootnotes = new LinkedList();
+    private LinkedList<Element> postponedFootnotes = new LinkedList<Element>();
 
     public NoteConverter(OfficeReader ofr, LaTeXConfig config, ConverterPalette palette) {
         super(ofr,config,palette);
@@ -115,7 +115,7 @@ public class NoteConverter extends ConverterHelper {
         int n = postponedFootnotes.size();
         if (n==1) {
             ldp.append("\\footnotetext{");
-            traverseNoteBody((Element) postponedFootnotes.get(0),ldp,ic);
+            traverseNoteBody(postponedFootnotes.get(0),ldp,ic);
             ldp.append("}").nl();
             postponedFootnotes.clear();
         }
@@ -124,7 +124,7 @@ public class NoteConverter extends ConverterHelper {
             ldp.append("\\addtocounter{footnote}{-"+n+"}").nl();
             for (int i=0; i<n; i++) {
                 ldp.append("\\stepcounter{footnote}\\footnotetext{");
-                traverseNoteBody((Element) postponedFootnotes.get(i),ldp,ic);
+                traverseNoteBody(postponedFootnotes.get(i),ldp,ic);
                 ldp.append("}").nl();
             }
             postponedFootnotes.clear();

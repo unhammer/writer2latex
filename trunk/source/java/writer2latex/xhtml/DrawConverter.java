@@ -94,7 +94,7 @@ public class DrawConverter extends ConverterHelper {
     private boolean bOriginalImageSize;
 	
     // Frames in spreadsheet documents are collected here
-    private Vector frames = new Vector();
+    private Vector<Element> frames = new Vector<Element>();
     // This flag determines wether to collect frames or insert them immediately
     private boolean bCollectFrames = false;
 	
@@ -102,9 +102,9 @@ public class DrawConverter extends ConverterHelper {
         super(ofr,config,converter);
         // We can only handle one form; pick an arbitrary one.
         // Also we cannot split a form over several files.
-        Iterator formsIterator = ofr.getForms().getFormsIterator();
+        Iterator<FormReader> formsIterator = ofr.getForms().getFormsIterator();
         if (formsIterator.hasNext() && config.getXhtmlSplitLevel()==0) {
-            form = (FormReader) formsIterator.next();
+            form = formsIterator.next();
         }
         bCollectFrames = ofr.isSpreadsheet();
         sScale = config.getXhtmlScaling();
@@ -222,7 +222,7 @@ public class DrawConverter extends ConverterHelper {
         bCollectFrames = false;
         int nCount = frames.size();
         for (int i=0; i<nCount; i++) {
-            handleDrawElement((Element) frames.get(i),hnode,null,CENTERED);
+            handleDrawElement(frames.get(i),hnode,null,CENTERED);
         }
         frames.clear();
         bCollectFrames = true;

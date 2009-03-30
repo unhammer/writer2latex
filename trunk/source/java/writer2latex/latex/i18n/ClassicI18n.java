@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-16) 
+ *  Version 1.2 (2009-03-26) 
  * 
  */
 
@@ -185,12 +185,12 @@ public class ClassicI18n extends I18n {
     // End of static part of I18n!
 	 
     // **** Global variables ****
-    private Hashtable babelLanguages; // mappings iso->babel language
+    private Hashtable<String,String> babelLanguages; // mappings iso->babel language
 
     // Unicode translation
-    private Hashtable tableSet; // all tables
+    private Hashtable<String,UnicodeTable> tableSet; // all tables
     private UnicodeTable table; // currently active table (top of stack)
-    private Stack tableStack; // stack of active tables
+    private Stack<UnicodeTable> tableStack; // stack of active tables
     private UnicodeStringParser ucparser; // Unicode string parser
 
     // Collected data
@@ -231,7 +231,7 @@ public class ClassicI18n extends I18n {
         if (config.useEurosym()) sSymbols+="|eurosym";
         if (config.useTipa()) sSymbols+="|tipa";
 
-        tableSet = new Hashtable();
+        tableSet = new Hashtable<String,UnicodeTable>();
         UnicodeTableHandler handler=new UnicodeTableHandler(tableSet, sSymbols);
         SAXParserFactory factory=SAXParserFactory.newInstance();
         InputStream is = this.getClass().getResourceAsStream("symbols.xml");
@@ -244,9 +244,9 @@ public class ClassicI18n extends I18n {
             t.printStackTrace();
         }
         // put root table at top of stack
-        tableStack = new Stack();
-        tableStack.push((UnicodeTable) tableSet.get("root"));
-        table = (UnicodeTable) tableSet.get("root");
+        tableStack = new Stack<UnicodeTable>();
+        tableStack.push(tableSet.get("root"));
+        table = tableSet.get("root");
     }
 	
     /** Construct a new I18n for general use
@@ -386,8 +386,8 @@ public class ClassicI18n extends I18n {
         // If no name is specified we should keep the current table
         // Otherwise try to find the table, and use root if it's not available
         if (sName!=null) {
-            table = (UnicodeTable) tableSet.get(sName);
-            if (table==null) { table = (UnicodeTable) tableSet.get("root"); }
+            table = tableSet.get(sName);
+            if (table==null) { table = tableSet.get("root"); }
         }
         tableStack.push(table);
     }
@@ -396,7 +396,7 @@ public class ClassicI18n extends I18n {
      */
     public void popSpecialTable() {
         tableStack.pop();
-        table = (UnicodeTable) tableStack.peek();
+        table = tableStack.peek();
     }
 
     /** Get the number of characters defined in the current table
@@ -632,7 +632,7 @@ public class ClassicI18n extends I18n {
     // todo: support automatic choice of inputenc (see comments)?
     private String getBabelLanguage(String sLang) {
         if (babelLanguages.containsKey(sLang)) {
-            return (String) babelLanguages.get(sLang);
+            return babelLanguages.get(sLang);
         }
         else {
             return "english"; // interpret unknown languages as English
@@ -640,7 +640,7 @@ public class ClassicI18n extends I18n {
     }
 	
     private void prepareBabelLanguages() {
-        babelLanguages = new Hashtable();
+        babelLanguages = new Hashtable<String,String>();
         babelLanguages.put("en", "english"); // latin1
         babelLanguages.put("bg", "bulgarian"); // cp1251?
         babelLanguages.put("cs", "czech"); // latin2

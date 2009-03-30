@@ -45,8 +45,8 @@ import org.w3c.dom.Node;
 public class FormsReader {
 
     private Element formsElement; // The office:forms element
-    private Hashtable forms = new Hashtable(); // all forms, indexed by name
-    private Hashtable controls = new Hashtable(); // all controls, indexed by id
+    private Hashtable<String, FormReader> forms = new Hashtable<String, FormReader>(); // all forms, indexed by name
+    private Hashtable<String, ControlReader> controls = new Hashtable<String, ControlReader>(); // all controls, indexed by id
 	
     /** <p>Read the content of an <code>office:forms</code> element</p>
      *  @param formsElement a DOM element, which must be <code>office:forms</code> node
@@ -77,7 +77,7 @@ public class FormsReader {
     /** <p>Get a <code>Iterator</code> over all forms.</p>
      *  @return a <code>Iterator</code> over all forms
      */
-    public Iterator getFormsIterator() {
+    public Iterator<FormReader> getFormsIterator() {
         return forms.values().iterator();
     }
 
@@ -86,13 +86,13 @@ public class FormsReader {
      *  @return the form as a <code>FormReader</code> object
      */
     public FormReader getForm(String sName) {
-        return (FormReader) forms.get(sName);
+        return forms.get(sName);
     }
 
     /** <p>Get a <code>Iterator</code> over all controls.</p>
      *  @return a <code>Iterator</code> over all controls
      */
-    public Iterator getControlsIterator() {
+    public Iterator<ControlReader> getControlsIterator() {
         return controls.values().iterator();
     }
 	
@@ -101,7 +101,7 @@ public class FormsReader {
      *  @return the control as a <code>ControlReader</code> object
      */
     public ControlReader getControl(String sId) {
-        return (ControlReader) controls.get(sId);
+        return controls.get(sId);
     }
 	
     /** <p>Add a control</p>

@@ -1,5 +1,5 @@
-Writer2LaTeX source version 1.0 beta
-====================================
+Writer2LaTeX source version 1.1.1
+=================================
 
 Writer2LaTeX is (c) 2002-2009 by Henrik Just.
 The source is available under the terms and conditions of the

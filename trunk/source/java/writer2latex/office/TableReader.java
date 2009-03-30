@@ -42,16 +42,16 @@ import writer2latex.util.Misc;
 public class TableReader {
     //private OfficeReader ofr;
     private Element tableNode;
-    private LinkedList cols = new LinkedList();
-    private LinkedList rows = new LinkedList();
-    private LinkedList cells = new LinkedList();
+    private LinkedList<TableLine> cols = new LinkedList<TableLine>();
+    private LinkedList<TableLine> rows = new LinkedList<TableLine>();
+    private LinkedList<LinkedList<Element>> cells = new LinkedList<LinkedList<Element>>();
     private int nMaxCols = 1; // real number of columns (count to last non-empty)
     private int nMaxRows = 1; // real number of rows (count to last non-empty)
     private String[] sColWidth;
     private String[] sRelColWidth;
     private String sTableWidth;
     private String sRelTableWidth;
-    private Vector printRanges;
+    private Vector<TableRange> printRanges;
 	
     /**
      * <p> The constructor reads a table from a table:table or table:sub-table
@@ -111,7 +111,7 @@ public class TableReader {
         boolean bHasRelWidth=true; // set to false if some columns does not have a relative width set
         int nColSum = 0;
         for (int nCol=0; nCol<nCols; nCol++) {
-            StyleWithProperties style = ofr.getColumnStyle(((TableLine) cols.get(nCol)).getStyleName());
+            StyleWithProperties style = ofr.getColumnStyle(cols.get(nCol).getStyleName());
             if (style!=null) {
                 sColWidth[nCol] = style.getProperty(XMLString.STYLE_COLUMN_WIDTH);
                 String s = style.getProperty(XMLString.STYLE_REL_COLUMN_WIDTH);
@@ -136,7 +136,7 @@ public class TableReader {
         // (Calc exports a lot of empty rows at columns bottom/right)
         int nRows = cells.size();
         for (int nRow=0; nRow<nRows; nRow++) {
-            LinkedList row = (LinkedList) cells.get(nRow);
+            LinkedList row = cells.get(nRow);
             nCols = row.size();
             int nMaxCol = 0;
             int nMaxRow = 0;
@@ -154,7 +154,7 @@ public class TableReader {
         }
         
         // Finally get the print ranges, if any
-        printRanges = new Vector();
+        printRanges = new Vector<TableRange>();
         if (!"false".equals(tableNode.getAttribute(XMLString.TABLE_PRINT))) {
             TableRangeParser parser = new TableRangeParser(tableNode.getAttribute(XMLString.TABLE_PRINT_RANGES));
             while (parser.hasMoreRanges()) {
@@ -228,7 +228,7 @@ public class TableReader {
             rows.add(new TableLine(node,bHeader,bDisplay));
 
             // Read the cells in the row
-            LinkedList row = new LinkedList();
+            LinkedList<Element> row = new LinkedList<Element>();
             if (node.hasChildNodes()) {
                 NodeList nl = node.getChildNodes();
                 int nLen = nl.getLength();
@@ -344,7 +344,7 @@ public class TableReader {
 	
     public Element getCell(int nRow, int nCol) {
         if (nRow<0 || nRow>=cells.size()) { return null; }
-        LinkedList row = (LinkedList) cells.get(nRow);
+        LinkedList row = cells.get(nRow);
         if (nCol<0 || nCol>=row.size()) { return null; }
         return (Element) row.get(nCol);
     }
@@ -373,19 +373,19 @@ public class TableReader {
 	
     public TableLine getRow(int nRow) {
         if (nRow<0 || nRow>=rows.size()) { return null; }
-        return (TableLine) rows.get(nRow);
+        return rows.get(nRow);
     }
 	
     public TableLine getCol(int nCol) {
         if (nCol<0 || nCol>=cols.size()) { return null; }
-        return (TableLine) cols.get(nCol);
+        return cols.get(nCol);
     }
 	
     public int getPrintRangeCount() { return printRanges.size(); }
 	
     public TableRange getPrintRange(int nIndex) {
         if (0<=nIndex && nIndex<printRanges.size()) {
-            return (TableRange) printRanges.get(nIndex);
+            return printRanges.get(nIndex);
         }
         else {
             return null;

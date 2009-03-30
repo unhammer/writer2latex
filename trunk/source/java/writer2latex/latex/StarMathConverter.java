@@ -698,7 +698,7 @@ public final class StarMathConverter implements writer2latex.api.StarMathConvert
     private SmTokenTable keywords=new SmTokenTable(SmTokenTable.keywords);
     private SmTokenTable symbols=new SmTokenTable(SmTokenTable.symbols);
     private LaTeXConfig config;
-    private Hashtable configSymbols;
+    private Hashtable<String, String> configSymbols;
     private boolean bUseColor;
     private SmToken curToken=new SmToken(); // contains the data of the current token
     private SimpleInputBuffer buffer; // contains the starmath formula
@@ -860,7 +860,7 @@ public final class StarMathConverter implements writer2latex.api.StarMathConvert
             buffer.getChar();
             String sIdent=buffer.getIdentifier();
             if (configSymbols.containsKey(sIdent)) { // symbol defined in configuration
-                curToken.assign(Token.SPECIAL, (String) configSymbols.get(sIdent), 5);
+                curToken.assign(Token.SPECIAL, configSymbols.get(sIdent), 5);
             }
             else if (!symbols.lookup(sIdent,false,curToken))
                 curToken.assign(Token.IDENT, i18n.convert(sIdent,true,"en"), 5);

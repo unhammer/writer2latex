@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-22) 
+ *  Version 1.2 (2009-03-26) 
  *
  */
  
@@ -68,9 +68,9 @@ public final class Application {
     /* Based on command-line parameters. */
     private String sTargetMIME = MIMETypes.LATEX;
     private boolean bRecurse = false;
-    private Vector configFileNames = new Vector();
+    private Vector<String> configFileNames = new Vector<String>();
     private String sTemplateFileName = null;
-    private Hashtable options = new Hashtable();
+    private Hashtable<String,String> options = new Hashtable<String,String>();
     private String sSource = null;
     private String sTarget = null;
 
@@ -208,9 +208,9 @@ public final class Application {
         }
 		
         // Step 7: Set options from command line
-        Enumeration keys = options.keys();
+        Enumeration<String> keys = options.keys();
         while (keys.hasMoreElements()) {
-            String sKey = (String) keys.nextElement();
+            String sKey = keys.nextElement();
             String sValue = (String) options.get(sKey);
             converter.getConfig().setOption(sKey,sValue);
             if (batchCv!=null) {

@@ -85,9 +85,9 @@ public class ListStyleConverter extends StyleConverterHelper {
     public String getStyleDeclarations(String sIndent) {
         if (bConvertStyles) {
             StringBuffer buf = new StringBuffer();
-            Enumeration names = styleNames.keys();
+            Enumeration<String> names = styleNames.keys();
             while (names.hasMoreElements()) {
-                String sDisplayName = (String) names.nextElement();
+                String sDisplayName = names.nextElement();
                 ListStyle style = (ListStyle)
                     getStyles().getStyleByDisplayName(sDisplayName);
                 if (!style.isAutomatic()) {

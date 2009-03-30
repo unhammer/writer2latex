@@ -232,9 +232,9 @@ public class FilterDataParser {
         }
         
         // Read further configuration properties
-        Enumeration keys = props.keys();
+        Enumeration<String> keys = props.keys();
         while (keys.hasMoreElements()) {
-            String sKey = (String) keys.nextElement();
+            String sKey = keys.nextElement();
             if (!"ConfigURL".equals(sKey) && !"TemplateURL".equals(sKey) && !"AutoCreate".equals(sKey)) {
                 Object value = props.get(sKey);
                 if (AnyConverter.isString(value)) {

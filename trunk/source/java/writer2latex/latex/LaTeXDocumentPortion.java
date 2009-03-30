@@ -36,7 +36,7 @@ import writer2latex.util.Misc;
 number of lines, and may include subportions. */
 public class LaTeXDocumentPortion {
 
-    private Vector nodes; // The collection of all nodes in this portion
+    private Vector<Object> nodes; // The collection of all nodes in this portion
 
     private StringBuffer curText; // The currently active node (always the last node)
     private boolean bEmpty; // Is the active node empty?
@@ -45,7 +45,7 @@ public class LaTeXDocumentPortion {
     
     public LaTeXDocumentPortion(boolean bWrap){
         this.bWrap = bWrap;
-        nodes = new Vector();
+        nodes = new Vector<Object>();
         curText = new StringBuffer();
         bEmpty = true;
     }

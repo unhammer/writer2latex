@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-03-05)
+ *  Version 1.2 (2009-03-27)
  *
  */
 
@@ -58,7 +58,7 @@ public class L10n {
                 case UP: return "Nach oben";
                 case FIRST : return "Anfang";
                 case PREVIOUS : return "Vorheriges";
-                case NEXT : return "N\u00ccchstes";
+                case NEXT : return "N\u00e4chstes";
                 case LAST : return "Ende";
                 case CONTENTS : return "Inhalte";
                 case INDEX : return "Index";

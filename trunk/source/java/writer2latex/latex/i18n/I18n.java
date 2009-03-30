@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-16) 
+ *  Version 1.2 (2009-03-26) 
  * 
  */
 
@@ -49,7 +49,7 @@ public abstract class I18n {
 
     // Collected data
     protected String sDefaultLanguage; // The default iso language to use
-    protected HashSet languages = new HashSet(); // All languages used
+    protected HashSet<String> languages = new HashSet<String>(); // All languages used
 
     // **** Constructors ****
 

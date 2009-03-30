@@ -1,7 +1,7 @@
-Writer2LaTeX version 1.0 beta
-=============================
+Writer2LaTeX version 1.1.1 (development release)
+================================================
 
-This is the distribution of Writer2LaTeX version 1.0 beta
+This is the distribution of Writer2LaTeX version 1.1.1
 
 Latest version can be found at the web site
   http://writer2latex.sourceforge.net

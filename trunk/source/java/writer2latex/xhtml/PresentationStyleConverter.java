@@ -45,7 +45,7 @@ public class PresentationStyleConverter extends FrameStyleConverter {
 
     // Data about outline styles
     String sCurrentOutlineStyle = null;
-    Hashtable outlineStyles = new Hashtable();
+    Hashtable<String, String[]> outlineStyles = new Hashtable<String, String[]>();
     ExportNameCollection outlineStyleNames = new ExportNameCollection(true);
 
     /** Create a new <code>PresentationStyleConverter</code>
@@ -87,9 +87,9 @@ public class PresentationStyleConverter extends FrameStyleConverter {
         if (bConvertStyles) {
             StringBuffer buf = new StringBuffer();
             buf.append(super.getStyleDeclarations(sIndent));
-            Enumeration names = outlineStyleNames.keys();
+            Enumeration<String> names = outlineStyleNames.keys();
             while (names.hasMoreElements()) {
-                String sDisplayName = (String) names.nextElement();
+                String sDisplayName = names.nextElement();
                 StyleWithProperties style = (StyleWithProperties)
                     getStyles().getStyleByDisplayName(sDisplayName);
                 if (!style.isAutomatic()) {
@@ -147,7 +147,7 @@ public class PresentationStyleConverter extends FrameStyleConverter {
     public void applyOutlineStyle(int nLevel, StyleInfo info) {
         if (2<=nLevel && nLevel<=9 && sCurrentOutlineStyle!=null) {
             if (outlineStyles.containsKey(sCurrentOutlineStyle)) {
-                info.sClass = "outline"+outlineStyleNames.getExportName(((String[]) outlineStyles.get(sCurrentOutlineStyle))[nLevel]);
+                info.sClass = "outline"+outlineStyleNames.getExportName(outlineStyles.get(sCurrentOutlineStyle)[nLevel]);
             }
         }
     }

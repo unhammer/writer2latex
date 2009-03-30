@@ -63,9 +63,9 @@ public class FrameStyleConverter extends StyleWithPropertiesConverterHelper {
         if (bConvertStyles) {
             StringBuffer buf = new StringBuffer();
             buf.append(super.getStyleDeclarations(sIndent));
-            Enumeration names = styleNames.keys();
+            Enumeration<String> names = styleNames.keys();
             while (names.hasMoreElements()) {
-                String sDisplayName = (String) names.nextElement();
+                String sDisplayName = names.nextElement();
                 StyleWithProperties style = (StyleWithProperties)
                     getStyles().getStyleByDisplayName(sDisplayName);
                 if (!style.isAutomatic()) {
