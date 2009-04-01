@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  *  
- *  Version 1.0 (2009-02-18)
+ *  Version 1.2 (2009-03-31)
  *  
  */
 
@@ -44,7 +44,7 @@ public class LaTeXOptionsDialog extends OptionsDialogBase {
 
     // Translate list box items to configuration option values 
     private static final String[] BACKEND_VALUES =
-        { "generic", "pdftex", "dvips", "unspecified" };
+        { "generic", "pdftex", "dvips", "xetex", "unspecified" };
     private static final String[] INPUTENCODING_VALUES =
         { "ascii", "latin1", "latin2", "iso-8859-7", "cp1250", "cp1251", "koi8-r", "utf8" };
     private static final String[] NOTES_VALUES =
@@ -204,7 +204,7 @@ public class LaTeXOptionsDialog extends OptionsDialogBase {
 
     // Implement XDialogEventHandler
     public boolean callHandlerMethod(XDialog xDialog, Object event, String sMethod) {
-        if (sMethod.equals("ConfigChange")) {
+        if (sMethod.equals("ConfigChange") || sMethod.equals("BackendChange")) {
             updateLockedOptions();
             enableControls();
         }
@@ -237,10 +237,15 @@ public class LaTeXOptionsDialog extends OptionsDialogBase {
             // backend must be pdf for pdfscreen
             return getListBoxSelectedItem("Config")==4 || super.isLocked(sOptionName);
         }
+        else if ("inputencoding".equals(sOptionName)) {
+        	// backend=xetex locks the encoding to utf8
+        	return getListBoxSelectedItem("Backend")==3 || super.isLocked(sOptionName);
+        }
         else if ("additional_symbols".equals(sOptionName)) {
             // additional_symbols is disabled for custom config (where the 5
             // individual options can be set independently)
-            return getListBoxSelectedItem("Config")==5 || super.isLocked(sOptionName);
+        	// it is also disabled for backend=xetex
+            return getListBoxSelectedItem("Backend")==3 || getListBoxSelectedItem("Config")==5 || super.isLocked(sOptionName);
         }
         else if ("use_pifont".equals(sOptionName)) {
             return isLocked("additional_symbols");

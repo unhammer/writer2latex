@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-30)
+ *  Version 1.2 (2009-03-31)
  *
  */ 
  
@@ -44,6 +44,9 @@ public final class TeXify {
 
     /** Backend format pdfTeX (pdf) */
     public static final short PDFTEX = 3;
+    
+    /** Backend format XeTeX (also pdf, usually) */
+    public static final short XETEX = 4;
 
     // Define the applications to run for each backend
     private static final String[] genericTexify = {
@@ -56,6 +59,9 @@ public final class TeXify {
         ExternalApps.LATEX, ExternalApps.BIBTEX, ExternalApps.MAKEINDEX,
         ExternalApps.LATEX, ExternalApps.MAKEINDEX, ExternalApps.LATEX,
         ExternalApps.DVIPS };
+    private static final String[] xeTexify = {
+        ExternalApps.XELATEX, ExternalApps.BIBTEX, ExternalApps.MAKEINDEX,
+        ExternalApps.XELATEX, ExternalApps.MAKEINDEX, ExternalApps.XELATEX };
 
     // Global objects
     //private XComponentContext xContext;
@@ -106,6 +112,14 @@ public final class TeXify {
                 file.getParentFile(), false)>0) {
                 throw new IOException("Error executing postscript viewer");
             }
+        }
+        else if (nBackend==XETEX) {
+        	doTeXify(xeTexify, file);
+            if (externalApps.execute(ExternalApps.PDFVIEWER,
+                    new File(file.getParentFile(),file.getName()+".pdf").getPath(),
+                    file.getParentFile(), false)>0) {
+                    throw new IOException("Error executing pdf viewer");
+                }
         }
 
     }

@@ -2,6 +2,8 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[w2l] Added XeTeX as possible backend in dialog
+
 [all] Bugfix: Paragraphs containing only fields are no longer lost
 
 [w4l] Added Writer4LaTeX extension

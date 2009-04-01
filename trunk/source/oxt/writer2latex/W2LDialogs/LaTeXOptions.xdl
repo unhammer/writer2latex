@@ -22,8 +22,10 @@
     <dlg:menuitem dlg:value="&amp;116.Backend.StringItemList"/>
     <dlg:menuitem dlg:value="&amp;117.Backend.StringItemList"/>
     <dlg:menuitem dlg:value="&amp;118.Backend.StringItemList"/>
+    <dlg:menuitem dlg:value="XeTeX"/>
     <dlg:menuitem dlg:value="&amp;119.Backend.StringItemList"/>
    </dlg:menupopup>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:BackendChange" script:language="UNO"/>
   </dlg:menulist>
   <dlg:text dlg:id="InputencodingLabel" dlg:tab-index="6" dlg:left="12" dlg:top="50" dlg:width="47" dlg:height="12" dlg:help-text="&amp;22.LaTeXOptions.InputencodingLabel.HelpText" dlg:value="&amp;23.LaTeXOptions.InputencodingLabel.Label"/>
   <dlg:menulist dlg:id="Inputencoding" dlg:tab-index="7" dlg:left="65" dlg:top="48" dlg:width="96" dlg:height="12" dlg:help-text="&amp;24.LaTeXOptions.Inputencoding.HelpText" dlg:spin="true" dlg:linecount="8">
