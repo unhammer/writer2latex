@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-09-22)
+ *  Version 1.0 (2008-04-02)
  *
  */
 
@@ -115,16 +115,10 @@ public class OfficeReader {
 	    Node child = node.getFirstChild();
         while (child!=null) {
             if (child.getNodeType()==Node.ELEMENT_NODE) {
-                if (child.getNodeName().equals(XMLString.TEXT_SPAN)) {
+            	if (isTextElement(child)) {
                     if (!isWhitespaceContent(child)) { return false; }
                 }
-                else if (child.getNodeName().equals(XMLString.TEXT_A)) {
-                    if (!isWhitespaceContent(child)) { return false; }
-                }
-                else if (child.getNodeName().equals(XMLString.TEXT_BIBLIOGRAPHY_MARK)) {
-                    if (!isWhitespaceContent(child)) { return false; }
-                }
-                else if (!isTextElement(child)) {
+                else {
                     return false; // found non-text content!
                 }
             }

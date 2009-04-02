@@ -1,5 +1,15 @@
 Changelog for Writer2LaTeX version 0.5 -> 1.0
 
+---------- version 1.0 beta2 ----------
+
+[all] Bugfix: Paragraphs containing only fields are no longer lost
+
+[all] Buildfile is adapted to work with separated ure and office (OOo 3.0+)
+
+[all] Bugfix: Corrected path to descriptions in oxt
+
+[w2x] Bugfix: Corrected typo in german translation of navigation bar
+
 ---------- version 1.0 beta ----------
 
 [w2x] Added german translation from Raphael Fetzer
