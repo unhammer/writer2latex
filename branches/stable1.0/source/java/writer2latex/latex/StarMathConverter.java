@@ -18,7 +18,7 @@
  *
  *  Copyright: 2002-2009 by Henrik Just
  *  
- *  Version 1.0 (2009-02-17)
+ *  Version 1.0 (2009-04-08)
  *
  *  All Rights Reserved.
  */
@@ -1007,12 +1007,12 @@ public final class StarMathConverter implements writer2latex.api.StarMathConvert
     
     private String table(float fSize, Token eAlign){
         StringBuffer bufTable=new StringBuffer();
-        String sLine=line(fSize,eAlign);
+        String sLine=line(fSize,eAlign,true);
         if (curToken.eType==Token.NEWLINE){ // more than one line
             bufTable.append("\\begin{gathered}").append(sLine);
             while (curToken.eType==Token.NEWLINE){
                 nextToken();
-                bufTable.append("\\\\").append(line(fSize,eAlign));
+                bufTable.append("\\\\").append(line(fSize,eAlign,false));
             }
             return bufTable.append("\\end{gathered}").toString();
         }
@@ -1052,12 +1052,19 @@ public final class StarMathConverter implements writer2latex.api.StarMathConvert
         }
     }
     
-    private String line(float fSize, Token eAlign){
+    private String line(float fSize, Token eAlign, boolean bFirstLine){
         if (curToken.eType!=Token.NEWLINE && curToken.eType!=Token.END){
             // Add implicit left alignment for expressions starting with text
             // (Note: Don't pass on this alignment to subexpressions!)
+        	// This alignment is only added if there's more than one line!
             if (curToken.eType==Token.TEXT) {
-                return expression(fSize,eAlign)+"\\hfill ";
+            	String sExpression = expression(fSize,eAlign);
+            	if (!bFirstLine || curToken.eType==Token.NEWLINE) {
+            		return sExpression+"\\hfill ";
+            	}
+            	else {
+            		return sExpression;
+            	}
             }
             else {
                 return align(fSize,eAlign,true,false);

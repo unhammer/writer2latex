@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description xmlns="http://openoffice.org/extensions/description/2006"
-             xmlns:d="http://openoffice.org/extensions/description/2006">
+             xmlns:d="http://openoffice.org/extensions/description/2006"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
 			 
   <identifier value="org.openoffice.da.writer2xhtml.oxt" />
   
@@ -16,6 +17,7 @@
     <name lang="de">Writer2xhtml Exportfilter</name>
     <name lang="es">Writer2xhtml filtros para exportar</name>
     <name lang="fr">Filtres d'exportation Writer2xhtml</name>
+    <name lang="it">Filtri di esportazione Writer2xhtml</name>
     <name lang="ru">Фильтры экспорта Writer2xhtml</name>
     <name lang="uk">Фільтри експорту Writer2xhtml</name>
   </display-name>
@@ -26,6 +28,7 @@
     <src xlink:href="desc_de.txt" lang="de" />
     <src xlink:href="desc_es.txt" lang="es" />
     <src xlink:href="desc_fr.txt" lang="fr" />
+    <src xlink:href="desc_it.txt" lang="it" />
     <src xlink:href="desc_ru.txt" lang="ru" />
     <src xlink:href="desc_uk.txt" lang="uk" />
   </extension-description>

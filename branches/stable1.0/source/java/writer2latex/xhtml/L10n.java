@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-04-01)
+ *  Version 1.0 (2009-04-08)
  *
  */
 
@@ -93,6 +93,20 @@ public class L10n {
                 case HOME : return "Inicio";
                 case DIRECTORY: return "Directorio";
                 case DOCUMENT: return "Documento";
+            }
+        }
+        if (sLocale.startsWith("it")) { // italian
+            switch (nString) {
+            	case UP: return "Su";
+            	case FIRST : return "Inizio";
+            	case PREVIOUS : return "Precedente";
+            	case NEXT : return "Successivo";
+            	case LAST : return "Fine";
+            	case CONTENTS : return "Sommario";
+            	case INDEX : return "Indice";
+            	case HOME : return "Home";
+            	case DIRECTORY: return "Cartella";
+            	case DOCUMENT: return "Documento";     
             }
         }
         if (sLocale.startsWith("da")) { // danish

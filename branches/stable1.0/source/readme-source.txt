@@ -1,4 +1,4 @@
-Writer2LaTeX source version 1.0 beta2
+Writer2LaTeX source version 1.0 beta3
 =====================================
 
 Writer2LaTeX is (c) 2002-2009 by Henrik Just.
