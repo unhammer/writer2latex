@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  *  
- *  Version 1.0 (2008-11-24)
+ *  Version 1.0 (2009-04-14)
  *  
  */
  
@@ -163,7 +163,7 @@ public abstract class ExportFilterBase implements
     	    if (origString.indexOf(">")!=-1){
 	        	origString=replace(origString,">","&gt;");
     	    }  
-	        return origString;
+  	        return origString;
 	  
         }
 
@@ -301,6 +301,7 @@ public abstract class ExportFilterBase implements
 	}
 	public void characters(String str){
 	    str=needsMask(str);
+
 	    try{
 		 xOutStream.writeBytes(str.getBytes("UTF-8"));
 	    }
@@ -370,12 +371,12 @@ public abstract class ExportFilterBase implements
             converter.setGraphicConverter(new GraphicConverterImpl(xComponentContext));
             
             ConverterResult dataOut = null;
-            try {
+            //try {
                 dataOut = converter.convert(xis,sName);
-            }
-            catch (IOException e) {
+            //}
+            //catch (IOException e) {
                 // Fail silently
-            }
+            //}
 
             // Write out files
             Iterator docEnum = dataOut.iterator();

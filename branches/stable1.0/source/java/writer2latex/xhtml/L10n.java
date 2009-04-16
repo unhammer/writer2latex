@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-04-08)
+ *  Version 1.0 (2009-04-16)
  *
  */
 
@@ -150,6 +150,20 @@ public class L10n {
             	case DIRECTORY: return "\u0422\u0435\u043a\u0430";
             	case DOCUMENT: return "\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442";
             }
+        }
+        if (sLocale.startsWith("tr")) { // turkish
+            switch (nString) {
+            	case UP: return "Yukar\u0131";
+            	case FIRST : return "\u0130lk";
+            	case PREVIOUS : return "\u00d6nceki";
+            	case NEXT : return "Sonraki";
+            	case LAST : return "Son";
+            	case CONTENTS : return "\u0130\u00e7indekiler";
+            	case INDEX : return "\u0130ndeks";
+            	case HOME : return "Ev";
+            	case DIRECTORY: return "Klas\u00f6r";
+            	case DOCUMENT: return "D\u00f6k\u00fcman";
+            }        	
         }
         if (sLocale.startsWith("hr")) { // croatian
             switch (nString) {

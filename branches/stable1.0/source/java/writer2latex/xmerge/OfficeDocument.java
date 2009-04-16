@@ -568,7 +568,6 @@ public class OfficeDocument
 	else{
 	    try{
 		//contentDoc=  builder.parse((InputStream)is);
-
                Reader r = secondHack(is);
                InputSource ins = new InputSource(r);
 	        org.w3c.dom.Document newDoc = builder.parse(ins);
@@ -670,7 +669,7 @@ public class OfficeDocument
                 }
 	    }
 	    catch (SAXException ex) {
-		throw new OfficeDocumentException(ex);
+	    	throw new OfficeDocumentException(ex);
 	    }
 	}
       

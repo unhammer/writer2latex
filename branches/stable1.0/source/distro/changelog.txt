@@ -2,7 +2,9 @@ Changelog for Writer2LaTeX version 0.5 -> 1.0
 
 ---------- version 1.0 beta3 ----------
 
-[all] Added Italian translation from Stefano...
+[all] Added turkish translation from Ferhat Nutku
+
+[all] Added Italian translation from Stefano Tombolini
 
 [w2l] Bugfix: Removed unwanted \hfill from one-line formulas starting with text
 
