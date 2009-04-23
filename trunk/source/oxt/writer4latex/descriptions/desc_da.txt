@@ -1,0 +1,3 @@
+Writer4LaTeX integrerer Writer med din LaTeX distribution. 
+
+Sammen med Writer2LaTeX eksportfilteret (som også skal være installeret) giver det dig mulighed for at bruge Writer som LaTeX frontend

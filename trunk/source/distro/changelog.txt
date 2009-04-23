@@ -2,6 +2,15 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[all] Filter: Filters out characters that are illegal in xml
+  (this fixes a problem with rtf documents imported in OOo)
+
+[w2x] Introduced hack to set link attributes using the link name
+  accepts a semicolon separated list of name=value, for example
+  title=link to next page;rel=next
+
+[all] Added icon and publisher information to the extensions
+
 [w2l] Added XeTeX as possible backend in dialog
 
 [all] Bugfix: Paragraphs containing only fields are no longer lost

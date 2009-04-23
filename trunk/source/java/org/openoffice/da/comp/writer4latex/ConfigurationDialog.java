@@ -20,14 +20,16 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-30)
+ *  Version 1.2 (2009-04-23)
  *
  */ 
  
 package org.openoffice.da.comp.writer4latex;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.util.Vector;
 
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
@@ -199,31 +201,98 @@ public final class ConfigurationDialog
         }
         return true;
     }
-	
-    private boolean autoConfigure(XWindow xWindow) {
-		externalApps.setApplication(ExternalApps.LATEX, "latex", "--interaction=batchmode %s");
-		externalApps.setApplication(ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s");
-		externalApps.setApplication(ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s");
-		externalApps.setApplication(ExternalApps.DVIPS, "dvips", "%s");
-		externalApps.setApplication(ExternalApps.BIBTEX, "bibtex", "%s");
-		externalApps.setApplication(ExternalApps.MAKEINDEX, "makeindex", "%s");
-		externalApps.setApplication(ExternalApps.OOLATEX, "oolatex", "%s");
+    
+    // Unix: Test to determine wether a certain application is available in the OS
+    // Requires "which", hence unix only
+    private boolean hasApp(String sAppName) {
+        try {
+			Vector<String> command = new Vector<String>();
+			command.add("which");
+			command.add(sAppName);
+			
+            ProcessBuilder pb = new ProcessBuilder(command);
+            Process proc = pb.start();        
 
+            // Gobble the error stream of the application
+            StreamGobbler errorGobbler = new 
+                StreamGobbler(proc.getErrorStream(), "ERROR");            
+            
+            // Gooble the output stream of the application
+            StreamGobbler outputGobbler = new 
+                StreamGobbler(proc.getInputStream(), "OUTPUT");
+                
+            errorGobbler.start();
+            outputGobbler.start();
+                                    
+            // The application exists if the process exits with 0
+            return proc.waitFor()==0;
+        }
+        catch (InterruptedException e) {
+            return false;
+        }
+        catch (IOException e) {
+            return false;
+        }
+    }
+    
+    // Unix: Configure a certain application testing the availability
+    private boolean configureApp(String sName, String sAppName, String sArguments) {
+    	if (hasApp(sAppName)) {
+    		externalApps.setApplication(sName, sAppName, sArguments);
+    		return true;
+    	}
+    	else {
+    		externalApps.setApplication(sName, "???", "???");
+    		return false;
+    	}
+    }
+    
+    // Unix: Configure a certain application testing the availability
+    // This variant uses an array of potential apps
+    private boolean configureApp(String sName, String[] sAppNames, String sArguments) {
+    	for (String sAppName : sAppNames) {
+    		if (configureApp(sName, sAppName, sArguments)) { return true; }
+    	}
+    	return false;
+    }
+	
+    // Configure the applications automatically (OS dependent)
+    private boolean autoConfigure(XWindow xWindow) {
 		String sOsName = System.getProperty("os.name");
     	if ("Linux".equals(sOsName)) {
-    		// TODO: Search for applications (which...)
-    		// Viewers may be evince, okular, xdvi, xpdf, ghostview or...
-    		externalApps.setApplication(ExternalApps.DVIVIEWER, "evince", "%s");
-    		externalApps.setApplication(ExternalApps.PDFVIEWER, "evince", "%s");
-    		externalApps.setApplication(ExternalApps.POSTSCRIPTVIEWER, "evince", "%s");
+    		configureApp(ExternalApps.LATEX, "latex", "--interaction=batchmode %s");
+    		configureApp(ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s");
+    		configureApp(ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s");
+    		configureApp(ExternalApps.DVIPS, "dvips", "%s");
+    		configureApp(ExternalApps.BIBTEX, "bibtex", "%s");
+    		configureApp(ExternalApps.MAKEINDEX, "makeindex", "%s");
+    		configureApp(ExternalApps.OOLATEX, "oolatex", "%s");    		
+    		// We have several possible viewers
+    		String[] sDviViewers = {"evince", "okular", "xdvi"};
+    		configureApp(ExternalApps.DVIVIEWER, sDviViewers, "%s");
+    		String[] sPdfViewers =  {"evince", "okular", "xpdf"};
+    		configureApp(ExternalApps.PDFVIEWER, sPdfViewers, "%s");
+    		String[] sPsViewers =  {"evince", "okular", "ghostview"};
+    		configureApp(ExternalApps.POSTSCRIPTVIEWER, sPsViewers, "%s");
     	}
     	else if ("Windows".equals(sOsName)) {
+    		// TODO: Get information from the windows registry
     		// Assume MikTeX
+    		externalApps.setApplication(ExternalApps.LATEX, "latex", "--interaction=batchmode %s");
+    		externalApps.setApplication(ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s");
+    		externalApps.setApplication(ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s");
+    		externalApps.setApplication(ExternalApps.DVIPS, "dvips", "%s");
+    		externalApps.setApplication(ExternalApps.BIBTEX, "bibtex", "%s");
+    		externalApps.setApplication(ExternalApps.MAKEINDEX, "makeindex", "%s");
+    		externalApps.setApplication(ExternalApps.OOLATEX, "oolatex", "%s");
     		externalApps.setApplication(ExternalApps.DVIVIEWER, "yap", "--single-instance %s");
     		// And assume gsview for pdf and ps
     		// gsview32 may not be in the path, but at least this helps a bit
     		externalApps.setApplication(ExternalApps.PDFVIEWER, "gsview32.exe", "-e \"%s\"");
     		externalApps.setApplication(ExternalApps.POSTSCRIPTVIEWER, "gsview32.exe", "-e \"%s\"");    		
+    	}
+    	else {
+    		// Unsupported OS
     	}
     	changeApplication(xWindow);
         return true;

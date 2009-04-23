@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description xmlns="http://openoffice.org/extensions/description/2006"
-             xmlns:d="http://openoffice.org/extensions/description/2006">
+             xmlns:d="http://openoffice.org/extensions/description/2006"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+
   <identifier value="org.openoffice.da.writer4latex.oxt" />
   <version value="1.1.1" />
   <dependencies>
     <OpenOffice.org-minimal-version value="2.2" d:name="OpenOffice.org 2.2"/>
   </dependencies>
+  
+  <publisher>
+    <name xlink:href="http://writer2latex.sourceforge.net" 
+    lang="en">Writer2LaTeX</name>
+  </publisher>
+  
+  <display-name>
+    <name lang="da">Writer4LaTeX frontend</name>
+    <name lang="en">Writer4LaTeX frontend</name>
+  </display-name>
+  
+  <extension-description>
+    <src xlink:href="descriptions/desc_da.txt" lang="da" />
+    <src xlink:href="descriptions/desc_en.txt" lang="en" />
+  </extension-description>
+  
+  <icon>
+    <default xlink:href="images/w2licon.png" />
+    <high-contrast xlink:href="images/w2lhcicon.png" />
+  </icon>
+  
 </description> 

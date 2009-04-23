@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  *  
- *  Version 1.0 (2008-11-24)
+ *  Version 1.2 (2009-04-23)
  *  
  */
  
@@ -132,38 +132,34 @@ public abstract class ExportFilterBase implements
             return name;
         }
 		
-        public String replace(String origString, String origChar, String replaceChar){
-	        String tmp="";	
-	        int index=origString.indexOf(origChar);
-	        if(index !=-1){
-                while (index !=-1){
-		            String first =origString.substring(0,index);
-		            first=first.concat(replaceChar);
-                    tmp=tmp.concat(first);
-                    origString=origString.substring(index+1,origString.length());
- 		            index=origString.indexOf(origChar);
-         	        if(index==-1) {
-                        tmp=tmp.concat(origString);
-                    }
-        	    }
-	        }
-	        return tmp;
-        }
-	   
         public String needsMask(String origString) {
-            if (origString.indexOf("&")!=-1){
-                origString=replace(origString,"&","&amp;");
-     	    }    
-	        if (origString.indexOf("\"")!=-1){
-        		origString=replace(origString,"\"","&quot;");
-    	    }    
-	        if (origString.indexOf("<")!=-1){
-        		origString=replace(origString,"<","&lt;");
-    	    }  
-    	    if (origString.indexOf(">")!=-1){
-	        	origString=replace(origString,">","&gt;");
-    	    }  
-	        return origString;
+        	StringBuffer buf = new StringBuffer();
+        	int nLen = origString.length();
+        	for (int i=0; i<nLen; i++) {
+        		char c = origString.charAt(i);
+                if (c=='&'){
+                    buf.append("&amp;");
+         	    }    
+    	        if (c=='\"'){
+            		buf.append("&quot;");
+        	    }    
+    	        if (c=='<'){
+            		buf.append("&lt;");
+        	    }  
+        	    if (c=='>'){
+    	        	buf.append("&gt;");
+        	    }  
+        	    else if (c=='\u0009' || c=='\n' || c=='\r' || (c>='\u0020' && c<='\uD7FF') || (c>='\uE000' && c<'\uFFFD')) {
+        			// Valid characters found at xml.com
+        			// Char ::= #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+        	    	buf.append(c);
+        	    }
+        	    else {
+        	    	// Found illegal character
+        	    	System.out.println("Illegal character : "+Integer.toHexString(c));
+        	    }
+        	}
+	        return buf.toString();
 	  
         }
 
@@ -233,7 +229,7 @@ public abstract class ExportFilterBase implements
         // Implementation of XDocumentHandler:
         // Flat xml is created by the sax events and passed through the pipe
         // created by exporter()
-
+        
         public void  startDocument () {
  	        //Do nothing
         }
@@ -301,6 +297,7 @@ public abstract class ExportFilterBase implements
 	}
 	public void characters(String str){
 	    str=needsMask(str);
+
 	    try{
 		 xOutStream.writeBytes(str.getBytes("UTF-8"));
 	    }
@@ -370,12 +367,12 @@ public abstract class ExportFilterBase implements
             converter.setGraphicConverter(new GraphicConverterImpl(xComponentContext));
             
             ConverterResult dataOut = null;
-            try {
+            //try {
                 dataOut = converter.convert(xis,sName);
-            }
-            catch (IOException e) {
+            //}
+            //catch (IOException e) {
                 // Fail silently
-            }
+            //}
 
             // Write out files
             Iterator<OutputFile> docEnum = dataOut.iterator();

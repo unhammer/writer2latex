@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-03-02)
+ *  Version 1.2 (2009-03-02)
  *
  */
 
@@ -597,8 +597,23 @@ public class Converter extends ConverterBase {
             anchor.setAttribute("href",sHref);
             String sName = Misc.getAttribute(onode,XMLString.OFFICE_NAME);
             if (sName!=null) {
-                anchor.setAttribute("name",sName);
-                anchor.setAttribute("title",sName); // OOo does not have title...
+            	// The name attribute is rarely use (usually the user will insert a bookmark)
+            	// Hence we (mis)use it to set additional attributes that are not supported by OOo
+            	if (sName.indexOf(";")==-1 && sName.indexOf("=")==-1) {
+            		// Simple case, use the value to set name and title
+                    anchor.setAttribute("name",sName);
+                    anchor.setAttribute("title",sName);
+            	}
+            	else {
+                	// Complex case - using the syntax: name=value;name=value;...
+            		String[] sElements = sName.split(";");
+            		for (String sElement : sElements) {
+            			String[] sNameVal = sElement.split("=");
+            			if (sNameVal.length>=2) {
+            				anchor.setAttribute(sNameVal[0],sNameVal[1]);
+            			}
+            		}
+            	}
             }
             // TODO: target has been deprecated in xhtml 1.0 strict
             String sTarget = Misc.getAttribute(onode,XMLString.OFFICE_TARGET_FRAME_NAME);

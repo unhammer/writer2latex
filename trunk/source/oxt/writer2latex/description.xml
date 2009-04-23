@@ -10,7 +10,12 @@
   <dependencies>
     <OpenOffice.org-minimal-version value="2.2" d:name="OpenOffice.org 2.2"/>
   </dependencies>
-
+  
+  <publisher>
+    <name xlink:href="http://writer2latex.sourceforge.net" 
+    lang="en">Writer2LaTeX</name>
+  </publisher>
+  
   <display-name>
     <name lang="da">Writer2LaTeX eksportfiltre</name>
     <name lang="en">Writer2LaTeX export filters</name>
@@ -20,6 +25,12 @@
     <name lang="ru">Фильтры экспорта Writer2LaTeX</name>
     <name lang="uk">Фільтри експорту Writer2LaTeX</name>
   </display-name>
+  
+  <icon>
+    <default xlink:href="images/w2licon.png" />
+    <high-contrast xlink:href="images/w2lhcicon.png" />
+  </icon>
+  
   
   <extension-description>
     <src xlink:href="desc_da.txt" lang="da" />
