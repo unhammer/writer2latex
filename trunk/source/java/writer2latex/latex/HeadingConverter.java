@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-22)
+ *  Version 1.2 (2009-04-28)
  *
  */
 
@@ -205,6 +205,12 @@ public class HeadingConverter extends ConverterHelper {
                         String sMarginTop = style.getAbsoluteLength(XMLString.FO_MARGIN_TOP);
                         String sMarginBottom = style.getAbsoluteLength(XMLString.FO_MARGIN_BOTTOM);
                         String sMarginLeft = style.getAbsoluteLength(XMLString.FO_MARGIN_LEFT);
+                        
+                        ListStyle outline = ofr.getOutlineStyle();
+                        if (outline.isNewType(i)) {
+                        	// Override left margin with the value from the outline
+                        	sMarginLeft = outline.getLevelStyleProperty(i, XMLString.FO_MARGIN_LEFT);
+                        }
     
                         String sSecName = hm.getName(i);
                         if (!comm.isEmpty()) { // have to create a cs for this heading
@@ -264,21 +270,50 @@ public class HeadingConverter extends ConverterHelper {
             else {
                 if (!bOnlyNum) {
                     // Distance between label and text:
-                    String sDistance = outline.getLevelStyleProperty(i,XMLString.TEXT_MIN_LABEL_DISTANCE);
+                	String sSpaceChar="";
+                    String sDistance=null;
+                    if (outline.isNewType(i)) {
+        				String sFormat = outline.getLevelStyleProperty(i, XMLString.TEXT_LABEL_FOLLOWED_BY);
+    					if ("listtab".equals(sFormat)) {
+            				String sMarginLeft = outline.getLevelStyleProperty(i, XMLString.FO_MARGIN_LEFT);
+            				if (sMarginLeft==null) { sMarginLeft = "0cm"; }
+            				String sTextIndent = outline.getLevelStyleProperty(i, XMLString.FO_TEXT_INDENT);
+            				if (sTextIndent==null) { sTextIndent = "0cm"; }
+    						String sTabPos = outline.getLevelStyleProperty(i, XMLString.TEXT_LIST_TAB_STOP_POSITION);
+    						if (sTabPos==null) { sTabPos = "0cm"; }
+    						sDistance = Misc.sub(sTabPos, Misc.add(sMarginLeft, sTextIndent));
+    					}
+    					else if ("space".equals(sFormat)) {
+    						sSpaceChar="\\ ";
+    					}
+                    }
+                    else {
+                    	sDistance = outline.getLevelStyleProperty(i,XMLString.TEXT_MIN_LABEL_DISTANCE);
+                    }
                     ldp.append("\\newcommand\\@distance")
                        .append(hm.getName(i)).append("{");
                     if (sDistance!=null) { 
                         ldp.append("\\hspace{").append(sDistance).append("}");
                     }
                     ldp.append("}").nl();
+                    
                     // Label width and alignment
-                    String sLabelWidth = outline.getLevelStyleProperty(i,XMLString.TEXT_MIN_LABEL_WIDTH);
                     String sTextAlign = outline.getLevelStyleProperty(i,XMLString.FO_TEXT_ALIGN);
                     String sAlignmentChar = "l"; // start (or left) is default
                     if (sTextAlign!=null) {
                         if ("end".equals(sTextAlign)) { sAlignmentChar="r"; }
                         else if ("right".equals(sTextAlign)) { sAlignmentChar="r"; }
                         else if ("center".equals(sTextAlign)) { sAlignmentChar="c"; }
+                    }
+                    String sLabelWidth = null;
+                    if (outline.isNewType(i)) {
+                    	String sFormat = outline.getLevelStyleProperty(i, XMLString.TEXT_LABEL_FOLLOWED_BY);
+                    	if ("listtab".equals(sFormat) || sAlignmentChar=="r") {
+                    		sLabelWidth="0cm";
+                    	}
+                    }
+                    else {
+                    	sLabelWidth = outline.getLevelStyleProperty(i,XMLString.TEXT_MIN_LABEL_WIDTH);
                     }
                     // Textstyle to use for label:
                     String sStyleName = outline.getLevelProperty(i,XMLString.TEXT_STYLE_NAME);
@@ -291,7 +326,7 @@ public class HeadingConverter extends ConverterHelper {
                     ldp.append("\\newcommand\\@textstyle")
                        .append(hm.getName(i)).append("[1]{");
                     if (!bOnlyNum && sLabelWidth!=null) {
-                        ldp.append("\\makebox[").append(sLabelWidth).append("][").append(sAlignmentChar).append("]{");
+                        ldp.append("\\protect\\makebox[").append(sLabelWidth).append("][").append(sAlignmentChar).append("]{");
                     }
 			        ldp.append(baText.getBefore())
                        .append(sPrefix!=null ? sPrefix : "")

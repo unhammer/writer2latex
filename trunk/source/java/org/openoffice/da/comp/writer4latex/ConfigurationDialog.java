@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-04-23)
+ *  Version 1.2 (2009-04-25)
  *
  */ 
  
@@ -259,24 +259,8 @@ public final class ConfigurationDialog
     // Configure the applications automatically (OS dependent)
     private boolean autoConfigure(XWindow xWindow) {
 		String sOsName = System.getProperty("os.name");
-    	if ("Linux".equals(sOsName)) {
-    		configureApp(ExternalApps.LATEX, "latex", "--interaction=batchmode %s");
-    		configureApp(ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s");
-    		configureApp(ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s");
-    		configureApp(ExternalApps.DVIPS, "dvips", "%s");
-    		configureApp(ExternalApps.BIBTEX, "bibtex", "%s");
-    		configureApp(ExternalApps.MAKEINDEX, "makeindex", "%s");
-    		configureApp(ExternalApps.OOLATEX, "oolatex", "%s");    		
-    		// We have several possible viewers
-    		String[] sDviViewers = {"evince", "okular", "xdvi"};
-    		configureApp(ExternalApps.DVIVIEWER, sDviViewers, "%s");
-    		String[] sPdfViewers =  {"evince", "okular", "xpdf"};
-    		configureApp(ExternalApps.PDFVIEWER, sPdfViewers, "%s");
-    		String[] sPsViewers =  {"evince", "okular", "ghostview"};
-    		configureApp(ExternalApps.POSTSCRIPTVIEWER, sPsViewers, "%s");
-    	}
-    	else if ("Windows".equals(sOsName)) {
-    		// TODO: Get information from the windows registry
+    	if (sOsName.startsWith("Windows")) {
+    		// TODO: Get information from the windows registry using unowinreg.dll from the SDK
     		// Assume MikTeX
     		externalApps.setApplication(ExternalApps.LATEX, "latex", "--interaction=batchmode %s");
     		externalApps.setApplication(ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s");
@@ -291,8 +275,21 @@ public final class ConfigurationDialog
     		externalApps.setApplication(ExternalApps.PDFVIEWER, "gsview32.exe", "-e \"%s\"");
     		externalApps.setApplication(ExternalApps.POSTSCRIPTVIEWER, "gsview32.exe", "-e \"%s\"");    		
     	}
-    	else {
-    		// Unsupported OS
+    	else { // Assume a unix-like system supporting the "which" command
+    		configureApp(ExternalApps.LATEX, "latex", "--interaction=batchmode %s");
+    		configureApp(ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s");
+    		configureApp(ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s");
+    		configureApp(ExternalApps.DVIPS, "dvips", "%s");
+    		configureApp(ExternalApps.BIBTEX, "bibtex", "%s");
+    		configureApp(ExternalApps.MAKEINDEX, "makeindex", "%s");
+    		configureApp(ExternalApps.OOLATEX, "oolatex", "%s");    		
+    		// We have several possible viewers
+    		String[] sDviViewers = {"evince", "okular", "xdvi"};
+    		configureApp(ExternalApps.DVIVIEWER, sDviViewers, "%s");
+    		String[] sPdfViewers =  {"evince", "okular", "xpdf"};
+    		configureApp(ExternalApps.PDFVIEWER, sPdfViewers, "%s");
+    		String[] sPsViewers =  {"evince", "okular", "ghostview"};
+    		configureApp(ExternalApps.POSTSCRIPTVIEWER, sPsViewers, "%s");
     	}
     	changeApplication(xWindow);
         return true;

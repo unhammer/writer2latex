@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-26)
+ *  Version 1.2 (2009-03-27)
  *
  */
 
@@ -146,6 +146,7 @@ public class XMLString {
     public static final String STYLE_PAGE_LAYOUT_PROPERTIES="style:page-layout-properties"; // oasis
     public static final String STYLE_DRAWING_PAGE_PROPERTIES="style:drawing-page-properties"; // oasis
     public static final String STYLE_HEADER_FOOTER_PROPERTIES="style:header-footer-properties"; // oasis
+    public static final String STYLE_LIST_LEVEL_LABEL_ALIGNMENT="style:list-level-label-alignment"; // oasis 1.2
     public static final String STYLE_BACKGROUND_IMAGE="style:background-image"; 	
     public static final String STYLE_COLUMNS="style:columns";
     public static final String STYLE_HEADER="style:header";
@@ -359,7 +360,11 @@ public class XMLString {
     public static final String TEXT_DISPLAY="text:display";
     public static final String TEXT_DISPLAY_OUTLINE_LEVEL="text:display-outline-level";
     public static final String TEXT_SEPARATION_CHARACTER="text:separation-character";
-	
+    
+    public static final String TEXT_LIST_LEVEL_POSITION_AND_SPACE_MODE="text:list-level-position-and-space-mode"; // oasis 1.2
+    public static final String TEXT_LABEL_FOLLOWED_BY="text:label-followed-by"; // oasis 1.2
+    public static final String TEXT_LIST_TAB_STOP_POSITION="text:list-tab-stop-position"; // oasis 1.2
+    
     public static final String TEXT_IDENTIFIER="text:identifier";
     public static final String TEXT_BIBLIOGRAPHY_TYPE="text:bibliography-type";
     public static final String TEXT_BIBILIOGRAPHIC_TYPE="text:bibiliographic-type"; // bug in OOo 1.0

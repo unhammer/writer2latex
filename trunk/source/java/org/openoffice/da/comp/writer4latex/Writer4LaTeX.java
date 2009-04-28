@@ -158,10 +158,6 @@ public final class Writer4LaTeX extends WeakBase
                     if (updateMediaProperties()) {
                         process();
                     }
-                    else {
-                    	MessageBox msgBox = new MessageBox(m_xContext, m_xFrame);
-                        msgBox.showMessage("Writer4LaTeX Error","Please install Writer2LaTeX version 1.0 or later");
-                    }
                 }
                 else {
                     warnNotSaved();
@@ -172,10 +168,6 @@ public final class Writer4LaTeX extends WeakBase
                 if (updateLocation()) {
                     if (mediaProps!=null || updateMediaProperties()) {
                         process();
-                    }
-                    else {
-                    	MessageBox msgBox = new MessageBox(m_xContext, m_xFrame);
-                        msgBox.showMessage("Writer4LaTeX Error","Please install Writer2LaTeX version 1.0 or later");
                     }
                 }
                 else {
@@ -318,6 +310,8 @@ public final class Writer4LaTeX extends WeakBase
             // If Writer2LaTeX is not installed, this will return null
             if (dialog==null) {
             	mediaProps = null;
+            	MessageBox msgBox = new MessageBox(m_xContext, m_xFrame);
+                msgBox.showMessage("Writer4LaTeX Error","Please install Writer2LaTeX version 1.0 or later");
             	return false;
             }
 

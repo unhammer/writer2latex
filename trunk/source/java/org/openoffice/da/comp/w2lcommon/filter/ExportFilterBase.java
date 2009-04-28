@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  *  
- *  Version 1.2 (2009-04-23)
+ *  Version 1.2 (2009-04-25)
  *  
  */
  
@@ -137,16 +137,16 @@ public abstract class ExportFilterBase implements
         	int nLen = origString.length();
         	for (int i=0; i<nLen; i++) {
         		char c = origString.charAt(i);
-                if (c=='&'){
-                    buf.append("&amp;");
-         	    }    
-    	        if (c=='\"'){
+        		if (c=='&'){
+        			buf.append("&amp;");
+        		}    
+        		else if (c=='\"'){
             		buf.append("&quot;");
         	    }    
-    	        if (c=='<'){
+                else if (c=='<'){
             		buf.append("&lt;");
         	    }  
-        	    if (c=='>'){
+                else if (c=='>'){
     	        	buf.append("&gt;");
         	    }  
         	    else if (c=='\u0009' || c=='\n' || c=='\r' || (c>='\u0020' && c<='\uD7FF') || (c>='\uE000' && c<'\uFFFD')) {

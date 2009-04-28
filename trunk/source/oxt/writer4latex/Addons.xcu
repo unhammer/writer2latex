@@ -35,6 +35,7 @@
                         <value/>
                     </prop>
                 </node>
+                <!-- maybe later
                 <node oor:name="menu2" oor:op="replace">
                     <prop oor:name="Context" oor:type="xs:string">
                         <value>com.sun.star.text.TextDocument</value>
@@ -53,6 +54,7 @@
                         <value/>
                     </prop>
                 </node>
+                -->
                 <node oor:name="menu3" oor:op="replace">
                     <prop oor:name="Context" oor:type="xs:string">
                         <value>com.sun.star.text.TextDocument</value>

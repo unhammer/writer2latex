@@ -16,18 +16,17 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 0.4 (2004-02-16)
+ *  Version 1.2 (2009-04-27)
  *
  */
 
 package writer2latex.office;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import writer2latex.util.Misc;
 
@@ -69,6 +68,11 @@ public class ListStyle extends OfficeStyle {
     public boolean isImage(int i) {
         return XMLString.TEXT_LIST_LEVEL_STYLE_IMAGE.equals(level[i].getName());
     }
+    
+    // Return true if this level is using the new list formatting of ODT 1.2
+    public boolean isNewType(int i) {
+    	return "label-alignment".equals(getLevelStyleProperty(i,XMLString.TEXT_LIST_LEVEL_POSITION_AND_SPACE_MODE));
+    }
 
     public String getLevelProperty(int i, String sName) {
         if (i>=1 && i<=MAX_LEVEL) {
@@ -90,39 +94,53 @@ public class ListStyle extends OfficeStyle {
 
     public void loadStyleFromDOM(Node node) {
         super.loadStyleFromDOM(node);
-        // Collect level information from child elements:
-        if (node.hasChildNodes()){
-            NodeList nl = node.getChildNodes();
-            int nLen = nl.getLength();
-            for (int i = 0; i < nLen; i++ ) {                                   
-                Node child=nl.item(i);
-                if (child.getNodeType()==Node.ELEMENT_NODE){
-                    String sLevel = Misc.getAttribute(child,XMLString.TEXT_LEVEL);
-                    if (sLevel!=null) {
-                        int nLevel = Misc.getPosInteger(sLevel,1);
-                        if (nLevel>=1 && nLevel<=MAX_LEVEL) {
-                            level[nLevel].loadFromDOM(child);
-                            // Also include style:properties
-                            if (child.hasChildNodes()){
-                                NodeList nl2 = child.getChildNodes();
-                                int nLen2 = nl2.getLength();
-                                for (int i2 = 0; i2 < nLen2; i2++ ) {
-                                    Node child2=nl2.item(i2);
-                                    if (child2.getNodeType()==Node.ELEMENT_NODE){
-                                        if (child2.getNodeName().equals(XMLString.STYLE_PROPERTIES)) {
-                                            levelStyle[nLevel].loadFromDOM(child2);
-                                        }
-                                        if (child2.getNodeName().equals(XMLString.STYLE_LIST_LEVEL_PROPERTIES)) { // oasis
-                                            levelStyle[nLevel].loadFromDOM(child2);
-                                        }
-                                    }
-                                }                                
-                            }                                   
-                        }
+        // Collect level information from child elements (text:list-level-style-*):
+        Node child = node.getFirstChild();
+        while (child!=null) {
+            if (child.getNodeType()==Node.ELEMENT_NODE){
+                String sLevel = Misc.getAttribute(child,XMLString.TEXT_LEVEL);
+                if (sLevel!=null) {
+                    int nLevel = Misc.getPosInteger(sLevel,1);
+                    if (nLevel>=1 && nLevel<=MAX_LEVEL) {
+                    	loadLevelPropertiesFromDOM(nLevel,child);
                     }
                 }
             }
+            child = child.getNextSibling();
         }
+    }
+    
+    private void loadLevelPropertiesFromDOM(int nLevel, Node node) {
+    	// Load the attributes
+        level[nLevel].loadFromDOM(node);
+        // Also include style:properties
+        Node child = node.getFirstChild();
+        while (child!=null) {
+        	if (child.getNodeType()==Node.ELEMENT_NODE){
+        		if (child.getNodeName().equals(XMLString.STYLE_PROPERTIES)) {
+        			levelStyle[nLevel].loadFromDOM(child);
+        			loadLevelLabelPropertiesFromDOM(nLevel,node);
+                }
+                if (child.getNodeName().equals(XMLString.STYLE_LIST_LEVEL_PROPERTIES)) { // oasis
+                    levelStyle[nLevel].loadFromDOM(child);
+        			loadLevelLabelPropertiesFromDOM(nLevel,child);
+                }                                
+            }                                   
+            child = child.getNextSibling();
+        }
+    }
+    
+    private void loadLevelLabelPropertiesFromDOM(int nLevel, Node node) {
+    	// Merge the properties from style:list-level-label-alignment
+        Node child = node.getFirstChild();
+        while (child!=null) {
+        	if (child.getNodeType()==Node.ELEMENT_NODE){
+        		if (child.getNodeName().equals(XMLString.STYLE_LIST_LEVEL_LABEL_ALIGNMENT)) {
+        			levelStyle[nLevel].loadFromDOM(child);
+                }
+            }                                   
+            child = child.getNextSibling();
+        }    	
     }
 	
 }

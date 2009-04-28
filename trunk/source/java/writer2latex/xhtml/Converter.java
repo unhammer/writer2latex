@@ -610,7 +610,7 @@ public class Converter extends ConverterBase {
             		for (String sElement : sElements) {
             			String[] sNameVal = sElement.split("=");
             			if (sNameVal.length>=2) {
-            				anchor.setAttribute(sNameVal[0],sNameVal[1]);
+            				anchor.setAttribute(sNameVal[0].trim(),sNameVal[1].trim());
             			}
             		}
             	}

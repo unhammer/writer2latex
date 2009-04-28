@@ -2,10 +2,12 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[w2l] Partial support for the new list formatting of ODT 1.2 (implemented in OOo 3.0)
+
 [all] Filter: Filters out characters that are illegal in xml
   (this fixes a problem with rtf documents imported in OOo)
 
-[w2x] Introduced hack to set link attributes using the link name
+[w2x] Introduced hack to set link attributes using the link name:
   accepts a semicolon separated list of name=value, for example
   title=link to next page;rel=next
 
