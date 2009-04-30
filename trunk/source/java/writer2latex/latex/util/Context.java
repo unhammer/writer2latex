@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2007 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2007-11-23) 
+ *  Version 1.2 (2009-04-30) 
  *
  */
 
@@ -68,6 +68,9 @@ public class Context {
 	
     // within a list of this level
     private int nListLevel = 0;
+    
+    // within a list that continues numbering
+    private boolean bInContinuedList = false;
 	
     // within a section command
     private boolean bInSection = false;
@@ -175,7 +178,11 @@ public class Context {
     public void incListLevel() { nListLevel++; }
 
     public int getListLevel() { return nListLevel; }
-
+    
+    public void setInContinuedList(boolean bInContinuedList) { this.bInContinuedList=bInContinuedList; }
+    
+    public boolean isInContinuedList() { return this.bInContinuedList; }
+    
     public void setInSection(boolean bInSection) { this.bInSection = bInSection; }
 	
     public boolean isInSection() { return bInSection; }
@@ -292,6 +299,7 @@ public class Context {
         newContext.setInSimpleTable(bInSimpleTable);
         newContext.setInMulticols(bInMulticols);
         newContext.setListLevel(nListLevel);
+        newContext.setInContinuedList(bInContinuedList);
         newContext.setInSection(bInSection);
         newContext.setInCaption(bInCaption);
         newContext.setInFigureFloat(bInFigureFloat);

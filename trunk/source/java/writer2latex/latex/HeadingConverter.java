@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-04-28)
+ *  Version 1.2 (2009-04-30)
  *
  */
 
@@ -202,15 +202,24 @@ public class HeadingConverter extends ConverterHelper {
                         palette.getI18n().applyLanguage(style,false,true,comm);
                         palette.getCharSc().applyFontEffects(style,true,comm);
 										
+                        // Get margin parameters (using first line indent as left margin)
                         String sMarginTop = style.getAbsoluteLength(XMLString.FO_MARGIN_TOP);
                         String sMarginBottom = style.getAbsoluteLength(XMLString.FO_MARGIN_BOTTOM);
                         String sMarginLeft = style.getAbsoluteLength(XMLString.FO_MARGIN_LEFT);
+                        String sTextIndent = style.getAbsoluteLength(XMLString.FO_TEXT_INDENT);
                         
-                        ListStyle outline = ofr.getOutlineStyle();
+                        // Seems that we should *not* override the paragraph style
+                        /*ListStyle outline = ofr.getOutlineStyle();
                         if (outline.isNewType(i)) {
-                        	// Override left margin with the value from the outline
-                        	sMarginLeft = outline.getLevelStyleProperty(i, XMLString.FO_MARGIN_LEFT);
-                        }
+                        	String sNumFormat = ListStyleConverter.numFormat(outline.getLevelProperty(i,XMLString.STYLE_NUM_FORMAT));
+                        	if (sNumFormat!=null && !"".equals(sNumFormat)) {
+                            	// It there's a numbering, override left margins with the value from the outline
+                				sMarginLeft = outline.getLevelStyleProperty(i, XMLString.FO_MARGIN_LEFT);
+                				if (sMarginLeft==null) { sMarginLeft = "0cm"; }
+                				sTextIndent = outline.getLevelStyleProperty(i, XMLString.FO_TEXT_INDENT);
+                				if (sTextIndent==null) { sTextIndent = "0cm"; }                        		
+                        	}
+                        }*/
     
                         String sSecName = hm.getName(i);
                         if (!comm.isEmpty()) { // have to create a cs for this heading
@@ -218,9 +227,10 @@ public class HeadingConverter extends ConverterHelper {
                                .append(comm.getBefore()).append("#1").append(comm.getAfter())
                                .append("}").nl();
                         }
+                        // Note: Use first line as left indent (cannot have separate first line indent)
                         ldp.append("\\renewcommand\\").append(sSecName)
                            .append("{\\@startsection{").append(sSecName).append("}{"+hm.getLevel(i))
-                           .append("}{"+sMarginLeft+"}{");
+                           .append("}{"+Misc.add(sMarginLeft,sTextIndent)+"}{");
                         // Suppress indentation after heading? currently not..
                         // ldp.append("-"); 
                         ldp.append(sMarginTop)
@@ -275,10 +285,20 @@ public class HeadingConverter extends ConverterHelper {
                     if (outline.isNewType(i)) {
         				String sFormat = outline.getLevelStyleProperty(i, XMLString.TEXT_LABEL_FOLLOWED_BY);
     					if ("listtab".equals(sFormat)) {
-            				String sMarginLeft = outline.getLevelStyleProperty(i, XMLString.FO_MARGIN_LEFT);
+    						String sMarginLeft="0cm";
+    						String sTextIndent="0cm";
+    		                if (sHeadingStyles[i]!=null) {
+    		                    StyleWithProperties style = ofr.getParStyle(sHeadingStyles[i]);
+    		                    if (style!=null) {
+    		                    	sMarginLeft = style.getAbsoluteLength(XMLString.FO_MARGIN_LEFT);
+    		                    	sTextIndent = style.getAbsoluteLength(XMLString.FO_TEXT_INDENT);
+    		                    }
+    		                }
+                            // Seems that we should *not* override the paragraph style
+            				/*String sMarginLeft = outline.getLevelStyleProperty(i, XMLString.FO_MARGIN_LEFT);
             				if (sMarginLeft==null) { sMarginLeft = "0cm"; }
             				String sTextIndent = outline.getLevelStyleProperty(i, XMLString.FO_TEXT_INDENT);
-            				if (sTextIndent==null) { sTextIndent = "0cm"; }
+            				if (sTextIndent==null) { sTextIndent = "0cm"; }*/
     						String sTabPos = outline.getLevelStyleProperty(i, XMLString.TEXT_LIST_TAB_STOP_POSITION);
     						if (sTabPos==null) { sTabPos = "0cm"; }
     						sDistance = Misc.sub(sTabPos, Misc.add(sMarginLeft, sTextIndent));
@@ -332,6 +352,7 @@ public class HeadingConverter extends ConverterHelper {
                        .append(sPrefix!=null ? sPrefix : "")
                        .append("#1")
                        .append(sSuffix!=null ? sSuffix : "")
+                       .append(sSpaceChar)
                        .append(baText.getAfter());
                     if (!bOnlyNum && sLabelWidth!=null) {
                         ldp.append("}");

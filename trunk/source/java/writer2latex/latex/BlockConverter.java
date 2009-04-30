@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-23)
+ *  Version 1.2 (2009-04-30)
  *
  */
 
@@ -242,6 +242,7 @@ public class BlockConverter extends ConverterHelper {
         // Set up new context
         Context ic = (Context) oc.clone();
         ic.incListLevel();
+        if ("true".equals(node.getAttribute(XMLString.TEXT_CONTINUE_NUMBERING))) { ic.setInContinuedList(true); }
 
         // Get the style name, if we don't know it already
         if (ic.getListStyleName()==null) {
@@ -261,9 +262,7 @@ public class BlockConverter extends ConverterHelper {
 
         // Apply the style
         BeforeAfter ba = new BeforeAfter();
-        palette.getListSc().applyListStyle(ic.getListStyleName(),ic.getListLevel(),
-            bOrdered,"true".equals(node.getAttribute(XMLString.TEXT_CONTINUE_NUMBERING)),
-            ba);
+        palette.getListSc().applyListStyle(bOrdered,ba,ic);
 			
         // Export the list
         if (ba.getBefore().length()>0) { ldp.append(ba.getBefore()).nl(); }

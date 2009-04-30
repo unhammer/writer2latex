@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-04-28)
+ *  Version 1.2 (2009-04-30)
  *
  */
 
@@ -67,10 +67,9 @@ public class ListStyleConverter extends StyleConverter {
 	}
 
 	/** <p>Apply a list style to an ordered or unordered list.</p> */
-	public void applyListStyle(String sStyleName, int nLevel, boolean bOrdered,
-			boolean bContinue, BeforeAfter ba) {
+	public void applyListStyle(boolean bOrdered, BeforeAfter ba, Context oc) {
 		// Step 1. We may have a style map, this always takes precedence
-		String sDisplayName = ofr.getListStyles().getDisplayName(sStyleName);
+		String sDisplayName = ofr.getListStyles().getDisplayName(oc.getListStyleName());
 		if (config.getListStyleMap().contains(sDisplayName)) {
 			ba.add(config.getListStyleMap().getBefore(sDisplayName),
 					config.getListStyleMap().getAfter(sDisplayName)); 
@@ -78,9 +77,9 @@ public class ListStyleConverter extends StyleConverter {
 		}
 		// Step 2: The list style may not exist, or the user wants to ignore it.
 		// In this case we create default lists
-		ListStyle style = ofr.getListStyle(sStyleName);
+		ListStyle style = ofr.getListStyle(oc.getListStyleName());
 		if (style==null || config.formatting()<=LaTeXConfig.IGNORE_MOST) {
-			if (nLevel<=4) {
+			if (oc.getListLevel()<=4) {
 				if (bOrdered) {
 					ba.add("\\begin{enumerate}","\\end{enumerate}");
 				}
@@ -92,15 +91,15 @@ public class ListStyleConverter extends StyleConverter {
 		}
 		// Step 3: Export as default lists, but redefine labels
 		if (config.formatting()==LaTeXConfig.CONVERT_BASIC) {
-			if (nLevel==1) {
-				if (!styleNames.containsName(getDisplayName(sStyleName))) {
-					createListStyleLabels(sStyleName);
+			if (oc.getListLevel()==1) {
+				if (!styleNames.containsName(getDisplayName(oc.getListStyleName()))) {
+					createListStyleLabels(oc.getListStyleName());
 				}
-				ba.add("\\liststyle"+styleNames.getExportName(getDisplayName(sStyleName))+"\n","");
+				ba.add("\\liststyle"+styleNames.getExportName(getDisplayName(oc.getListStyleName()))+"\n","");
 			}
-			if (nLevel<=4) {
-				String sCounterName = listStyleLevelNames.get(sStyleName)[nLevel]; 
-				if (bContinue && style.isNumber(nLevel)) {
+			if (oc.getListLevel()<=4) {
+				String sCounterName = listStyleLevelNames.get(oc.getListStyleName())[oc.getListLevel()]; 
+				if (oc.isInContinuedList() && style.isNumber(oc.getListLevel())) {
 					bNeedSaveEnumCounter = true;
 					ba.add("\\setcounter{saveenum}{\\value{"+sCounterName+"}}\n","");
 				}
@@ -110,21 +109,21 @@ public class ListStyleConverter extends StyleConverter {
 				else {
 					ba.add("\\begin{itemize}","\\end{itemize}");
 				}
-				if (bContinue && style.isNumber(nLevel)) {
+				if (oc.isInContinuedList() && style.isNumber(oc.getListLevel())) {
 					ba.add("\n\\setcounter{"+sCounterName+"}{\\value{saveenum}}","");
 				}
 			}
 			return;			
 		}
 		// Step 4: Export with formatting, as "Writer style" custom lists
-		if (nLevel<=4) { // TODO: Max level should not be fixed
-			if (!styleNames.containsName(getDisplayName(sStyleName))) {
-				createListStyle(sStyleName);
+		if (oc.getListLevel()<=4) { // TODO: Max level should not be fixed
+			if (!styleNames.containsName(getDisplayName(oc.getListStyleName()))) {
+				createListStyle(oc.getListStyleName());
 			}
-			String sTeXName="list"+styleNames.getExportName(getDisplayName(sStyleName))
-			+"level"+Misc.int2roman(nLevel);
-			if (!bContinue && style.isNumber(nLevel)) {
-				int nStartValue = Misc.getPosInteger(style.getLevelProperty(nLevel,XMLString.TEXT_START_VALUE),1)-1;
+			String sTeXName="list"+styleNames.getExportName(getDisplayName(oc.getListStyleName()))
+			+"level"+Misc.int2roman(oc.getListLevel());
+			if (!oc.isInContinuedList() && style.isNumber(oc.getListLevel())) {
+				int nStartValue = Misc.getPosInteger(style.getLevelProperty(oc.getListLevel(),XMLString.TEXT_START_VALUE),1)-1;
 				ba.add("\\setcounter{"+sTeXName+"}{"+Integer.toString(nStartValue)+"}\n","");
 			}
 			ba.add("\\begin{"+sTeXName+"}","\\end{"+sTeXName+"}");
