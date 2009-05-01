@@ -8,7 +8,7 @@
                 <value>com.sun.star.text.TextDocument</value>
             </prop>
             <prop oor:name="Title" oor:type="xs:string">
-                <value>Writer4LaTeX</value>
+                <value>LaTe~X</value>
             </prop>
             <prop oor:name="Target" oor:type="xs:string">
                 <value>_self</value>
@@ -35,7 +35,6 @@
                         <value/>
                     </prop>
                 </node>
-                <!-- maybe later
                 <node oor:name="menu2" oor:op="replace">
                     <prop oor:name="Context" oor:type="xs:string">
                         <value>com.sun.star.text.TextDocument</value>
@@ -54,7 +53,6 @@
                         <value/>
                     </prop>
                 </node>
-                -->
                 <node oor:name="menu3" oor:op="replace">
                     <prop oor:name="Context" oor:type="xs:string">
                         <value>com.sun.star.text.TextDocument</value>

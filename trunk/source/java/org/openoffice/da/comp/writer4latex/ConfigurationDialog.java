@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-04-25)
+ *  Version 1.2 (2009-05-01)
  *
  */ 
  
@@ -268,7 +268,7 @@ public final class ConfigurationDialog
     		externalApps.setApplication(ExternalApps.DVIPS, "dvips", "%s");
     		externalApps.setApplication(ExternalApps.BIBTEX, "bibtex", "%s");
     		externalApps.setApplication(ExternalApps.MAKEINDEX, "makeindex", "%s");
-    		externalApps.setApplication(ExternalApps.OOLATEX, "oolatex", "%s");
+    		externalApps.setApplication(ExternalApps.MK4HT, "mk4ht", "oolatex %s");
     		externalApps.setApplication(ExternalApps.DVIVIEWER, "yap", "--single-instance %s");
     		// And assume gsview for pdf and ps
     		// gsview32 may not be in the path, but at least this helps a bit
@@ -282,7 +282,7 @@ public final class ConfigurationDialog
     		configureApp(ExternalApps.DVIPS, "dvips", "%s");
     		configureApp(ExternalApps.BIBTEX, "bibtex", "%s");
     		configureApp(ExternalApps.MAKEINDEX, "makeindex", "%s");
-    		configureApp(ExternalApps.OOLATEX, "oolatex", "%s");    		
+    		configureApp(ExternalApps.MK4HT, "mk4ht", "oolatex %s");    		
     		// We have several possible viewers
     		String[] sDviViewers = {"evince", "okular", "xdvi"};
     		configureApp(ExternalApps.DVIVIEWER, sDviViewers, "%s");
@@ -305,7 +305,7 @@ public final class ConfigurationDialog
             case 3: return ExternalApps.DVIPS;
             case 4: return ExternalApps.BIBTEX;
             case 5: return ExternalApps.MAKEINDEX;
-            case 6: return ExternalApps.OOLATEX;
+            case 6: return ExternalApps.MK4HT;
             case 7: return ExternalApps.DVIVIEWER;
             case 8: return ExternalApps.PDFVIEWER;
             case 9: return ExternalApps.POSTSCRIPTVIEWER;

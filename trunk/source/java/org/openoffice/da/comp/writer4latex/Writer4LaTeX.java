@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-30)
+ *  Version 1.2 (2009-05-01)
  *
  */ 
  
@@ -33,20 +33,26 @@ import java.net.URISyntaxException;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertyAccess;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.task.XStatusIndicator;
 import com.sun.star.task.XStatusIndicatorFactory;
 import com.sun.star.ui.dialogs.ExecutableDialogResults;
 import com.sun.star.ui.dialogs.XExecutableDialog;
+import com.sun.star.ui.dialogs.XFilePicker;
+import com.sun.star.ui.dialogs.XFilterManager;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
 import org.openoffice.da.comp.w2lcommon.helper.MessageBox;
 import org.openoffice.da.comp.w2lcommon.helper.PropertyHelper;
+import org.openoffice.da.comp.w2lcommon.helper.RegistryHelper;
+import org.openoffice.da.comp.w2lcommon.helper.XPropertySetHelper;
        
 /** This class implements the ui (dispatch) commands provided by Writer4LaTeX.
  *  The actual processing is done by the three core classes <code>TeXify</code>,
@@ -67,6 +73,7 @@ public final class Writer4LaTeX extends WeakBase
 	
     // Global data
     private TeXify texify = null;
+    private LaTeXImporter latexImporter = null;
     private PropertyValue[] mediaProps = null;
     private String sBasePath = null;
     private String sBaseFileName = null;
@@ -166,9 +173,8 @@ public final class Writer4LaTeX extends WeakBase
             }
             else if ( aURL.Path.compareTo("ProcessDirectly") == 0 ) {
                 if (updateLocation()) {
-                    if (mediaProps!=null || updateMediaProperties()) {
-                        process();
-                    }
+                	updateMediaPropertiesSilent();
+                    process();
                 }
                 else {
                     warnNotSaved();
@@ -190,8 +196,7 @@ public final class Writer4LaTeX extends WeakBase
                 return;
             }
             else if ( aURL.Path.compareTo("ImportLaTeX") == 0 ) {
-                org.openoffice.da.comp.w2lcommon.helper.MessageBox msgBox = new org.openoffice.da.comp.w2lcommon.helper.MessageBox(m_xContext);
-                msgBox.showMessage("Writer4LaTeX", "This feature has not been implemented yet");
+                importLaTeX();
                 return;
             }
         }
@@ -289,10 +294,61 @@ public final class Writer4LaTeX extends WeakBase
         }
 
     }
+    
+    private void importLaTeX() {
+    	// Display the file dialog
+    	String sURL = browseForLaTeXFile();
+    	if (sURL!=null) {
+    		if (latexImporter==null) {
+    			latexImporter = new LaTeXImporter(m_xContext);
+    		}
+    		latexImporter.importLaTeX(sURL);
+    	}
+    }
 
     // Some utility methods
+    
+    private String browseForLaTeXFile() {
+    	String sPath = null;
+        XComponent xComponent = null;
+        try {
+            // Create FilePicker
+            Object filePicker = m_xContext.getServiceManager()
+                .createInstanceWithContext("com.sun.star.ui.dialogs.FilePicker", m_xContext);
+            XFilePicker xFilePicker = (XFilePicker)
+                UnoRuntime.queryInterface(XFilePicker.class, filePicker);
+            xComponent = (XComponent)
+                UnoRuntime.queryInterface(XComponent.class, xFilePicker);
+            
+            XFilterManager xFilterManager = (XFilterManager) UnoRuntime.queryInterface(XFilterManager.class, xFilePicker);
+            xFilterManager.appendFilter("LaTeX","*.tex"); 
+
+
+            // Display the FilePicker
+            XExecutableDialog xExecutable = (XExecutableDialog)
+                UnoRuntime.queryInterface(XExecutableDialog.class, xFilePicker);
+
+            // Get the path
+            if (xExecutable.execute() == ExecutableDialogResults.OK) {
+                String[] sPathList = xFilePicker.getFiles();
+                if (sPathList.length > 0) {
+                	sPath = sPathList[0];
+                }     
+            }
+        }
+        catch (com.sun.star.uno.Exception e) {
+        }
+        finally{
+            // Always dispose the FilePicker component
+            if (xComponent!=null) {
+                xComponent.dispose();
+            }
+        } 
+        return sPath;
+    }
+
 	
-    private boolean updateMediaProperties() {
+    private void prepareMediaProperties() {
         // Create inital media properties
         mediaProps = new PropertyValue[2];
         mediaProps[0] = new PropertyValue();
@@ -300,8 +356,12 @@ public final class Writer4LaTeX extends WeakBase
         mediaProps[0].Value = "org.openoffice.da.writer2latex";
         mediaProps[1] = new PropertyValue();
         mediaProps[1].Name = "Overwrite";
-        mediaProps[1].Value = "true";
-
+        mediaProps[1].Value = "true";    	
+    }
+    
+    private boolean updateMediaProperties() {
+    	prepareMediaProperties();
+    	
         try {
             // Display options dialog
             Object dialog = m_xContext.getServiceManager()
@@ -340,6 +400,161 @@ public final class Writer4LaTeX extends WeakBase
             mediaProps = null;
             return false;
         }
+    }
+    
+    private String getOptionAsString(XPropertySet xProps, String sName) {
+    	Object value = XPropertySetHelper.getPropertyValue(xProps, sName);
+        // Try to convert the value to a string
+        if (value instanceof String) return (String) value;
+        else if (value instanceof Boolean) return ((Boolean) value).toString();
+        else if (value instanceof Integer) return ((Integer) value).toString();
+        else if (value instanceof Short) return ((Short) value).toString();
+        else return null;
+    }
+    
+    private void loadOption(XPropertySet xProps, PropertyHelper filterData, String sRegName, String sOptionName) {
+        String sValue = getOptionAsString(xProps,sRegName);
+        if (sValue!=null) {
+        	// Set the filter data
+        	filterData.put(sOptionName, sValue);
+        }
+    }
+    
+    // Read the configuration directly from the registry rather than using the dialog
+    // TODO: Should probably do some refactoring in the Options dialogs to avoid this solution
+    private void updateMediaPropertiesSilent() {
+    	prepareMediaProperties();
+
+    	RegistryHelper registry = new RegistryHelper(m_xContext);
+    	
+    	// Read the stored settings from the registry rather than displaying a dialog
+    	try {
+    		// Prepare registry view
+    		Object view = registry.getRegistryView("/org.openoffice.da.Writer2LaTeX.Options/LaTeXOptions",true);
+    		XPropertySet xProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,view);
+    		
+            PropertyHelper filterData = new PropertyHelper();
+            
+            // Read the configuration file
+            short nConfig = XPropertySetHelper.getPropertyValueAsShort(xProps, "Config");
+            switch (nConfig) {
+            case 0: filterData.put("ConfigURL","*ultraclean.xml"); break;
+            case 1: filterData.put("ConfigURL","*clean.xml"); break;
+            case 2: filterData.put("ConfigURL","*default.xml"); break;
+            case 3: filterData.put("ConfigURL","*pdfprint.xml"); break;
+            case 4: filterData.put("ConfigURL","*pdfscreen.xml"); break;
+            case 5: filterData.put("ConfigURL","$(user)/writer2latex.xml");
+            		filterData.put("AutoCreate","true"); break;
+            default:
+            	loadOption(xProps,filterData,"ConfigName","ConfigURL");
+            }
+            
+    		// Read the options
+    		// General
+    		short nBackend = XPropertySetHelper.getPropertyValueAsShort(xProps,"Backend");
+    		switch (nBackend) {
+    		case 0: filterData.put("backend","generic"); break;
+    		case 1: filterData.put("backend","pdftex"); break; 
+    		case 2: filterData.put("backend","dvips"); break; 
+    		case 3: filterData.put("backend","xetex"); break; 
+    		case 4: filterData.put("backend","unspecified"); 
+    		}
+    		short nInputencoding = XPropertySetHelper.getPropertyValueAsShort(xProps,"Inputencoding");
+    		switch (nInputencoding) {
+    		case 0: filterData.put("inputencoding", "ascii"); break;
+    		case 1: filterData.put("inputencoding", "latin1"); break;
+    		case 2: filterData.put("inputencoding", "latin2"); break;
+    		case 3: filterData.put("inputencoding", "iso-8859-7"); break;
+    		case 4: filterData.put("inputencoding", "cp1250"); break;
+    		case 5: filterData.put("inputencoding", "cp1251"); break;
+    		case 6: filterData.put("inputencoding", "koi8-r"); break;
+    		case 7: filterData.put("inputencoding", "utf8");
+    		}
+    		loadOption(xProps,filterData,"Multilingual","multilingual");
+    		loadOption(xProps,filterData,"GreekMath","greek_math");
+    		loadOption(xProps,filterData,"AdditionalSymbols","use_pifont");
+    		loadOption(xProps,filterData,"AdditionalSymbols","use_ifsym");
+    		loadOption(xProps,filterData,"AdditionalSymbols","use_wasysym");
+    		loadOption(xProps,filterData,"AdditionalSymbols","use_eurosym");
+    		loadOption(xProps,filterData,"AdditionalSymbols","use_tipa");
+
+    		// Bibliography
+    		loadOption(xProps,filterData,"UseBibtex","use_bibtex");
+    		loadOption(xProps,filterData,"BibtexStyle","bibtex_style");
+
+    		// Files
+    		boolean bWrapLines = XPropertySetHelper.getPropertyValueAsBoolean(xProps,"WrapLines");
+    		if (bWrapLines) {
+    			loadOption(xProps,filterData,"WrapLinesAfter","wrap_lines_after");
+    		}
+    		else {
+    			filterData.put("wrap_lines_after", "0");
+    		}
+    		loadOption(xProps,filterData,"SplitLinkedSections","split_linked_sections");
+    		loadOption(xProps,filterData,"SplitToplevelSections","split_toplevel_sections");
+    		loadOption(xProps,filterData,"SaveImagesInSubdir","save_images_in_subdir");
+
+    		// Special content
+    		short nNotes = XPropertySetHelper.getPropertyValueAsShort(xProps, "Notes");
+    		switch (nNotes) {
+    		case 0: filterData.put("notes","ignore"); break;
+    		case 1: filterData.put("notes","comment"); break;
+    		case 2: filterData.put("notes","pdfannotation"); break;
+    		case 3: filterData.put("notes","marginpar");
+    		}
+    		loadOption(xProps,filterData,"Metadata","metadata");
+
+    		// Figures and tables
+    		loadOption(xProps,filterData,"OriginalImageSize","original_image_size");
+    		boolean bOptimizeSimpleTables = XPropertySetHelper.getPropertyValueAsBoolean(xProps,"OptimizeSimpleTables");
+    		if (bOptimizeSimpleTables) {
+        		loadOption(xProps,filterData,"SimpleTableLimit","simple_table_limit");    			
+    		}
+    		else {
+    			filterData.put("simple_table_limit", "0");
+    		}
+    		loadOption(xProps,filterData,"FloatTables","float_tables");
+    		loadOption(xProps,filterData,"FloatFigures","float_figures");
+    		loadOption(xProps,filterData,"FloatOptions","float_options");
+    	    short nFloatOptions = XPropertySetHelper.getPropertyValueAsShort(xProps, "FloatOptions");
+    	    switch (nFloatOptions) {
+    	    case 0: filterData.put("float_options", ""); break;
+    	    case 1: filterData.put("float_options", "tp"); break;
+    	    case 2: filterData.put("float_options", "bp"); break;
+    	    case 3: filterData.put("float_options", "htp"); break;
+    	    case 4: filterData.put("float_options", "hbp");
+    	    }
+
+    		// AutoCorrect
+    		loadOption(xProps,filterData,"IgnoreHardPageBreaks","ignore_hard_page_breaks");
+    		loadOption(xProps,filterData,"IgnoreHardLineBreaks","ignore_hard_line_breaks");
+    		loadOption(xProps,filterData,"IgnoreEmptyParagraphs","ignore_empty_paragraphs");
+    		loadOption(xProps,filterData,"IgnoreDoubleSpaces","ignore_empty_spaces");
+    		
+    		registry.disposeRegistryView(view);
+    		
+    		// Write out the filter data
+    		/*PropertyValue[] props = filterData.toArray();
+    		for (int i=0; i<props.length; i++) {
+    			String sName = props[i].Name;
+    			Object value = props[i].Value;
+    			if (value instanceof String) {
+    				System.out.println(sName+"="+(String)value);
+    			}
+    			else {
+    				System.out.println(sName+"= ???");
+    			}
+    		}*/
+    		
+            // Update the media properties with the FilterData
+            PropertyHelper helper = new PropertyHelper(mediaProps);
+            helper.put("FilterData",filterData.toArray());
+            mediaProps = helper.toArray();
+
+    	}
+    	catch (com.sun.star.uno.Exception e) {
+    		// Failed to get registry view, ignore
+    	}
     }
 	
     private boolean updateLocation() {

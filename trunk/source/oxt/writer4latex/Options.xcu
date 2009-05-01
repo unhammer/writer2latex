@@ -45,12 +45,12 @@
                 <value>%s</value>
             </prop>
         </node>
-        <node oor:name="Oolatex" oor:type="xs:string">
+        <node oor:name="Mk4ht" oor:type="xs:string">
             <prop oor:name="Executable">
-                <value>oolatex</value>
+                <value>mk4ht</value>
             </prop>
             <prop oor:name="Options">
-                <value>%s</value>
+                <value>oolatex %s</value>
             </prop>
         </node>
         <node oor:name="Dvips" oor:type="xs:string">

@@ -54,13 +54,13 @@ public class ExternalApps {
     public final static String XELATEX = "XeLaTeX";
     public final static String BIBTEX = "BibTeX";
     public final static String MAKEINDEX = "Makeindex";
-    public final static String OOLATEX = "Oolatex";
+    public final static String MK4HT = "Mk4ht";
     public final static String DVIPS = "Dvips";
     public final static String DVIVIEWER = "DVIViewer";
     public final static String POSTSCRIPTVIEWER = "PostscriptViewer";
     public final static String PDFVIEWER = "PdfViewer";
 	
-    private final static String[] sApps = { LATEX, PDFLATEX, XELATEX, BIBTEX, MAKEINDEX, OOLATEX, DVIPS, DVIVIEWER, POSTSCRIPTVIEWER, PDFVIEWER };
+    private final static String[] sApps = { LATEX, PDFLATEX, XELATEX, BIBTEX, MAKEINDEX, MK4HT, DVIPS, DVIVIEWER, POSTSCRIPTVIEWER, PDFVIEWER };
 	
     private XComponentContext xContext;
 

@@ -16,7 +16,7 @@
     <dlg:menuitem dlg:value="Dvips"/>
     <dlg:menuitem dlg:value="BibTeX"/>
     <dlg:menuitem dlg:value="MakeIndex"/>
-    <dlg:menuitem dlg:value="TeX4ht (oolatex)"/>
+    <dlg:menuitem dlg:value="Mk4ht (TeX4ht)"/>
     <dlg:menuitem dlg:value="DVI Viewer"/>
     <dlg:menuitem dlg:value="PDF Viewer"/>
     <dlg:menuitem dlg:value="PostScript Viewer"/>

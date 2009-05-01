@@ -32,11 +32,11 @@ import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XDialogEventHandler;
 import com.sun.star.awt.XDialogProvider2;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
+//import com.sun.star.beans.PropertyVetoException;
+//import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
+//import com.sun.star.lang.IllegalArgumentException;
+//import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XServiceName;
@@ -436,67 +436,6 @@ msgBox.showMessage("Error",e.toString()+" "+e.getStackTrace()[0].toString());
         }
     }
 	
-    // Helpers for access to an XPropertySet. The helpers will fail silently if
-    // names or data is provided, but the subclass is expected to use them with
-    // correct data only...
-    protected Object getPropertyValue(XPropertySet xProps, String sName) {
-        try {
-            return xProps.getPropertyValue(sName);
-        }
-        catch (UnknownPropertyException e) {
-            return null;
-        }
-        catch (WrappedTargetException e) {
-            return null;
-        }
-    } 
-	
-    protected void setPropertyValue(XPropertySet xProps, String sName, Object value) {
-        try {
-            xProps.setPropertyValue(sName,value);
-        }
-        catch (UnknownPropertyException e) {
-        }
-        catch (PropertyVetoException e) { // unacceptable value
-        }
-        catch (IllegalArgumentException e) {
-        }
-        catch (WrappedTargetException e) {
-        }
-    }
-	
-    protected String getPropertyValueAsString(XPropertySet xProps, String sName) {
-        Object value = getPropertyValue(xProps,sName);
-        return value instanceof String ? (String) value : "";
-    }
-	
-    protected int getPropertyValueAsInteger(XPropertySet xProps, String sName) {
-        Object value = getPropertyValue(xProps,sName);
-        return value instanceof Integer ? ((Integer) value).intValue() : 0;
-    }
-	
-    protected void setPropertyValue(XPropertySet xProps, String sName, int nValue) {
-        setPropertyValue(xProps,sName,new Integer(nValue));
-    }
-
-    protected short getPropertyValueAsShort(XPropertySet xProps, String sName) {
-        Object value = getPropertyValue(xProps,sName);
-        return value instanceof Short ? ((Short) value).shortValue() : 0;
-    }
-	
-    protected void setPropertyValue(XPropertySet xProps, String sName, short nValue) {
-        setPropertyValue(xProps,sName,new Short(nValue));
-    }
-
-    protected boolean getPropertyValueAsBoolean(XPropertySet xProps, String sName) {
-        Object value = getPropertyValue(xProps,sName);
-        return value instanceof Boolean ? ((Boolean) value).booleanValue() : false;
-    }
-	
-    protected void setPropertyValue(XPropertySet xProps, String sName, boolean bValue) {
-        setPropertyValue(xProps,sName,new Boolean(bValue));
-    }
-
 }
 
 

@@ -18,7 +18,7 @@
             <node-ref oor:name="XeLaTeX" oor:node-type="Application" />
             <node-ref oor:name="BibTeX" oor:node-type="Application" />
             <node-ref oor:name="Makeindex" oor:node-type="Application" />
-            <node-ref oor:name="Oolatex" oor:node-type="Application" />
+            <node-ref oor:name="Mk4ht" oor:node-type="Application" />
             <node-ref oor:name="Dvips" oor:node-type="Application" />
             <node-ref oor:name="DVIViewer" oor:node-type="Application" />
             <node-ref oor:name="PostscriptViewer" oor:node-type="Application" />

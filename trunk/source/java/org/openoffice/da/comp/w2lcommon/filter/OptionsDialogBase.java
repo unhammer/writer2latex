@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-10-14)
+ *  Version 1.2 (2009-05-01)
  *
  */ 
  
@@ -50,6 +50,7 @@ import com.sun.star.util.XMacroExpander;
 
 import org.openoffice.da.comp.w2lcommon.helper.DialogBase;
 import org.openoffice.da.comp.w2lcommon.helper.PropertyHelper;
+import org.openoffice.da.comp.w2lcommon.helper.XPropertySetHelper;
 
 /** This class provides an abstract uno component which implements a filter ui
  */
@@ -205,7 +206,7 @@ public abstract class OptionsDialogBase extends DialogBase implements
             XPropertySet xDocInfo = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, docInfo);
 
-            return getPropertyValueAsString(xDocInfo,"Template");
+            return XPropertySetHelper.getPropertyValueAsString(xDocInfo,"Template");
         }
         catch (Exception e) {
             return "";
@@ -287,7 +288,7 @@ public abstract class OptionsDialogBase extends DialogBase implements
                     UnoRuntime.queryInterface(XPropertySet.class,view);
 	 		
                 // Get the available configurations
-                Object configurations = getPropertyValue(xProps,"Configurations");
+                Object configurations = XPropertySetHelper.getPropertyValue(xProps,"Configurations");
                 XNameAccess xConfigurations = (XNameAccess)
                     UnoRuntime.queryInterface(XNameAccess.class,configurations);
 				
@@ -296,7 +297,7 @@ public abstract class OptionsDialogBase extends DialogBase implements
                 Object config = xConfigurations.getByName(sName);
                 XPropertySet xCfgProps = (XPropertySet)
                     UnoRuntime.queryInterface(XPropertySet.class,config);
-                sLockedOptions = getPropertyValueAsString(xCfgProps,"LockedOptions");
+                sLockedOptions = XPropertySetHelper.getPropertyValueAsString(xCfgProps,"LockedOptions");
 				
                 // Dispose the registry view
                 disposeRegistryView(view);
@@ -330,7 +331,7 @@ public abstract class OptionsDialogBase extends DialogBase implements
         String[] sStdConfigs = getListBoxStringItemList("Config");
         int nStdConfigs = sStdConfigs.length;
 
-        Object configurations = getPropertyValue(xProps,"Configurations");
+        Object configurations = XPropertySetHelper.getPropertyValue(xProps,"Configurations");
         XNameAccess xConfigurations = (XNameAccess)
             UnoRuntime.queryInterface(XNameAccess.class,configurations);
         sConfigNames = xConfigurations.getElementNames();
@@ -346,7 +347,7 @@ public abstract class OptionsDialogBase extends DialogBase implements
                 Object config = xConfigurations.getByName(sConfigNames[i]);
                 XPropertySet xCfgProps = (XPropertySet)
                     UnoRuntime.queryInterface(XPropertySet.class,config);
-                sAllConfigs[nStdConfigs+i] = getPropertyValueAsString(xCfgProps,"DisplayName");
+                sAllConfigs[nStdConfigs+i] = XPropertySetHelper.getPropertyValueAsString(xCfgProps,"DisplayName");
             }
             catch (Exception e) {
                 sAllConfigs[nStdConfigs+i] = "";
@@ -363,7 +364,7 @@ public abstract class OptionsDialogBase extends DialogBase implements
 		
         // Select item based on template name
         String sTheTemplateName = getTemplateName();
-        Object templates = getPropertyValue(xProps,"Templates");
+        Object templates = XPropertySetHelper.getPropertyValue(xProps,"Templates");
         XNameAccess xTemplates = (XNameAccess)
             UnoRuntime.queryInterface(XNameAccess.class,templates);
         String[] sTemplateNames = xTemplates.getElementNames();
@@ -372,9 +373,9 @@ public abstract class OptionsDialogBase extends DialogBase implements
                 Object template = xTemplates.getByName(sTemplateNames[i]);
                 XPropertySet xTplProps = (XPropertySet)
                     UnoRuntime.queryInterface(XPropertySet.class,template);
-                String sTemplateName = getPropertyValueAsString(xTplProps,"TemplateName");
+                String sTemplateName = XPropertySetHelper.getPropertyValueAsString(xTplProps,"TemplateName");
                 if (sTemplateName.equals(sTheTemplateName)) {
-                    String sConfigName = getPropertyValueAsString(xTplProps,"ConfigName");
+                    String sConfigName = XPropertySetHelper.getPropertyValueAsString(xTplProps,"ConfigName");
                     for (short j=0; j<nRegConfigs; j++) {
                         if (sConfigNames[j].equals(sConfigName)) {
                             setListBoxSelectedItem("Config",(short) (nStdConfigs+j));
@@ -389,12 +390,12 @@ public abstract class OptionsDialogBase extends DialogBase implements
         }
 
         // Select item based on value stored in registry
-        short nConfig = getPropertyValueAsShort(xProps,"Config");
+        short nConfig = XPropertySetHelper.getPropertyValueAsShort(xProps,"Config");
         if (nConfig<nStdConfigs) {
             setListBoxSelectedItem("Config",nConfig);
         }
         else { // Registry configurations are stored by name
-            String sConfigName = getPropertyValueAsString(xProps,"ConfigName");
+            String sConfigName = XPropertySetHelper.getPropertyValueAsString(xProps,"ConfigName");
             for (short i=0; i<nRegConfigs; i++) {
                 if (sConfigNames[i].equals(sConfigName)) {
                     setListBoxSelectedItem("Config",(short) (nStdConfigs+i));
@@ -405,7 +406,7 @@ public abstract class OptionsDialogBase extends DialogBase implements
 	
     protected short saveConfig(XPropertySet xProps, PropertyHelper filterData) {
         // The Config list box is common for all dialogs
-        Object configurations = getPropertyValue(xProps,"Configurations");
+        Object configurations = XPropertySetHelper.getPropertyValue(xProps,"Configurations");
         XNameAccess xNameAccess = (XNameAccess)
             UnoRuntime.queryInterface(XNameAccess.class,configurations);
 
@@ -418,29 +419,29 @@ public abstract class OptionsDialogBase extends DialogBase implements
                 Object config = xNameAccess.getByName(sConfigNames[i]);
                 XPropertySet xCfgProps = (XPropertySet)
                     UnoRuntime.queryInterface(XPropertySet.class,config);
-                filterData.put("ConfigURL",expandMacros(getPropertyValueAsString(xCfgProps,"ConfigURL")));
-                filterData.put("TemplateURL",expandMacros(getPropertyValueAsString(xCfgProps,"TargetTemplateURL")));
-                setPropertyValue(xProps,"ConfigName",sConfigNames[i]);
+                filterData.put("ConfigURL",expandMacros(XPropertySetHelper.getPropertyValueAsString(xCfgProps,"ConfigURL")));
+                filterData.put("TemplateURL",expandMacros(XPropertySetHelper.getPropertyValueAsString(xCfgProps,"TargetTemplateURL")));
+                XPropertySetHelper.setPropertyValue(xProps,"ConfigName",sConfigNames[i]);
                 bFound = true;
             }
             catch (Exception e) {
             }
         }
-        setPropertyValue(xProps,"Config",nConfig);
-        if (!bFound) { setPropertyValue(xProps,"ConfigName",""); }
+        XPropertySetHelper.setPropertyValue(xProps,"Config",nConfig);
+        if (!bFound) { XPropertySetHelper.setPropertyValue(xProps,"ConfigName",""); }
         return nConfig;
     }
 	
     // Check box option (boolean)
     protected boolean loadCheckBoxOption(XPropertySet xProps, String sName) {
-        boolean bValue = getPropertyValueAsBoolean(xProps,sName);
+        boolean bValue = XPropertySetHelper.getPropertyValueAsBoolean(xProps,sName);
         setCheckBoxStateAsBoolean(sName, bValue);
         return bValue;
     }
 	
     protected boolean saveCheckBoxOption(XPropertySet xProps, String sName) {
         boolean bValue = getCheckBoxStateAsBoolean(sName);
-        setPropertyValue(xProps, sName, bValue);
+        XPropertySetHelper.setPropertyValue(xProps, sName, bValue);
         return bValue;
     }
 
@@ -455,14 +456,14 @@ public abstract class OptionsDialogBase extends DialogBase implements
 	
     // List box option
     protected short loadListBoxOption(XPropertySet xProps, String sName) {
-        short nValue = getPropertyValueAsShort(xProps, sName);
+        short nValue = XPropertySetHelper.getPropertyValueAsShort(xProps, sName);
         setListBoxSelectedItem(sName ,nValue);
         return nValue;
     }
 	
     protected short saveListBoxOption(XPropertySet xProps, String sName) {
         short nValue = getListBoxSelectedItem(sName);
-        setPropertyValue(xProps, sName, nValue);
+        XPropertySetHelper.setPropertyValue(xProps, sName, nValue);
         return nValue;
     }
 	
@@ -477,14 +478,14 @@ public abstract class OptionsDialogBase extends DialogBase implements
 	
     // Combo box option
     protected String loadComboBoxOption(XPropertySet xProps, String sName) {
-        String sValue = getPropertyValueAsString(xProps, sName);
+        String sValue = XPropertySetHelper.getPropertyValueAsString(xProps, sName);
         setComboBoxText(sName ,sValue);
         return sValue;
     }
 	
     protected String saveComboBoxOption(XPropertySet xProps, String sName) {
         String sValue = getComboBoxText(sName);
-        setPropertyValue(xProps, sName, sValue);
+        XPropertySetHelper.setPropertyValue(xProps, sName, sValue);
         return sValue;
     }
 	
@@ -499,14 +500,14 @@ public abstract class OptionsDialogBase extends DialogBase implements
 
     // Text Field option
     protected String loadTextFieldOption(XPropertySet xProps, String sName) {
-        String sValue = getPropertyValueAsString(xProps, sName);
+        String sValue = XPropertySetHelper.getPropertyValueAsString(xProps, sName);
         setTextFieldText(sName ,sValue);
         return sValue;
     }
 	
     protected String saveTextFieldOption(XPropertySet xProps, String sName) {
         String sValue = getTextFieldText(sName);
-        setPropertyValue(xProps, sName, sValue);
+        XPropertySetHelper.setPropertyValue(xProps, sName, sValue);
         return sValue;
     }
 	
@@ -521,14 +522,14 @@ public abstract class OptionsDialogBase extends DialogBase implements
 
     // Numeric option
     protected int loadNumericOption(XPropertySet xProps, String sName) {
-        int nValue = getPropertyValueAsInteger(xProps, sName);
+        int nValue = XPropertySetHelper.getPropertyValueAsInteger(xProps, sName);
         setNumericFieldValue(sName, nValue);
         return nValue;
     }
 	
     protected int saveNumericOption(XPropertySet xProps, String sName) {
         int nValue = getNumericFieldValue(sName);
-        setPropertyValue(xProps, sName, nValue);
+        XPropertySetHelper.setPropertyValue(xProps, sName, nValue);
         return nValue;
     }
 	
