@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-26) 
+ *  Version 1.2 (2009-05-20) 
  *
  */ 
  
@@ -66,6 +66,18 @@ public class W4LRegistration {
             multiFactory,						    
             regKey);
         }
+        else if (implName.equals(TeXImportFilter.__implementationName) ) {
+            xSingleServiceFactory = FactoryHelper.getServiceFactory(TeXImportFilter.class,
+            TeXImportFilter.__serviceName,
+            multiFactory,						    
+            regKey);
+        }
+        else if (implName.equals(TeXDetectService.__implementationName) ) {
+            xSingleServiceFactory = FactoryHelper.getServiceFactory(TeXDetectService.class,
+            TeXDetectService.__serviceName,
+            multiFactory,						    
+            regKey);
+        }
         else if (implName.equals(ConfigurationDialog.__implementationName) ) {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(ConfigurationDialog.class,
             ConfigurationDialog.__serviceName,
@@ -94,6 +106,10 @@ public class W4LRegistration {
         return
             FactoryHelper.writeRegistryServiceInfo(Writer4LaTeX.__implementationName,
                 Writer4LaTeX.__serviceName, regKey) &
+            FactoryHelper.writeRegistryServiceInfo(TeXImportFilter.__implementationName,
+                        TeXImportFilter.__serviceName, regKey) &
+            FactoryHelper.writeRegistryServiceInfo(TeXDetectService.__implementationName,
+                        TeXDetectService.__serviceName, regKey) &
             FactoryHelper.writeRegistryServiceInfo(ConfigurationDialog.__implementationName,
                 ConfigurationDialog.__serviceName, regKey) &
             FactoryHelper.writeRegistryServiceInfo(LogViewerDialog.__implementationName,

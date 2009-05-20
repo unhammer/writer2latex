@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-05-01)
+ *  Version 1.2 (2009-05-18)
  *
  */ 
  
@@ -38,14 +38,11 @@ import com.sun.star.frame.XController;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.task.XStatusIndicator;
 import com.sun.star.task.XStatusIndicatorFactory;
 import com.sun.star.ui.dialogs.ExecutableDialogResults;
 import com.sun.star.ui.dialogs.XExecutableDialog;
-import com.sun.star.ui.dialogs.XFilePicker;
-import com.sun.star.ui.dialogs.XFilterManager;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
@@ -73,7 +70,6 @@ public final class Writer4LaTeX extends WeakBase
 	
     // Global data
     private TeXify texify = null;
-    private LaTeXImporter latexImporter = null;
     private PropertyValue[] mediaProps = null;
     private String sBasePath = null;
     private String sBaseFileName = null;
@@ -131,12 +127,6 @@ public final class Writer4LaTeX extends WeakBase
                 return this;
             else if ( aURL.Path.compareTo("ViewLog") == 0 )
                 return this;
-            else if ( aURL.Path.compareTo("UseBibTeX") == 0 )
-                return this;
-            else if ( aURL.Path.compareTo("ImportBibTeX") == 0 )
-                return this;
-            else if ( aURL.Path.compareTo("ImportLaTeX") == 0 )
-                return this;
         }
         return null;
     }
@@ -183,20 +173,6 @@ public final class Writer4LaTeX extends WeakBase
             }
             else if ( aURL.Path.compareTo("ViewLog") == 0 ) {
                 viewLog();
-                return;
-            }
-            else if ( aURL.Path.compareTo("UseBibTeX") == 0 ) {
-                org.openoffice.da.comp.w2lcommon.helper.MessageBox msgBox = new org.openoffice.da.comp.w2lcommon.helper.MessageBox(m_xContext);
-                msgBox.showMessage("Writer4LaTeX", "This feature has not been implemented yet");
-                return;
-            }
-            else if ( aURL.Path.compareTo("ImportBibTeX") == 0 ) {
-                org.openoffice.da.comp.w2lcommon.helper.MessageBox msgBox = new org.openoffice.da.comp.w2lcommon.helper.MessageBox(m_xContext);
-                msgBox.showMessage("Writer4LaTeX", "This feature has not been implemented yet");
-                return;
-            }
-            else if ( aURL.Path.compareTo("ImportLaTeX") == 0 ) {
-                importLaTeX();
                 return;
             }
         }
@@ -295,59 +271,7 @@ public final class Writer4LaTeX extends WeakBase
 
     }
     
-    private void importLaTeX() {
-    	// Display the file dialog
-    	String sURL = browseForLaTeXFile();
-    	if (sURL!=null) {
-    		if (latexImporter==null) {
-    			latexImporter = new LaTeXImporter(m_xContext);
-    		}
-    		latexImporter.importLaTeX(sURL);
-    	}
-    }
-
     // Some utility methods
-    
-    private String browseForLaTeXFile() {
-    	String sPath = null;
-        XComponent xComponent = null;
-        try {
-            // Create FilePicker
-            Object filePicker = m_xContext.getServiceManager()
-                .createInstanceWithContext("com.sun.star.ui.dialogs.FilePicker", m_xContext);
-            XFilePicker xFilePicker = (XFilePicker)
-                UnoRuntime.queryInterface(XFilePicker.class, filePicker);
-            xComponent = (XComponent)
-                UnoRuntime.queryInterface(XComponent.class, xFilePicker);
-            
-            XFilterManager xFilterManager = (XFilterManager) UnoRuntime.queryInterface(XFilterManager.class, xFilePicker);
-            xFilterManager.appendFilter("LaTeX","*.tex"); 
-
-
-            // Display the FilePicker
-            XExecutableDialog xExecutable = (XExecutableDialog)
-                UnoRuntime.queryInterface(XExecutableDialog.class, xFilePicker);
-
-            // Get the path
-            if (xExecutable.execute() == ExecutableDialogResults.OK) {
-                String[] sPathList = xFilePicker.getFiles();
-                if (sPathList.length > 0) {
-                	sPath = sPathList[0];
-                }     
-            }
-        }
-        catch (com.sun.star.uno.Exception e) {
-        }
-        finally{
-            // Always dispose the FilePicker component
-            if (xComponent!=null) {
-                xComponent.dispose();
-            }
-        } 
-        return sPath;
-    }
-
-	
     private void prepareMediaProperties() {
         // Create inital media properties
         mediaProps = new PropertyValue[2];
@@ -532,19 +456,6 @@ public final class Writer4LaTeX extends WeakBase
     		loadOption(xProps,filterData,"IgnoreDoubleSpaces","ignore_empty_spaces");
     		
     		registry.disposeRegistryView(view);
-    		
-    		// Write out the filter data
-    		/*PropertyValue[] props = filterData.toArray();
-    		for (int i=0; i<props.length; i++) {
-    			String sName = props[i].Name;
-    			Object value = props[i].Value;
-    			if (value instanceof String) {
-    				System.out.println(sName+"="+(String)value);
-    			}
-    			else {
-    				System.out.println(sName+"= ???");
-    			}
-    		}*/
     		
             // Update the media properties with the FilterData
             PropertyHelper helper = new PropertyHelper(mediaProps);

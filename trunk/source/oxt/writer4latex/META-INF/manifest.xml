@@ -30,6 +30,14 @@
      manifest:media-type="application/vnd.sun.star.configuration-data"/>
  
     <manifest:file-entry
+     manifest:full-path="w4l_types.xcu"
+     manifest:media-type="application/vnd.sun.star.configuration-data"/>
+
+    <manifest:file-entry
+     manifest:full-path="w4l_filters.xcu"
+     manifest:media-type="application/vnd.sun.star.configuration-data"/>
+
+    <manifest:file-entry
      manifest:full-path="writer4latex.jar"
      manifest:media-type="application/vnd.sun.star.uno-component;type=Java"/>
 

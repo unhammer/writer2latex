@@ -45,7 +45,7 @@ class StreamGobbler extends Thread {
             while ( (line = br.readLine()) != null) {
             //while ( br.readLine() != null) {
                 // Do nothing...
-                System.out.println(type + ">" + line);
+                //System.out.println(type + ">" + line);
             }    
         }
         catch (IOException ioe) {
