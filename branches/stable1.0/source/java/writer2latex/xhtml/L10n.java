@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-04-16)
+ *  Version 1.0 (2009-05-20)
  *
  */
 
@@ -122,6 +122,20 @@ public class L10n {
                 case DIRECTORY: return "Mappe";
                 case DOCUMENT: return "Dokument";
             }
+        }
+        if (sLocale.startsWith("pl")) { // polish
+        	switch (nString) {
+        		case UP: return "W g\u00f3r\u0119";
+        		case FIRST : return "Pierwsza";
+        		case PREVIOUS : return "Poprzednia";
+        		case NEXT : return "Nast\u0119pna";
+        		case LAST : return "Ostatnia";
+        		case CONTENTS : return "Spis tre\u015bci";
+        		case INDEX : return "Indeks";
+        		case HOME : return "Pocz\u0105tek";
+        		case DIRECTORY: return "Katalog";
+        		case DOCUMENT: return "Dokument";
+        	}
         }
         if (sLocale.startsWith("ru")) { // russian
             switch (nString) {

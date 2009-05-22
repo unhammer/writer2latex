@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-03-08)
+ *  Version 1.0 (2009-05-22)
  *
  */
  
@@ -228,7 +228,14 @@ public class DrawConverter extends ConverterHelper {
         }
         if (!oc.isInFrame() && config.alignFrames()) {
             // Avoid nesting center environment
-            ba.add("\\begin{center}\n","\n\\end{center}\n");
+        	if (config.floatFigures()) {
+        		// Inside floats we don't want the extra glue added by the center environment
+        		ba.add("\\centering\n","\n");
+        	}
+        	else {
+        		// Outside a float we certainly want it
+                ba.add("\\begin{center}\n","\n\\end{center}\n");
+        	}
         }
 	
     }

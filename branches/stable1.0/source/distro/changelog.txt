@@ -1,8 +1,17 @@
 Changelog for Writer2LaTeX version 0.5 -> 1.0
 
+---------- version 1.0 final ----------
+
+[w2l] Use \centering, \raggedleft and \raggedright rather than the corresponding
+  environment in floats (to avoid the extra glue)
+
+[all] Added updated Italian translation from Stefano Tombolini
+
+[all] Added Polish translation from Dariusz Bismor
+
 ---------- version 1.0 beta3 ----------
 
-[all] Added turkish translation from Ferhat Nutku
+[all] Added Turkish translation from Ferhat Nutku
 
 [all] Added Italian translation from Stefano Tombolini
 

@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-23)
+ *  Version 1.0 (2009-05-22)
  *
  */
 
@@ -149,7 +149,7 @@ public class TableConverter extends ConverterHelper {
             // Get table declarations
             baTable = new BeforeAfter();
             baTableAlign = new BeforeAfter();
-            formatter.applyTableStyle(baTable,baTableAlign);
+            formatter.applyTableStyle(baTable,baTableAlign,config.floatTables() && !ic.isInFrame() && !table.isSubTable());
 			
             // Convert table
             if (formatter.isSupertabular()) {
@@ -181,7 +181,7 @@ public class TableConverter extends ConverterHelper {
             // Table head
             ldp.append("\\tablehead{");
             handleHeaderRows(ldp,oc);
-            ldp.append("}");
+            ldp.append("}\n");
 
             // The table
             handleHyperTarget(ldp);
