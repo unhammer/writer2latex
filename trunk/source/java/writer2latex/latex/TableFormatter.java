@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  *  
- *  Version 1.0 (2009-02-19)
+ *  Version 1.0 (2009-05-22)
  *  
  */
  
@@ -307,8 +307,11 @@ public class TableFormatter extends ConverterHelper {
     /**
      * <p>Create table environment based on table style.</p>
      * <p>Returns eg. "\begin{longtable}{m{2cm}|m{4cm}}", "\end{longtable}".</p>
+     * @param ba the <code>BeforeAfter</code> to contain the table code
+     * @param baAlign the <code>BeforeAfter</code> to contain the alignment code, if it's separate
+     * @param bInFloat true if the table should be floating
      */
-    public void applyTableStyle(BeforeAfter ba, BeforeAfter baAlign) {
+    public void applyTableStyle(BeforeAfter ba, BeforeAfter baAlign, boolean bInFloat) {
         // Read formatting info from table style
         // Only supported properties are alignment and may-break-between-rows.
         String sStyleName = table.getTableStyleName();
@@ -328,7 +331,18 @@ public class TableFormatter extends ConverterHelper {
 		
         // Create table alignment (for supertabular, tabular and tabulary)
         if (!bIsLongtable && !table.isSubTable()) {
-            baAlign.add("\\begin{"+sAlign+"}\n","\\end{"+sAlign+"}\n");
+        	if (bInFloat & !bIsSupertabular) {
+        		// Inside a float we don't want the extra glue added by the flushleft/center/flushright environment
+        		switch (cAlign) {
+        		case 'c' : baAlign.add("\\centering\n", ""); break;
+        		case 'r' : baAlign.add("\\raggedleft\n", ""); break;
+        		case 'l' : baAlign.add("\\raggedright\n", "");
+        		}
+        	}
+        	else {
+        		// But outside floats we do want it
+                baAlign.add("\\begin{"+sAlign+"}\n","\\end{"+sAlign+"}\n");        		
+        	}
         }
 		
         // Create table declaration

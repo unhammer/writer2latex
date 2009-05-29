@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-02)
+ *  Version 1.2 (2009-05-29)
  *
  */
 
@@ -153,7 +153,7 @@ public class Converter extends ConverterBase {
         textCv = new TextConverter(ofr,config,this);
         tableCv = new TableConverter(ofr,config,this);
         drawCv = new DrawConverter(ofr,config,this);
-        mathCv = new MathConverter(ofr,config,this,nType!=XhtmlDocument.XHTML10);
+        mathCv = new MathConverter(ofr,config,this,nType!=XhtmlDocument.XHTML10 && nType!=XhtmlDocument.XHTML11);
 
         // Set locale to document language
         StyleWithProperties style = ofr.isSpreadsheet() ? ofr.getDefaultCellStyle() : ofr.getDefaultParStyle();

@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-19)
+ *  Version 1.0 (2009-05-29)
  *
  */
  
@@ -59,7 +59,7 @@ public class XhtmlDocument extends DOMDocument {
     /** Constant to identify XHTML 1.0 strict documents */
     public static final int XHTML10 = 0;
 	
-    /** Constant to identify XHTML 1.1 documents (not used currently) */
+    /** Constant to identify XHTML 1.1 documents */
     public static final int XHTML11 = 1;
     
     /** Constant to identify XHTML + MathML documents */
@@ -70,7 +70,7 @@ public class XhtmlDocument extends DOMDocument {
      */
     public static final int XHTML_MATHML_XSL = 3;
 	
-    private static final String[] sExtension = { ".html", ".html", ".xhtml", ".xml" };
+    private static final String[] sExtension = { ".html", ".xhtml", ".xhtml", ".xml" };
 
     private static final String[] sEmpty = { "base", "meta", "link", "hr", "br", "param", "img", "area", "input", "col" };
 	

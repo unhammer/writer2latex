@@ -22,8 +22,11 @@
     <name lang="de">Writer2xhtml Exportfilter</name>
     <name lang="es">Writer2xhtml filtros para exportar</name>
     <name lang="fr">Filtres d'exportation Writer2xhtml</name>
+    <name lang="it">Filtri di esportazione Writer2xhtml</name>
+    <name lang="pl">Filtry ekportu Writer2xhtml</name>
     <name lang="ru">Фильтры экспорта Writer2xhtml</name>
     <name lang="uk">Фільтри експорту Writer2xhtml</name>
+    <name lang="tr">Writer2LaTeX ihraç etme filitreleri</name>
   </display-name>
   
   <icon>
@@ -38,8 +41,11 @@
     <src xlink:href="desc_de.txt" lang="de" />
     <src xlink:href="desc_es.txt" lang="es" />
     <src xlink:href="desc_fr.txt" lang="fr" />
+    <src xlink:href="desc_it.txt" lang="it" />
+    <src xlink:href="desc_pl.txt" lang="pl" />
     <src xlink:href="desc_ru.txt" lang="ru" />
     <src xlink:href="desc_uk.txt" lang="uk" />
+    <src xlink:href="desc_tr.txt" lang="tr" />
   </extension-description>
 
 </description> 

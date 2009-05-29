@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-23)
+ *  Version 1.2 (2009-05-29)
  *
  */
 
@@ -46,6 +46,8 @@ public class MIMETypes {
 	
     // Desitination formats
     public static final String XHTML="text/html";
+    /** This is a fake Mime type, for internal use only */
+    public static final String XHTML11="application/xhtml11";
     public static final String XHTML_MATHML="application/xhtml+xml";
     public static final String XHTML_MATHML_XSL="application/xml";
     public static final String LATEX="application/x-latex";

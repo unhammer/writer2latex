@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-27)
+ *  Version 1.2 (2009-05-29)
  *
  */
 
@@ -95,6 +95,20 @@ public class L10n {
                 case DOCUMENT: return "Documento";
             }
         }
+        if (sLocale.startsWith("it")) { // italian
+            switch (nString) {
+            	case UP: return "Su";
+            	case FIRST : return "Inizio";
+            	case PREVIOUS : return "Precedente";
+            	case NEXT : return "Successivo";
+            	case LAST : return "Fine";
+            	case CONTENTS : return "Sommario";
+            	case INDEX : return "Indice";
+            	case HOME : return "Home";
+            	case DIRECTORY: return "Cartella";
+            	case DOCUMENT: return "Documento";     
+            }
+        }
         if (sLocale.startsWith("da")) { // danish
             switch (nString) {
                 case UP: return "Op";
@@ -108,6 +122,20 @@ public class L10n {
                 case DIRECTORY: return "Mappe";
                 case DOCUMENT: return "Dokument";
             }
+        }
+        if (sLocale.startsWith("pl")) { // polish
+        	switch (nString) {
+        		case UP: return "W g\u00f3r\u0119";
+        		case FIRST : return "Pierwsza";
+        		case PREVIOUS : return "Poprzednia";
+        		case NEXT : return "Nast\u0119pna";
+        		case LAST : return "Ostatnia";
+        		case CONTENTS : return "Spis tre\u015bci";
+        		case INDEX : return "Indeks";
+        		case HOME : return "Pocz\u0105tek";
+        		case DIRECTORY: return "Katalog";
+        		case DOCUMENT: return "Dokument";
+        	}
         }
         if (sLocale.startsWith("ru")) { // russian
             switch (nString) {
@@ -136,6 +164,20 @@ public class L10n {
             	case DIRECTORY: return "\u0422\u0435\u043a\u0430";
             	case DOCUMENT: return "\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442";
             }
+        }
+        if (sLocale.startsWith("tr")) { // turkish
+            switch (nString) {
+            	case UP: return "Yukar\u0131";
+            	case FIRST : return "\u0130lk";
+            	case PREVIOUS : return "\u00d6nceki";
+            	case NEXT : return "Sonraki";
+            	case LAST : return "Son";
+            	case CONTENTS : return "\u0130\u00e7indekiler";
+            	case INDEX : return "\u0130ndeks";
+            	case HOME : return "Ev";
+            	case DIRECTORY: return "Klas\u00f6r";
+            	case DOCUMENT: return "D\u00f6k\u00fcman";
+            }        	
         }
         if (sLocale.startsWith("hr")) { // croatian
             switch (nString) {

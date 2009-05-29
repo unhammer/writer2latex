@@ -2,6 +2,9 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[w2x] Added XHTML 1.1 (without MathML) as target format. Internally Writer2xhtml uses
+  the non-existing MIME type application/xhtml11 for this
+
 [w2l] Bugfix: Continued numbering now works correctly for lists that continue at level>1
 
 [w2l] Added support for the new list formatting of ODT 1.2 (implemented in OOo 3.0)

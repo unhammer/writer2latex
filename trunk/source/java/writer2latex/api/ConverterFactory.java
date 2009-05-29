@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-04-30)
+ *  Version 1.2 (2009-05-29)
  *
  */
  
@@ -33,7 +33,7 @@ public class ConverterFactory {
 
     // Version information
     private static final String VERSION = "1.1.1";
-    private static final String DATE = "2008-05-18";
+    private static final String DATE = "2008-05-29";
 	
     /** Return version information
      *  @return the Writer2LaTeX version in the form
@@ -53,6 +53,10 @@ public class ConverterFactory {
      *    <li><code>application/x-latex</code> for LaTeX format</li>
      *    <li><code>application/x-bibtex</code> for BibTeX format</li>
      *    <li><code>text/html</code> for XHTML 1.0 strict format</li>
+     *    <li><code>application/xhtml11</code> for XHTML 1.1 format
+     *    Note that this is <em>not</em> the recommended media type for XHTML 1.1
+     *    (see http://www.w3.org/TR/xhtml-media-types/), but it is used internally
+     *    by Writer2xhtml to distinguish from XHTML+MathML</li>
      *    <li><code>application/xhtml+xml</code> for XHTML+MathML</li>
      *    <li><code>application/xml</code> for XHTML+MathML using stylesheets from w3c's
      *        math working group</li>
@@ -72,6 +76,9 @@ public class ConverterFactory {
         }
         else if (MIMETypes.XHTML.equals(sMIME)) {
             converter = createInstance("writer2latex.xhtml.Xhtml10Converter");
+        }
+        else if (MIMETypes.XHTML11.equals(sMIME)) {
+            converter = createInstance("writer2latex.xhtml.Xhtml11Converter");
         }
         else if (MIMETypes.XHTML_MATHML.equals(sMIME)) {
             converter = createInstance("writer2latex.xhtml.XhtmlMathMLConverter");
