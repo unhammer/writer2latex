@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-17)
+ *  Version 1.2 (2009-05-31)
  *
  */
 
@@ -44,7 +44,7 @@ import writer2latex.latex.util.StyleMap;
 import writer2latex.util.Misc;
 
 public class LaTeXConfig extends writer2latex.base.ConfigBase {
-    protected int getOptionCount() { return 59; }
+    protected int getOptionCount() { return 63; }
     protected String getDefaultConfigPath() { return "/writer2latex/latex/config/"; } 
     
     // Override setOption to be backwards compatible
@@ -83,7 +83,7 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     public static final int CUSTOM = 4;
 	
     // Options
-    protected int OPTION_COUNT = 59;
+    protected int OPTION_COUNT = 63;
 
     private static final int BACKEND = 0;
     private static final int NO_PREAMBLE = 1;
@@ -122,28 +122,32 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     private static final int OTHER_STYLES = 34;
     private static final int IMAGE_CONTENT = 35;
 	private static final int TABLE_CONTENT = 36;
-    private static final int IGNORE_HARD_PAGE_BREAKS = 37;
-    private static final int IGNORE_HARD_LINE_BREAKS = 38;
-    private static final int IGNORE_EMPTY_PARAGRAPHS = 39;
-    private static final int IGNORE_DOUBLE_SPACES = 40;
-    private static final int ALIGN_FRAMES = 41;
-    private static final int FLOAT_FIGURES = 42; 
-    private static final int FLOAT_TABLES = 43; 
-    private static final int FLOAT_OPTIONS = 44;
-    private static final int FIGURE_SEQUENCE_NAME = 45; 
-    private static final int TABLE_SEQUENCE_NAME = 46; 
-    private static final int IMAGE_OPTIONS = 47;
-    private static final int REMOVE_GRAPHICS_EXTENSION = 48;
-    private static final int ORIGINAL_IMAGE_SIZE = 49;
-    private static final int SIMPLE_TABLE_LIMIT = 50;
-    private static final int NOTES = 51;
-    private static final int METADATA = 52;
-    private static final int TABSTOP = 53;
-    private static final int WRAP_LINES_AFTER = 54;
-    private static final int SPLIT_LINKED_SECTIONS = 55;
-    private static final int SPLIT_TOPLEVEL_SECTIONS = 56;
-    private static final int SAVE_IMAGES_IN_SUBDIR = 57;
-    private static final int DEBUG = 58;
+	private static final int TABLE_FIRST_HEAD_STYLE = 37;
+	private static final int TABLE_HEAD_STYLE = 38;
+	private static final int TABLE_FOOT_STYLE = 39;
+	private static final int TABLE_LAST_FOOT_STYLE = 40;
+    private static final int IGNORE_HARD_PAGE_BREAKS = 41;
+    private static final int IGNORE_HARD_LINE_BREAKS = 42;
+    private static final int IGNORE_EMPTY_PARAGRAPHS = 43;
+    private static final int IGNORE_DOUBLE_SPACES = 44;
+    private static final int ALIGN_FRAMES = 45;
+    private static final int FLOAT_FIGURES = 46; 
+    private static final int FLOAT_TABLES = 47; 
+    private static final int FLOAT_OPTIONS = 48;
+    private static final int FIGURE_SEQUENCE_NAME = 49; 
+    private static final int TABLE_SEQUENCE_NAME = 50; 
+    private static final int IMAGE_OPTIONS = 51;
+    private static final int REMOVE_GRAPHICS_EXTENSION = 52;
+    private static final int ORIGINAL_IMAGE_SIZE = 53;
+    private static final int SIMPLE_TABLE_LIMIT = 54;
+    private static final int NOTES = 55;
+    private static final int METADATA = 56;
+    private static final int TABSTOP = 57;
+    private static final int WRAP_LINES_AFTER = 58;
+    private static final int SPLIT_LINKED_SECTIONS = 59;
+    private static final int SPLIT_TOPLEVEL_SECTIONS = 60;
+    private static final int SAVE_IMAGES_IN_SUBDIR = 61;
+    private static final int DEBUG = 62;
 
     protected LinkedList<String> customPreamble = new LinkedList<String>();
     protected StyleMap par = new StyleMap();
@@ -226,6 +230,10 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
         options[OTHER_STYLES] = new ContentHandlingOption("other_styles","accept");
         options[IMAGE_CONTENT] = new ContentHandlingOption("image_content","accept");
         options[TABLE_CONTENT] = new ContentHandlingOption("table_content","accept");
+        options[TABLE_FIRST_HEAD_STYLE] = new Option("table_first_head_style","");
+        options[TABLE_HEAD_STYLE] = new Option("table_head_style","");
+        options[TABLE_FOOT_STYLE] = new Option("table_foot_style","");
+        options[TABLE_LAST_FOOT_STYLE] = new Option("table_last_foot_style","");
         options[IGNORE_HARD_PAGE_BREAKS] = new BooleanOption("ignore_hard_page_breaks","false");
         options[IGNORE_HARD_LINE_BREAKS] = new BooleanOption("ignore_hard_line_breaks","false");
         options[IGNORE_EMPTY_PARAGRAPHS] = new BooleanOption("ignore_empty_paragraphs","false");
@@ -493,6 +501,10 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     public int otherStyles() { return ((IntegerOption) options[OTHER_STYLES]).getValue(); }
     public int imageContent() { return ((IntegerOption) options[IMAGE_CONTENT]).getValue(); }
     public int tableContent() { return ((IntegerOption) options[TABLE_CONTENT]).getValue(); }
+    public String getTableFirstHeadStyle() { return options[TABLE_FIRST_HEAD_STYLE].getString(); }
+    public String getTableHeadStyle() { return options[TABLE_HEAD_STYLE].getString(); }
+    public String getTableFootStyle() { return options[TABLE_FOOT_STYLE].getString(); }
+    public String getTableLastFootStyle() { return options[TABLE_LAST_FOOT_STYLE].getString(); }
     public boolean ignoreHardPageBreaks() { return ((BooleanOption) options[IGNORE_HARD_PAGE_BREAKS]).getValue(); }
     public boolean ignoreHardLineBreaks() { return ((BooleanOption) options[IGNORE_HARD_LINE_BREAKS]).getValue(); }
     public boolean ignoreEmptyParagraphs() { return ((BooleanOption) options[IGNORE_EMPTY_PARAGRAPHS]).getValue(); }

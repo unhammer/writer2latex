@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-26) 
+ *  Version 1.2 (2009-06-11) 
  *
  */
  
@@ -276,6 +276,7 @@ public final class Application {
         System.out.println("   -latex");
         System.out.println("   -bibtex");
         System.out.println("   -xhtml");
+        System.out.println("   -xhtml11");
         System.out.println("   -xhtml+mathml");
         System.out.println("   -xhtml+mathml+xsl");
         System.out.println("   -recurse");
@@ -308,6 +309,7 @@ public final class Application {
                 if ("-latex".equals(sArg)) { sTargetMIME = MIMETypes.LATEX; }
                 else if ("-bibtex".equals(sArg)) { sTargetMIME = MIMETypes.BIBTEX; }
                 else if ("-xhtml".equals(sArg)) { sTargetMIME = MIMETypes.XHTML; }
+                else if ("-xhtml11".equals(sArg)) { sTargetMIME = MIMETypes.XHTML11; }
                 else if ("-xhtml+mathml".equals(sArg)) { sTargetMIME = MIMETypes.XHTML_MATHML; }
                 else if ("-xhtml+mathml+xsl".equals(sArg)) { sTargetMIME = MIMETypes.XHTML_MATHML_XSL; }
                 else if ("-recurse".equals(sArg)) { bRecurse = true; }

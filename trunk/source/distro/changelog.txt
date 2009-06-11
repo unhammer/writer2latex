@@ -2,6 +2,16 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[w2l] Allow additional characters in bibliography keys (_, - and :)
+
+[w2l] Bugfix: Fixed crash when using the option external_bibtex_files
+
+[w2l] New options: table_first_head_style, table_head_style, table_foot_style and
+  table_last_foot_style. These can be used to access the advanced table head/table foot
+  features of supertabular and longtable: If the first paragraph in the first cell in
+  a row uses one of the styles given by these optons, the row is exported as part of the
+  first head, head, foot or last foot.
+
 [w2x] Added XHTML 1.1 (without MathML) as target format. Internally Writer2xhtml uses
   the non-existing MIME type application/xhtml11 for this
 

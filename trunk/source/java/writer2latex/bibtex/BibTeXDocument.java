@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-03-08)
+ *  Version 1.2 (2009-06-05)
  *
  */
 
@@ -52,7 +52,7 @@ public class BibTeXDocument implements Document {
 	
     private String sName;
     private Hashtable<String, BibMark> entries = new Hashtable<String, BibMark>();
-    private ExportNameCollection exportNames = new ExportNameCollection(true);
+    private ExportNameCollection exportNames = new ExportNameCollection("",true,"_-:");
     private I18n i18n;
 
     /**

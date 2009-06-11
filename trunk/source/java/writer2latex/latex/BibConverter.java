@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-09-08)
+ *  Version 1.2 (2009-06-05)
  *
  */
 
@@ -134,8 +134,9 @@ public class BibConverter extends ConverterHelper {
                         bibDoc.put(new BibMark(node));
                     }
                 }
+                // Insert citation: Original if using external files; stripped if exporting BibTeX
                 ldp.append("\\cite{")
-                   .append(bibDoc.getExportName(sIdentifier))
+                   .append(config.externalBibtexFiles().length()==0 ? bibDoc.getExportName(sIdentifier) : sIdentifier)
                    .append("}");
             }
         }

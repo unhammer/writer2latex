@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2007 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 0.5 (2007-02-25)
+ *  Version 1.2 (2009-06-05)
  *
  */
 
@@ -29,20 +29,27 @@ package writer2latex.util;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-// Collection of export names
-// Used for mapping named collections to simpler names (only A-Z, a-z and 0-9)
+/** Maintain a collection of export names. 
+ *  This is used to map named collections to simpler names (only A-Z, a-z and 0-9, and possibly additional characters)
+ */
 public class ExportNameCollection{
     private Hashtable<String, String> exportNames = new Hashtable<String, String>();
     private String sPrefix;
+    private String sAdditionalChars;
     private boolean bAcceptNumbers;
-	
-    public ExportNameCollection(String sPrefix, boolean b) {
+    
+    public ExportNameCollection(String sPrefix, boolean bAcceptNumbers, String sAdditionalChars) {
         this.sPrefix=sPrefix;
-        bAcceptNumbers = b;
+        this.bAcceptNumbers = bAcceptNumbers;
+        this.sAdditionalChars = sAdditionalChars;
+    }
+    
+    public ExportNameCollection(String sPrefix, boolean bAcceptNumbers) {
+    	this(sPrefix,bAcceptNumbers,"");
     }
 	
-    public ExportNameCollection(boolean b) {
-        this("",b);
+    public ExportNameCollection(boolean bAcceptNumbers) {
+        this("",bAcceptNumbers,"");
     }
 	
     public Enumeration<String> keys() {
@@ -73,6 +80,9 @@ public class ExportNameCollection{
                     outbuf.append(Misc.int2roman(
                                   Integer.parseInt(inbuf.getInteger())));
                 }
+            }
+            else if (sAdditionalChars.indexOf(c)>-1) {
+            	outbuf.append(inbuf.getChar());
             }
             else {
                 inbuf.getChar(); // ignore this character
