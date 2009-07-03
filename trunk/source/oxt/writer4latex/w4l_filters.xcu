@@ -15,6 +15,18 @@
 		<prop oor:name="TemplateName"/>
 	</node>
 
+	<node oor:name="org.openoffice.da.writer4latex.xelatex" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+		<prop oor:name="UIName"><value>XeLaTeX</value></prop>
+		<prop oor:name="Type"><value>org.openoffice.da.writer4latex.XeLaTeX_File</value></prop>
+		<prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+		<prop oor:name="FilterService"><value>org.openoffice.da.comp.writer4latex.TeXImportFilter</value></prop>
+		<prop oor:name="UIComponent"/>
+		<prop oor:name="Flags"><value>IMPORT TEMPLATE TEMPLATEPATH ALIEN 3RDPARTYFILTER</value></prop>
+		<prop oor:name="UserData"/>
+		<prop oor:name="FileFormatVersion"><value>0</value></prop>
+		<prop oor:name="TemplateName"/>
+	</node>
+
 </node>
 
 </oor:component-data>

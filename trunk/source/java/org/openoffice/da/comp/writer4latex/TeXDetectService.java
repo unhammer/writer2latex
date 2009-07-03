@@ -20,25 +20,33 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-05-20)
+ *  Version 1.2 (2009-06-19)
  *
  */ 
 
 package org.openoffice.da.comp.writer4latex;
 
+import java.io.IOException;
+
+import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
 import com.sun.star.lib.uno.helper.WeakBase;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.document.XExtendedFilterDetection;
-import com.sun.star.task.XStatusIndicator;
+import com.sun.star.lang.XServiceInfo;
+import com.sun.star.io.XInputStream;
+import com.sun.star.ucb.XSimpleFileAccess2;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+
+
 
 /** This class provides detect services for TeX documents
  *  It is thus an implementation of the service com.sun.star.document.ExtendedTypeDetection
  */
 
-public class TeXDetectService extends WeakBase implements XExtendedFilterDetection {
+public class TeXDetectService extends WeakBase implements XExtendedFilterDetection, XServiceInfo {
 	
 	// Constants
 	
@@ -47,17 +55,40 @@ public class TeXDetectService extends WeakBase implements XExtendedFilterDetecti
 	public static final String __serviceName = "com.sun.star.document.ExtendedTypeDetection"; 
 	private static final String[] m_serviceNames = { __serviceName };
 	
+	// The type names
+	private static final String LATEX_FILE = "org.openoffice.da.writer4latex.LaTeX_File";
+	private static final String XELATEX_FILE = "org.openoffice.da.writer4latex.XeLaTeX_File";
+	
 	// From constructor+initialization
-    private final XComponentContext m_xContext;
+private final XComponentContext m_xContext;
 
 	/** Construct a new <code>TeXDetectService</code>
 	 * 
 	 * @param xContext The Component Context
 	 */
 	public TeXDetectService( XComponentContext xContext ) {
-        m_xContext = xContext;
-    }
+		m_xContext = xContext;
+	}
 	
+	// Implement com.sun.star.lang.XServiceInfo:
+	public String getImplementationName() {
+		return __implementationName;
+	}
+	
+	public boolean supportsService( String sService ) {
+		int len = m_serviceNames.length;
+
+		for(int i=0; i < len; i++) {
+			if (sService.equals(m_serviceNames[i]))
+				return true;
+		}
+		return false;
+	}
+
+	public String[] getSupportedServiceNames() {
+		return m_serviceNames;
+	}
+		
 	// Implement XExtendedFilterDetection
 	public String detect(PropertyValue[][] mediaDescriptor) {
 		// Read the media properties
@@ -80,10 +111,66 @@ public class TeXDetectService extends WeakBase implements XExtendedFilterDetecti
 			}
 		}
 		
-		if ("org.openoffice.da.writer4latex.LaTeX_File".equals(sTypeName)) {
-			return sTypeName;
+		// If there's no URL, we cannot verify the type (this should never happen on proper use of the service)
+		if (sURL==null) {
+			System.out.println("No URL given!");
+			return "";
 		}
-		else {
+		
+		System.out.println("Asked to verify the type "+sTypeName);
+		// Also, we can only verify LaTeX and XeLaTeX
+		if (sTypeName==null || !(sTypeName.equals(LATEX_FILE) || sTypeName.equals(XELATEX_FILE))) {
+			return "";
+		}
+
+		// Initialise the file access
+		XSimpleFileAccess2 sfa2 = null;
+		try {
+			Object sfaObject = m_xContext.getServiceManager().createInstanceWithContext(
+					"com.sun.star.ucb.SimpleFileAccess", m_xContext);
+			sfa2 = (XSimpleFileAccess2) UnoRuntime.queryInterface(XSimpleFileAccess2.class, sfaObject);
+		}
+		catch (com.sun.star.uno.Exception e) {
+			// failed to get SimpleFileAccess service (should not happen)
+			System.out.println("Failed to get SFA service");
+			return "";
+		}
+		
+		// Get the input stream
+		XInputStreamToInputStreamAdapter is = null;
+		try {
+			XInputStream xis = sfa2.openFileRead(sURL);
+			is = new XInputStreamToInputStreamAdapter(xis);
+		}
+		catch (com.sun.star.ucb.CommandAbortedException e) {
+			// Failed to create input stream, cannot verify the type
+			System.out.println("Failed to get input stream");
+			return "";
+		}
+		catch (com.sun.star.uno.Exception e) {
+			// Failed to create input stream, cannot verify the type
+			System.out.println("Failed to get input stream");
+			return "";
+		}
+
+		// Ask the deTeXtive
+		DeTeXtive deTeXtive = new DeTeXtive();
+		try {
+			String sType = deTeXtive.deTeXt(is);
+			System.out.println("The DeTeXtive returned the type "+sType);
+			if ("LaTeX".equals(sType)) {
+				return LATEX_FILE;
+			}
+			else if ("XeLaTeX".equals(sType)) {
+				return XELATEX_FILE;
+			}
+			else {
+				return "";
+			}
+		}
+		catch (IOException e) {
+			// Failed to read the stream, cannot verify the type
+			System.out.println("Failed to read the input stream");
 			return "";
 		}
 				

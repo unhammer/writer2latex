@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-05-19)
+ *  Version 1.2 (2009-06-19)
  *
  */ 
  
@@ -32,6 +32,7 @@ import java.net.URI;
 
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.document.XDocumentInsertable;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.task.XStatusIndicator;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
@@ -48,7 +49,7 @@ import com.sun.star.document.XFilter;
 /** This class implements an import filter for TeX documents using TeX4ht
  *  It is thus an implementation of the service com.sun.star.document.ImportFilter
  */
-public class TeXImportFilter extends WeakBase implements XInitialization, XNamed, XImporter, XFilter {
+public class TeXImportFilter extends WeakBase implements XInitialization, XNamed, XImporter, XFilter, XServiceInfo {
 
 	// Constants
 	
@@ -282,7 +283,15 @@ public class TeXImportFilter extends WeakBase implements XInitialization, XNamed
 
     	if (xStatus!=null) { xStatus.setValue(++nStep); }
     	
-    	externalApps.execute(ExternalApps.MK4HT, file.getName(), file.getParentFile(), true);
+    	// Default is the filter org.openoffice.da.writer4latex.latex
+    	String sCommand = "oolatex";
+    	if ("org.openoffice.da.writer4latex.xelatex".equals(m_sFilterName)) {
+    		sCommand = "ooxelatex";
+    	}
+    	
+    	System.out.println("Executing tex4ht with command "+sCommand+" on file "+file.getName());
+    	
+    	externalApps.execute(ExternalApps.MK4HT, sCommand, file.getName(), file.getParentFile(), true);
 		
     	if (xStatus!=null) { nStep+=5; xStatus.setValue(nStep); }
 

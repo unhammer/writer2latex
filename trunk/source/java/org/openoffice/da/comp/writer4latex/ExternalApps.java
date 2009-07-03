@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-30)
+ *  Version 1.2 (2009-06-19)
  *
  */ 
  
@@ -95,7 +95,7 @@ public class ExternalApps {
     public String[] getApplication(String sAppName) {
         return apps.get(sAppName);
     } 
-	
+    
     /** Execute an external application
      *  @param sAppName the name of the application to execute
      *  @param sFileName the file name to use
@@ -104,6 +104,18 @@ public class ExternalApps {
      *  @return error code 
      */
     public int execute(String sAppName, String sFileName, File workDir, boolean bWaitFor) {
+    	return execute(sAppName, "", sFileName, workDir, bWaitFor);
+    }
+	
+    /** Execute an external application
+     *  @param sAppName the name of the application to execute
+     *  @param sCommand subcommand/option to pass to the command
+     *  @param sFileName the file name to use
+     *  @param workDir the working directory to use
+     *  @param bWaitFor true if the method should wait for the execution to finish
+     *  @return error code 
+     */
+    public int execute(String sAppName, String sCommand, String sFileName, File workDir, boolean bWaitFor) {
         // Assemble the command
         String[] sApp = getApplication(sAppName);
         if (sApp==null) { return 1; }
@@ -113,19 +125,13 @@ public class ExternalApps {
 			command.add(sApp[0]);
 			String[] sArguments = sApp[1].split(" ");
 			for (String s : sArguments) {
-				command.add(s.replace("%s",sFileName));
+				command.add(s.replace("%c",sCommand).replace("%s",sFileName));
 			}
 			
             ProcessBuilder pb = new ProcessBuilder(command);
-            //Map<String, String> env = pb.environment();
-            //env.put("VAR1", "myValue");
             pb.directory(workDir);
             Process proc = pb.start();        
-  
         
-            //Runtime rt = Runtime.getRuntime();
-            //Process proc = rt.exec(sCommand, new String[0], workDir);
-
             // Gobble the error stream of the application
             StreamGobbler errorGobbler = new 
                 StreamGobbler(proc.getErrorStream(), "ERROR");            
