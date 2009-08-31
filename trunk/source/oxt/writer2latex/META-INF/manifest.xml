@@ -12,6 +12,10 @@
     <manifest:file-entry
      manifest:full-path="w2l_filters.xcu"
      manifest:media-type="application/vnd.sun.star.configuration-data"/>
+
+    <manifest:file-entry
+     manifest:full-path="OptionPages.xcu"
+     manifest:media-type="application/vnd.sun.star.configuration-data"/>
 	 
     <manifest:file-entry
      manifest:full-path="Options.xcs"
@@ -23,6 +27,10 @@
 
     <manifest:file-entry
      manifest:full-path="W2LDialogs/"
+     manifest:media-type="application/vnd.sun.star.basic-library"/>
+	 
+    <manifest:file-entry
+     manifest:full-path="W2LDialogs2/"
      manifest:media-type="application/vnd.sun.star.basic-library"/>
 	 
     <manifest:file-entry

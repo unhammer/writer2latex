@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-06-11)
+ *  Version 1.2 (2009-08-23)
  *
  */
 
@@ -248,25 +248,35 @@ public class TableConverter extends ConverterHelper {
 
             // Table head
             ldp.append("\\tablefirsthead{");
-            handleRows(ldp,oc,RowType.FIRST_HEAD);
+            if (hasRowType(RowType.FIRST_HEAD)) {
+            	handleRows(ldp,oc,RowType.FIRST_HEAD,true,false);
+            }
+            else {
+            	handleRows(ldp,oc,RowType.HEAD,true,false);
+            }
             ldp.append("}\n");
             ldp.append("\\tablehead{");
-            handleRows(ldp,oc,RowType.HEAD);
+            handleRows(ldp,oc,RowType.HEAD,true,false);
             ldp.append("}\n");
             
             // Table foot
             ldp.append("\\tabletail{");
-            handleRows(ldp,oc,RowType.FOOT);
+            handleRows(ldp,oc,RowType.FOOT,true,true);
             ldp.append("}\n");
             ldp.append("\\tablelasttail{");
-            handleRows(ldp,oc,RowType.LAST_FOOT);
+            if (hasRowType(RowType.LAST_FOOT)) {
+            	handleRows(ldp,oc,RowType.LAST_FOOT,true,true);
+            }
+            else {
+            	handleRows(ldp,oc,RowType.FOOT,true,true);
+            }
             ldp.append("}\n");
 
             // The table body
             handleHyperTarget(ldp);
             ldp.append(baTable.getBefore()).nl();
-            handleRows(ldp,oc,RowType.BODY);
-            ldp.append(baTable.getAfter()).nl();
+            handleRows(ldp,oc,RowType.BODY,true,!hasRowType(RowType.FOOT) && !hasRowType(RowType.LAST_FOOT));
+            ldp.nl().append(baTable.getAfter()).nl();
 
             ldp.append(baTableAlign.getAfter());
         }
@@ -282,25 +292,25 @@ public class TableConverter extends ConverterHelper {
                 handleCaption("\\caption",ldp,oc);
                 ldp.append("\\\\").nl();
                 if (hasRowType(RowType.FIRST_HEAD)) {
-                	handleRows(ldp,oc,RowType.FIRST_HEAD);
+                	handleRows(ldp,oc,RowType.FIRST_HEAD,true,true);
                 }
                 else {
-                	handleRows(ldp,oc,RowType.HEAD);            	
+                	handleRows(ldp,oc,RowType.HEAD,true,true);            	
                 }
                 ldp.nl().append("\\endfirsthead").nl();
             }
             else if (hasRowType(RowType.FIRST_HEAD)) {
             	// Otherwise we only need it if the table contains a first head
-            	handleRows(ldp,oc,RowType.FIRST_HEAD);
+            	handleRows(ldp,oc,RowType.FIRST_HEAD,true,true);
                 ldp.nl().append("\\endfirsthead").nl();            	
             }
 			
             // Head
-            handleRows(ldp,oc,RowType.HEAD);
+            handleRows(ldp,oc,RowType.HEAD,true,true);
             ldp.nl().append("\\endhead").nl();
             
             // Foot
-            handleRows(ldp,oc,RowType.FOOT);
+            handleRows(ldp,oc,RowType.FOOT,false,true);
             ldp.nl().append("\\endfoot").nl();
 
             // Last foot
@@ -308,26 +318,26 @@ public class TableConverter extends ConverterHelper {
             	// If there's a caption below, we must use \endlastfoot
             	// and have to repeat the foot if there's no last foot
                 if (hasRowType(RowType.LAST_FOOT)) {
-                	handleRows(ldp,oc,RowType.LAST_FOOT);
+                	handleRows(ldp,oc,RowType.LAST_FOOT,false,true);
                     ldp.nl();
                 }
                 else if (hasRowType(RowType.FOOT)){
-                	handleRows(ldp,oc,RowType.FOOT);            	
+                	handleRows(ldp,oc,RowType.FOOT,false,true);            	
                     ldp.nl();
                 }
                 handleCaption("\\caption",ldp,oc);
-                ldp.nl().append("\\endlastfoot").nl();
+                ldp.append("\\endlastfoot").nl();
             }
             else if (hasRowType(RowType.LAST_FOOT)) {
             	// Otherwise we only need it if the table contains a last foot
-            	handleRows(ldp,oc,RowType.LAST_FOOT);
+            	handleRows(ldp,oc,RowType.LAST_FOOT,false,true);
                 ldp.nl().append("\\endlastfoot").nl();            	
             }
 			
             // Body
-            handleRows(ldp,oc,RowType.BODY);
+            handleRows(ldp,oc,RowType.BODY,!hasRowType(RowType.HEAD) && !hasRowType(RowType.FIRST_HEAD),true);
 			
-            ldp.append(baTable.getAfter()).nl();
+            ldp.nl().append(baTable.getAfter()).nl();
         }
 		
         private void handleTableFloat(LaTeXDocumentPortion ldp, Context oc) {
@@ -347,9 +357,9 @@ public class TableConverter extends ConverterHelper {
             // The table
             handleHyperTarget(ldp);
             ldp.append(baTable.getBefore()).nl();
-            handleRows(ldp,oc,RowType.HEAD);
+            handleRows(ldp,oc,RowType.HEAD,true,true);
             ldp.nl();
-            handleRows(ldp,oc,RowType.BODY);
+            handleRows(ldp,oc,RowType.BODY,!hasRowType(RowType.HEAD),true);
             ldp.append(baTable.getAfter()).nl();
 			
             // Caption below
@@ -357,7 +367,7 @@ public class TableConverter extends ConverterHelper {
                 handleCaption("\\caption",ldp,oc);
             }
 			
-            ldp.append(baTableAlign.getAfter());
+            ldp.nl().append(baTableAlign.getAfter());
 
             ldp.append("\\end{table}").nl();
         }
@@ -373,12 +383,10 @@ public class TableConverter extends ConverterHelper {
             // The table
             handleHyperTarget(ldp);
             ldp.append(baTable.getBefore()).nl();
-            if (table.getFirstBodyRow()>0) {
-                handleRows(ldp,oc,RowType.HEAD);
-                ldp.nl();
-            }
-            handleRows(ldp,oc,RowType.BODY);
-            ldp.append(baTable.getAfter()).nl();
+            handleRows(ldp,oc,RowType.HEAD,true,true);
+            ldp.nl();
+            handleRows(ldp,oc,RowType.BODY,!hasRowType(RowType.HEAD),true);
+            ldp.nl().append(baTable.getAfter()).nl();
 			
             // Caption below
             if (caption!=null && !bCaptionAbove) {
@@ -400,21 +408,24 @@ public class TableConverter extends ConverterHelper {
             }
         }
 		
-        private void handleRows(LaTeXDocumentPortion ldp, Context oc, RowType rowType) {
+        private void handleRows(LaTeXDocumentPortion ldp, Context oc, RowType rowType, boolean bLineBefore, boolean bLineAfter) {
             int nRowCount = table.getRowCount();
             int nColCount = table.getColCount();
             boolean bFirst = true;
+            int nPreviousRow = -1;
             for (int nRow=0; nRow<nRowCount; nRow++) {
             	if (rowTypes[nRow]==rowType) {
+            		// Add interrow material from previous row, if any
+            		if (nPreviousRow>-1) {
+            			ldp.append(formatter.getInterrowMaterial(nPreviousRow+1)).nl();
+            		}
+            		nPreviousRow = nRow;
+
             		// If it's the first row, add top interrow material
-            		if (bFirst) {
+            		if (bFirst && bLineBefore) {
             			String sInter = formatter.getInterrowMaterial(nRow);
             			if (sInter.length()>0) { ldp.append(sInter).nl(); }
             			bFirst=false;
-            		}
-            		else {
-            			// If it's not the first row in this row portion, separate with a newline
-            			ldp.nl();
             		}
             		// Export columns in this row
             		Context icRow = (Context) oc.clone();
@@ -446,9 +457,14 @@ public class TableConverter extends ConverterHelper {
             			}
             			nCol+=nColSpan;
             		}
-            		ldp.append("\\\\").append(formatter.getInterrowMaterial(nRow+1));
+            		ldp.append("\\\\");
             	}
             }
+    		// Add interrow material from last row, if required
+            if (nPreviousRow>-1 && bLineAfter) {
+            	ldp.append(formatter.getInterrowMaterial(nPreviousRow+1));
+            }
+
         }
 	
     }
