@@ -18,6 +18,8 @@
     <name lang="es">Writer2xhtml filtros para exportar</name>
     <name lang="fr">Filtres d'exportation Writer2xhtml</name>
     <name lang="it">Filtri di esportazione Writer2xhtml</name>
+    <name lang="pt_BR">Filtros de exportação Writer2xhtml</name>
+    <name lang="cs">Exportní filtry Writer2xhtml</name>
     <name lang="pl">Filtry ekportu Writer2xhtml</name>
     <name lang="ru">Фильтры экспорта Writer2xhtml</name>
     <name lang="uk">Фільтри експорту Writer2xhtml</name>
@@ -31,6 +33,8 @@
     <src xlink:href="desc_es.txt" lang="es" />
     <src xlink:href="desc_fr.txt" lang="fr" />
     <src xlink:href="desc_it.txt" lang="it" />
+    <src xlink:href="desc_pt_BR.txt" lang="pt_BR" />
+    <src xlink:href="desc_cs.txt" lang="cs" />
     <src xlink:href="desc_pl.txt" lang="pl" />
     <src xlink:href="desc_ru.txt" lang="ru" />
     <src xlink:href="desc_uk.txt" lang="uk" />

@@ -2,6 +2,12 @@ Changelog for Writer2LaTeX version 0.5 -> 1.0
 
 ---------- version 1.0 final ----------
 
+[all] Added Brazilian Portuguese translation from Henrique
+
+[all] Added Czech translation from Jindřich Marek
+
+[w2l] Bugfix: Fixed crash when using the option external_bibtex_files
+
 [w2l] Use \centering, \raggedleft and \raggedright rather than the corresponding
   environment in floats (to avoid the extra glue)
 
