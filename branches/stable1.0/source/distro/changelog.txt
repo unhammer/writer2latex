@@ -2,6 +2,13 @@ Changelog for Writer2LaTeX version 0.5 -> 1.0
 
 ---------- version 1.0 final ----------
 
+[w2l] Bugfix: Fixed problem with name clash for Polish (\lll is defined by Babel
+  as well as amsfonts)
+
+[w2l] Bugfix: The symbol U+2280 and U+2281 are now translated correctly
+
+[all] Added Dutch translation from Michael Janszen
+
 [all] Added Brazilian Portuguese translation from Henrique
 
 [all] Added Czech translation from Jindřich Marek

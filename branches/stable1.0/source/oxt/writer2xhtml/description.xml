@@ -15,6 +15,7 @@
     <name lang="da">Writer2xhtml eksportfiltre</name>
     <name lang="en">Writer2xhtml export filters</name>
     <name lang="de">Writer2xhtml Exportfilter</name>
+    <name lang="nl">Writer2xhtml exportfilters</name>
     <name lang="es">Writer2xhtml filtros para exportar</name>
     <name lang="fr">Filtres d'exportation Writer2xhtml</name>
     <name lang="it">Filtri di esportazione Writer2xhtml</name>
@@ -30,6 +31,7 @@
     <src xlink:href="desc_da.txt" lang="da" />
     <src xlink:href="desc_en.txt" lang="en" />
     <src xlink:href="desc_de.txt" lang="de" />
+    <src xlink:href="desc_nl.txt" lang="nl" />
     <src xlink:href="desc_es.txt" lang="es" />
     <src xlink:href="desc_fr.txt" lang="fr" />
     <src xlink:href="desc_it.txt" lang="it" />

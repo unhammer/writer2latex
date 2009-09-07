@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- This is a datafile used by Writer2LaTeX
-     Version 1.0 (2008-12-03)
+     Version 1.0 (2009-09-07)
 
 	 The definitions for greek characters are contributed by interzone, info@interzone.gr
      and extended by Johannis Likos. Additional bugfixes by Alexej Kryukov
@@ -1273,8 +1273,8 @@ PART I: Common symbols, ascii only
 <symbol char="227D" math="{\succcurlyeq}"/>
 <symbol char="227E" math="{\precsim}"/>
 <symbol char="227F" math="{\succsim}"/>
-<symbol char="2280" math="{\nsucc}"/>
-<symbol char="2281" math="{\nprec}"/>
+<symbol char="2280" math="{\nprec}"/>
+<symbol char="2281" math="{\nsucc}"/>
 <symbol char="2282" math="{\subset}"/>
 <symbol char="2283" math="{\supset}"/>
 <symbol char="2284" math="{\not\subset}"/>
