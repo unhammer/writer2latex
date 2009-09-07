@@ -29,7 +29,7 @@ package writer2latex.latex.i18n;
 // Helper class: Parse a unicode string.
 // Note: Some 8-bit fonts have additional "spacer" characters that are used
 // for manual placement of accents. These are ignored between the base character
-// and the combining character, thus we are parsing according to the rule
+// and the combining character, thus we are parsing according to the rule 
 // <base char> <spacer char>* <combining char>?
 class UnicodeStringParser {
     private UnicodeTable table; // the table to use

@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-03-08)
+ *  Version 1.0 (2009-09-07)
  *
  */
  
@@ -391,6 +391,9 @@ public class DrawConverter extends ConverterHelper {
         // Add alternative text, using either alt.text, name or file name
         Element frame = getFrame(onode);
         Element desc = Misc.getChildByTagName(frame,XMLString.SVG_DESC);
+        if (desc==null) {
+            desc = Misc.getChildByTagName(frame,XMLString.SVG_TITLE);        	
+        }
         String sAltText = desc!=null ? Misc.getPCDATA(desc) : (sName!=null ? sName : sFileName);
         image.setAttribute("alt",sAltText);
 

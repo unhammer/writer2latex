@@ -27,7 +27,7 @@
 package writer2latex.latex.util;
 
 /** This class contains data for the mapping of OOo headings to LaTeX headings.
-    A LaTeX heading is characterized by a name and a level.
+    A LaTeX heading is characterized by a name and a level. 
     The heading is inserted with \name{...} or \name[...]{...}
     The headings are supposed to be "normal" LaTeX headings,
     ie. the names are also counter names, and the headings

@@ -26,7 +26,7 @@
  
 package writer2latex.api;
 
-/** This class represents a single entry on an index page created by a batch converter
+/** This class represents a single entry on an index page created by a batch converter 
  */
 public class IndexPageEntry {
 

@@ -27,7 +27,7 @@
 package writer2latex.util;
 
 /** This class provides a simple string input buffer; it can be used as the
- *  basis of a tokenizer.
+ *  basis of a tokenizer. 
  */
 public class SimpleInputBuffer {
     

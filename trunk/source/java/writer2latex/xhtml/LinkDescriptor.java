@@ -30,7 +30,7 @@ import org.w3c.dom.Element;
 
 /**
  * Helper class (a struct) to contain information about a Link (used to manage
- * links to be resolved later)
+ * links to be resolved later) 
  */
 final class LinkDescriptor {
     Element element; // the a-element

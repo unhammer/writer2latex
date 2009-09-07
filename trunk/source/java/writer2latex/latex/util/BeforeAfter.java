@@ -26,7 +26,7 @@
 
 package writer2latex.latex.util;
 
-/** Utility class to hold LaTeX code to put before/after other LaTeX code
+/** Utility class to hold LaTeX code to put before/after other LaTeX code 
  */
 public class BeforeAfter {
     private String sBefore="";

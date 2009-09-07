@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-05-29)
+ *  Version 1.2 (2009-09-05)
  *
  */
 
@@ -446,6 +446,7 @@ public class Converter extends ConverterBase {
         htmlDoc.setNoDoctype(config.xhtmlNoDoctype());
         htmlDoc.setAddBOM(config.xhtmlAddBOM());
         htmlDoc.setUseNamedEntities(config.useNamedEntities());
+        htmlDoc.setHexadecimalEntities(config.hexadecimalEntities());
         htmlDoc.setXsltPath(config.getXsltPath());
         if (template!=null) { htmlDoc.readFromTemplate(template); }
         else if (bNeedHeaderFooter) { htmlDoc.createHeaderFooter(); }

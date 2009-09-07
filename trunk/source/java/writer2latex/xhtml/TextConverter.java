@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-03-10)
+ *  Version 1.0 (2009-09-05)
  *
  */
 
@@ -1456,16 +1456,16 @@ public class TextConverter extends ConverterHelper {
     }
 	
     private void handleTabStop(Node onode, Node hnode) {
-        // xhtml does not have tab stops, we export a space, which the
+        // xhtml does not have tab stops, but we export and ASCII TAB character, which the
         // user may choose to format
         if (config.getXhtmlTabstopStyle().length()>0) {
             Element span = converter.createElement("span");
             hnode.appendChild(span);
             span.setAttribute("class",config.getXhtmlTabstopStyle());
-            span.appendChild(converter.createTextNode(" "));
+            span.appendChild(converter.createTextNode("\t"));
         }
         else {
-            hnode.appendChild(converter.createTextNode(" "));
+            hnode.appendChild(converter.createTextNode("\t"));
         }
     }
 	

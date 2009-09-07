@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-07-21)
+ *  Version 1.2 (2009-09-06)
  *
  */ 
  
@@ -42,7 +42,7 @@ public class W2XExportFilter extends ExportFilterBase {
     public static final String __implementationName = "org.openoffice.da.comp.writer2xhtml.W2XExportFilter";
 	
     /** Filter name to include in error messages */
-	public static final String __displayName = "Writer2xhtml";
+	public final String __displayName = "Writer2xhtml";
 
     public W2XExportFilter(XComponentContext xComponentContext1) {
         super(xComponentContext1);

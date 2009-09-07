@@ -27,7 +27,7 @@
 package writer2latex.api;
 
 /** A simple interface for a graphic converter which converts between various
- *  graphics formats
+ *  graphics formats 
  */
 public interface GraphicConverter {
     

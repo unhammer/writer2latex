@@ -42,7 +42,7 @@ package writer2latex.xmerge;
 
 /**
  *  This interface contains constants for StarOffice XML tags,
- *  attributes (StarCalc cell types, etc.).
+ *  attributes (StarCalc cell types, etc.). 
  *
  *  @author      Herbie Ong, Paul Rank, Martin Maher
  */

@@ -29,7 +29,7 @@ package writer2latex.office;
 import org.w3c.dom.Element;
 
 /**
- *  This class represent a cell in a table view</p>
+ *  This class represent a cell in a table view
  */
 public class CellView {
     public Element cell = null;

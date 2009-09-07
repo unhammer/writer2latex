@@ -26,7 +26,7 @@
 
 package writer2latex.util;
 
-// Create a list of values separated by commas or another seperation character
+// Create a list of values separated by commas or another seperation character 
 public class CSVList{
     private String sSep;
     private String sNameValueSep;

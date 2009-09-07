@@ -2,6 +2,16 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[w2x] Use svg:title as alternative text on graphics if svg:desc is not present
+
+[all] Bugfix: Filtername (Writer2LaTeX/Writer2xhtml) was not displayed in error messages
+
+[w2x] New option hexadecimal_entities with values true (default) and false.
+  When this option is set to true, numeric character entities are exported
+  using hexadecimal numbers, otherwise decimal numbers are used
+
+[w2x] Export tabs as ASCII TAB rather than space
+
 [w2l] Allow additional characters in bibliography keys (_, - and :)
 
 [w2l] Bugfix: Fixed crash when using the option external_bibtex_files

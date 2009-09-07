@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-05-29)
+ *  Version 1.2 (2009-09-05)
  *
  */
  
@@ -82,6 +82,7 @@ public class XhtmlDocument extends DOMDocument {
     // Configuration
     private String sEncoding = "UTF-8";	
     private boolean bUseNamedEntities = false;
+    private boolean bHexadecimalEntities = true;
     private char cLimit = 65535;
     private boolean bNoDoctype = false;
     private boolean bAddBOM = false;
@@ -292,6 +293,10 @@ public class XhtmlDocument extends DOMDocument {
         bUseNamedEntities = b;
     }
 	
+    public void setHexadecimalEntities(boolean b) {
+        bHexadecimalEntities = b;
+    }
+	
     public void setXsltPath(String s) { sXsltPath = s; }
 
     public String getFileExtension() { return super.getFileExtension(); }
@@ -474,7 +479,12 @@ public class XhtmlDocument extends DOMDocument {
     		}
     	}
         if (c>cLimit) {
-            osw.write("&#x"+Integer.toHexString(c).toUpperCase()+";");
+        	if (bHexadecimalEntities) {
+                osw.write("&#x"+Integer.toHexString(c).toUpperCase()+";");        		
+        	}
+        	else {
+        		osw.write("&#"+Integer.toString(c).toUpperCase()+";");
+        	}
         }
         else {
             osw.write(c);

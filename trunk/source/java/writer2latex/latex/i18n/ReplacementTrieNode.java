@@ -26,7 +26,7 @@
 
 package writer2latex.latex.i18n;
 
-/** This class contains a node in a trie of string -> LaTeX code replacements 
+/** This class contains a node in a trie of string -> LaTeX code replacements  
 */
 public class ReplacementTrieNode {
 

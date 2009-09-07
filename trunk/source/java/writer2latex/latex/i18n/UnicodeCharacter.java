@@ -26,7 +26,7 @@
 
 package writer2latex.latex.i18n;
 
-// Helper class: A struct to hold the LaTeX representations of a unicode character
+// Helper class: A struct to hold the LaTeX representations of a unicode character 
 class UnicodeCharacter implements Cloneable {
     final static int NORMAL = 0;     // this is a normal character
     final static int COMBINING = 1;  // this character should be ignored

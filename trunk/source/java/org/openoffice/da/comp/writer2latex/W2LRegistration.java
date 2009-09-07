@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-07-21) 
+ *  Version 1.2 (2009-09-06) 
  *
  */ 
  
@@ -78,6 +78,12 @@ public class W2LRegistration {
             multiFactory,						    
             regKey);
         }
+        else if (implName.equals(ConfigurationDialog.__implementationName)) {
+            xSingleServiceFactory = FactoryHelper.getServiceFactory(ConfigurationDialog.class,
+            ConfigurationDialog.__serviceName,
+            multiFactory,						    
+            regKey);
+        }
         
         return xSingleServiceFactory;
     }
@@ -97,7 +103,9 @@ public class W2LRegistration {
             FactoryHelper.writeRegistryServiceInfo(LaTeXOptionsDialog.__implementationName,
                 LaTeXOptionsDialog.__serviceName, regKey) &
             FactoryHelper.writeRegistryServiceInfo(W2LStarMathConverter.__implementationName,
-                W2LStarMathConverter.__serviceName, regKey);
+                W2LStarMathConverter.__serviceName, regKey) &
+        	FactoryHelper.writeRegistryServiceInfo(ConfigurationDialog.__implementationName,
+                ConfigurationDialog.__serviceName, regKey);
     }
 }
 

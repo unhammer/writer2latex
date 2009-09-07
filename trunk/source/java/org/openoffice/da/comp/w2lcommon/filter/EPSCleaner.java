@@ -29,7 +29,7 @@ package org.openoffice.da.comp.w2lcommon.filter;
  *  See the issue http://qa.openoffice.org/issues/show_bug.cgi?id=25256
  *  According to this message http://markmail.org/message/dc6rprmtktxuq35v
  *  on dev@openoffice.org the binary data is an EPSI preview in TIFF format
- *  TODO: Is it possible to avoid this export?
+ *  TODO: Is it possible to avoid this export? 
  */
 public class EPSCleaner {
 

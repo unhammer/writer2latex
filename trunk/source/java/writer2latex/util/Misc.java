@@ -39,7 +39,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.NamedNodeMap;
 
-// This class contains some usefull, but unrelated static methods
+// This class contains some usefull, but unrelated static methods 
 public class Misc{
 
     private final static int BUFFERSIZE = 1024;

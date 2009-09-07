@@ -38,7 +38,7 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
-/** This class provides simple access to a uno awt message box
+/** This class provides simple access to a uno awt message box 
  */
 public class MessageBox {
 

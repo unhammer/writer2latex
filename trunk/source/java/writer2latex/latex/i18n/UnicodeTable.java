@@ -18,7 +18,7 @@
  *
  *  Copyright: 2002-2007 by Henrik Just
  *
- *  All Rights Reserved.
+ *  All Rights Reserved. 
  * 
  *  Version 0.5 (2007-07-24) 
  * 

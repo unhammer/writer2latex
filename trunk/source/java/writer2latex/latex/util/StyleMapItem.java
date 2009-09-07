@@ -26,7 +26,7 @@
  
 package writer2latex.latex.util;
 
-// A struct to hold data about a style map
+// A struct to hold data about a style map 
 class StyleMapItem {
     String sBefore;
     String sAfter;

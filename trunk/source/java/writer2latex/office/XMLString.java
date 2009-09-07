@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-27)
+ *  Version 1.2 (2009-09-07)
  *
  */
 
@@ -440,6 +440,7 @@ public class XMLString {
 
     // svg namespace
 	public static final String SVG_DESC="svg:desc";
+	public static final String SVG_TITLE="svg:title";
 
     public static final String SVG_FONT_FAMILY="svg:font-family"; // oasis (font declarations only)
     public static final String SVG_X="svg:x";

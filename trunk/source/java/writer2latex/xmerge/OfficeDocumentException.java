@@ -52,7 +52,7 @@ import org.xml.sax.SAXParseException;
 /**
  *  Used by OfficeDocument to encapsulate exceptions.  It will add
  *  more details to the message string if it is of type
- *  <code>SAXParseException</code>.
+ *  <code>SAXParseException</code>. 
  *
  *  @author      Herbie Ong
  */

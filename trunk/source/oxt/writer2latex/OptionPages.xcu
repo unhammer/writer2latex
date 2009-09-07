@@ -17,52 +17,155 @@
   </node>
   
   <node oor:name="Nodes">
+
+	<!-- We define a single root node -->
     <node oor:name="org.openoffice.da.writer2latex.configuration" 
       oor:op="fuse"> 
       <prop oor:name="Id">
-        <value>org.openoffice.da.writer2latex.configuration</value>
+        <value>org.openoffice.da.writer2latex/configuration</value>
       </prop>
       <prop oor:name="Label">
         <value xml:lang="en-US">Writer2LaTeX</value>
       </prop>
       <prop oor:name="OptionsPage">
-        <value>%origin%/W2LDialogs2/Configuration1.xdl</value>
+        <value>%origin%/W2LDialogs2/ConfigurationRoot.xdl</value>
       </prop>
       <prop oor:name="EventHandlerService">
         <value>org.openoffice.da.writer2latex.ConfigurationDialog</value>
       </prop>
+
       <node oor:name="Leaves">
-        <node oor:name="org.openoffice.da.writer2latex.configuration.subpage1" 
+      	<!-- and the root node has several leaves -->
+
+        <node oor:name="org.openoffice.da.writer2latex.configuration.documentclass" 
           oor:op="fuse">
           <prop oor:name="Id">
-            <value>org.openoffice.da.writer2latex.configuration.subpage1</value>
+            <value>org.openoffice.da.writer2latex/configuration/documentclass</value>
           </prop>
           <prop oor:name="Label">
-            <value xml:lang="en-US">Subpage</value>
+            <value xml:lang="en-US">Documentclass</value>
           </prop>
           <prop oor:name="OptionsPage">
-            <value>%origin%/W2LDialogs2/Configuration2.xdl</value>
+            <value>%origin%/W2LDialogs2/Documentclass.xdl</value>
           </prop>
           <prop oor:name="EventHandlerService">
              <value>org.openoffice.da.writer2latex.ConfigurationDialog</value>
           </prop>
         </node>
-        <node oor:name="org.openoffice.da.writer2latex.configuration.subpage2" 
+
+        <node oor:name="org.openoffice.da.writer2latex.configuration.styles" 
           oor:op="fuse">
           <prop oor:name="Id">
-            <value>org.openoffice.da.writer2latex.configuration.subpage2</value>
+            <value>org.openoffice.da.writer2latex.configuration.styles</value>
           </prop>
           <prop oor:name="Label">
-            <value xml:lang="en-US">Subpage</value>
+            <value xml:lang="en-US">Styles</value>
           </prop>
           <prop oor:name="OptionsPage">
-            <value>%origin%/W2LDialogs2/Configuration1.xdl</value>
+            <value>%origin%/W2LDialogs2/Styles.xdl</value>
           </prop>
           <prop oor:name="EventHandlerService">
              <value>org.openoffice.da.writer2latex.ConfigurationDialog</value>
           </prop>
         </node>
-      </node>
+
+        <node oor:name="org.openoffice.da.writer2latex.configuration.formatting" 
+          oor:op="fuse">
+          <prop oor:name="Id">
+            <value>org.openoffice.da.writer2latex.configuration.formatting</value>
+          </prop>
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Formatting</value>
+          </prop>
+          <prop oor:name="OptionsPage">
+            <value>%origin%/W2LDialogs2/Formatting.xdl</value>
+          </prop>
+          <prop oor:name="EventHandlerService">
+             <value>org.openoffice.da.writer2latex.ConfigurationDialog</value>
+          </prop>
+        </node>
+
+        <node oor:name="org.openoffice.da.writer2latex.configuration.fonts" 
+          oor:op="fuse">
+          <prop oor:name="Id">
+            <value>org.openoffice.da.writer2latex.configuration.fonts</value>
+          </prop>
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Fonts</value>
+          </prop>
+          <prop oor:name="OptionsPage">
+            <value>%origin%/W2LDialogs2/Fonts.xdl</value>
+          </prop>
+          <prop oor:name="EventHandlerService">
+             <value>org.openoffice.da.writer2latex.ConfigurationDialog</value>
+          </prop>
+        </node>
+
+        <node oor:name="org.openoffice.da.writer2latex.configuration.pages" 
+          oor:op="fuse">
+          <prop oor:name="Id">
+            <value>org.openoffice.da.writer2latex.configuration.pages</value>
+          </prop>
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Pages</value>
+          </prop>
+          <prop oor:name="OptionsPage">
+            <value>%origin%/W2LDialogs2/Pages.xdl</value>
+          </prop>
+          <prop oor:name="EventHandlerService">
+             <value>org.openoffice.da.writer2latex.ConfigurationDialog</value>
+          </prop>
+        </node>
+
+        <node oor:name="org.openoffice.da.writer2latex.configuration.tables" 
+          oor:op="fuse">
+          <prop oor:name="Id">
+            <value>org.openoffice.da.writer2latex.configuration.tables</value>
+          </prop>
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Tables</value>
+          </prop>
+          <prop oor:name="OptionsPage">
+            <value>%origin%/W2LDialogs2/Tables.xdl</value>
+          </prop>
+          <prop oor:name="EventHandlerService">
+             <value>org.openoffice.da.writer2latex.ConfigurationDialog</value>
+          </prop>
+        </node>
+
+        <node oor:name="org.openoffice.da.writer2latex.configuration.figures" 
+          oor:op="fuse">
+          <prop oor:name="Id">
+            <value>org.openoffice.da.writer2latex.configuration.figures</value>
+          </prop>
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Figures</value>
+          </prop>
+          <prop oor:name="OptionsPage">
+            <value>%origin%/W2LDialogs2/Figures.xdl</value>
+          </prop>
+          <prop oor:name="EventHandlerService">
+             <value>org.openoffice.da.writer2latex.ConfigurationDialog</value>
+          </prop>
+        </node>
+
+        <node oor:name="org.openoffice.da.writer2latex.configuration.textandmath" 
+          oor:op="fuse">
+          <prop oor:name="Id">
+            <value>org.openoffice.da.writer2latex.configuration.textandmath</value>
+          </prop>
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Text and math</value>
+          </prop>
+          <prop oor:name="OptionsPage">
+            <value>%origin%/W2LDialogs2/TextAndMath.xdl</value>
+          </prop>
+          <prop oor:name="EventHandlerService">
+             <value>org.openoffice.da.writer2latex.ConfigurationDialog</value>
+          </prop>
+        </node>
+
+	  </node>
     </node>
   </node>
   

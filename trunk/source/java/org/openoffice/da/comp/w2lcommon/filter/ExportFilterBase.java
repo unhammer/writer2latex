@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  *  
- *  Version 1.2 (2009-04-25)
+ *  Version 1.2 (2009-09-06)
  *  
  */
  
@@ -82,7 +82,7 @@ public abstract class ExportFilterBase implements
     public static final String __implementationName = "";
 	
     /** Filter name to include in error messages */
-	public static final String __displayName = "";
+	public String __displayName = "";
 
     private static XComponentContext xComponentContext = null;
     protected static XMultiServiceFactory xMSF;
@@ -94,7 +94,6 @@ public abstract class ExportFilterBase implements
 	
     private Object filterData;
     private XSimpleFileAccess2 sfa2;
-	
 
     /** We need to get the Service Manager from the Component context to
      *  instantiate certain services, hence this constructor.

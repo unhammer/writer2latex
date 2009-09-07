@@ -26,7 +26,7 @@
 
 package writer2latex.base;
 
-// The mother of all options; reads and writes string values
+// The mother of all options; reads and writes string values 
 public class Option {
     protected String sValue;
     private String sName;

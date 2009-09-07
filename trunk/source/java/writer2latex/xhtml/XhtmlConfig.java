@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-14)
+ *  Version 1.2 (2009-09-05)
  *
  */
 
@@ -38,7 +38,7 @@ import writer2latex.util.Misc;
 
 public class XhtmlConfig extends writer2latex.base.ConfigBase {
     // Implement configuration methods
-    protected int getOptionCount() { return 36; }
+    protected int getOptionCount() { return 37; }
     protected String getDefaultConfigPath() { return "/writer2latex/xhtml/config/"; }
 	
     // Override setOption: To be backwards compatible, we must accept options
@@ -65,34 +65,35 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     private static final int ADD_BOM = 5;
     private static final int ENCODING = 6;
     private static final int USE_NAMED_ENTITIES = 7;
-    private static final int CUSTOM_STYLESHEET = 8;
-    private static final int FORMATTING = 9;
-    private static final int FRAME_FORMATTING = 10;
-    private static final int SECTION_FORMATTING = 11;
-    private static final int TABLE_FORMATTING = 12;
-    private static final int IGNORE_TABLE_DIMENSIONS = 13;
-    private static final int USE_DUBLIN_CORE = 14;
-    private static final int NOTES = 15;
-    private static final int CONVERT_TO_PX = 16;
-    private static final int SCALING = 17;
-    private static final int COLUMN_SCALING = 18;
-    private static final int FLOAT_OBJECTS = 19;
-    private static final int TABSTOP_STYLE = 20;
-    private static final int USE_LIST_HACK = 21;
-    private static final int SPLIT_LEVEL = 22;
-    private static final int REPEAT_LEVELS = 23;
-    private static final int CALC_SPLIT = 24;
-    private static final int DISPLAY_HIDDEN_SHEETS = 25;
-    private static final int DISPLAY_HIDDEN_ROWS_COLS = 26;
-    private static final int DISPLAY_FILTERED_ROWS_COLS = 27;
-    private static final int APPLY_PRINT_RANGES = 28;
-    private static final int USE_TITLE_AS_HEADING = 29;
-    private static final int USE_SHEET_NAMES_AS_HEADINGS = 30;
-    private static final int XSLT_PATH = 31;
-    private static final int SAVE_IMAGES_IN_SUBDIR = 32;
-    private static final int UPLINK = 33;
-    private static final int DIRECTORY_ICON = 34;
-    private static final int DOCUMENT_ICON = 35;
+    private static final int HEXADECIMAL_ENTITIES = 8;
+    private static final int CUSTOM_STYLESHEET = 9;
+    private static final int FORMATTING = 10;
+    private static final int FRAME_FORMATTING = 11;
+    private static final int SECTION_FORMATTING = 12;
+    private static final int TABLE_FORMATTING = 13;
+    private static final int IGNORE_TABLE_DIMENSIONS = 14;
+    private static final int USE_DUBLIN_CORE = 15;
+    private static final int NOTES = 16;
+    private static final int CONVERT_TO_PX = 17;
+    private static final int SCALING = 18;
+    private static final int COLUMN_SCALING = 19;
+    private static final int FLOAT_OBJECTS = 20;
+    private static final int TABSTOP_STYLE = 21;
+    private static final int USE_LIST_HACK = 22;
+    private static final int SPLIT_LEVEL = 23;
+    private static final int REPEAT_LEVELS = 24;
+    private static final int CALC_SPLIT = 25;
+    private static final int DISPLAY_HIDDEN_SHEETS = 26;
+    private static final int DISPLAY_HIDDEN_ROWS_COLS = 27;
+    private static final int DISPLAY_FILTERED_ROWS_COLS = 28;
+    private static final int APPLY_PRINT_RANGES = 29;
+    private static final int USE_TITLE_AS_HEADING = 30;
+    private static final int USE_SHEET_NAMES_AS_HEADINGS = 31;
+    private static final int XSLT_PATH = 32;
+    private static final int SAVE_IMAGES_IN_SUBDIR = 33;
+    private static final int UPLINK = 34;
+    private static final int DIRECTORY_ICON = 35;
+    private static final int DOCUMENT_ICON = 36;
 
     protected XhtmlStyleMap xpar = new XhtmlStyleMap();
     protected XhtmlStyleMap xtext = new XhtmlStyleMap();
@@ -111,6 +112,7 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
         options[ADD_BOM] = new BooleanOption("add_bom","false");
         options[ENCODING] = new Option("encoding","UTF-8");
         options[USE_NAMED_ENTITIES] = new BooleanOption("use_named_entities","false");
+        options[HEXADECIMAL_ENTITIES] = new BooleanOption("hexadecimal_entities","true");
         options[CUSTOM_STYLESHEET] = new Option("custom_stylesheet","");
         options[FORMATTING] = new XhtmlFormatOption("formatting","convert_all");
         options[FRAME_FORMATTING] = new XhtmlFormatOption("frame_formatting","convert_all");
@@ -216,6 +218,7 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     public boolean xhtmlAddBOM() { return ((BooleanOption) options[ADD_BOM]).getValue(); }
     public String xhtmlEncoding() { return options[ENCODING].getString(); }
     public boolean useNamedEntities() { return ((BooleanOption) options[USE_NAMED_ENTITIES]).getValue(); }
+    public boolean hexadecimalEntities() { return ((BooleanOption) options[HEXADECIMAL_ENTITIES]).getValue(); }
     public String xhtmlCustomStylesheet() { return options[CUSTOM_STYLESHEET].getString(); }
     public int xhtmlFormatting() { return ((XhtmlFormatOption) options[FORMATTING]).getValue(); }
     public int xhtmlFrameFormatting() { return ((XhtmlFormatOption) options[FRAME_FORMATTING]).getValue(); }

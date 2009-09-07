@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-08) 
+ *  Version 1.2 (2009-09-05) 
  *
  */
  
@@ -94,6 +94,7 @@ public class BatchConverterImpl extends BatchConverterBase {
         htmlDoc.setNoDoctype(config.xhtmlNoDoctype());
         htmlDoc.setAddBOM(config.xhtmlAddBOM());
         htmlDoc.setUseNamedEntities(config.useNamedEntities());
+        htmlDoc.setHexadecimalEntities(config.hexadecimalEntities());
         if (template!=null) { htmlDoc.readFromTemplate(template); }
         else { htmlDoc.createHeaderFooter(); }
 
