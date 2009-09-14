@@ -2,6 +2,8 @@ Changelog for Writer2LaTeX version 0.5 -> 1.0
 
 ---------- version 1.0 final ----------
 
+[c2x] Optimization: Don't include more than one trailing empty row
+
 [w2l] Bugfix: Fixed problem with name clash for Polish (\lll is defined by Babel
   as well as amsfonts)
 
