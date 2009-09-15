@@ -11,7 +11,7 @@ Changelog for Writer2LaTeX version 0.5 -> 1.0
 
 [all] Added Dutch translation from Michael Janszen
 
-[all] Added Brazilian Portuguese translation from Henrique
+[all] Added Brazilian Portuguese translation from Henrique Pasti
 
 [all] Added Czech translation from Jindřich Marek
 
