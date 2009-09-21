@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-22)
+ *  Version 1.2 (2009-09-20)
  *
  */
 
@@ -170,6 +170,9 @@ public final class MathmlConverter extends ConverterHelper {
                 }
                 else if (XMLString.TEXT_TAB_STOP.equals(sName)) { // old
                     // Tab stops are allowed
+                }
+                else if (XMLString.TEXT_SOFT_PAGE_BREAK.equals(sName)) { // since ODF 1.1
+                	// Soft page breaks are allowed
                 }
                 else {
                     // Other elements -> not a display

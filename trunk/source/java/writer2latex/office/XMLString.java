@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-07)
+ *  Version 1.2 (2009-09-20)
  *
  */
 
@@ -321,6 +321,8 @@ public class XMLString {
 	public static final String TEXT_FOOTNOTE_REF="text:footnote-ref";
 	public static final String TEXT_ENDNOTE_REF="text:endnote-ref";
     public static final String TEXT_NOTE_REF="text:note-ref"; // oasis
+    public static final String TEXT_SOFT_PAGE_BREAK="text:soft-page-break"; // ODF 1.1
+    
     // text namespace - attributes
     public static final String TEXT_USE_OUTLINE_LEVEL="text:use-outline-level";
     public static final String TEXT_USE_INDEX_SOURCE_STYLES="text:use-index-source-styles";

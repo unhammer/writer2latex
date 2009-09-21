@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Headings" dlg:left="139" dlg:top="84" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:moveable="true" dlg:title="Headings" dlg:withtitlebar="false">
+ <dlg:bulletinboard>
+  <dlg:text dlg:id="HeadingsLabel" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="120" dlg:height="12" dlg:value="Headings"/>
+
+  <dlg:text dlg:id="MaxLevelLabel" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="120" dlg:height="12" dlg:value="Heading levels to export"/>
+  <dlg:menulist dlg:id="MaxLevel" dlg:tab-index="2" dlg:left="140" dlg:top="20" dlg:width="40" dlg:height="12" dlg:spin="true" dlg:linecount="11">
+   <dlg:menupopup>
+    <dlg:menuitem dlg:value="0"/>
+    <dlg:menuitem dlg:value="1"/>
+    <dlg:menuitem dlg:value="2"/>
+    <dlg:menuitem dlg:value="3"/>
+    <dlg:menuitem dlg:value="4"/>
+    <dlg:menuitem dlg:value="5"/>
+    <dlg:menuitem dlg:value="6"/>
+    <dlg:menuitem dlg:value="7"/>
+    <dlg:menuitem dlg:value="8"/>
+    <dlg:menuitem dlg:value="9"/>
+    <dlg:menuitem dlg:value="10"/>
+   </dlg:menupopup>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:MaxLevelChange" script:language="UNO"/>
+  </dlg:menulist>
+
+  <dlg:text dlg:id="WriterLevelLabel" dlg:tab-index="3" dlg:left="10" dlg:top="42" dlg:width="100" dlg:height="12" dlg:value="Writer level"/>
+  <dlg:menulist dlg:id="WriterLevel" dlg:tab-index="4" dlg:left="140" dlg:top="40" dlg:width="40" dlg:height="12" dlg:spin="true" dlg:linecount="10">
+   <dlg:menupopup>
+    <dlg:menuitem dlg:value="1"/>
+    <dlg:menuitem dlg:value="2"/>
+    <dlg:menuitem dlg:value="3"/>
+    <dlg:menuitem dlg:value="4"/>
+    <dlg:menuitem dlg:value="5"/>
+    <dlg:menuitem dlg:value="6"/>
+    <dlg:menuitem dlg:value="7"/>
+    <dlg:menuitem dlg:value="8"/>
+    <dlg:menuitem dlg:value="9"/>
+    <dlg:menuitem dlg:value="10"/>
+   </dlg:menupopup>
+  </dlg:menulist>
+
+  <dlg:text dlg:id="LaTeXLevelLabel" dlg:tab-index="5" dlg:left="10" dlg:top="56" dlg:width="100" dlg:height="12" dlg:value="LaTeX level"/>
+  <dlg:menulist dlg:id="LaTeXLevel" dlg:tab-index="6" dlg:left="140" dlg:top="54" dlg:width="40" dlg:height="12" dlg:spin="true" dlg:linecount="7">
+   <dlg:menupopup>
+    <dlg:menuitem dlg:value="-1"/>
+    <dlg:menuitem dlg:value="0"/>
+    <dlg:menuitem dlg:value="1"/>
+    <dlg:menuitem dlg:value="2"/>
+    <dlg:menuitem dlg:value="3"/>
+    <dlg:menuitem dlg:value="4"/>
+    <dlg:menuitem dlg:value="5"/>
+   </dlg:menupopup>
+  </dlg:menulist>
+  
+  <dlg:text dlg:id="LaTeXNameLabel" dlg:tab-index="7" dlg:left="10" dlg:top="70" dlg:width="100" dlg:height="12" dlg:value="LaTeX heading name"/>
+  <dlg:combobox dlg:id="LaTeXName" dlg:tab-index="8" dlg:left="140" dlg:top="68" dlg:width="100" dlg:height="12" dlg:spin="true" dlg:linecount="7">
+   <dlg:menupopup>
+    <dlg:menuitem dlg:value="part"/>
+    <dlg:menuitem dlg:value="chapter"/>
+    <dlg:menuitem dlg:value="section"/>
+    <dlg:menuitem dlg:value="subsection"/>
+    <dlg:menuitem dlg:value="subsubsection"/>
+    <dlg:menuitem dlg:value="paragraph"/>
+    <dlg:menuitem dlg:value="subparagraph"/>
+   </dlg:menupopup>
+  </dlg:combobox>
+  
+  <dlg:text dlg:id="IndexesAndTablesLabel" dlg:tab-index="9" dlg:left="5" dlg:top="84" dlg:width="120" dlg:height="12" dlg:value="Indexes and tables"/>
+  <dlg:checkbox dlg:id="NoIndex" dlg:tab-index="10" dlg:left="10" dlg:top="98" dlg:width="240" dlg:height="12" dlg:value="Do not include indexes" dlg:checked="false"/>
+  
+ </dlg:bulletinboard>
+</dlg:window>

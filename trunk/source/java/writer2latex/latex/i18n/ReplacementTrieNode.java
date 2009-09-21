@@ -16,15 +16,17 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2006 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 0.5 (2006-11-02)
+ *  Version 1.2 (2009-09-20)
  *
  */
 
 package writer2latex.latex.i18n;
+
+import java.util.Set;
 
 /** This class contains a node in a trie of string -> LaTeX code replacements  
 */
@@ -113,6 +115,18 @@ public class ReplacementTrieNode {
             child.setLaTeXCode(sLaTeXCode);
             child.setFontencs(nFontencs);
         }
+    }
+    
+    protected void collectStrings(Set<String> strings, String sPrefix) {
+    	ReplacementTrieNode child = this.getFirstChild();
+    	while (child!=null) {
+        	if (child.getLaTeXCode()!=null) {
+        		strings.add(sPrefix+child.getLetter());
+        		System.out.println("Found "+sPrefix+child.getLetter());
+        	}
+    		child.collectStrings(strings, sPrefix+child.getLetter());
+    		child = child.getNextSibling();
+    	}
     }
 	
     public String toString() {

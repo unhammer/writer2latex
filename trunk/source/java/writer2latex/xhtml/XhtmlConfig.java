@@ -20,13 +20,15 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-05)
+ *  Version 1.2 (2009-09-20)
  *
  */
 
 package writer2latex.xhtml;
 
 import java.util.Enumeration;
+import java.util.Map;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -152,8 +154,23 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
         options[DIRECTORY_ICON] = new Option("directory_icon","");
         options[DOCUMENT_ICON] = new Option("document_icon","");
     }
+    
+    // Dummy implementation of complex options
+	public void setComplexOption(String sGroup, String sName, Map<String,String> attributes) {
+		// do nothing
+	}
+
+	public Map<String,String> getComplexOption(String sGroup, String sName) {
+		// no options are defined, return null in all cases
+		return null;
+	}
 	
-    protected void readInner(Element elm) {
+	public Set<String> getComplexOptions(String sGroup) {
+		// Always an empty set
+		return new java.util.HashSet<String>();
+	}
+
+	protected void readInner(Element elm) {
         if (elm.getTagName().equals("xhtml-style-map")) {
             String sName = elm.getAttribute("name");
             String sFamily = elm.getAttribute("family");

@@ -16,12 +16,12 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
+ *  
+ *  Version 1.0 (2009-09-14)
  *
  *  All Rights Reserved.
  */
- 
-// Version 1.0 (2008-11-22) 
  
 package writer2latex.office;
 
@@ -52,6 +52,9 @@ public class TableReader {
     private String sTableWidth;
     private String sRelTableWidth;
     private Vector<TableRange> printRanges;
+    
+    private int nRowCount;
+    private int nEmptyRowCount;
 	
     /**
      * <p> The constructor reads a table from a table:table or table:sub-table
@@ -63,6 +66,10 @@ public class TableReader {
         //this.ofr = ofr;
         this.tableNode = tableNode;
         if (!tableNode.hasChildNodes()) { return; } // empty table!
+        
+        // Count the actual number of rows (trailing repeated rows are ignored)
+        countTableRows(tableNode); 
+        
         NodeList nl = tableNode.getChildNodes();
         int nLen = nl.getLength();
         for (int i = 0; i < nLen; i++) {
@@ -224,7 +231,7 @@ public class TableReader {
     private void readTableRow(Node node, boolean bHeader, boolean bDisplay) {
         int nRepeat = Misc.getPosInteger(Misc.getAttribute(node,
                                          XMLString.TABLE_NUMBER_ROWS_REPEATED),1);
-        while (nRepeat-->0) {
+        while (nRepeat-->0  && rows.size()<nRowCount) {
             rows.add(new TableLine(node,bHeader,bDisplay));
 
             // Read the cells in the row
@@ -302,6 +309,98 @@ public class TableReader {
 	
     private void readTableHeaderRows(Node node, boolean bHeader, boolean bDisplay) {
         readTableRows(node,true,bDisplay);
+    }
+    
+    private void countTableRows(Element table) {
+        nRowCount = 0;
+        nEmptyRowCount = 0;
+        Node child = table.getFirstChild();
+        while (child!=null) {
+            if (child.getNodeType() == Node.ELEMENT_NODE) {
+                String sName = child.getNodeName();
+                if (sName.equals(XMLString.TABLE_TABLE_ROW)) {
+                    countTableRow(child);
+                }
+                else if (sName.equals(XMLString.TABLE_TABLE_ROWS)) {
+                    countTableRows(child);
+                }
+                else if (sName.equals(XMLString.TABLE_TABLE_ROW_GROUP)) {
+                    countTableRowGroup(child);
+                }
+                else if (sName.equals(XMLString.TABLE_TABLE_HEADER_ROWS)) {
+                    countTableHeaderRows(child);
+                }
+            }
+            child = child.getNextSibling();
+        }
+        // We will accept only one trailing empty row
+        if (nEmptyRowCount>1) { nRowCount-=nEmptyRowCount-1; }
+    }
+    
+    private void countTableRow(Node node) {
+        int nRepeat = Misc.getPosInteger(Misc.getAttribute(node,
+                XMLString.TABLE_NUMBER_ROWS_REPEATED),1);
+        nRowCount += nRepeat;
+        if (isEmptyRow(node)) {
+        	nEmptyRowCount+=nRepeat;
+        }
+        else {
+        	nEmptyRowCount = 0;
+        }
+    }
+    
+    private boolean isEmptyRow(Node node) {
+    	Node child = node.getFirstChild();
+    	while (child!=null) {
+    		if (child.getNodeType() == Node.ELEMENT_NODE) {
+    			Element cell = (Element) child;
+    			String sName = cell.getTagName();
+    			if (sName.equals(XMLString.TABLE_TABLE_CELL)) {
+    				if (cell.hasChildNodes()) { return false; }
+    			}
+    		}
+    		child = child.getNextSibling();
+    	}
+    	return true;
+    }
+	
+    private void countTableRows(Node node) {
+    	Node child = node.getFirstChild();
+    	while (child!=null) {
+    		if (child.getNodeType() == Node.ELEMENT_NODE) {
+    			String sName = child.getNodeName();
+    			if (sName.equals(XMLString.TABLE_TABLE_ROW)) {
+    				countTableRow(child);
+    			}
+    			else if (sName.equals(XMLString.TABLE_TABLE_ROW_GROUP)) {
+    				countTableRowGroup(child);
+    			}
+    		}
+            child = child.getNextSibling();
+    	}
+    }
+	
+    private void countTableRowGroup(Node node) {
+    	Node child = node.getFirstChild();
+    	while (child!=null) {
+    		if (child.getNodeType() == Node.ELEMENT_NODE) {
+    			String sName = child.getNodeName();
+    			if (sName.equals(XMLString.TABLE_TABLE_HEADER_ROWS)) {
+    				countTableHeaderRows(child);
+    			}
+    			else if (sName.equals(XMLString.TABLE_TABLE_ROW)) {
+    				countTableRow(child);
+    			}
+    			else if (sName.equals(XMLString.TABLE_TABLE_ROW_GROUP)) {
+    				countTableRowGroup(child);
+    			}
+    		}
+            child = child.getNextSibling();
+    	}	
+    }
+	
+    private void countTableHeaderRows(Node node) {
+    	countTableRows(node);
     }
 	
     public String getTableName() {

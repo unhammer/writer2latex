@@ -22,7 +22,7 @@
     <node oor:name="org.openoffice.da.writer2latex.configuration" 
       oor:op="fuse"> 
       <prop oor:name="Id">
-        <value>org.openoffice.da.writer2latex/configuration</value>
+        <value>org.openoffice.da.writer2latex.configuration</value>
       </prop>
       <prop oor:name="Label">
         <value xml:lang="en-US">Writer2LaTeX</value>
@@ -40,7 +40,13 @@
         <node oor:name="org.openoffice.da.writer2latex.configuration.documentclass" 
           oor:op="fuse">
           <prop oor:name="Id">
-            <value>org.openoffice.da.writer2latex/configuration/documentclass</value>
+            <value>org.openoffice.da.writer2latex.configuration.documentclass</value>
+          </prop>
+          <prop oor:name="GroupId">
+            <value>org.openoffice.da.writer2latex.configuration</value>
+          </prop>
+          <prop oor:name="GroupIndex">
+            <value>0</value>
           </prop>
           <prop oor:name="Label">
             <value xml:lang="en-US">Documentclass</value>
@@ -53,10 +59,38 @@
           </prop>
         </node>
 
+        <node oor:name="org.openoffice.da.writer2latex.configuration.headings" 
+          oor:op="fuse">
+          <prop oor:name="Id">
+            <value>org.openoffice.da.writer2latex.configuration.headings</value>
+          </prop>
+          <prop oor:name="GroupId">
+            <value>org.openoffice.da.writer2latex.configuration</value>
+          </prop>
+          <prop oor:name="GroupIndex">
+            <value>1</value>
+          </prop>
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Headings</value>
+          </prop>
+          <prop oor:name="OptionsPage">
+            <value>%origin%/W2LDialogs2/Headings.xdl</value>
+          </prop>
+          <prop oor:name="EventHandlerService">
+             <value>org.openoffice.da.writer2latex.ConfigurationDialog</value>
+          </prop>
+        </node>
+
         <node oor:name="org.openoffice.da.writer2latex.configuration.styles" 
           oor:op="fuse">
           <prop oor:name="Id">
             <value>org.openoffice.da.writer2latex.configuration.styles</value>
+          </prop>
+          <prop oor:name="GroupId">
+            <value>org.openoffice.da.writer2latex.configuration</value>
+          </prop>
+          <prop oor:name="GroupIndex">
+            <value>2</value>
           </prop>
           <prop oor:name="Label">
             <value xml:lang="en-US">Styles</value>
@@ -74,6 +108,12 @@
           <prop oor:name="Id">
             <value>org.openoffice.da.writer2latex.configuration.formatting</value>
           </prop>
+          <prop oor:name="GroupId">
+            <value>org.openoffice.da.writer2latex.configuration</value>
+          </prop>
+          <prop oor:name="GroupIndex">
+            <value>3</value>
+          </prop>
           <prop oor:name="Label">
             <value xml:lang="en-US">Formatting</value>
           </prop>
@@ -89,6 +129,12 @@
           oor:op="fuse">
           <prop oor:name="Id">
             <value>org.openoffice.da.writer2latex.configuration.fonts</value>
+          </prop>
+          <prop oor:name="GroupId">
+            <value>org.openoffice.da.writer2latex.configuration</value>
+          </prop>
+          <prop oor:name="GroupIndex">
+            <value>4</value>
           </prop>
           <prop oor:name="Label">
             <value xml:lang="en-US">Fonts</value>
@@ -106,6 +152,12 @@
           <prop oor:name="Id">
             <value>org.openoffice.da.writer2latex.configuration.pages</value>
           </prop>
+          <prop oor:name="GroupId">
+            <value>org.openoffice.da.writer2latex.configuration</value>
+          </prop>
+          <prop oor:name="GroupIndex">
+            <value>5</value>
+          </prop>
           <prop oor:name="Label">
             <value xml:lang="en-US">Pages</value>
           </prop>
@@ -121,6 +173,12 @@
           oor:op="fuse">
           <prop oor:name="Id">
             <value>org.openoffice.da.writer2latex.configuration.tables</value>
+          </prop>
+          <prop oor:name="GroupId">
+            <value>org.openoffice.da.writer2latex.configuration</value>
+          </prop>
+          <prop oor:name="GroupIndex">
+            <value>6</value>
           </prop>
           <prop oor:name="Label">
             <value xml:lang="en-US">Tables</value>
@@ -138,6 +196,12 @@
           <prop oor:name="Id">
             <value>org.openoffice.da.writer2latex.configuration.figures</value>
           </prop>
+          <prop oor:name="GroupId">
+            <value>org.openoffice.da.writer2latex.configuration</value>
+          </prop>
+          <prop oor:name="GroupIndex">
+            <value>7</value>
+          </prop>
           <prop oor:name="Label">
             <value xml:lang="en-US">Figures</value>
           </prop>
@@ -153,6 +217,12 @@
           oor:op="fuse">
           <prop oor:name="Id">
             <value>org.openoffice.da.writer2latex.configuration.textandmath</value>
+          </prop>
+          <prop oor:name="GroupId">
+            <value>org.openoffice.da.writer2latex.configuration</value>
+          </prop>
+          <prop oor:name="GroupIndex">
+            <value>8</value>
           </prop>
           <prop oor:name="Label">
             <value xml:lang="en-US">Text and math</value>

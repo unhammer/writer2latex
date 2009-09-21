@@ -20,9 +20,12 @@
     <name lang="da">Writer2LaTeX eksportfiltre</name>
     <name lang="en">Writer2LaTeX export filters</name>
     <name lang="de">Writer2Latex Exportfilter</name>
+    <name lang="nl">Writer2LaTeX exportfilters</name>
     <name lang="es">Writer2LaTeX filtros para exportar</name>
     <name lang="fr">Filtres d'exportation Writer2LaTeX</name>
     <name lang="it">Filtri di esportazione Writer2LaTeX</name>
+    <name lang="pt_BR">Filtros de exportação do Writer2LaTeX</name>
+    <name lang="cs">Exportní filtry Writer2LaTeX</name>
     <name lang="pl">Filtry ekportu Writer2LaTeX</name>
     <name lang="ru">Фильтры экспорта Writer2LaTeX</name>
     <name lang="uk">Фільтри експорту Writer2LaTeX</name>
@@ -39,9 +42,12 @@
     <src xlink:href="desc_da.txt" lang="da" />
     <src xlink:href="desc_en.txt" lang="en" />
     <src xlink:href="desc_de.txt" lang="de" />
+    <src xlink:href="desc_nl.txt" lang="nl" />
     <src xlink:href="desc_es.txt" lang="es" />
     <src xlink:href="desc_fr.txt" lang="fr" />
     <src xlink:href="desc_it.txt" lang="it" />
+    <src xlink:href="desc_pt_BR.txt" lang="pt_BR" />
+    <src xlink:href="desc_cs.txt" lang="cs" />
     <src xlink:href="desc_pl.txt" lang="pl" />
     <src xlink:href="desc_ru.txt" lang="ru" />
     <src xlink:href="desc_uk.txt" lang="uk" />

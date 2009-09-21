@@ -6,15 +6,18 @@
   <dlg:checkbox dlg:id="ExportGeometry" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="240" dlg:height="12" dlg:value="Export page geometry" dlg:checked="false">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:ExportGeometryChange" script:language="UNO"/>
   </dlg:checkbox>
-  <dlg:text dlg:id="HeaderAndFooterLabel" dlg:tab-index="3" dlg:left="5" dlg:top="50" dlg:width="245" dlg:height="12" dlg:value="Header and footer"/>
-  <dlg:checkbox dlg:id="ExportHeaderAndFooter" dlg:tab-index="4" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Export header and footer" dlg:checked="false">
+  <dlg:checkbox dlg:id="UseGeometry" dlg:tab-index="2" dlg:left="20" dlg:top="36" dlg:width="230" dlg:height="12" dlg:value="Use geometry.sty" dlg:checked="false"/>
+
+  <dlg:text dlg:id="HeaderFooterLabel" dlg:tab-index="3" dlg:left="5" dlg:top="50" dlg:width="245" dlg:height="12" dlg:value="Header and footer"/>
+  <dlg:checkbox dlg:id="ExportHeaderFooter" dlg:tab-index="4" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Export header and footer" dlg:checked="false">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:ExportHeaderAndFooterChange" script:language="UNO"/>
   </dlg:checkbox>
-  <dlg:text dlg:id="PageNumberLabel" dlg:tab-index="6" dlg:left="5" dlg:top="92" dlg:width="245" dlg:height="12" dlg:value="Page numbers"/>
-  <dlg:text dlg:id="EndnoteLabel" dlg:tab-index="8" dlg:left="5" dlg:top="120" dlg:width="245" dlg:height="12" dlg:value="Endnotes"/>
-  <dlg:checkbox dlg:id="UseGeometry" dlg:tab-index="2" dlg:left="20" dlg:top="36" dlg:width="230" dlg:height="12" dlg:value="Use geometry.sty" dlg:checked="false"/>
   <dlg:checkbox dlg:id="UseFancyhdr" dlg:tab-index="5" dlg:left="20" dlg:top="78" dlg:width="230" dlg:height="12" dlg:value="Use fancyhdr.sty" dlg:checked="false"/>
+
+  <dlg:text dlg:id="PageNumberLabel" dlg:tab-index="6" dlg:left="5" dlg:top="92" dlg:width="245" dlg:height="12" dlg:value="Page numbers"/>
   <dlg:checkbox dlg:id="UseLastpage" dlg:tab-index="7" dlg:left="10" dlg:top="106" dlg:width="240" dlg:height="12" dlg:value="Use lastpage.sty" dlg:checked="false"/>
+
+  <dlg:text dlg:id="EndnoteLabel" dlg:tab-index="8" dlg:left="5" dlg:top="120" dlg:width="245" dlg:height="12" dlg:value="Endnotes"/>
   <dlg:checkbox dlg:id="UseEndnotes" dlg:tab-index="9" dlg:left="10" dlg:top="134" dlg:width="240" dlg:height="12" dlg:value="Use endnotes.sty" dlg:checked="false"/>
  </dlg:bulletinboard>
 </dlg:window>

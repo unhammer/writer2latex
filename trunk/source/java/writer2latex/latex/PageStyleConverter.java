@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-23)
+ *  Version 1.2 (2009-09-17)
  *
  */
 
@@ -130,7 +130,7 @@ public class PageStyleConverter extends StyleConverter {
      *  @param ba      the <code>BeforeAfter</code> to add code to.
      */
     private void applyMasterPage(String sName, BeforeAfter ba) {
-        if (config.pageFormatting()==LaTeXConfig.IGNORE_ALL) return;
+        if (config.pageFormatting()==LaTeXConfig.IGNORE_ALL || config.pageFormatting()==LaTeXConfig.CONVERT_GEOMETRY) return;
         MasterPage style = ofr.getMasterPage(sName);
         if (style==null) { return; }
         String sNextName = style.getProperty(XMLString.STYLE_NEXT_STYLE_NAME);
@@ -150,7 +150,7 @@ public class PageStyleConverter extends StyleConverter {
      * Process header or footer contents
      */
     private void convertMasterPages(LaTeXDocumentPortion ldp) {
-        if (config.pageFormatting()==LaTeXConfig.IGNORE_ALL) { return; }
+        if (config.pageFormatting()==LaTeXConfig.IGNORE_ALL || config.pageFormatting()==LaTeXConfig.CONVERT_GEOMETRY) { return; }
 
         Context context = new Context();
         context.resetFormattingFromStyle(ofr.getDefaultParStyle());
@@ -357,7 +357,7 @@ public class PageStyleConverter extends StyleConverter {
 
     // TODO: Reenable several geometries per document??
     private void convertPageMasterGeometry(LaTeXDocumentPortion pack, LaTeXDocumentPortion ldp) {
-        if (config.pageFormatting()!=LaTeXConfig.CONVERT_ALL) { return; }
+        if (config.pageFormatting()!=LaTeXConfig.CONVERT_ALL && config.pageFormatting()!=LaTeXConfig.CONVERT_GEOMETRY) { return; }
         if (mainPageLayout==null) { return; }
 
         // Set global document options

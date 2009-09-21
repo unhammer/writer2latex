@@ -3,8 +3,8 @@
 <dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Fonts" dlg:left="139" dlg:top="84" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:moveable="true" dlg:title="Fonts" dlg:withtitlebar="false">
  <dlg:bulletinboard>
   <dlg:text dlg:id="XeTeXLabel" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="245" dlg:height="12" dlg:value="XeTeX"/>
-  <dlg:text dlg:id="OtherLabel" dlg:tab-index="2" dlg:left="5" dlg:top="36" dlg:width="245" dlg:height="12" dlg:value="Other TeX variants"/>
   <dlg:checkbox dlg:id="UseFontspec" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="240" dlg:height="12" dlg:value="Use original fonts (fontspec.sty)" dlg:checked="false"/>
+  <dlg:text dlg:id="OtherLabel" dlg:tab-index="2" dlg:left="5" dlg:top="36" dlg:width="245" dlg:height="12" dlg:value="Other TeX variants"/>
   <dlg:checkbox dlg:id="UsePifont" dlg:tab-index="3" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:value="Use pifont.sty (dingbats)" dlg:checked="false"/>
   <dlg:checkbox dlg:id="UseTipa" dlg:tab-index="4" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Use tipa.sty and tipax.sty (phonetic symbols)" dlg:checked="false"/>
   <dlg:checkbox dlg:id="UseEurosym" dlg:tab-index="5" dlg:left="10" dlg:top="78" dlg:width="240" dlg:height="12" dlg:value="Use eurosym.sty (euro currency symbol)" dlg:checked="false"/>

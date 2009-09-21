@@ -2,6 +2,13 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[all] Extended configuration API with the new notion "complex" options
+
+[w2l] Bugfix (ODF 1.1): Allow soft page breaks in display equations
+
+[w2l] Added new value "convert_geometry" for the option "page_formatting"
+  (export geometry but not header and footer)
+
 [w2x] Use svg:title as alternative text on graphics if svg:desc is not present
 
 [all] Bugfix: Filtername (Writer2LaTeX/Writer2xhtml) was not displayed in error messages

@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-05-29)
+ *  Version 1.2 (2009-09-15)
  *
  */
 
@@ -107,6 +107,48 @@ public class L10n {
             	case HOME : return "Home";
             	case DIRECTORY: return "Cartella";
             	case DOCUMENT: return "Documento";     
+            }
+        }
+        if (sLocale.startsWith("pt")) { // (brazilian) portuguese
+            switch (nString) {
+            	case UP: return "Acima";
+            	case FIRST : return "Primeiro";
+            	case PREVIOUS : return "Anterior";
+            	case NEXT : return "Pr\u00f3ximo";
+            	case LAST : return "\u00daltimo";
+            	case CONTENTS : return "Conte\u00fado";
+            	case INDEX : return "\u00cdndice";
+            	case HOME : return "Home";
+            	case DIRECTORY: return "Diret\u00f3rio";
+            	case DOCUMENT: return "Documento";     
+            }
+        }
+        if (sLocale.startsWith("cs")) { // czech
+            switch (nString) {
+            	case UP: return "Nahoru";
+            	case FIRST : return "Prvn\u00ed";
+            	case PREVIOUS : return "P\u0159edchoz\u00ed";
+            	case NEXT : return "Dal\u0161\u00ed";
+            	case LAST : return "Posledn\u00ed";
+            	case CONTENTS : return "Obsah";
+            	case INDEX : return "Rejst\u0159\u00edk";
+            	case HOME : return "Dom\u016f";
+            	case DIRECTORY: return "Adres\u00e1\u0159 (slo\u017eka)";
+            	case DOCUMENT: return "Dokument";     
+            }
+        }
+        if (sLocale.startsWith("nl")) { // dutch
+            switch (nString) {
+            case UP: return "Omhoog";
+            case FIRST : return "Eerste";
+            case PREVIOUS : return "Vorige";
+            case NEXT : return "Volgende";
+            case LAST : return "Laatste";
+            case CONTENTS : return "Inhoud";
+            case INDEX : return "Index";
+            case HOME : return "Hoofdpagina";
+            case DIRECTORY: return "Directory";
+            case DOCUMENT: return "Document";  
             }
         }
         if (sLocale.startsWith("da")) { // danish

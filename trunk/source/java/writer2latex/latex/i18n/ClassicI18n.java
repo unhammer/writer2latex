@@ -313,6 +313,10 @@ public class ClassicI18n extends I18n {
             pack.append("\\usepackage[")
                 .append(babelopt.toString())
                 .append("]{babel}").nl();
+            // For Polish we must undefine \lll which is later defined by ams
+            if (languages.contains("pl")) { 
+            	pack.append("\\let\\lll\\undefined").nl();
+            }
         }
 			
         // usepackage tipa

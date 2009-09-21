@@ -16,15 +16,18 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2006 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 0.5 (2006-11-02)
+ *  Version 1.2 (2009-09-20)
  *
  */
 
 package writer2latex.latex.i18n;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /** This class contains a trie of string -> LaTeX code replacements 
 */
@@ -48,8 +51,10 @@ public class ReplacementTrie extends ReplacementTrieNode {
         else { super.put(sInput,sLaTeXCode,nFontencs); }
     }
 	
-    public String[] getInputStrings() {
-        return null; //TODO
+    public Set<String> getInputStrings() {
+    	HashSet<String> strings = new HashSet<String>();
+    	collectStrings(strings,"");
+    	return strings;
     }
 
 

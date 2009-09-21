@@ -11,13 +11,18 @@
     <dlg:menuitem dlg:value="Convert most"/>
     <dlg:menuitem dlg:value="Convert all"/>
    </dlg:menupopup>
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:FormattingChange" script:language="UNO"/>
   </dlg:menulist>
-  <dlg:checkbox dlg:id="UseColor" dlg:tab-index="2" dlg:left="10" dlg:top="22" dlg:width="240" dlg:height="12" dlg:value="Use color.sty (color support)" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="UseUlem" dlg:tab-index="5" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Use ulem.sty (underline and strike out text)" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="UseHyperref" dlg:tab-index="6" dlg:left="10" dlg:top="78" dlg:width="240" dlg:height="12" dlg:value="Use hyperref.sty (support for hyperlinks)" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="UseHyperref" dlg:tab-index="2" dlg:left="10" dlg:top="22" dlg:width="240" dlg:height="12" dlg:value="Use hyperref.sty (support for hyperlinks)" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="UseColor" dlg:tab-index="3" dlg:left="10" dlg:top="36" dlg:width="240" dlg:height="12" dlg:value="Use color.sty (color support)" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:UseColorChange" script:language="UNO"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:id="UseColortbl" dlg:tab-index="4" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:value="Use colortbl.sty (background color in tables)" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="UseSoul" dlg:tab-index="5" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Use soul.sty (underline and strike out text)" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:UseSoulChange" script:language="UNO"/>
+  </dlg:checkbox>
+  <dlg:checkbox dlg:id="UseUlem" dlg:tab-index="6" dlg:left="10" dlg:top="78" dlg:width="240" dlg:height="12" dlg:value="Use ulem.sty (underline and strike out text)" dlg:checked="false"/>
   <dlg:checkbox dlg:id="UseTitlesec" dlg:tab-index="7" dlg:left="10" dlg:top="92" dlg:width="240" dlg:height="12" dlg:value="Use titlesec.sty to format headings" dlg:checked="false"/>
   <dlg:checkbox dlg:id="UseTitletoc" dlg:tab-index="8" dlg:left="10" dlg:top="106" dlg:width="240" dlg:height="12" dlg:value="Use titletoc.sty to format content tables" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="UseSoul" dlg:tab-index="4" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:value="Use soul.sty (underline and strike out text)" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="UseColortbl" dlg:tab-index="3" dlg:left="10" dlg:top="36" dlg:width="240" dlg:height="12" dlg:value="Use colortbl.sty (background color in tables)" dlg:checked="false"/>
  </dlg:bulletinboard>
 </dlg:window>

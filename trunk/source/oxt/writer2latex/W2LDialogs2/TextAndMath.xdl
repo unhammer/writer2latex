@@ -6,15 +6,23 @@
   <dlg:checkbox dlg:id="UseOoomath" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="240" dlg:height="12" dlg:value="Use ooomath.sty (custom package supporting OpenOffice.org equations)" dlg:checked="false"/>
   <dlg:text dlg:id="MathSymbolsLabel" dlg:tab-index="2" dlg:left="5" dlg:top="36" dlg:width="245" dlg:height="12" dlg:value="Math symbols"/>
   <dlg:text dlg:id="MathSymbolNameLabel" dlg:tab-index="3" dlg:left="10" dlg:top="50" dlg:width="50" dlg:height="12" dlg:value="Name"/>
-  <dlg:button dlg:id="NewSymbolButton" dlg:tab-index="5" dlg:left="165" dlg:top="48" dlg:width="40" dlg:height="12" dlg:value="New..."/>
-  <dlg:button dlg:id="DeleteSymbolButton" dlg:tab-index="6" dlg:left="210" dlg:top="48" dlg:width="40" dlg:height="12" dlg:value="Delete..."/>
+  <dlg:button dlg:id="NewSymbolButton" dlg:tab-index="5" dlg:left="165" dlg:top="48" dlg:width="40" dlg:height="12" dlg:value="New...">
+   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:NewSymbolClick" script:language="UNO"/>
+  </dlg:button>
+  <dlg:button dlg:id="DeleteSymbolButton" dlg:tab-index="6" dlg:left="210" dlg:top="48" dlg:width="40" dlg:height="12" dlg:value="Delete...">
+   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:DeleteSymbolClick" script:language="UNO"/>
+  </dlg:button>
   <dlg:text dlg:id="MathLaTeXLabel" dlg:tab-index="7" dlg:left="10" dlg:top="64" dlg:width="50" dlg:height="12" dlg:value="LaTeX code"/>
   <dlg:textfield dlg:id="MathLaTeX" dlg:tab-index="8" dlg:left="70" dlg:top="62" dlg:width="180" dlg:height="12"/>
   <dlg:text dlg:id="TextReplaceLabel" dlg:tab-index="9" dlg:left="5" dlg:top="78" dlg:width="245" dlg:height="12" dlg:value="Text replace"/>
   <dlg:text dlg:id="InputLabel" dlg:tab-index="10" dlg:left="10" dlg:top="92" dlg:width="50" dlg:height="12" dlg:value="Input"/>
   <dlg:menulist dlg:id="MathSymbolName" dlg:tab-index="4" dlg:left="70" dlg:top="48" dlg:width="90" dlg:height="12" dlg:spin="true"/>
-  <dlg:button dlg:id="NewTextButton" dlg:tab-index="12" dlg:left="165" dlg:top="90" dlg:width="40" dlg:height="12" dlg:value="New..."/>
-  <dlg:button dlg:id="DeleteTextButton" dlg:tab-index="13" dlg:left="210" dlg:top="90" dlg:width="40" dlg:height="12" dlg:value="Delete..."/>
+  <dlg:button dlg:id="NewTextButton" dlg:tab-index="12" dlg:left="165" dlg:top="90" dlg:width="40" dlg:height="12" dlg:value="New...">
+     <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:NewTextClick" script:language="UNO"/>
+  </dlg:button>
+  <dlg:button dlg:id="DeleteTextButton" dlg:tab-index="13" dlg:left="210" dlg:top="90" dlg:width="40" dlg:height="12" dlg:value="Delete...">
+     <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:DeleteTextClick" script:language="UNO"/>
+  </dlg:button>
   <dlg:text dlg:id="LaTeXLabel" dlg:tab-index="14" dlg:left="10" dlg:top="106" dlg:width="50" dlg:height="12" dlg:value="LaTeX code"/>
   <dlg:textfield dlg:id="LaTeX" dlg:tab-index="15" dlg:left="70" dlg:top="104" dlg:width="180" dlg:height="12"/>
   <dlg:text dlg:id="TabStopLabel" dlg:tab-index="16" dlg:left="5" dlg:top="120" dlg:width="245" dlg:height="12" dlg:value="Tab stops"/>

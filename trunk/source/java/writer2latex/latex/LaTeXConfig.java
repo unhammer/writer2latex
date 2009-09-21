@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-05-31)
+ *  Version 1.2 (2009-09-20)
  *
  */
 
@@ -28,7 +28,10 @@ package writer2latex.latex;
 
 import java.util.LinkedList;
 import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Enumeration;
+import java.util.Map;
+import java.util.Set;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -40,6 +43,7 @@ import writer2latex.base.Option;
 import writer2latex.latex.util.HeadingMap;
 import writer2latex.latex.i18n.ClassicI18n;
 import writer2latex.latex.i18n.ReplacementTrie;
+import writer2latex.latex.i18n.ReplacementTrieNode;
 import writer2latex.latex.util.StyleMap;
 import writer2latex.util.Misc;
 
@@ -69,6 +73,8 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     public static final int CONVERT_ALL = 4;
     // Page formatting
     public static final int CONVERT_HEADER_FOOTER = 5;
+    public static final int CONVERT_GEOMETRY = 6;
+    
     // Handling of other formatting
     public static final int IGNORE = 0;
     public static final int ACCEPT = 1;
@@ -224,6 +230,7 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
                 super.setString(sValue);
                 if ("convert_all".equals(sValue)) nValue = CONVERT_ALL;
                 else if ("convert_header_footer".equals(sValue)) nValue = CONVERT_HEADER_FOOTER;
+                else if ("convert_geometry".equals(sValue)) nValue = CONVERT_GEOMETRY;
                 else if ("ignore_all".equals(sValue)) nValue = IGNORE_ALL;
             }
         };
@@ -295,6 +302,36 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
         //stringReplace.put("\u00AB\u00A0","\u00AB ",I18n.readFontencs("any"));
         //stringReplace.put("\u00A0\u00BB"," \u00BB",I18n.readFontencs("any"));
     }
+    
+	public void setComplexOption(String sGroup, String sName, Map<String,String> attributes) {
+		if ("string-replace".equals(sGroup)) {
+            String sLaTeXCode = attributes.get("latex-code");
+            String sFontencs = attributes.get("fontencs");
+            if (sLaTeXCode!=null) {
+            	int nFontencs = ClassicI18n.readFontencs(sFontencs!=null && sFontencs.length()>0 ? sFontencs : "any");
+            	stringReplace.put(sName,sLaTeXCode,nFontencs);
+            }
+		}
+	}
+
+	public Map<String,String> getComplexOption(String sGroup, String sName) {
+		if ("string-replace".equals(sGroup)) {
+			ReplacementTrieNode node = stringReplace.get(sName);
+			if (node!=null) {
+				HashMap<String,String> attributes = new HashMap<String,String>();
+				attributes.put("latex-code", node.getLaTeXCode());
+				attributes.put("fontencs", "(todo)");
+			}
+		}
+		return null;
+	}
+	
+	public Set<String> getComplexOptions(String sGroup) {
+		if ("string-replace".equals(sGroup)) {
+			return stringReplace.getInputStrings();
+		}
+		return new java.util.HashSet<String>();
+	}
 	
     protected void readInner(Element elm) {
         if (elm.getTagName().equals("style-map")) {
@@ -400,24 +437,21 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
             hlmNode.setAttribute("level",Integer.toString(headingMap.getLevel(i)));
             hmNode.appendChild(hlmNode);
         }
-		
-        // TODO: Export string replacements
-        //String[] sInputStrings = stringReplace.getInputStrings();
-        /*
-        int nSize = sInputStrings.size();
-        for (int i=0; i<nSize; i++) {
-            String sInput = sInputStrings[i];
+        
+        Set<String> inputStrings = stringReplace.getInputStrings();
+        for (String sInput : inputStrings) {
+        	System.out.println("Writing input "+sInput);
             ReplacementTrieNode node = stringReplace.get(sInput);
             Element srNode = dom.createElement("string-replace");
             srNode.setAttribute("input",sInput);
             srNode.setAttribute("latex-code",node.getLaTeXCode());
-            srNode.setAttribute("fontenc",I18n.writeFontencs(node.getFontencs()));
-            hmNode.appendChild(srNode);
+            srNode.setAttribute("fontenc","(todo)");
+            //srNode.setAttribute("fontenc",ClassicI18n.writeFontencs(node.getFontencs()));
+            dom.getDocumentElement().appendChild(srNode);
         }
-        */
 		
         writeContent(dom,customPreamble,"custom-preamble");
-
+        
     }
 
     private void writeStyleMap(Document dom, StyleMap sm, String sFamily) {
