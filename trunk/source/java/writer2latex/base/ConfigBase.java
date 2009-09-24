@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-22)
+ *  Version 1.2 (2009-09-24)
  *
  */
 
@@ -35,6 +35,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -42,6 +45,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.DOMImplementation;
 
+import writer2latex.api.ComplexOption;
 import writer2latex.xmerge.NewDOMDocument;
 
 public abstract class ConfigBase implements writer2latex.api.Config {
@@ -50,9 +54,11 @@ public abstract class ConfigBase implements writer2latex.api.Config {
     protected abstract String getDefaultConfigPath();
 	
     protected Option[] options;
+    protected Map<String,ComplexOption> optionGroups;
 	
     public ConfigBase() {
         options = new Option[getOptionCount()];
+        optionGroups = new HashMap<String,ComplexOption>();
     }
 	
     public void setOption(String sName,String sValue) {
@@ -76,6 +82,16 @@ public abstract class ConfigBase implements writer2latex.api.Config {
     	}
         return null;
     }
+    
+    public ComplexOption getComplexOption(String sGroup) {
+   		return optionGroups.get(sGroup);
+    }
+    
+	// The subclass may use this method to define option groups
+	protected ComplexOption addComplexOption(String sGroup) {
+		optionGroups.put(sGroup, new ComplexOption());
+		return optionGroups.get(sGroup);
+	}
 
     public void readDefaultConfig(String sName) throws IllegalArgumentException {
         InputStream is = this.getClass().getResourceAsStream(getDefaultConfigPath()+sName);

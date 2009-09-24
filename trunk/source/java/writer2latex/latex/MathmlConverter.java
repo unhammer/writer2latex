@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-20)
+ *  Version 1.2 (2009-09-21)
  *
  */
 
@@ -50,10 +50,12 @@ public final class MathmlConverter extends ConverterHelper {
     private StarMathConverter smc;
 	
     private boolean bContainsFormulas = false;
+    private boolean bAddParAfterDisplay = false;
 	
     public MathmlConverter(OfficeReader ofr,LaTeXConfig config, ConverterPalette palette) {
         super(ofr,config,palette);
         smc = new StarMathConverter(palette.getI18n(),config);
+        bAddParAfterDisplay = config.formatting()>=LaTeXConfig.CONVERT_MOST;
     }
 
     public void appendDeclarations(LaTeXDocumentPortion pack, LaTeXDocumentPortion decl) {
@@ -121,12 +123,14 @@ public final class MathmlConverter extends ConverterHelper {
                 ldp.nl()
                    .append(convert(null,theEquation)).nl()
                    .append("\\end{equation}").nl();
+                if (bAddParAfterDisplay) { ldp.nl(); }
             }
             else {
                 // Unnumbered equation
                 ldp.append("\\begin{equation*}").nl()
                    .append(convert(null,theEquation)).nl()
                    .append("\\end{equation*}").nl();
+                if (bAddParAfterDisplay) { ldp.nl(); }
             }
             return true;
         }

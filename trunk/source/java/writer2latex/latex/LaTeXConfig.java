@@ -20,14 +20,12 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-20)
+ *  Version 1.2 (2009-09-24)
  *
  */
 
 package writer2latex.latex;
 
-import java.util.LinkedList;
-import java.util.Hashtable;
 import java.util.HashMap;
 import java.util.Enumeration;
 import java.util.Map;
@@ -37,13 +35,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
+import writer2latex.api.ComplexOption;
 import writer2latex.base.BooleanOption;
 import writer2latex.base.IntegerOption;
 import writer2latex.base.Option;
 import writer2latex.latex.util.HeadingMap;
 import writer2latex.latex.i18n.ClassicI18n;
 import writer2latex.latex.i18n.ReplacementTrie;
-import writer2latex.latex.i18n.ReplacementTrieNode;
 import writer2latex.latex.util.StyleMap;
 import writer2latex.util.Misc;
 
@@ -51,13 +49,29 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     protected int getOptionCount() { return 63; }
     protected String getDefaultConfigPath() { return "/writer2latex/latex/config/"; } 
     
-    // Override setOption to be backwards compatible
-    public void setOption(String sName,String sValue) {
-        // this option has been renamed:
-        if (sName.equals("keep_image_size")) { sName = "original_image_size"; }
-        super.setOption(sName, sValue);
+	// Override getter and setter methods for options in order to: 
+    //  - Treat the custom preamble like a regular option, even though the xml representation is different
+    //  - Be backwards compatible (renamed option)
+    @Override public void setOption(String sName,String sValue) {
+    	if (sName.equals("custom-preamble")) {
+    		sCustomPreamble = sValue;
+    	}
+    	else {
+    		// this option has been renamed:
+    		if (sName.equals("keep_image_size")) { sName = "original_image_size"; }
+    		super.setOption(sName, sValue);
+    	}
     }
-
+    
+    @Override public String getOption(String sName) {
+    	if (sName.equals("custom-preamble")) {
+    		return sCustomPreamble;
+    	}
+    	else {
+    		return super.getOption(sName);
+    	}
+    }
+    
     // Backend
     public static final int GENERIC = 0;
     public static final int DVIPS = 1;
@@ -155,7 +169,7 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     private static final int SAVE_IMAGES_IN_SUBDIR = 61;
     private static final int DEBUG = 62;
 
-    protected LinkedList<String> customPreamble = new LinkedList<String>();
+    protected String sCustomPreamble = "";
     protected StyleMap par = new StyleMap();
     protected StyleMap parBlock = new StyleMap();
     protected StyleMap text = new StyleMap();
@@ -163,8 +177,9 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     protected StyleMap listItem = new StyleMap();
     protected StyleMap textAttr = new StyleMap();
     protected HeadingMap headingMap = new HeadingMap(5);
-    protected Hashtable<String, String> mathSymbols = new Hashtable<String, String>();
-    protected ReplacementTrie stringReplace = new ReplacementTrie();
+    
+    private ComplexOption stringReplace;
+    private ComplexOption mathSymbols;
 	
     public LaTeXConfig() {
         super();
@@ -288,51 +303,46 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
         headingMap.setLevelData(3,"subsubsection",3);
         headingMap.setLevelData(4,"paragraph",4);
         headingMap.setLevelData(5,"subparagraph",5);
+        
+        // Complex options
+        stringReplace=addComplexOption("string-replace");
         // Standard string replace:
         // Fix french spacing; replace nonbreaking space 
         // right before em-dash, !, ?, : and ; (babel handles this)
-        stringReplace.put("\u00A0\u2014"," \u2014",ClassicI18n.readFontencs("any"));
-        stringReplace.put("\u00A0!"," !",ClassicI18n.readFontencs("any"));
-        stringReplace.put("\u00A0?"," ?",ClassicI18n.readFontencs("any"));
-        stringReplace.put("\u00A0:"," :",ClassicI18n.readFontencs("any"));
-        stringReplace.put("\u00A0;"," ;",ClassicI18n.readFontencs("any"));
+        Map<String,String> attr = new HashMap<String,String>();
+        attr.put("fontenc", "any");
+        attr.put("latex-code", " \u2014");
+        stringReplace.put("\u00A0\u2014",attr);
+
+        attr = new HashMap<String,String>();
+        attr.put("fontenc", "any");
+        attr.put("latex-code", " !");
+        stringReplace.put("\u00A0!",attr);
+
+        attr = new HashMap<String,String>();
+        attr.put("fontenc", "any");
+        attr.put("latex-code", " ?");
+        stringReplace.put("\u00A0?",attr);
+
+        attr = new HashMap<String,String>();
+        attr.put("fontenc", "any");
+        attr.put("latex-code", " :");
+        stringReplace.put("\u00A0:",attr);
+
+        attr = new HashMap<String,String>();
+        attr.put("fontenc", "any");
+        attr.put("latex-code", " ;");
+        stringReplace.put("\u00A0;",attr);
+        
         // Right after opening guillemet and right before closing  guillemet:
         // Here we must *keep* the non-breaking space
         // TODO: Use \og and \fg if the document contains french...
         //stringReplace.put("\u00AB\u00A0","\u00AB ",I18n.readFontencs("any"));
         //stringReplace.put("\u00A0\u00BB"," \u00BB",I18n.readFontencs("any"));
+        
+        mathSymbols = addComplexOption("math-symbol-map");
     }
-    
-	public void setComplexOption(String sGroup, String sName, Map<String,String> attributes) {
-		if ("string-replace".equals(sGroup)) {
-            String sLaTeXCode = attributes.get("latex-code");
-            String sFontencs = attributes.get("fontencs");
-            if (sLaTeXCode!=null) {
-            	int nFontencs = ClassicI18n.readFontencs(sFontencs!=null && sFontencs.length()>0 ? sFontencs : "any");
-            	stringReplace.put(sName,sLaTeXCode,nFontencs);
-            }
-		}
-	}
-
-	public Map<String,String> getComplexOption(String sGroup, String sName) {
-		if ("string-replace".equals(sGroup)) {
-			ReplacementTrieNode node = stringReplace.get(sName);
-			if (node!=null) {
-				HashMap<String,String> attributes = new HashMap<String,String>();
-				attributes.put("latex-code", node.getLaTeXCode());
-				attributes.put("fontencs", "(todo)");
-			}
-		}
-		return null;
-	}
-	
-	public Set<String> getComplexOptions(String sGroup) {
-		if ("string-replace".equals(sGroup)) {
-			return stringReplace.getInputStrings();
-		}
-		return new java.util.HashSet<String>();
-	}
-	
+    	
     protected void readInner(Element elm) {
         if (elm.getTagName().equals("style-map")) {
             String sName = elm.getAttribute("name");
@@ -368,25 +378,29 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
             readHeadingMap(elm);
         }
         else if (elm.getTagName().equals("string-replace")) {
+        	// TODO: ConfigBase should handle this
             String sInput = elm.getAttribute("input");
-            String sLaTeXCode = elm.getAttribute("latex-code");
-            String sFontencs = elm.getAttribute("fontencs");
-            int nFontencs = ClassicI18n.readFontencs(sFontencs.length()>0 ? sFontencs : "any");
-            stringReplace.put(sInput,sLaTeXCode,nFontencs);
+            Map<String,String> attributes = new HashMap<String,String>();
+            attributes.put("latex-code", elm.getAttribute("latex-code"));
+            attributes.put("fontenc", elm.getAttribute("fontenc"));
+            stringReplace.put(sInput,attributes);
         }
         else if (elm.getTagName().equals("custom-preamble")) {
+        	StringBuffer buf = new StringBuffer();
             Node child = elm.getFirstChild();
             while (child!=null) {
                 if (child.getNodeType()==Node.TEXT_NODE) {
-                    customPreamble.add(child.getNodeValue());
+                    buf.append(child.getNodeValue());
                 }
                 child = child.getNextSibling();
             }
+            sCustomPreamble = buf.toString();
         }
         else if (elm.getTagName().equals("math-symbol-map")) {
             String sName = elm.getAttribute("name");
-            String sLatex = elm.getAttribute("latex");
-            mathSymbols.put(sName,sLatex);
+            Map<String,String> attr = new HashMap<String,String>();
+            attr.put("latex", elm.getAttribute("latex"));
+            mathSymbols.put(sName, attr);
         }
     }
 
@@ -410,10 +424,8 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     
     protected void writeInner(Document dom) {
         // Write math symbol map
-        Enumeration<String> msEnum = mathSymbols.keys();
-        while (msEnum.hasMoreElements()) {
-            String sName = msEnum.nextElement();
-            String sLatex = mathSymbols.get(sName);
+    	for (String sName : mathSymbols.keySet()) {
+            String sLatex = mathSymbols.get(sName).get("latex");
             Element msNode = dom.createElement("math-symbol-map");
             msNode.setAttribute("name",sName);
 	        msNode.setAttribute("latex",sLatex);
@@ -438,20 +450,20 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
             hmNode.appendChild(hlmNode);
         }
         
-        Set<String> inputStrings = stringReplace.getInputStrings();
+        // TODO: ConfigBase should handle this
+        Set<String> inputStrings = stringReplace.keySet();
         for (String sInput : inputStrings) {
-        	System.out.println("Writing input "+sInput);
-            ReplacementTrieNode node = stringReplace.get(sInput);
+        	Map<String,String> attributes = stringReplace.get(sInput);
             Element srNode = dom.createElement("string-replace");
             srNode.setAttribute("input",sInput);
-            srNode.setAttribute("latex-code",node.getLaTeXCode());
-            srNode.setAttribute("fontenc","(todo)");
-            //srNode.setAttribute("fontenc",ClassicI18n.writeFontencs(node.getFontencs()));
+            srNode.setAttribute("latex-code",attributes.get("latex-code"));
+            srNode.setAttribute("fontenc",attributes.get("fontenc"));
             dom.getDocumentElement().appendChild(srNode);
         }
 		
-        writeContent(dom,customPreamble,"custom-preamble");
-        
+        Element cp = dom.createElement("custom-preamble");
+        cp.appendChild(dom.createTextNode( sCustomPreamble));
+        dom.getDocumentElement().appendChild(cp);
     }
 
     private void writeStyleMap(Document dom, StyleMap sm, String sFamily) {
@@ -475,20 +487,23 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
             dom.getDocumentElement().appendChild(smNode);
         }
     }
-
-    private void writeContent(Document dom, LinkedList<String> list, String sElement) {
-        Element node = dom.createElement(sElement);
-        int nLen = list.size();
-        for (int i=0; i<nLen; i++) {
-            node.appendChild( dom.createTextNode( list.get(i) ) );
-        }
-        dom.getDocumentElement().appendChild(node);
-    }
 	
     // Convenience accessor methods
 
-    // String replace
-    public ReplacementTrie getStringReplace() { return stringReplace; }
+    // Return current string replace as a trie
+    public ReplacementTrie getStringReplace() {
+        ReplacementTrie trie = new ReplacementTrie();
+        for (String sInput : stringReplace.keySet()) {
+        	Map<String,String> attributes = stringReplace.get(sInput);
+            String sLaTeXCode = attributes.get("latex-code");
+            String sFontenc = attributes.get("fontenc");
+            trie.put(sInput,sLaTeXCode!=null ? sLaTeXCode : "",
+            		 ClassicI18n.readFontencs(sFontenc!=null ? sFontenc : "any"));
+        }
+        return trie;
+    }
+    
+    public String getCustomPreamble() { return sCustomPreamble; }
 
     // Common options
     public boolean debug() { return ((BooleanOption) options[DEBUG]).getValue(); }
@@ -574,7 +589,14 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     public boolean splitToplevelSections() { return ((BooleanOption) options[SPLIT_TOPLEVEL_SECTIONS]).getValue(); }
     public boolean saveImagesInSubdir() { return ((BooleanOption) options[SAVE_IMAGES_IN_SUBDIR]).getValue(); }
 	
-    public Hashtable<String, String> getMathSymbols() { return mathSymbols; }
+    public Map<String, String> getMathSymbols() {
+    	Map<String,String> map = new HashMap<String,String>();
+    	for (String sName : mathSymbols.keySet()) {
+    		String sLatex = mathSymbols.get(sName).get("latex");
+    		map.put(sName, sLatex);
+    	}
+    	return map;
+    }
 
     public StyleMap getParStyleMap() { return par; }
     public StyleMap getParBlockStyleMap() { return parBlock; }
@@ -583,7 +605,6 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     public StyleMap getListItemStyleMap() { return listItem; }
     public StyleMap getTextAttributeStyleMap() { return textAttr; }
     public HeadingMap getHeadingMap() { return headingMap; }
-    public LinkedList<String> getCustomPreamble() { return customPreamble; }
 
 }
 

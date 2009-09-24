@@ -2,6 +2,10 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[w2l] Bugfix: Add \par after display equation when formatting>=convert_most
+
+[w2l] The custom preamble is now available in the API as a normal option "custom-preamble"
+
 [all] Extended configuration API with the new notion "complex" options
 
 [w2l] Bugfix (ODF 1.1): Allow soft page breaks in display equations

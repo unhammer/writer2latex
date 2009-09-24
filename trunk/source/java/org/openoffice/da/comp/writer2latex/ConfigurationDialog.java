@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-20)
+ *  Version 1.2 (2009-09-23)
  *
  */ 
  
@@ -29,6 +29,8 @@ package org.openoffice.da.comp.writer2latex;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import com.sun.star.awt.XContainerWindowEventHandler;
@@ -52,6 +54,7 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
 import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
 
+import writer2latex.api.ComplexOption;
 import writer2latex.api.Config;
 import writer2latex.api.ConverterFactory;
 
@@ -68,6 +71,11 @@ public final class ConfigurationDialog extends WeakBase
     private XSimpleFileAccess2 sfa2;
     private String sConfigFileName = null;
     Config config;
+    // Local cache of complex options
+    // ComplexOption paragraphMap = ... osv.
+    ComplexOption mathSymbols = new ComplexOption();
+    ComplexOption stringReplace = new ComplexOption();
+    String sCurrentMathSymbol = null;
     String sCurrentText = null;
     private String sTitle = null;
     private DialogAccess dlg = null;
@@ -175,20 +183,51 @@ public final class ConfigurationDialog extends WeakBase
             	return true;
             }
             // Text and math page
+            else if (sMethod.equals("MathSymbolNameChange")) {
+            	saveTextAndMath();
+            	enableTextAndMathControls();
+            	return true;
+            }
             else if (sMethod.equals("NewSymbolClick")) {
-            	appendItem("MathSymbolName");
+            	String sNewName = appendItem("MathSymbolName");
+            	if (sNewName!=null) {
+            		Map<String,String> attr = new HashMap<String,String>();
+            		attr.put("latex", "");
+            		mathSymbols.put(sNewName, attr);
+            	}
+            	saveTextAndMath();
+            	enableTextAndMathControls();
             	return true;
             }
             else if (sMethod.equals("DeleteSymbolClick")) {
-            	deleteCurrentItem("MathSymbolName");
+            	if (deleteCurrentItem("MathSymbolName")) {
+            		mathSymbols.remove(sCurrentMathSymbol);
+            		enableTextAndMathControls();
+            	}
+            	return true;
+            }
+            else if (sMethod.equals("TextInputChange")) {
+            	saveTextAndMath();
+            	enableTextAndMathControls();
             	return true;
             }
             else if (sMethod.equals("NewTextClick")) {
-            	appendItem("TextInput");
+            	String sNewName = appendItem("TextInput");
+            	if (sNewName!=null) {
+            		Map<String,String> attr = new HashMap<String,String>();
+            		attr.put("latex-code", "");
+            		attr.put("fontenc", "any");
+            		stringReplace.put(sNewName, attr);
+            	}
+            	saveTextAndMath();
+            	enableTextAndMathControls();
             	return true;
             }
             else if (sMethod.equals("DeleteTextClick")) {
-            	deleteCurrentItem("TextInput");
+            	if (deleteCurrentItem("TextInput")) {
+            		stringReplace.remove(sCurrentText);
+            		enableTextAndMathControls();
+            	}
             	return true;
             }            
         }
@@ -209,7 +248,8 @@ public final class ConfigurationDialog extends WeakBase
         		"ExportGeometryChange", "ExportHeaderAndFooterChange", // Pages
         		"NoTablesChange", "UseSupertabularChange", "UseLongtableChange", // Tables
         		"NoImagesChange", // Images
-        		"NewSymbolClick", "DeleteSymbolClick", "NewTextClick", "DeleteTextClick" // Text and Math
+        		"MathSymbolNameChange", "NewSymbolClick", "DeleteSymbolClick",
+        		"TextInputChange", "NewTextClick", "DeleteTextClick" // Text and Math
         };
         return sNames;
     }
@@ -236,10 +276,18 @@ public final class ConfigurationDialog extends WeakBase
     		if (sMethod.equals("ok")) {
     			loadConfig();
     			getControls();
+    			config.getComplexOption("math-symbol-map").clear();
+    			config.getComplexOption("math-symbol-map").copyAll(mathSymbols);
+    			config.getComplexOption("string-replace").clear();
+    			config.getComplexOption("string-replace").copyAll(stringReplace);
     			saveConfig();
     			return true;
     		} else if (sMethod.equals("back") || sMethod.equals("initialize")) {
     			loadConfig();
+    			mathSymbols.clear();
+    			mathSymbols.copyAll(config.getComplexOption("math-symbol-map"));
+    			stringReplace.clear();
+    			stringReplace.copyAll(config.getComplexOption("string-replace"));
     			setControls();
     			return true;
     		}
@@ -263,7 +311,6 @@ public final class ConfigurationDialog extends WeakBase
     		return xDialogProvider.createDialogWithHandler(sDialogUrl, this);
     	}
     	catch (Exception e) {
-    		System.out.println(e.getMessage());
     		return null;
     	}
      }
@@ -278,7 +325,7 @@ public final class ConfigurationDialog extends WeakBase
     	return false;
     }
     
-    private void deleteCurrentItem(String sListName) {
+    private boolean deleteCurrentItem(String sListName) {
     	String[] sItems = dlg.getListBoxStringItemList(sListName);
     	short nSelected = dlg.getListBoxSelectedItem(sListName);
     	if (nSelected>=0 && deleteItem()) {
@@ -293,7 +340,9 @@ public final class ConfigurationDialog extends WeakBase
     		dlg.setListBoxStringItemList(sListName, sNewItems);
     		short nNewSelected = nSelected<nOldLen-1 ? nSelected : (short)(nSelected-1);
 			dlg.setListBoxSelectedItem(sListName, nNewSelected);
+			return true;
     	}
+    	return false;
     }
     
     private String newItem() {
@@ -310,17 +359,25 @@ public final class ConfigurationDialog extends WeakBase
     	return null;
     }
     
-    private void appendItem(String sListName) {
+    private String appendItem(String sListName) {
     	String[] sItems = dlg.getListBoxStringItemList(sListName);
     	String sNewItem = newItem();
     	if (sNewItem!=null) {
     		int nOldLen = sItems.length;
+    		for (short i=0; i<nOldLen; i++) {
+    			if (sNewItem.equals(sItems[i])) {
+    				// Item already exists, select the existing one
+    				dlg.setListBoxSelectedItem(sListName, i);
+    				return null;
+    			}
+    		}
     		String[] sNewItems = new String[nOldLen+1];
     		System.arraycopy(sItems, 0, sNewItems, 0, nOldLen);
     		sNewItems[nOldLen]=sNewItem;
     		dlg.setListBoxStringItemList(sListName, sNewItems);
     		dlg.setListBoxSelectedItem(sListName, (short)nOldLen);
     	}
+    	return sNewItem;
     }
     
 	// Load the user configuration from file
@@ -451,7 +508,7 @@ public final class ConfigurationDialog extends WeakBase
     	dlg.setCheckBoxStateAsBoolean("NoPreamble","true".equals(config.getOption("no_preamble")));
     	dlg.setTextFieldText("Documentclass",config.getOption("documentclass"));
     	dlg.setTextFieldText("GlobalOptions",config.getOption("global_options"));
-    	//TODO: dlg.setTextFieldText("CustomPreamble",config.getLongOption("custom-preamble"));
+    	dlg.setTextFieldText("CustomPreamble",config.getOption("custom-preamble"));
     	enableDocumentclassControls();
     }
     
@@ -459,7 +516,7 @@ public final class ConfigurationDialog extends WeakBase
     	config.setOption("no_preamble", Boolean.toString(dlg.getCheckBoxStateAsBoolean("NoPreamble")));
     	config.setOption("documentclass", dlg.getTextFieldText("Documentclass"));
     	config.setOption("global_options", dlg.getTextFieldText("GlobalOptions"));
-    	//TODO: config.setLongOption("custom-preamble", dlg.getTextFieldText("CustomPreamble"));
+    	config.setOption("custom-preamble", dlg.getTextFieldText("CustomPreamble"));
     }
 
     private void enableDocumentclassControls() {
@@ -587,7 +644,6 @@ public final class ConfigurationDialog extends WeakBase
     // use_ifsym, use_bbding
     
     private void loadFonts() {
-    	System.out.println("Loading fonts, f.eks. use_pifont="+config.getOption("use_pifont"));
     	dlg.setCheckBoxStateAsBoolean("UseFontspec","true".equals(config.getOption("use_fontspec")));
     	dlg.setCheckBoxStateAsBoolean("UsePifont","true".equals(config.getOption("use_pifont")));
     	dlg.setCheckBoxStateAsBoolean("UseTipa","true".equals(config.getOption("use_tipa")));
@@ -764,30 +820,90 @@ public final class ConfigurationDialog extends WeakBase
     // text replacements and math symbol definitions
     
     private void loadTextAndMath() {
-    	Set<String> names = config.getComplexOptions("string-replace");
-    	String[] sNames = new String[names.size()];
+    	dlg.setCheckBoxStateAsBoolean("UseOoomath","true".equals(config.getOption("use_ooomath")));
+    	
+       	Set<String> symbolnames = config.getComplexOption("math-symbol-map").keySet();
+    	String[] sSymbolNames = new String[symbolnames.size()];
     	int i=0;
-    	for (String s : names) {
-    		sNames[i++] = s;
+    	for (String s : symbolnames) {
+    		sSymbolNames[i++] = s;
     	}
-    	System.out.println("Found "+sNames.length+" string replacements");
+    	dlg.setListBoxStringItemList("MathSymbolName", sSymbolNames);
+    	dlg.setListBoxSelectedItem("MathSymbolName", (short)0);
+    	sCurrentMathSymbol = sSymbolNames[0];
+ 
+    	Set<String> names = config.getComplexOption("string-replace").keySet();
+    	String[] sNames = new String[names.size()];
+    	int j=0;
+    	for (String s : names) {
+    		sNames[j++] = s;
+    	}
     	dlg.setListBoxStringItemList("TextInput", sNames);
     	dlg.setListBoxSelectedItem("TextInput", (short)0);
+    	sCurrentText = sNames[0];
+    	
+    	dlg.setTextFieldText("TabStopLaTeX", config.getOption("tabstop"));
+    	
     	enableTextAndMathControls();
     }
     
     private void saveTextAndMath() {
+    	config.setOption("use_ooomath", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseOoomath")));
     	
+    	// Save the current math symbol in our cache
+    	if (sCurrentMathSymbol!=null) {
+    		Map<String,String> attr = new HashMap<String,String>();
+    		attr.put("latex", dlg.getTextFieldText("MathLaTeX"));
+    		mathSymbols.put(sCurrentMathSymbol, attr);
+    	}
+    	
+    	// Save the current string replace in our cache
+    	if (sCurrentText!=null) {
+    		Map<String,String> attr = new HashMap<String,String>();
+    		attr.put("latex-code", dlg.getTextFieldText("LaTeX"));
+    		attr.put("fontenc", "any");
+    		stringReplace.put(sCurrentText, attr);
+    	}
+    	
+    	config.setOption("tabstop", dlg.getTextFieldText("TabStopLaTeX"));
     }
     
     private void enableTextAndMathControls() {
+    	// Get the current math symbol, if any
+    	short nSymbolItem = dlg.getListBoxSelectedItem("MathSymbolName");
+    	if (nSymbolItem>=0) {
+    		sCurrentMathSymbol = dlg.getListBoxStringItemList("MathSymbolName")[nSymbolItem];
+    		
+    		Map<String,String> attributes = mathSymbols.get(sCurrentMathSymbol);
+    		dlg.setTextFieldText("MathLaTeX", attributes.get("latex"));
+    		dlg.setControlEnabled("DeleteSymbolButton", true);
+    	}
+    	else {
+    		sCurrentMathSymbol = null;
+    		dlg.setTextFieldText("MathLaTeX", "");
+    		dlg.setControlEnabled("DeleteSymbolButton", false);
+    	}
+    	
+    	// Get the current input string, if any
+    	short nItem = dlg.getListBoxSelectedItem("TextInput");
+    	if (nItem>=0) {
+    		sCurrentText = dlg.getListBoxStringItemList("TextInput")[nItem];
+    		
+    		Map<String,String> attributes = stringReplace.get(sCurrentText);
+    		dlg.setTextFieldText("LaTeX", attributes.get("latex-code"));
+    		//dlg.setTextFieldText("Fontenc", attributes.get("fontenc"));
+    		dlg.setControlEnabled("DeleteTextButton",
+    				!"\u00A0!".equals(sCurrentText) && !"\u00A0?".equals(sCurrentText) && 
+    				!"\u00A0:".equals(sCurrentText) && !"\u00A0;".equals(sCurrentText) &&
+    				!"\u00A0\u2014".equals(sCurrentText));
+    	}
+    	else {
+    		sCurrentText = null;
+    		dlg.setTextFieldText("LaTeX", "");
+    		//dlg.setTextFieldText("Fontenc", "any");
+    		dlg.setControlEnabled("DeleteTextButton", false);
+    	}
     	
     }
-    
-
-
 	
 }
-
-
-

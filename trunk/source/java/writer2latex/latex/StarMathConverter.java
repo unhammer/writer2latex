@@ -18,14 +18,14 @@
  *
  *  Copyright: 2002-2009 by Henrik Just
  *  
- *  Version 1.0 (2009-04-08)
+ *  Version 1.2 (2009-09-24)
  *
  *  All Rights Reserved.
  */
 
 package writer2latex.latex;
 
-import java.util.Hashtable;
+import java.util.Map;
 import writer2latex.util.*;
 import writer2latex.latex.i18n.ClassicI18n;
 import writer2latex.latex.i18n.I18n;
@@ -698,7 +698,7 @@ public final class StarMathConverter implements writer2latex.api.StarMathConvert
     private SmTokenTable keywords=new SmTokenTable(SmTokenTable.keywords);
     private SmTokenTable symbols=new SmTokenTable(SmTokenTable.symbols);
     private LaTeXConfig config;
-    private Hashtable<String, String> configSymbols;
+    private Map<String, String> configSymbols;
     private boolean bUseColor;
     private SmToken curToken=new SmToken(); // contains the data of the current token
     private SimpleInputBuffer buffer; // contains the starmath formula

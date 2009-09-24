@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-03-02) 
+ *  Version 1.2 (2009-09-24) 
  *
  */
 
@@ -29,11 +29,9 @@ package writer2latex.latex;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
-import java.util.LinkedList;
 
 import writer2latex.api.Config;
 import writer2latex.api.ConverterFactory;
-//import writer2latex.api.ConverterResult;
 import writer2latex.base.ConverterBase;
 import writer2latex.latex.i18n.ClassicI18n;
 import writer2latex.latex.i18n.I18n;
@@ -226,10 +224,9 @@ public final class ConverterPalette extends ConverterBase {
         mathmlCv.appendDeclarations(packages,declarations);
 
         // Add custom preamble
-        LinkedList<String> customPreamble = config.getCustomPreamble();
-        int nCPLen = customPreamble.size();
-        for (int i=0; i<nCPLen; i++) {
-            declarations.append( customPreamble.get(i) ).nl();
+        String sCustomPreamble = config.getCustomPreamble();
+        if (sCustomPreamble.length()>0) {
+        	declarations.append(sCustomPreamble).nl();
         }
 
         // Set \title, \author and \date (for \maketitle)

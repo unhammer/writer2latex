@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-20)
+ *  Version 1.2 (2009-09-22)
  *
  */
 
@@ -31,8 +31,6 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.IllegalArgumentException;
-import java.util.Map;
-import java.util.Set;
 
 /** This is an interface for configuration of a {@link Converter}.
  *  A configuration always supports simple name/value options.
@@ -97,27 +95,12 @@ public interface Config {
 	 */
 	public String getOption(String sName);
 	
-	/** Set a complex option
-	 * 
-	 * @param sGroup the group to which this option belongs
-	 * @param sName the name of this option
-	 * @param attributes the attributes defining the values of this option
-	 */
-	public void setComplexOption(String sGroup, String sName, Map<String,String> attributes);
-
 	/** Get a complex option
 	 * 
-	 * @param sGroup the group to which this option belongs
-	 * @param sName the name of this option
-	 * @return the attributes defining the values of this option
+	 * @param sName the name of the complex option
+	 * @return
 	 */
-	public Map<String,String> getComplexOption(String sGroup, String sName);
+	public ComplexOption getComplexOption(String sName);
 	
-	/** Get the collection of complex options in a specific groups
-	 * 
-	 * @param sGroup the name of the group of options
-	 * @return the names of the currently defined options in this group
-	 */
-	public Set<String> getComplexOptions(String sGroup);
 }
 
