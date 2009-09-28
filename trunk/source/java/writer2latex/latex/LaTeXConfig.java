@@ -20,14 +20,13 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-24)
+ *  Version 1.2 (2009-09-28)
  *
  */
 
 package writer2latex.latex;
 
 import java.util.HashMap;
-import java.util.Enumeration;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,12 +45,17 @@ import writer2latex.latex.util.StyleMap;
 import writer2latex.util.Misc;
 
 public class LaTeXConfig extends writer2latex.base.ConfigBase {
+	/////////////////////////////////////////////////////////////////////////
+	// I. Define items needed by ConfigBase
+	
     protected int getOptionCount() { return 63; }
     protected String getDefaultConfigPath() { return "/writer2latex/latex/config/"; } 
     
-	// Override getter and setter methods for options in order to: 
+	/////////////////////////////////////////////////////////////////////////
+	// II. Override getter and setter methods for simple options in order to: 
     //  - Treat the custom preamble like a regular option, even though the xml representation is different
-    //  - Be backwards compatible (renamed option)
+    //  - Be backwards compatible (renamed the option keep_image_size) 
+    
     @Override public void setOption(String sName,String sValue) {
     	if (sName.equals("custom-preamble")) {
     		sCustomPreamble = sValue;
@@ -71,6 +75,9 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     		return super.getOption(sName);
     	}
     }
+    
+	/////////////////////////////////////////////////////////////////////////
+    // III. Declare all constants
     
     // Backend
     public static final int GENERIC = 0;
@@ -103,8 +110,6 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     public static final int CUSTOM = 4;
 	
     // Options
-    protected int OPTION_COUNT = 63;
-
     private static final int BACKEND = 0;
     private static final int NO_PREAMBLE = 1;
     private static final int NO_INDEX = 2;
@@ -168,21 +173,29 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     private static final int SPLIT_TOPLEVEL_SECTIONS = 60;
     private static final int SAVE_IMAGES_IN_SUBDIR = 61;
     private static final int DEBUG = 62;
-
-    protected String sCustomPreamble = "";
-    protected StyleMap par = new StyleMap();
-    protected StyleMap parBlock = new StyleMap();
-    protected StyleMap text = new StyleMap();
-    protected StyleMap list = new StyleMap();
-    protected StyleMap listItem = new StyleMap();
-    protected StyleMap textAttr = new StyleMap();
-    protected HeadingMap headingMap = new HeadingMap(5);
     
+	/////////////////////////////////////////////////////////////////////////
+    // IV. Our options data
+
+    private ComplexOption headingMap;
+    private ComplexOption parMap;
+    private ComplexOption parBlockMap;
+    private ComplexOption listMap;
+    private ComplexOption listItemMap;
+    private ComplexOption textMap;
+    private ComplexOption textAttrMap;
     private ComplexOption stringReplace;
     private ComplexOption mathSymbols;
+    private String sCustomPreamble = "";
 	
+	/////////////////////////////////////////////////////////////////////////
+    // V. The rather long constructor setting all defaults
+    
+    /** Construct a new <code>LaTeXConfig</code> with default values for all options
+     */
     public LaTeXConfig() {
         super();
+        
         // create options with default values
         options[NO_PREAMBLE] = new BooleanOption("no_preamble","false");
         options[NO_INDEX] = new BooleanOption("no_index","false");
@@ -297,19 +310,49 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
         options[SPLIT_TOPLEVEL_SECTIONS] = new BooleanOption("split_toplevel_sections","false");
         options[SAVE_IMAGES_IN_SUBDIR] = new BooleanOption("save_images_in_subdir","false");
         options[DEBUG] = new BooleanOption("debug","false");
-        // Headings for article class:
-        headingMap.setLevelData(1,"section",1);
-        headingMap.setLevelData(2,"subsection",2);
-        headingMap.setLevelData(3,"subsubsection",3);
-        headingMap.setLevelData(4,"paragraph",4);
-        headingMap.setLevelData(5,"subparagraph",5);
+
+        // Complex options - heading map
+        headingMap = addComplexOption("heading-map");
+        Map<String,String> attr = new HashMap<String,String>();
+        attr.put("name", "section");
+        attr.put("level", "1");
+        headingMap.put("1", attr);
         
-        // Complex options
+        attr = new HashMap<String,String>();
+        attr.put("name", "subsection");
+        attr.put("level", "2");
+        headingMap.put("2", attr);
+        
+        attr = new HashMap<String,String>();
+        attr.put("name", "subsubsection");
+        attr.put("level", "3");
+        headingMap.put("3", attr);
+        
+        attr = new HashMap<String,String>();
+        attr.put("name", "paragraph");
+        attr.put("level", "4");
+        headingMap.put("4", attr);
+        
+        attr = new HashMap<String,String>();
+        attr.put("name", "subparagraph");
+        attr.put("level", "5");
+        headingMap.put("5", attr);
+        
+        // Complex options - style maps
+        parMap = addComplexOption("paragraph-map");
+        parBlockMap = addComplexOption("paragraph-block-map");
+        listMap = addComplexOption("list-map");
+        listItemMap = addComplexOption("list-item-map");
+        textMap = addComplexOption("text-map");
+        textAttrMap = addComplexOption("text-attribute-map");
+        
+        // Complex options - string replace
         stringReplace=addComplexOption("string-replace");
+        
         // Standard string replace:
         // Fix french spacing; replace nonbreaking space 
         // right before em-dash, !, ?, : and ; (babel handles this)
-        Map<String,String> attr = new HashMap<String,String>();
+        attr = new HashMap<String,String>();
         attr.put("fontenc", "any");
         attr.put("latex-code", " \u2014");
         stringReplace.put("\u00A0\u2014",attr);
@@ -340,50 +383,80 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
         //stringReplace.put("\u00AB\u00A0","\u00AB ",I18n.readFontencs("any"));
         //stringReplace.put("\u00A0\u00BB"," \u00BB",I18n.readFontencs("any"));
         
+        // Complex options - math user defined symbols
         mathSymbols = addComplexOption("math-symbol-map");
     }
+    
+	////////////////////////////////////////////////////////////////////////////
+    // VI. Provide methods to fill in the gaps in the supers read and write methods
     	
     protected void readInner(Element elm) {
-        if (elm.getTagName().equals("style-map")) {
+        if (elm.getTagName().equals("heading-map")) {
+        	// Unlike other complex options, a heading map is completely replaced
+            headingMap.clear();
+        	Node child = elm.getFirstChild();
+        	while (child!=null) {
+        		if (child.getNodeType()==Node.ELEMENT_NODE) {
+        			Element childElm = (Element) child;
+        			if (childElm.getTagName().equals("heading-level-map")) {
+        				if (childElm.hasAttribute("writer-level")) {
+        					Map<String,String> attr = new HashMap<String,String>();
+        					attr.put("name",childElm.getAttribute("name"));
+        					attr.put("level",childElm.getAttribute("level"));
+        					headingMap.put(childElm.getAttribute("writer-level"), attr);
+        				}        				
+        			}
+        		}
+        		child = child.getNextSibling();
+        	}
+        }
+        else if (elm.getTagName().equals("style-map")) {
             String sName = elm.getAttribute("name");
             String sFamily = elm.getAttribute("family");
             if (sFamily.length()==0) { // try old name
                 sFamily = elm.getAttribute("class");
             }
-            String sBefore = elm.getAttribute("before");
-            String sAfter = elm.getAttribute("after");
-            boolean bLineBreak = !"false".equals(elm.getAttribute("line-break"));
-            boolean bVerbatim = "true".equals(elm.getAttribute("verbatim"));
+
+            Map<String,String> attr = new HashMap<String,String>();
+            attr.put("before", elm.getAttribute("before"));
+            attr.put("after", elm.getAttribute("after"));
+            
             if ("paragraph".equals(sFamily)) {
-                par.put(sName,sBefore,sAfter,bLineBreak,bVerbatim);
+            	if (elm.hasAttribute("line-break")) { attr.put("line-break", elm.getAttribute("line-break")); }
+            	if (elm.hasAttribute("verbatim")) { attr.put("verbatim", elm.getAttribute("verbatim")); }
+                parMap.put(sName, attr);
             }
             if ("paragraph-block".equals(sFamily)) {
-                String sNext = elm.getAttribute("next");
-                parBlock.put(sName,sBefore,sAfter,sNext,bVerbatim);
-            }
-            else if ("text".equals(sFamily)) {
-                text.put(sName,sBefore,sAfter,false,bVerbatim);
+                attr.put("next", elm.getAttribute("next"));
+            	if (elm.hasAttribute("verbatim")) { attr.put("verbatim", elm.getAttribute("verbatim")); }
+                parBlockMap.put(sName, attr);
             }
             else if ("list".equals(sFamily)) {
-                list.put(sName,sBefore,sAfter);
+            	listMap.put(sName, attr);
             }
             else if ("listitem".equals(sFamily)) {
-                listItem.put(sName,sBefore,sAfter);
+                listItemMap.put(sName, attr);
+            }
+            else if ("text".equals(sFamily)) {
+            	if (elm.hasAttribute("verbatim")) { attr.put("verbatim", elm.getAttribute("verbatim")); }
+            	textMap.put(sName, attr);
             }
             else if ("text-attribute".equals(sFamily)) {
-            	textAttr.put(sName, sBefore, sAfter);
+            	textAttrMap.put(sName, attr);
             }
         }
-        else if (elm.getTagName().equals("heading-map")) {
-            readHeadingMap(elm);
-        }
         else if (elm.getTagName().equals("string-replace")) {
-        	// TODO: ConfigBase should handle this
             String sInput = elm.getAttribute("input");
             Map<String,String> attributes = new HashMap<String,String>();
             attributes.put("latex-code", elm.getAttribute("latex-code"));
             attributes.put("fontenc", elm.getAttribute("fontenc"));
             stringReplace.put(sInput,attributes);
+        }
+        else if (elm.getTagName().equals("math-symbol-map")) {
+            String sName = elm.getAttribute("name");
+            Map<String,String> attr = new HashMap<String,String>();
+            attr.put("latex", elm.getAttribute("latex"));
+            mathSymbols.put(sName, attr);
         }
         else if (elm.getTagName().equals("custom-preamble")) {
         	StringBuffer buf = new StringBuffer();
@@ -396,61 +469,36 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
             }
             sCustomPreamble = buf.toString();
         }
-        else if (elm.getTagName().equals("math-symbol-map")) {
-            String sName = elm.getAttribute("name");
-            Map<String,String> attr = new HashMap<String,String>();
-            attr.put("latex", elm.getAttribute("latex"));
-            mathSymbols.put(sName, attr);
-        }
     }
 
-    public void readHeadingMap(Element node) {
-        int nMaxLevel = Misc.getPosInteger(node.getAttribute("max-level"),0);
-        headingMap.reset(nMaxLevel);
-        Node child = node.getFirstChild();
-        while (child!=null) {
-            if (child.getNodeType()==Node.ELEMENT_NODE) {
-                Element elm = (Element) child;
-                if (elm.getTagName().equals("heading-level-map")) {
-                    int nWriterLevel = Misc.getPosInteger(elm.getAttribute("writer-level"),1);
-                    String sName = elm.getAttribute("name");
-                    int nLevel = Misc.getPosInteger(elm.getAttribute("level"),0);
-                    headingMap.setLevelData(nWriterLevel,sName,nLevel);
-                }
-            }
-            child = child.getNextSibling();
-        }
-    }
-    
     protected void writeInner(Document dom) {
-        // Write math symbol map
-    	for (String sName : mathSymbols.keySet()) {
-            String sLatex = mathSymbols.get(sName).get("latex");
-            Element msNode = dom.createElement("math-symbol-map");
-            msNode.setAttribute("name",sName);
-	        msNode.setAttribute("latex",sLatex);
-            dom.getDocumentElement().appendChild(msNode);
-        }
-
-        writeStyleMap(dom,par,"paragraph");
-        writeStyleMap(dom,parBlock,"paragraph-block");
-        writeStyleMap(dom,text,"text");
-        writeStyleMap(dom,list,"list");
-        writeStyleMap(dom,listItem,"listitem");
-        writeStyleMap(dom,textAttr,"text-attribute");
-
+        // Write heading map
+    	int nMaxLevel = 0;
+    	while (nMaxLevel<10 && headingMap.get(Integer.toString(nMaxLevel+1))!=null) { nMaxLevel++; }
+    	
         Element hmNode = dom.createElement("heading-map");
-        hmNode.setAttribute("max-level",Integer.toString(headingMap.getMaxLevel()));
+        // This attribute is not used anymore, but we keep it for backwards compatibility
+        hmNode.setAttribute("max-level",Integer.toString(nMaxLevel));
         dom.getDocumentElement().appendChild(hmNode);
-        for (int i=1; i<=headingMap.getMaxLevel(); i++) {
+        for (int i=1; i<=nMaxLevel; i++) {
             Element hlmNode = dom.createElement("heading-level-map");
-            hlmNode.setAttribute("writer-level",Integer.toString(i));
-            hlmNode.setAttribute("name",headingMap.getName(i));
-            hlmNode.setAttribute("level",Integer.toString(headingMap.getLevel(i)));
+            String sWriterLevel = Integer.toString(i);
+            hlmNode.setAttribute("writer-level",sWriterLevel);
+            Map<String,String> attr = headingMap.get(sWriterLevel);
+            hlmNode.setAttribute("name",attr.get("name"));
+            hlmNode.setAttribute("level",attr.get("level"));
             hmNode.appendChild(hlmNode);
         }
         
-        // TODO: ConfigBase should handle this
+    	// Write style maps
+        writeStyleMap(dom,parMap,"paragraph");
+        writeStyleMap(dom,parBlockMap,"paragraph-block");
+        writeStyleMap(dom,listMap,"list");
+        writeStyleMap(dom,listItemMap,"listitem");
+        writeStyleMap(dom,textMap,"text");
+        writeStyleMap(dom,textAttrMap,"text-attribute");
+
+        // Write string replace
         Set<String> inputStrings = stringReplace.keySet();
         for (String sInput : inputStrings) {
         	Map<String,String> attributes = stringReplace.get(sInput);
@@ -461,34 +509,82 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
             dom.getDocumentElement().appendChild(srNode);
         }
 		
-        Element cp = dom.createElement("custom-preamble");
+        // Write math symbol map
+    	for (String sName : mathSymbols.keySet()) {
+            String sLatex = mathSymbols.get(sName).get("latex");
+            Element msNode = dom.createElement("math-symbol-map");
+            msNode.setAttribute("name",sName);
+	        msNode.setAttribute("latex",sLatex);
+            dom.getDocumentElement().appendChild(msNode);
+        }
+
+    	// Write custom preamble
+    	Element cp = dom.createElement("custom-preamble");
         cp.appendChild(dom.createTextNode( sCustomPreamble));
         dom.getDocumentElement().appendChild(cp);
     }
 
-    private void writeStyleMap(Document dom, StyleMap sm, String sFamily) {
-        Enumeration<String> smEnum = sm.getNames();
-        while (smEnum.hasMoreElements()) {
-            String sName = smEnum.nextElement();
+    private void writeStyleMap(Document dom, ComplexOption co, String sFamily) {
+    	for (String sName : co.keySet()) {
+    		Map<String,String> attr = co.get(sName);
             Element smNode = dom.createElement("style-map");
             smNode.setAttribute("name",sName);
 	        smNode.setAttribute("family",sFamily);
-            smNode.setAttribute("before",sm.getBefore(sName));
-            smNode.setAttribute("after",sm.getAfter(sName));
-            if (sm.getNext(sName)!=null) {
-                smNode.setAttribute("next",sm.getNext(sName));
+            smNode.setAttribute("before",attr.containsKey("before") ? attr.get("before") : "");
+            smNode.setAttribute("after",attr.containsKey("after") ? attr.get("after") : "");
+            if (attr.containsKey("next")) {
+                smNode.setAttribute("next",attr.get("next"));
             }
-            if (!sm.getLineBreak(sName)) {
-                smNode.setAttribute("line-break","false");
+            if (attr.containsKey("line-break")) {
+                smNode.setAttribute("line-break",attr.get("line-break"));
             }
-            if (sm.getVerbatim(sName)) {
-                smNode.setAttribute("verbatim","true");
+            if (attr.containsKey("verbatim")) {
+                smNode.setAttribute("verbatim",attr.get("verbatim"));
             }
             dom.getDocumentElement().appendChild(smNode);
         }
     }
 	
-    // Convenience accessor methods
+	/////////////////////////////////////////////////////////////////////////
+    // VII. Convenience accessor methods
+    
+    public HeadingMap getHeadingMap() {
+    	int nMaxLevel = 0;
+    	while (nMaxLevel<10 && headingMap.get(Integer.toString(nMaxLevel+1))!=null) { nMaxLevel++; }
+
+    	HeadingMap map = new HeadingMap(nMaxLevel);
+        for (int i=1; i<=nMaxLevel; i++) {
+            String sWriterLevel = Integer.toString(i);
+            Map<String,String> attr = headingMap.get(sWriterLevel);
+            String sName = attr.get("name");
+            int nLevel = Misc.getPosInteger(attr.get("level"),0);
+            map.setLevelData(i, sName, nLevel);
+        }
+        return map;
+    }
+    
+    // Get style maps
+    public StyleMap getParStyleMap() { return getStyleMap(parMap); }
+    public StyleMap getParBlockStyleMap() { return getStyleMap(parBlockMap); }
+    public StyleMap getListStyleMap() { return getStyleMap(listMap); }
+    public StyleMap getListItemStyleMap() { return getStyleMap(listItemMap); }
+    public StyleMap getTextAttributeStyleMap() { return getStyleMap(textAttrMap); }
+    public StyleMap getTextStyleMap() { return getStyleMap(textMap); }
+    
+    private StyleMap getStyleMap(ComplexOption co) {
+    	StyleMap map = new StyleMap();
+    	for (String sName : co.keySet()) {
+    		Map<String,String> attr = co.get(sName);
+    		String sBefore = attr.containsKey("before") ? attr.get("before") : "";
+    		String sAfter = attr.containsKey("after") ? attr.get("after") : "";
+    		String sNext = attr.containsKey("next") ? attr.get("next") : "";
+    		boolean bLineBreak = !"false".equals(attr.get("line-break"));
+    		boolean bVerbatim = "true".equals(attr.get("verbatim"));
+    		map.put(sName, sBefore, sAfter, sNext, bLineBreak, bVerbatim);
+    	}
+    	return map;
+    }
+
 
     // Return current string replace as a trie
     public ReplacementTrie getStringReplace() {
@@ -503,6 +599,17 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
         return trie;
     }
     
+    // Get the math symbols as a simple Map
+    public Map<String, String> getMathSymbols() {
+    	Map<String,String> map = new HashMap<String,String>();
+    	for (String sName : mathSymbols.keySet()) {
+    		String sLatex = mathSymbols.get(sName).get("latex");
+    		map.put(sName, sLatex);
+    	}
+    	return map;
+    }
+
+    // Get the custom preamble
     public String getCustomPreamble() { return sCustomPreamble; }
 
     // Common options
@@ -589,22 +696,5 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     public boolean splitToplevelSections() { return ((BooleanOption) options[SPLIT_TOPLEVEL_SECTIONS]).getValue(); }
     public boolean saveImagesInSubdir() { return ((BooleanOption) options[SAVE_IMAGES_IN_SUBDIR]).getValue(); }
 	
-    public Map<String, String> getMathSymbols() {
-    	Map<String,String> map = new HashMap<String,String>();
-    	for (String sName : mathSymbols.keySet()) {
-    		String sLatex = mathSymbols.get(sName).get("latex");
-    		map.put(sName, sLatex);
-    	}
-    	return map;
-    }
-
-    public StyleMap getParStyleMap() { return par; }
-    public StyleMap getParBlockStyleMap() { return parBlock; }
-    public StyleMap getTextStyleMap() { return text; }
-    public StyleMap getListStyleMap() { return list; }
-    public StyleMap getListItemStyleMap() { return listItem; }
-    public StyleMap getTextAttributeStyleMap() { return textAttr; }
-    public HeadingMap getHeadingMap() { return headingMap; }
-
 }
 

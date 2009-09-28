@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2007 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2007-07-30) 
+ *  Version 1.2 (2009-09-28) 
  * 
  */
 
@@ -32,6 +32,16 @@ import java.util.Enumeration;
 public class StyleMap {
     private Hashtable<String, StyleMapItem> items = new Hashtable<String, StyleMapItem>();
 	
+    public void put(String sName, String sBefore, String sAfter, String sNext, boolean bLineBreak, boolean bVerbatim) {
+        StyleMapItem item = new StyleMapItem();
+        item.sBefore = sBefore;
+        item.sAfter = sAfter;
+        item.sNext = ";"+sNext+";";
+        item.bLineBreak = bLineBreak;
+        item.bVerbatim = bVerbatim;
+        items.put(sName,item);
+    }
+
     public void put(String sName, String sBefore, String sAfter, boolean bLineBreak, boolean bVerbatim) {
         StyleMapItem item = new StyleMapItem();
         item.sBefore = sBefore;

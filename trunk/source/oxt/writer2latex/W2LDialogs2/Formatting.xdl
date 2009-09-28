@@ -24,5 +24,20 @@
   <dlg:checkbox dlg:id="UseUlem" dlg:tab-index="6" dlg:left="10" dlg:top="78" dlg:width="240" dlg:height="12" dlg:value="Use ulem.sty (underline and strike out text)" dlg:checked="false"/>
   <dlg:checkbox dlg:id="UseTitlesec" dlg:tab-index="7" dlg:left="10" dlg:top="92" dlg:width="240" dlg:height="12" dlg:value="Use titlesec.sty to format headings" dlg:checked="false"/>
   <dlg:checkbox dlg:id="UseTitletoc" dlg:tab-index="8" dlg:left="10" dlg:top="106" dlg:width="240" dlg:height="12" dlg:value="Use titletoc.sty to format content tables" dlg:checked="false"/>
+  <dlg:text dlg:id="FormattingAttributeLabel" dlg:tab-index="9" dlg:left="10" dlg:top="120" dlg:width="100" dlg:height="12" dlg:value="Character formatting"/>
+  <dlg:menulist dlg:id="FormattingAttribute" dlg:tab-index="10" dlg:left="120" dlg:top="118" dlg:width="130" dlg:height="12" dlg:spin="true">
+   <dlg:menupopup>
+    <dlg:menuitem dlg:value="Bold"/>
+    <dlg:menuitem dlg:value="Italics"/>
+    <dlg:menuitem dlg:value="Small caps"/>
+    <dlg:menuitem dlg:value="Superscript"/>
+    <dlg:menuitem dlg:value="Subscript"/>
+   </dlg:menupopup>
+  </dlg:menulist>
+  <dlg:text dlg:id="BeforeLabel" dlg:tab-index="11" dlg:left="15" dlg:top="148" dlg:width="95" dlg:height="12" dlg:value="LaTeX code before"/>
+  <dlg:textfield dlg:id="Before" dlg:tab-index="12" dlg:left="120" dlg:top="146" dlg:width="130" dlg:height="12"/>
+  <dlg:text dlg:id="AfterLabel" dlg:tab-index="13" dlg:left="15" dlg:top="162" dlg:width="95" dlg:height="12" dlg:value="LaTeX code after"/>
+  <dlg:textfield dlg:id="After" dlg:tab-index="14" dlg:left="120" dlg:top="160" dlg:width="130" dlg:height="12"/>
+  <dlg:checkbox dlg:id="CustomAttribute" dlg:tab-index="15" dlg:left="15" dlg:top="134" dlg:width="235" dlg:height="12" dlg:value="Apply custom LaTeX code" dlg:checked="false"/>
  </dlg:bulletinboard>
 </dlg:window>

@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-23)
+ *  Version 1.2 (2009-09-27)
  *
  */ 
  
@@ -29,6 +29,8 @@ package org.openoffice.da.comp.writer2latex;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.Collator;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -828,6 +830,7 @@ public final class ConfigurationDialog extends WeakBase
     	for (String s : symbolnames) {
     		sSymbolNames[i++] = s;
     	}
+    	sortStringArray(sSymbolNames);
     	dlg.setListBoxStringItemList("MathSymbolName", sSymbolNames);
     	dlg.setListBoxSelectedItem("MathSymbolName", (short)0);
     	sCurrentMathSymbol = sSymbolNames[0];
@@ -838,6 +841,7 @@ public final class ConfigurationDialog extends WeakBase
     	for (String s : names) {
     		sNames[j++] = s;
     	}
+    	sortStringArray(sNames);
     	dlg.setListBoxStringItemList("TextInput", sNames);
     	dlg.setListBoxSelectedItem("TextInput", (short)0);
     	sCurrentText = sNames[0];
@@ -904,6 +908,13 @@ public final class ConfigurationDialog extends WeakBase
     		dlg.setControlEnabled("DeleteTextButton", false);
     	}
     	
+    }
+    
+    // Utilities
+    private void sortStringArray(String[] theArray) {
+    	// TODO: Get locale from OOo rather than the system
+        Collator collator = Collator.getInstance();
+    	Arrays.sort(theArray, collator);
     }
 	
 }
