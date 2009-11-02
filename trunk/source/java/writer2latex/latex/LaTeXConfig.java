@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-28)
+ *  Version 1.2 (2009-11-02)
  *
  */
 
@@ -48,7 +48,7 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
 	/////////////////////////////////////////////////////////////////////////
 	// I. Define items needed by ConfigBase
 	
-    protected int getOptionCount() { return 63; }
+    protected int getOptionCount() { return 65; }
     protected String getDefaultConfigPath() { return "/writer2latex/latex/config/"; } 
     
 	/////////////////////////////////////////////////////////////////////////
@@ -129,50 +129,52 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     private static final int USE_COLORTBL = 16;
     private static final int USE_GEOMETRY = 17;
     private static final int USE_FANCYHDR = 18;
-    private static final int USE_HYPERREF = 19;
-    private static final int USE_CAPTION = 20;
-    private static final int USE_LONGTABLE = 21;
-    private static final int USE_SUPERTABULAR = 22;
-    private static final int USE_TABULARY = 23;
-    private static final int USE_ENDNOTES = 24;
-    private static final int USE_ULEM = 25;
-    private static final int USE_LASTPAGE = 26;
-    private static final int USE_TITLEREF = 27;
-    private static final int USE_OOOREF = 28;
-    private static final int USE_BIBTEX = 29;
-    private static final int BIBTEX_STYLE = 30;
-    private static final int EXTERNAL_BIBTEX_FILES = 31;
-    private static final int FORMATTING = 32;
-    private static final int PAGE_FORMATTING = 33;
-    private static final int OTHER_STYLES = 34;
-    private static final int IMAGE_CONTENT = 35;
-	private static final int TABLE_CONTENT = 36;
-	private static final int TABLE_FIRST_HEAD_STYLE = 37;
-	private static final int TABLE_HEAD_STYLE = 38;
-	private static final int TABLE_FOOT_STYLE = 39;
-	private static final int TABLE_LAST_FOOT_STYLE = 40;
-    private static final int IGNORE_HARD_PAGE_BREAKS = 41;
-    private static final int IGNORE_HARD_LINE_BREAKS = 42;
-    private static final int IGNORE_EMPTY_PARAGRAPHS = 43;
-    private static final int IGNORE_DOUBLE_SPACES = 44;
-    private static final int ALIGN_FRAMES = 45;
-    private static final int FLOAT_FIGURES = 46; 
-    private static final int FLOAT_TABLES = 47; 
-    private static final int FLOAT_OPTIONS = 48;
-    private static final int FIGURE_SEQUENCE_NAME = 49; 
-    private static final int TABLE_SEQUENCE_NAME = 50; 
-    private static final int IMAGE_OPTIONS = 51;
-    private static final int REMOVE_GRAPHICS_EXTENSION = 52;
-    private static final int ORIGINAL_IMAGE_SIZE = 53;
-    private static final int SIMPLE_TABLE_LIMIT = 54;
-    private static final int NOTES = 55;
-    private static final int METADATA = 56;
-    private static final int TABSTOP = 57;
-    private static final int WRAP_LINES_AFTER = 58;
-    private static final int SPLIT_LINKED_SECTIONS = 59;
-    private static final int SPLIT_TOPLEVEL_SECTIONS = 60;
-    private static final int SAVE_IMAGES_IN_SUBDIR = 61;
-    private static final int DEBUG = 62;
+    private static final int USE_TITLESEC = 19;
+    private static final int USE_TITLETOC = 20;
+    private static final int USE_HYPERREF = 21;
+    private static final int USE_CAPTION = 22;
+    private static final int USE_LONGTABLE = 23;
+    private static final int USE_SUPERTABULAR = 24;
+    private static final int USE_TABULARY = 25;
+    private static final int USE_ENDNOTES = 26;
+    private static final int USE_ULEM = 27;
+    private static final int USE_LASTPAGE = 28;
+    private static final int USE_TITLEREF = 29;
+    private static final int USE_OOOREF = 30;
+    private static final int USE_BIBTEX = 31;
+    private static final int BIBTEX_STYLE = 32;
+    private static final int EXTERNAL_BIBTEX_FILES = 33;
+    private static final int FORMATTING = 34;
+    private static final int PAGE_FORMATTING = 35;
+    private static final int OTHER_STYLES = 36;
+    private static final int IMAGE_CONTENT = 37;
+	private static final int TABLE_CONTENT = 38;
+	private static final int TABLE_FIRST_HEAD_STYLE = 39;
+	private static final int TABLE_HEAD_STYLE = 40;
+	private static final int TABLE_FOOT_STYLE = 41;
+	private static final int TABLE_LAST_FOOT_STYLE = 42;
+    private static final int IGNORE_HARD_PAGE_BREAKS = 43;
+    private static final int IGNORE_HARD_LINE_BREAKS = 44;
+    private static final int IGNORE_EMPTY_PARAGRAPHS = 45;
+    private static final int IGNORE_DOUBLE_SPACES = 46;
+    private static final int ALIGN_FRAMES = 47;
+    private static final int FLOAT_FIGURES = 48; 
+    private static final int FLOAT_TABLES = 49; 
+    private static final int FLOAT_OPTIONS = 50;
+    private static final int FIGURE_SEQUENCE_NAME = 51; 
+    private static final int TABLE_SEQUENCE_NAME = 52; 
+    private static final int IMAGE_OPTIONS = 53;
+    private static final int REMOVE_GRAPHICS_EXTENSION = 54;
+    private static final int ORIGINAL_IMAGE_SIZE = 55;
+    private static final int SIMPLE_TABLE_LIMIT = 56;
+    private static final int NOTES = 57;
+    private static final int METADATA = 58;
+    private static final int TABSTOP = 59;
+    private static final int WRAP_LINES_AFTER = 60;
+    private static final int SPLIT_LINKED_SECTIONS = 61;
+    private static final int SPLIT_TOPLEVEL_SECTIONS = 62;
+    private static final int SAVE_IMAGES_IN_SUBDIR = 63;
+    private static final int DEBUG = 64;
     
 	/////////////////////////////////////////////////////////////////////////
     // IV. Our options data
@@ -230,6 +232,8 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
         options[USE_COLORTBL] = new BooleanOption("use_colortbl","false");
         options[USE_GEOMETRY] = new BooleanOption("use_geometry","false");
         options[USE_FANCYHDR] = new BooleanOption("use_fancyhdr","false");
+        options[USE_TITLESEC] = new BooleanOption("use_titlesec","false");
+        options[USE_TITLETOC] = new BooleanOption("use_titletoc","false");
         options[USE_HYPERREF] = new BooleanOption("use_hyperref","true");
         options[USE_CAPTION] = new BooleanOption("use_caption","false");
         options[USE_LONGTABLE] = new BooleanOption("use_longtable","false");
@@ -342,7 +346,7 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
         parMap = addComplexOption("paragraph-map");
         parBlockMap = addComplexOption("paragraph-block-map");
         listMap = addComplexOption("list-map");
-        listItemMap = addComplexOption("list-item-map");
+        listItemMap = addComplexOption("listitem-map");
         textMap = addComplexOption("text-map");
         textAttrMap = addComplexOption("text-attribute-map");
         
@@ -637,6 +641,8 @@ public class LaTeXConfig extends writer2latex.base.ConfigBase {
     public boolean useColortbl() { return ((BooleanOption) options[USE_COLORTBL]).getValue(); }
     public boolean useGeometry() { return ((BooleanOption) options[USE_GEOMETRY]).getValue(); }
     public boolean useFancyhdr() { return ((BooleanOption) options[USE_FANCYHDR]).getValue(); }
+    public boolean useTitlesec() { return ((BooleanOption) options[USE_TITLESEC]).getValue(); }
+    public boolean useTitletoc() { return ((BooleanOption) options[USE_TITLETOC]).getValue(); }
     public boolean useHyperref() { return ((BooleanOption) options[USE_HYPERREF]).getValue(); }
     public boolean useCaption() { return ((BooleanOption) options[USE_CAPTION]).getValue(); }
     public boolean useLongtable() { return ((BooleanOption) options[USE_LONGTABLE]).getValue(); }

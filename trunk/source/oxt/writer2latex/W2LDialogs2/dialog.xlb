@@ -5,12 +5,12 @@
  <library:element library:name="Documentclass"/>
  <library:element library:name="Headings"/>
  <library:element library:name="Styles"/>
- <library:element library:name="Formatting"/>
+ <library:element library:name="DeleteDialog"/>
  <library:element library:name="Fonts"/>
  <library:element library:name="Pages"/>
  <library:element library:name="Tables"/>
  <library:element library:name="Figures"/>
  <library:element library:name="TextAndMath"/>
  <library:element library:name="NewDialog"/>
- <library:element library:name="DeleteDialog"/>
+ <library:element library:name="Characters"/>
 </library:library>

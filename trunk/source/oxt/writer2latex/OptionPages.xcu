@@ -103,10 +103,10 @@
           </prop>
         </node>
 
-        <node oor:name="org.openoffice.da.writer2latex.configuration.formatting" 
+        <node oor:name="org.openoffice.da.writer2latex.configuration.characters" 
           oor:op="fuse">
           <prop oor:name="Id">
-            <value>org.openoffice.da.writer2latex.configuration.formatting</value>
+            <value>org.openoffice.da.writer2latex.configuration.characters</value>
           </prop>
           <prop oor:name="GroupId">
             <value>org.openoffice.da.writer2latex.configuration</value>
@@ -115,10 +115,10 @@
             <value>3</value>
           </prop>
           <prop oor:name="Label">
-            <value xml:lang="en-US">Formatting</value>
+            <value xml:lang="en-US">Characters</value>
           </prop>
           <prop oor:name="OptionsPage">
-            <value>%origin%/W2LDialogs2/Formatting.xdl</value>
+            <value>%origin%/W2LDialogs2/Characters.xdl</value>
           </prop>
           <prop oor:name="EventHandlerService">
              <value>org.openoffice.da.writer2latex.ConfigurationDialog</value>

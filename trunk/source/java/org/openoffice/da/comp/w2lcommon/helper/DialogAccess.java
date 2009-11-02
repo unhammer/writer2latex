@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-06)
+ *  Version 1.2 (2009-11-02)
  *
  */ 
 
@@ -70,6 +70,17 @@ public class DialogAccess {
     }
 
     
+    public boolean getControlEnabled(String sControlName) {
+        XPropertySet xPropertySet = getControlProperties(sControlName);
+        try {
+            return ((Boolean) xPropertySet.getPropertyValue("Enabled")).booleanValue();
+        }
+        catch (Exception e) {
+            // Will fail if the control does not exist
+        	return false;
+        }
+    }
+	
     public void setControlEnabled(String sControlName, boolean bEnabled) {
         XPropertySet xPropertySet = getControlProperties(sControlName);
         try {

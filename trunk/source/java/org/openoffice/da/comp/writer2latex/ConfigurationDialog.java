@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-27)
+ *  Version 1.2 (2009-11-02)
  *
  */ 
  
@@ -68,15 +68,25 @@ import org.openoffice.da.comp.w2lcommon.helper.DialogAccess;
  */
 public final class ConfigurationDialog extends WeakBase
     implements XServiceInfo, XContainerWindowEventHandler {
+	
+	private String[] sFamilyNames = { "text", "paragraph", "paragraph-block", "list", "listitem" };
+	private String[] sAttributeNames = { "bold", "italics", "small-caps", "superscript", "subscipt" };
 
     private XComponentContext xContext;
     private XSimpleFileAccess2 sfa2;
     private String sConfigFileName = null;
     Config config;
     // Local cache of complex options
-    // ComplexOption paragraphMap = ... osv.
-    ComplexOption mathSymbols = new ComplexOption();
-    ComplexOption stringReplace = new ComplexOption();
+    ComplexOption[] styleMap;
+    ComplexOption attributeMap;
+    ComplexOption headingMap;
+    ComplexOption mathSymbols;
+    ComplexOption stringReplace;
+    short nCurrentFamily = -1;
+    String sCurrentStyleName = null;
+    short nCurrentAttribute = -1;
+    short nCurrentMaxLevel = -1;
+    short nCurrentWriterLevel = 0;
     String sCurrentMathSymbol = null;
     String sCurrentText = null;
     private String sTitle = null;
@@ -119,6 +129,14 @@ public final class ConfigurationDialog extends WeakBase
         
         // Create the configuration
         config = ConverterFactory.createConverter("application/x-latex").getConfig();
+        
+        // Initialize the local cache of complex options
+        styleMap = new ComplexOption[5];
+        for (int i=0; i<5; i++) { styleMap[i]=new ComplexOption(); }
+        attributeMap = new ComplexOption();
+        headingMap = new ComplexOption();
+        mathSymbols = new ComplexOption();
+        stringReplace = new ComplexOption();
     }
         	
     // Implement XContainerWindowEventHandler
@@ -134,60 +152,107 @@ public final class ConfigurationDialog extends WeakBase
             }
             // Documentclass page
             else if (sMethod.equals("NoPreambleChange")) {
-                enableDocumentclassControls();
+                updateDocumentclassControls();
                 return true;
             }
             // Headings page
             else if (sMethod.equals("MaxLevelChange")) {
-                enableHeadingsControls();
+            	saveHeadings();
+                updateHeadingsControls();
+                return true;
+            }
+            else if (sMethod.equals("WriterLevelChange")) {
+            	saveHeadings();
+                updateHeadingsControls();
+                return true;
+            }
+            else if (sMethod.equals("NoIndexChange")) {
+                updateHeadingsControls();
                 return true;
             }
             // Styles page
-            // Formatting page
-            else if (sMethod.equals("FormattingChange")) {
-            	enableFormattingControls();
-                return true;
+            else if (sMethod.equals("StyleFamilyChange")) {
+            	saveStyles();
+            	updateStylesControls();
+            	return true;
             }
-            else if (sMethod.equals("UseColorChange")) {
-            	enableFormattingControls();
-                return true;
+            else if (sMethod.equals("StyleNameChange")) {
+            	saveStyles();
+            	updateStylesControls();
+            	return true;
             }
+            else if (sMethod.equals("NewStyleClick")) {
+            	if (nCurrentFamily>-1) {
+            		String sNewName = appendItem("StyleName");
+            		if (sNewName!=null) {
+            			Map<String,String> attr = new HashMap<String,String>();
+            			attr.put("before", "");
+            			attr.put("after", "");
+            			attr.put("after", "");
+            			attr.put("verbatim", "");
+            			attr.put("line-break","");
+            			styleMap[nCurrentFamily].put(sNewName, attr);
+            		}
+            		saveStyles();
+            		updateStylesControls();
+            	}
+            	return true;
+            }
+            else if (sMethod.equals("DeleteStyleClick")) {
+            	if (nCurrentFamily>-1 && sCurrentStyleName!=null) {
+            		if (deleteCurrentItem("StyleName")) {
+            			styleMap[nCurrentFamily].remove(sCurrentStyleName);
+                		updateStylesControls();
+            		}
+            	}
+            	return true;
+            }
+            // Characters page
             else if (sMethod.equals("UseSoulChange")) {
-            	enableFormattingControls();
+            	updateCharactersControls();
+                return true;
+            }
+            else if (sMethod.equals("FormattingAttributeChange")) {
+            	saveCharacters();
+            	updateCharactersControls();
+                return true;
+            }
+            else if (sMethod.equals("CustomAttributeChange")) {
+            	updateCharactersControls();
                 return true;
             }
             // Fonts page
             // Pages page
             else if (sMethod.equals("ExportGeometryChange")) {
-            	enablePagesControls();
+            	updatePagesControls();
                 return true;
             }
             else if (sMethod.equals("ExportHeaderAndFooterChange")) {
-            	enablePagesControls();
+            	updatePagesControls();
                 return true;
             }
             // Tables page
             else if (sMethod.equals("NoTablesChange")) {
-            	enableTablesControls();
+            	updateTablesControls();
             	return true;
             }
             else if (sMethod.equals("UseSupertabularChange")) {
-            	enableTablesControls();
+            	updateTablesControls();
             	return true;
             }
             else if (sMethod.equals("UseLongtableChange")) {
-            	enableTablesControls();
+            	updateTablesControls();
             	return true;
             }
             // Figures page
             else if (sMethod.equals("NoImagesChange")) {
-            	enableFiguresControls();
+            	updateFiguresControls();
             	return true;
             }
             // Text and math page
             else if (sMethod.equals("MathSymbolNameChange")) {
             	saveTextAndMath();
-            	enableTextAndMathControls();
+            	updateTextAndMathControls();
             	return true;
             }
             else if (sMethod.equals("NewSymbolClick")) {
@@ -198,19 +263,19 @@ public final class ConfigurationDialog extends WeakBase
             		mathSymbols.put(sNewName, attr);
             	}
             	saveTextAndMath();
-            	enableTextAndMathControls();
+            	updateTextAndMathControls();
             	return true;
             }
             else if (sMethod.equals("DeleteSymbolClick")) {
             	if (deleteCurrentItem("MathSymbolName")) {
             		mathSymbols.remove(sCurrentMathSymbol);
-            		enableTextAndMathControls();
+            		updateTextAndMathControls();
             	}
             	return true;
             }
             else if (sMethod.equals("TextInputChange")) {
             	saveTextAndMath();
-            	enableTextAndMathControls();
+            	updateTextAndMathControls();
             	return true;
             }
             else if (sMethod.equals("NewTextClick")) {
@@ -222,13 +287,13 @@ public final class ConfigurationDialog extends WeakBase
             		stringReplace.put(sNewName, attr);
             	}
             	saveTextAndMath();
-            	enableTextAndMathControls();
+            	updateTextAndMathControls();
             	return true;
             }
             else if (sMethod.equals("DeleteTextClick")) {
             	if (deleteCurrentItem("TextInput")) {
             		stringReplace.remove(sCurrentText);
-            		enableTextAndMathControls();
+            		updateTextAndMathControls();
             	}
             	return true;
             }            
@@ -245,8 +310,9 @@ public final class ConfigurationDialog extends WeakBase
     public String[] getSupportedMethodNames() {
         String[] sNames = { "external_event", 
         		"NoPreambleChange", // Documentclass
-        		"MaxLevelChange", // Headings
-        		"FormattingChange", "UseColorChange", "UseSoulChange", // Formatting
+        		"MaxLevelChange", "WriterLevelChange", "NoIndexChange", // Headings
+        		"StyleFamilyChange", "StyleNameChange", "NewStyleClick", "DeleteStyleClick", // Styles
+        		"UseSoulChange", "FormattingAttributeChange", "CustomAttributeChange", // Characters
         		"ExportGeometryChange", "ExportHeaderAndFooterChange", // Pages
         		"NoTablesChange", "UseSupertabularChange", "UseLongtableChange", // Tables
         		"NoImagesChange", // Images
@@ -278,6 +344,19 @@ public final class ConfigurationDialog extends WeakBase
     		if (sMethod.equals("ok")) {
     			loadConfig();
     			getControls();
+    			for (int i=0; i<5; i++) {
+    				config.getComplexOption(sFamilyNames[i]+"-map").clear();
+    				config.getComplexOption(sFamilyNames[i]+"-map").copyAll(styleMap[i]);
+    			}
+    			config.getComplexOption("text-attribute-map").clear();
+    			config.getComplexOption("text-attribute-map").copyAll(attributeMap);
+    			if (nCurrentMaxLevel>-1) {
+    				for (int i=nCurrentMaxLevel+1; i<11; i++) {
+    					headingMap.remove(Integer.toString(i));
+    				}
+    			}
+    			config.getComplexOption("heading-map").clear();
+    			config.getComplexOption("heading-map").copyAll(headingMap);
     			config.getComplexOption("math-symbol-map").clear();
     			config.getComplexOption("math-symbol-map").copyAll(mathSymbols);
     			config.getComplexOption("string-replace").clear();
@@ -286,6 +365,14 @@ public final class ConfigurationDialog extends WeakBase
     			return true;
     		} else if (sMethod.equals("back") || sMethod.equals("initialize")) {
     			loadConfig();
+    			for (int i=0; i<5; i++) {
+    				styleMap[i].clear();
+    				styleMap[i].copyAll(config.getComplexOption(sFamilyNames[i]+"-map"));
+    			}
+    			attributeMap.clear();
+    			attributeMap.copyAll(config.getComplexOption("text-attribute-map"));
+    			headingMap.clear();
+    			headingMap.copyAll(config.getComplexOption("heading-map"));
     			mathSymbols.clear();
     			mathSymbols.copyAll(config.getComplexOption("math-symbol-map"));
     			stringReplace.clear();
@@ -452,8 +539,8 @@ public final class ConfigurationDialog extends WeakBase
     	else if ("Styles".equals(sTitle)) {
     		loadStyles();
     	}
-    	else if ("Formatting".equals(sTitle)) {
-    		loadFormatting();
+    	else if ("Characters".equals(sTitle)) {
+    		loadCharacters();
     	}
     	else if ("Fonts".equals(sTitle)) {
     		loadFonts();
@@ -483,8 +570,8 @@ public final class ConfigurationDialog extends WeakBase
     	else if ("Styles".equals(sTitle)) {
     		saveStyles();
     	}
-    	else if ("Formatting".equals(sTitle)) {
-    		saveFormatting();
+    	else if ("Characters".equals(sTitle)) {
+    		saveCharacters();
     	}
     	else if ("Fonts".equals(sTitle)) {
     		saveFonts();
@@ -511,7 +598,7 @@ public final class ConfigurationDialog extends WeakBase
     	dlg.setTextFieldText("Documentclass",config.getOption("documentclass"));
     	dlg.setTextFieldText("GlobalOptions",config.getOption("global_options"));
     	dlg.setTextFieldText("CustomPreamble",config.getOption("custom-preamble"));
-    	enableDocumentclassControls();
+    	updateDocumentclassControls();
     }
     
     private void saveDocumentclass() {
@@ -521,7 +608,7 @@ public final class ConfigurationDialog extends WeakBase
     	config.setOption("custom-preamble", dlg.getTextFieldText("CustomPreamble"));
     }
 
-    private void enableDocumentclassControls() {
+    private void updateDocumentclassControls() {
     	boolean bPreamble = !dlg.getCheckBoxStateAsBoolean("NoPreamble");
     	dlg.setControlEnabled("DocumentclassLabel",bPreamble);
     	dlg.setControlEnabled("Documentclass",bPreamble);
@@ -532,50 +619,87 @@ public final class ConfigurationDialog extends WeakBase
     }
     
     // The page "Headings"
-    // This page handles the heading map as well as the option no_index
+    // This page handles the heading map as well as the options no_index, use_titlesec and use_titletoc
     
     private void loadHeadings() {
-    	// TODO: Load heading map
+    	// Determine the max level (from 0 to 10)
+    	Set<String> writerLevels = headingMap.keySet();
+    	nCurrentMaxLevel = 0;
+    	while(nCurrentMaxLevel<10 && writerLevels.contains(Integer.toString(nCurrentMaxLevel+1))) {
+    		nCurrentMaxLevel++;
+    	}
+    	dlg.setListBoxSelectedItem("MaxLevel", nCurrentMaxLevel);
+    	
+    	dlg.setCheckBoxStateAsBoolean("UseTitlesec","true".equals(config.getOption("use_titlesec")));
     	dlg.setCheckBoxStateAsBoolean("NoIndex","true".equals(config.getOption("no_index")));
-    	enableHeadingsControls();
+    	dlg.setCheckBoxStateAsBoolean("UseTitletoc","true".equals(config.getOption("use_titletoc")));
+
+    	updateHeadingsControls();
     }
     
     private void saveHeadings() {
-    	// TODO: Save heading map
-    	config.setOption("no_index", Boolean.toString(dlg.getCheckBoxStateAsBoolean("NoIndex")));    	
+    	// Save the current writer level in our cache
+    	if (nCurrentWriterLevel>-1) {
+    		Map<String,String> attr = new HashMap<String,String>();
+    		attr.put("name", dlg.getComboBoxText("LaTeXName"));
+    		attr.put("level", dlg.getComboBoxText("LaTeXLevel"));
+    		headingMap.put(Integer.toString(nCurrentWriterLevel+1), attr);
+    	}
+
+    	config.setOption("use_titlesec", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseTitlesec")));    	
+    	config.setOption("no_index", Boolean.toString(dlg.getCheckBoxStateAsBoolean("NoIndex")));
+    	config.setOption("use_titletoc", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseTitletoc")));    		
     }
     
-    private void enableHeadingsControls() {
-    	boolean bEnable = dlg.getListBoxSelectedItem("MaxLevel")>0;
-    	dlg.setControlEnabled("WriterLevelLabel", bEnable);
-    	dlg.setControlEnabled("WriterLevel", bEnable);
-    	dlg.setControlEnabled("LaTeXLevelLabel", bEnable);
-    	dlg.setControlEnabled("LaTeXLevel", bEnable);
-    	dlg.setControlEnabled("LaTeXNameLabel", bEnable);
-    	dlg.setControlEnabled("LaTeXName", bEnable);
+    private void updateHeadingsControls() {
+    	// Adjust the presented writer levels to the max level
+    	nCurrentMaxLevel = dlg.getListBoxSelectedItem("MaxLevel");
+    	nCurrentWriterLevel = dlg.getListBoxSelectedItem("WriterLevel");
+    	String[] sWriterLevels = new String[nCurrentMaxLevel];
+    	for (int i=0; i<nCurrentMaxLevel; i++) {
+    		sWriterLevels[i]=Integer.toString(i+1);
+    	}
+    	dlg.setListBoxStringItemList("WriterLevel", sWriterLevels);
+    	if (nCurrentWriterLevel+1>nCurrentMaxLevel) { nCurrentWriterLevel = (short)(nCurrentMaxLevel-1); }
+    	else if (nCurrentWriterLevel<0 && nCurrentMaxLevel>0) { nCurrentWriterLevel=0; }
+    	dlg.setListBoxSelectedItem("WriterLevel", nCurrentWriterLevel);
+    	
+    	// Load the values for the current level
+    	if (nCurrentWriterLevel>-1) {
+    		String sLevel = Integer.toString(nCurrentWriterLevel+1);
+    		if (headingMap.keySet().contains(sLevel)) {
+    			Map<String,String> attr = headingMap.get(sLevel);
+    			dlg.setComboBoxText("LaTeXLevel", attr.get("level"));
+    			dlg.setComboBoxText("LaTeXName", attr.get("name"));
+    		}
+    		else {
+    			dlg.setListBoxSelectedItem("LaTeXLevel", (short)2);
+    			dlg.setComboBoxText("LaTeXName", "");
+    		}
+    	}
+
+    	boolean bupdate = dlg.getListBoxSelectedItem("MaxLevel")>0;
+    	dlg.setControlEnabled("WriterLevelLabel", bupdate);
+    	dlg.setControlEnabled("WriterLevel", bupdate);
+    	dlg.setControlEnabled("LaTeXLevelLabel", bupdate);
+    	dlg.setControlEnabled("LaTeXLevel", bupdate);
+    	dlg.setControlEnabled("LaTeXNameLabel", bupdate);
+    	dlg.setControlEnabled("LaTeXName", bupdate);
+    	// Until implemented:
+    	dlg.setControlEnabled("UseTitlesec", false);
+    	//dlg.setControlEnabled("UseTitlesec", bupdate);
+
+    	// Until implemented:
+    	dlg.setControlEnabled("UseTitletoc", false);
+    	//boolean bNoIndex = dlg.getCheckBoxStateAsBoolean("NoIndex");
+    	//dlg.setControlEnabled("UseTitletoc", !bNoIndex);
+
     }
     
     // The page "Styles"
-    // This page handles the various style maps as well as the option other_styles
+    // This page handles the various style maps as well as the options other_styles and formatting
     
     private void loadStyles() {
-    	// TODO
-    	enableStylesControls();
-    }
-    
-    private void saveStyles() {
-    	// TODO
-    }
-    
-    private void enableStylesControls() {
-    	// TODO
-    }
-    
-    // The page "Formatting"
-    // This page handles the options formatting, use_color, use_colortbl, use_soul, use_ulem,
-    // use_hyperref, use_titlesec, use_titletoc
-    
-    private void loadFormatting() {
     	String sFormatting = config.getOption("formatting");
     	if ("ignore_all".equals(sFormatting)) {
     		dlg.setListBoxSelectedItem("Formatting", (short)0);
@@ -592,19 +716,28 @@ public final class ConfigurationDialog extends WeakBase
     	else {
     		dlg.setListBoxSelectedItem("Formatting", (short)2);
     	}
-    	
-    	dlg.setCheckBoxStateAsBoolean("UseHyperref","true".equals(config.getOption("use_hyperref")));
-    	dlg.setCheckBoxStateAsBoolean("UseColor","true".equals(config.getOption("use_color")));
-    	dlg.setCheckBoxStateAsBoolean("UseColortbl","true".equals(config.getOption("use_colortbl")));
-    	dlg.setCheckBoxStateAsBoolean("UseSoul","true".equals(config.getOption("use_soul")));
-    	dlg.setCheckBoxStateAsBoolean("UseUlem","true".equals(config.getOption("use_ulem")));
-    	dlg.setCheckBoxStateAsBoolean("UseTitlesec","true".equals(config.getOption("use_titlesec")));
-    	dlg.setCheckBoxStateAsBoolean("UseTitletoc","true".equals(config.getOption("use_titletoc")));
-    	
-    	enableFormattingControls();
+
+    	updateStylesControls();
     }
     
-    private void saveFormatting() {
+    private void saveStyles() {
+    	// Save the current style map, if any
+    	if (nCurrentFamily>-1 && sCurrentStyleName!=null) {
+    		Map<String,String> attr=new HashMap<String,String>();
+    		attr.put("before", dlg.getTextFieldText("Before"));
+    		attr.put("after", dlg.getTextFieldText("After"));
+    		if (dlg.getControlEnabled("Next")) {
+    			attr.put("next", dlg.getTextFieldText("Next"));
+    		}
+    		if (dlg.getControlEnabled("LineBreak")) {
+    			attr.put("line-break", Boolean.toString(dlg.getCheckBoxStateAsBoolean("LineBreak")));
+    		}
+    		if (dlg.getControlEnabled("Verbatim")) {
+    			attr.put("verbatim", Boolean.toString(dlg.getCheckBoxStateAsBoolean("Verbatim")));
+    		}
+    		styleMap[nCurrentFamily].put(sCurrentStyleName, attr);
+    	}
+    	
     	switch (dlg.getListBoxSelectedItem("Formatting")) {
     	case 0: config.setOption("formatting", "ignore_all"); break;
     	case 1: config.setOption("formatting", "ignore_most"); break;
@@ -612,33 +745,116 @@ public final class ConfigurationDialog extends WeakBase
     	case 3: config.setOption("formatting", "convert_most"); break;
     	case 4: config.setOption("formatting", "convert_all");
     	}
+
+    }
+    
+    private void updateStylesControls() {
+    	short nNewFamily = dlg.getListBoxSelectedItem("StyleFamily");
+    	if (nNewFamily>-1 && nNewFamily!=nCurrentFamily) {
+    		// The user has changed the family; load and display the corresponding style names
+    		Set<String> items = styleMap[nNewFamily].keySet();
+        	String[] sStyleNames = new String[items.size()];
+        	int i=0;
+        	for (String s : items) {
+        		sStyleNames[i++] = s;
+        	}
+        	sortStringArray(sStyleNames);
+        	dlg.setListBoxStringItemList("StyleName", sStyleNames);
+        	dlg.setListBoxSelectedItem("StyleName", (short)Math.min(sStyleNames.length-1, 0));
+        	dlg.setControlEnabled("NextLabel", nNewFamily==2);
+        	dlg.setControlEnabled("Next", nNewFamily==2);
+        	dlg.setControlEnabled("Verbatim", nNewFamily<2);
+        	dlg.setControlEnabled("LineBreak", nNewFamily==1);
+        	nCurrentFamily = nNewFamily;
+    	}
+    	
+    	if (nCurrentFamily>-1) {
+    		short nStyleNameItem = dlg.getListBoxSelectedItem("StyleName");
+    		if (nStyleNameItem>=0) {
+    			sCurrentStyleName = dlg.getListBoxStringItemList("StyleName")[nStyleNameItem];
+    			
+    			Map<String,String> attr = styleMap[nCurrentFamily].get(sCurrentStyleName);
+    			dlg.setTextFieldText("Before", attr.containsKey("before") ? attr.get("before") : "");
+    			dlg.setTextFieldText("After", attr.containsKey("after") ? attr.get("before") : "");
+    			dlg.setTextFieldText("Next", attr.containsKey("next") ? attr.get("next") : "");
+    			dlg.setTextFieldText("Verbatim", attr.containsKey("verbatim") ? attr.get("verbatim") : "");
+    			dlg.setTextFieldText("LineBreak", attr.containsKey("line-break") ? attr.get("line-break") : "");
+    			dlg.setControlEnabled("DeleteStyleButton", true);
+    			System.out.println("...OK loading style");
+    		}
+    		else {
+    			sCurrentStyleName = null;
+    			dlg.setTextFieldText("Before", "");
+    			dlg.setTextFieldText("After", "");
+    			dlg.setTextFieldText("Next", "");
+    			dlg.setCheckBoxStateAsBoolean("Verbatim", false);
+    			dlg.setCheckBoxStateAsBoolean("LineBreak", false);
+    			dlg.setControlEnabled("DeleteStyleButton", false);
+    		}
+    	}
+    }
+    
+    // The page "Characters"
+    // This page handles the options use_color, use_soul, use_ulem and use_hyperref
+    // In addition it handles style maps for formatting attributes
+    
+    private void loadCharacters() {
+    	dlg.setCheckBoxStateAsBoolean("UseHyperref","true".equals(config.getOption("use_hyperref")));
+    	dlg.setCheckBoxStateAsBoolean("UseColor","true".equals(config.getOption("use_color")));
+    	dlg.setCheckBoxStateAsBoolean("UseSoul","true".equals(config.getOption("use_soul")));
+    	dlg.setCheckBoxStateAsBoolean("UseUlem","true".equals(config.getOption("use_ulem")));
+    	
+    	updateCharactersControls();
+    }
+    
+    private void saveCharacters() {
+    	// Save the current attribute map, if any
+    	if (nCurrentAttribute>-1) {
+    		if (dlg.getCheckBoxStateAsBoolean("CustomAttribute")) {
+    			HashMap<String,String> attr = new HashMap<String,String>();
+    			attr.put("before", dlg.getTextFieldText("Before"));
+    			attr.put("after", dlg.getTextFieldText("After"));
+    			attributeMap.put(sAttributeNames[nCurrentAttribute], attr);
+    		}
+    		else {
+    			attributeMap.remove(sAttributeNames[nCurrentAttribute]);
+    		}
+    	}
     	
     	config.setOption("use_hyperref", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseHyperref")));    	
     	config.setOption("use_color", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseColor")));    	
-    	config.setOption("use_colortbl", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseColortbl")));    	
     	config.setOption("use_soul", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseSoul")));    	
-    	config.setOption("use_ulem", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseUlem")));    	
-    	config.setOption("use_titlesec", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseTitlesec")));    	
-    	config.setOption("use_titletoc", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseTitletoc")));    		
+    	config.setOption("use_ulem", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseUlem")));    
     }
     
-    private void enableFormattingControls() {
-    	short nFormatting = dlg.getListBoxSelectedItem("Formatting");
-    	boolean bUseColor = dlg.getCheckBoxStateAsBoolean("UseColor");
-    	//boolean bUseSoul = dlg.getCheckBoxStateAsBoolean("UseSoul");
-    	    	
-    	dlg.setControlEnabled("UseColor", nFormatting>0);
-    	dlg.setControlEnabled("UseColortbl", nFormatting>0 && bUseColor);
+    private void updateCharactersControls() {
+    	short nNewAttribute = dlg.getListBoxSelectedItem("FormattingAttribute");
+    	if (nNewAttribute>-1 && nCurrentAttribute!=nNewAttribute) {
+    		String sName = sAttributeNames[nNewAttribute];
+    		if (attributeMap.keySet().contains(sName)) {
+    			dlg.setCheckBoxStateAsBoolean("CustomAttribute", true);
+    			dlg.setTextFieldText("Before", 
+    				attributeMap.get(sName).containsKey("before") ? attributeMap.get(sName).get("before") : "");
+    			dlg.setTextFieldText("After",
+    				attributeMap.get(sName).containsKey("after") ? attributeMap.get(sName).get("after") : "");
+    		}
+    		else {
+    			dlg.setCheckBoxStateAsBoolean("CustomAttribute", false);
+    			dlg.setTextFieldText("Before", "");
+    			dlg.setTextFieldText("After", "");
+    		}
+    		nCurrentAttribute = nNewAttribute;
+    	}
+    	
+    	boolean bCustom = dlg.getCheckBoxStateAsBoolean("CustomAttribute");
+    	dlg.setControlEnabled("Before", bCustom);
+    	dlg.setControlEnabled("After", bCustom);
+    	
     	// Until implemented...
     	dlg.setControlEnabled("UseSoul", false);
-    	dlg.setControlEnabled("UseUlem", nFormatting>0);
-    	dlg.setControlEnabled("UseTitlesec", false);
-    	dlg.setControlEnabled("UseTitletoc", false);
     	// After which it should be...
-    	//dlg.setControlEnabled("UseSoul", nFormatting>0);
-    	//dlg.setControlEnabled("UseUlem", nFormatting>0 && !bUseSoul);
-    	//dlg.setControlEnabled("UseTitlesec", nFormatting>2);
-    	//dlg.setControlEnabled("UseTitletoc", nFormatting>2);
+    	//boolean bUseSoul = dlg.getCheckBoxStateAsBoolean("UseSoul");   	    	
+    	//dlg.setControlEnabled("UseUlem", !bUseSoul);
     }
     
     // The page "Fonts"
@@ -654,7 +870,7 @@ public final class ConfigurationDialog extends WeakBase
     	dlg.setCheckBoxStateAsBoolean("UseIfsym","true".equals(config.getOption("use_ifsym")));
     	dlg.setCheckBoxStateAsBoolean("UseBbding","true".equals(config.getOption("use_bbding")));
     	
-    	enableFontsControls();
+    	updateFontsControls();
     }
     
     private void saveFonts() {    	
@@ -667,7 +883,7 @@ public final class ConfigurationDialog extends WeakBase
     	config.setOption("use_bbding", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseBbding")));    	    	
     }
     
-    private void enableFontsControls() {
+    private void updateFontsControls() {
     	// Until implemented...
     	dlg.setControlEnabled("UseFontspec", false);
     	// Nothing to do
@@ -700,7 +916,7 @@ public final class ConfigurationDialog extends WeakBase
     	dlg.setCheckBoxStateAsBoolean("UseLastpage", "true".equals(config.getOption("use_lastpage")));
     	dlg.setCheckBoxStateAsBoolean("UseEndnotes", "true".equals(config.getOption("use_endnotes")));
     	
-    	enablePagesControls();
+    	updatePagesControls();
     }
     
     private void savePages() {
@@ -725,7 +941,7 @@ public final class ConfigurationDialog extends WeakBase
     	config.setOption("use_endnotes", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseEndnotes")));
     }
     
-    private void enablePagesControls() {
+    private void updatePagesControls() {
     	boolean bExportGeometry = dlg.getCheckBoxStateAsBoolean("ExportGeometry");
     	dlg.setControlEnabled("UseGeometry",bExportGeometry);
 
@@ -740,6 +956,7 @@ public final class ConfigurationDialog extends WeakBase
     
     private void loadTables() {
     	dlg.setCheckBoxStateAsBoolean("NoTables", !"accept".equals(config.getOption("table_content")));
+    	dlg.setCheckBoxStateAsBoolean("UseColortbl","true".equals(config.getOption("use_colortbl")));
     	dlg.setCheckBoxStateAsBoolean("UseTabulary", "true".equals(config.getOption("use_tabulary")));
     	//dlg.setCheckBoxStateAsBoolean("UseMultirow", "true".equals(config.getOption("use_multirow")));
     	dlg.setCheckBoxStateAsBoolean("UseSupertabular","true".equals(config.getOption("use_supertabular")));
@@ -749,11 +966,12 @@ public final class ConfigurationDialog extends WeakBase
     	dlg.setTextFieldText("TableFootStyle", config.getOption("table_foot_style"));
     	dlg.setTextFieldText("TableLastFootStyle", config.getOption("table_last_foot_style"));
     	dlg.setTextFieldText("TableSequenceName", config.getOption("table_sequence_name"));
-    	enableTablesControls();
+    	updateTablesControls();
     }
     
     private void saveTables() {
     	config.setOption("table_content", dlg.getCheckBoxStateAsBoolean("NoTables") ? "ignore" : "accept");
+    	config.setOption("use_colortbl", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseColortbl")));    	
     	config.setOption("use_tabulary", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseTabulary")));
     	//config.setOption("use_multirow", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseMultirow")));
     	config.setOption("use_supertabular", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseSupertabular")));
@@ -765,10 +983,11 @@ public final class ConfigurationDialog extends WeakBase
     	config.setOption("table_sequence_name", dlg.getTextFieldText("TableSequenceName"));
     }
     
-    private void enableTablesControls() {
+    private void updateTablesControls() {
     	boolean bNoTables = dlg.getCheckBoxStateAsBoolean("NoTables");
     	boolean bSupertabular = dlg.getCheckBoxStateAsBoolean("UseSupertabular");
     	boolean bLongtable = dlg.getCheckBoxStateAsBoolean("UseLongtable");
+    	dlg.setControlEnabled("UseColortbl", !bNoTables);
     	dlg.setControlEnabled("UseTabulary", !bNoTables);
     	dlg.setControlEnabled("UseMultirow", false);
     	dlg.setControlEnabled("UseSupertabular", !bNoTables);
@@ -798,7 +1017,7 @@ public final class ConfigurationDialog extends WeakBase
     	dlg.setCheckBoxStateAsBoolean("NoImages", !"accept".equals(config.getOption("image_content")));
     	dlg.setCheckBoxStateAsBoolean("RemoveGraphicsExtension", "true".equals(config.getOption("remove_graphics_extension")));
     	dlg.setTextFieldText("ImageOptions", config.getOption("image_options"));
-    	enableFiguresControls();
+    	updateFiguresControls();
      }
     
     private void saveFigures() {
@@ -810,7 +1029,7 @@ public final class ConfigurationDialog extends WeakBase
     	config.setOption("image_options", dlg.getTextFieldText("ImageOptions"));
     }
 
-    private void enableFiguresControls() {
+    private void updateFiguresControls() {
     	boolean bNoImages = dlg.getCheckBoxStateAsBoolean("NoImages");
     	dlg.setControlEnabled("RemoveGraphicsExtension", !bNoImages);
     	dlg.setControlEnabled("ImageOptionsLabel", !bNoImages);
@@ -833,8 +1052,8 @@ public final class ConfigurationDialog extends WeakBase
     	sortStringArray(sSymbolNames);
     	dlg.setListBoxStringItemList("MathSymbolName", sSymbolNames);
     	dlg.setListBoxSelectedItem("MathSymbolName", (short)0);
-    	sCurrentMathSymbol = sSymbolNames[0];
- 
+    	//sCurrentMathSymbol = symbolnames.size()>0 ? sSymbolNames[0] : null;
+    	
     	Set<String> names = config.getComplexOption("string-replace").keySet();
     	String[] sNames = new String[names.size()];
     	int j=0;
@@ -844,11 +1063,11 @@ public final class ConfigurationDialog extends WeakBase
     	sortStringArray(sNames);
     	dlg.setListBoxStringItemList("TextInput", sNames);
     	dlg.setListBoxSelectedItem("TextInput", (short)0);
-    	sCurrentText = sNames[0];
+    	//sCurrentText = sNames[0];
     	
     	dlg.setTextFieldText("TabStopLaTeX", config.getOption("tabstop"));
     	
-    	enableTextAndMathControls();
+    	updateTextAndMathControls();
     }
     
     private void saveTextAndMath() {
@@ -872,7 +1091,7 @@ public final class ConfigurationDialog extends WeakBase
     	config.setOption("tabstop", dlg.getTextFieldText("TabStopLaTeX"));
     }
     
-    private void enableTextAndMathControls() {
+    private void updateTextAndMathControls() {
     	// Get the current math symbol, if any
     	short nSymbolItem = dlg.getListBoxSelectedItem("MathSymbolName");
     	if (nSymbolItem>=0) {
