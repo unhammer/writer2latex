@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-11-02)
+ *  Version 1.2 (2009-11-08)
  *
  */ 
  
@@ -32,6 +32,7 @@ import java.io.OutputStream;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,6 +62,7 @@ import writer2latex.api.Config;
 import writer2latex.api.ConverterFactory;
 
 import org.openoffice.da.comp.w2lcommon.helper.DialogAccess;
+import org.openoffice.da.comp.w2lcommon.helper.StyleNameProvider;
 
 /** This class provides a uno component which implements the configuration
  *  of Writer2LaTeX. The same component is used for all pages - using the
@@ -70,6 +72,7 @@ public final class ConfigurationDialog extends WeakBase
     implements XServiceInfo, XContainerWindowEventHandler {
 	
 	private String[] sFamilyNames = { "text", "paragraph", "paragraph-block", "list", "listitem" };
+	private String[] sOOoFamilyNames = { "CharacterStyles", "ParagraphStyles", "ParagraphStyles", "NumberingStyles", "NumberingStyles" };
 	private String[] sAttributeNames = { "bold", "italics", "small-caps", "superscript", "subscipt" };
 
     private XComponentContext xContext;
@@ -91,6 +94,7 @@ public final class ConfigurationDialog extends WeakBase
     String sCurrentText = null;
     private String sTitle = null;
     private DialogAccess dlg = null;
+    private StyleNameProvider styleNameProvider = null;
     
     /** The component will be registered under this name.
      */
@@ -137,6 +141,8 @@ public final class ConfigurationDialog extends WeakBase
         headingMap = new ComplexOption();
         mathSymbols = new ComplexOption();
         stringReplace = new ComplexOption();
+        
+        styleNameProvider = new StyleNameProvider(xContext);
     }
         	
     // Implement XContainerWindowEventHandler
@@ -183,7 +189,7 @@ public final class ConfigurationDialog extends WeakBase
             }
             else if (sMethod.equals("NewStyleClick")) {
             	if (nCurrentFamily>-1) {
-            		String sNewName = appendItem("StyleName");
+            		String sNewName = appendItem("StyleName",styleNameProvider.getInternalNames(sOOoFamilyNames[nCurrentFamily]).keySet());
             		if (sNewName!=null) {
             			Map<String,String> attr = new HashMap<String,String>();
             			attr.put("before", "");
@@ -256,7 +262,7 @@ public final class ConfigurationDialog extends WeakBase
             	return true;
             }
             else if (sMethod.equals("NewSymbolClick")) {
-            	String sNewName = appendItem("MathSymbolName");
+            	String sNewName = appendItem("MathSymbolName",new HashSet<String>());
             	if (sNewName!=null) {
             		Map<String,String> attr = new HashMap<String,String>();
             		attr.put("latex", "");
@@ -279,7 +285,7 @@ public final class ConfigurationDialog extends WeakBase
             	return true;
             }
             else if (sMethod.equals("NewTextClick")) {
-            	String sNewName = appendItem("TextInput");
+            	String sNewName = appendItem("TextInput", new HashSet<String>());
             	if (sNewName!=null) {
             		Map<String,String> attr = new HashMap<String,String>();
             		attr.put("latex-code", "");
@@ -345,8 +351,16 @@ public final class ConfigurationDialog extends WeakBase
     			loadConfig();
     			getControls();
     			for (int i=0; i<5; i++) {
-    				config.getComplexOption(sFamilyNames[i]+"-map").clear();
-    				config.getComplexOption(sFamilyNames[i]+"-map").copyAll(styleMap[i]);
+    				ComplexOption configMap = config.getComplexOption(sFamilyNames[i]+"-map"); 
+    				configMap.clear();
+    				Map<String,String> internalNames = styleNameProvider.getInternalNames(sOOoFamilyNames[i]);
+    				for (String sDisplayName : styleMap[i].keySet()) {
+    					String sName = sDisplayName;
+    					if (internalNames!=null && internalNames.containsKey(sDisplayName)) {
+    						sName = internalNames.get(sDisplayName);
+    					}
+   						configMap.copy(sName, styleMap[i].get(sDisplayName));
+    				}
     			}
     			config.getComplexOption("text-attribute-map").clear();
     			config.getComplexOption("text-attribute-map").copyAll(attributeMap);
@@ -366,8 +380,16 @@ public final class ConfigurationDialog extends WeakBase
     		} else if (sMethod.equals("back") || sMethod.equals("initialize")) {
     			loadConfig();
     			for (int i=0; i<5; i++) {
+    				ComplexOption configMap = config.getComplexOption(sFamilyNames[i]+"-map"); 
     				styleMap[i].clear();
-    				styleMap[i].copyAll(config.getComplexOption(sFamilyNames[i]+"-map"));
+    				Map<String,String> displayNames = styleNameProvider.getDisplayNames(sOOoFamilyNames[i]);
+    				for (String sName : configMap.keySet()) {
+    					String sDisplayName = sName;
+    					if (displayNames!=null && displayNames.containsKey(sName)) {
+    						sDisplayName = displayNames.get(sName);
+    					}
+   						styleMap[i].copy(sDisplayName, configMap.get(sName));
+    				}
     			}
     			attributeMap.clear();
     			attributeMap.copyAll(config.getComplexOption("text-attribute-map"));
@@ -404,9 +426,13 @@ public final class ConfigurationDialog extends WeakBase
     	}
      }
 
-    private boolean deleteItem() {
+    private boolean deleteItem(String sName) {
     	XDialog xDialog=getDialog("W2LDialogs2.DeleteDialog");
     	if (xDialog!=null) {
+    		DialogAccess ddlg = new DialogAccess(xDialog);
+    		String sLabel = ddlg.getLabelText("DeleteLabel");
+    		sLabel = sLabel.replaceAll("%s", sName);
+    		ddlg.setLabelText("DeleteLabel", sLabel);
     		boolean bDelete = xDialog.execute()==ExecutableDialogResults.OK;
     		xDialog.endExecute();
     		return bDelete;
@@ -417,7 +443,7 @@ public final class ConfigurationDialog extends WeakBase
     private boolean deleteCurrentItem(String sListName) {
     	String[] sItems = dlg.getListBoxStringItemList(sListName);
     	short nSelected = dlg.getListBoxSelectedItem(sListName);
-    	if (nSelected>=0 && deleteItem()) {
+    	if (nSelected>=0 && deleteItem(sItems[nSelected])) {
     		int nOldLen = sItems.length;
     		String[] sNewItems = new String[nOldLen-1];
     		if (nSelected>0) {
@@ -434,9 +460,18 @@ public final class ConfigurationDialog extends WeakBase
     	return false;
     }
     
-    private String newItem() {
+    private String newItem(Set<String> suggestions) {
     	XDialog xDialog=getDialog("W2LDialogs2.NewDialog");
     	if (xDialog!=null) {
+    		int nCount = suggestions.size();
+    		String[] sItems = new String[nCount];
+    		int i=0;
+    		for (String s : suggestions) {
+    			sItems[i++] = s;
+    		}
+    		sortStringArray(sItems);
+    		DialogAccess ndlg = new DialogAccess(xDialog);
+    		ndlg.setListBoxStringItemList("Name", sItems);
     		String sResult = null;
     		if (xDialog.execute()==ExecutableDialogResults.OK) {
     			DialogAccess dlg = new DialogAccess(xDialog);
@@ -448,9 +483,9 @@ public final class ConfigurationDialog extends WeakBase
     	return null;
     }
     
-    private String appendItem(String sListName) {
+    private String appendItem(String sListName, Set<String> suggestions) {
     	String[] sItems = dlg.getListBoxStringItemList(sListName);
-    	String sNewItem = newItem();
+    	String sNewItem = newItem(suggestions);
     	if (sNewItem!=null) {
     		int nOldLen = sItems.length;
     		for (short i=0; i<nOldLen; i++) {
@@ -780,7 +815,6 @@ public final class ConfigurationDialog extends WeakBase
     			dlg.setTextFieldText("Verbatim", attr.containsKey("verbatim") ? attr.get("verbatim") : "");
     			dlg.setTextFieldText("LineBreak", attr.containsKey("line-break") ? attr.get("line-break") : "");
     			dlg.setControlEnabled("DeleteStyleButton", true);
-    			System.out.println("...OK loading style");
     		}
     		else {
     			sCurrentStyleName = null;

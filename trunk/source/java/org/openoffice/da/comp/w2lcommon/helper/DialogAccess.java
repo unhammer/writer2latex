@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-11-02)
+ *  Version 1.2 (2009-11-08)
  *
  */ 
 
@@ -213,6 +213,27 @@ public class DialogAccess {
             // nText is an illegal value
         }
     }
+    
+    public String getLabelText(String sControlName) {
+        XPropertySet xPropertySet = getControlProperties(sControlName);
+        try {
+            return (String) xPropertySet.getPropertyValue("Label");
+        }
+        catch (Exception e) {
+            // Will fail if the control does not exist or is not a label
+            return "";
+        }
+    }
+	
+    public void setLabelText(String sControlName, String sLabel) {
+        XPropertySet xPropertySet = getControlProperties(sControlName);
+        try {
+            xPropertySet.setPropertyValue("Label",sLabel);
+        }
+        catch (Exception e) {
+            // Will fail if the control does not exist or is not a label
+        }
+    }    
 	
     public String getTextFieldText(String sControlName) {
         XPropertySet xPropertySet = getControlProperties(sControlName);

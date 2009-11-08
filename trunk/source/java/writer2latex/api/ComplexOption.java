@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-23)
+ *  Version 1.2 (2009-11-08)
  *
  */
 
@@ -63,7 +63,23 @@ public class ComplexOption {
     		options.put(sName, attributes);
     	}
 	}
-
+	
+	/** Define a key using a <i>copy</i> of a the provided attributes.
+	 *  If the key already exists, the old value will be replaced
+	 * 
+	 * @param sName the name of the key. The name must be non-empty, otherwise the request will be ignored.
+	 * @param attributes
+	 */
+	public void copy(String sName, Map<String,String> attributes) {
+    	if (sName!=null && sName.length()>0) {
+			Map<String,String> newAttributes = new HashMap<String,String>();
+			for (String sAttrName : attributes.keySet()) {
+				newAttributes.put(sAttrName, attributes.get(sAttrName));
+			}
+    		put(sName, newAttributes);
+    	}
+	}
+	
 	/** Get the value belonging to a key
 	 * 
 	 * @param sName the name of the key
@@ -79,12 +95,7 @@ public class ComplexOption {
 	 */
 	public void copyAll(ComplexOption co) {
 		for (String sName : co.keySet()) {
-			Map<String,String> attr = co.get(sName);
-			Map<String,String> newAttr = new HashMap<String,String>();
-			for (String sAttrName : attr.keySet()) {
-				newAttr.put(sAttrName, attr.get(sAttrName));
-			}
-			options.put(sName, newAttr);
+			copy(sName, co.get(sName));
 		}
 	}
 	
