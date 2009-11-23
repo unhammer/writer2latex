@@ -22,6 +22,20 @@ The source of Writer2LaTeX consists of three major parts:
 Currently parts of the source for Writer2LaTeX are somewhat messy and
 undocumented. This situation is improving from time to time :-)
 
+Third-party software
+--------------------
+
+Writer2LaTeX includes some classes from the OpenOffice.org project
+* com.sun.star.lib.loader.* are part of the SDK for OOo
+* writer2latex.xmerge.* contains some classes which are part of the xmerge
+  project within OOo (some of the classes are slightly modified)
+See copyright notices within the source files
+
+Also, the windows DLL file unowinreg.dll is part of the SDK for OOo,
+the source can be found at http://svn.services.openoffice.org/
+
+Finally, writer2latex.util.Base64 is Harald Harders public domain Base64 class
+
 
 Building Writer2LaTeX
 ---------------------
@@ -35,11 +49,10 @@ these are jurt.jar, unoil.jar, ridl.jar and juh.jar.
 To make these files available for the compiler, edit the file build.xml in
 the writer2latex09 directory as follows:
 
-The line
-	<property name="OFFICE_HOME" location=""/>
-should be edited to contain the path to your OOo installation, e.g.
-	<property name="OFFICE_HOME" location="C:/Program Files/OpenOffice.org 2.0.4"/>
-
+The lines
+	<property name="OFFICE_HOME" location="/opt/openoffice.org/basis3.0" />
+	<property name="URE_HOME" location="/opt/openoffice.org/ure" />
+should be modified to point to your OOo installation
 
 To build, open a command shell, navigate to the writer2latex09 directory and type
 
@@ -61,7 +74,7 @@ In addition to oxt, the build file supports the following targets:
     clean
 
 
-Henrik Just, September 2009
+Henrik Just, November 2009
 
 
 Thanks to Michael Niedermair for writing the original ant build file

@@ -13,4 +13,5 @@
  <library:element library:name="TextAndMath"/>
  <library:element library:name="NewDialog"/>
  <library:element library:name="Characters"/>
+ <library:element library:name="LoadDefaults"/>
 </library:library>

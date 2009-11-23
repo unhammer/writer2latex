@@ -3,6 +3,7 @@
 
 <node oor:name="Filters">
  
+	<!-- Temp. disable TeX import for 1.1.1 alpha release
 	<node oor:name="org.openoffice.da.writer4latex.latex" oor:op="replace" oor:finalized="true" oor:mandatory="true">
 		<prop oor:name="UIName"><value>LaTeX</value></prop>
 		<prop oor:name="Type"><value>org.openoffice.da.writer4latex.LaTeX_File</value></prop>
@@ -25,7 +26,7 @@
 		<prop oor:name="UserData"/>
 		<prop oor:name="FileFormatVersion"><value>0</value></prop>
 		<prop oor:name="TemplateName"/>
-	</node>
+	</node>-->
 
 </node>
 

@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-06-19)
+ *  Version 1.2 (2009-11-19)
  *
  */ 
  
@@ -35,9 +35,12 @@ import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XContainerWindowEventHandler;
+import com.sun.star.awt.XDialog;
+import com.sun.star.awt.XDialogProvider2;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.ui.dialogs.ExecutableDialogResults;
 import com.sun.star.ui.dialogs.XExecutableDialog;
@@ -47,6 +50,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
 import com.sun.star.lib.uno.helper.WeakBase;
+
+import org.openoffice.da.comp.w2lcommon.helper.DialogAccess;
 
 /** This class provides a uno component which implements the configuration
  *  of Writer4LaTeX
@@ -247,12 +252,30 @@ public final class ConfigurationDialog
     	}
     }
     
+    // Unix: Configure a certain application, reporting the availability
+    private boolean configureApp(String sName, String sAppName, String sArguments, StringBuffer info) {
+    	if (hasApp(sAppName)) {
+    		externalApps.setApplication(sName, sAppName, sArguments);
+    		info.append("Found "+sAppName+" - OK\n");
+    		return true;
+    	}
+    	else {
+    		externalApps.setApplication(sName, "???", "???");
+    		info.append("Failed to find "+sAppName+"\n");
+    		return false;
+    	}
+    }
+    
     // Unix: Configure a certain application testing the availability
     // This variant uses an array of potential apps
-    private boolean configureApp(String sName, String[] sAppNames, String sArguments) {
+    private boolean configureApp(String sName, String[] sAppNames, String sArguments, StringBuffer info) {
     	for (String sAppName : sAppNames) {
-    		if (configureApp(sName, sAppName, sArguments)) { return true; }
+    		if (configureApp(sName, sAppName, sArguments)) {
+    			info.append("Found "+sName+": "+sAppName+" - OK\n");
+    			return true;
+    		}
     	}
+    	info.append("Failed to find "+sName+"\n");
     	return false;
     }
 	
@@ -273,23 +296,28 @@ public final class ConfigurationDialog
     		// And assume gsview for pdf and ps
     		// gsview32 may not be in the path, but at least this helps a bit
     		externalApps.setApplication(ExternalApps.PDFVIEWER, "gsview32.exe", "-e \"%s\"");
-    		externalApps.setApplication(ExternalApps.POSTSCRIPTVIEWER, "gsview32.exe", "-e \"%s\"");    		
+    		externalApps.setApplication(ExternalApps.POSTSCRIPTVIEWER, "gsview32.exe", "-e \"%s\"");  
+    		displayAutoConfigInfo("Configured for MikTeX...");
     	}
     	else { // Assume a unix-like system supporting the "which" command
-    		configureApp(ExternalApps.LATEX, "latex", "--interaction=batchmode %s");
-    		configureApp(ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s");
-    		configureApp(ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s");
-    		configureApp(ExternalApps.DVIPS, "dvips", "%s");
-    		configureApp(ExternalApps.BIBTEX, "bibtex", "%s");
-    		configureApp(ExternalApps.MAKEINDEX, "makeindex", "%s");
-    		configureApp(ExternalApps.MK4HT, "mk4ht", "%c %s");    		
+    		StringBuffer info = new StringBuffer();
+    		info.append("Results of configuration:\n\n");
+    		configureApp(ExternalApps.LATEX, "latex", "--interaction=batchmode %s",info);
+    		configureApp(ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s",info);
+    		configureApp(ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s",info);
+    		configureApp(ExternalApps.DVIPS, "dvips", "%s",info);
+    		configureApp(ExternalApps.BIBTEX, "bibtex", "%s",info);
+    		configureApp(ExternalApps.MAKEINDEX, "makeindex", "%s",info);
+    		configureApp(ExternalApps.MK4HT, "mk4ht", "%c %s",info);    		
     		// We have several possible viewers
     		String[] sDviViewers = {"evince", "okular", "xdvi"};
-    		configureApp(ExternalApps.DVIVIEWER, sDviViewers, "%s");
+    		configureApp(ExternalApps.DVIVIEWER, sDviViewers, "%s",info);
     		String[] sPdfViewers =  {"evince", "okular", "xpdf"};
-    		configureApp(ExternalApps.PDFVIEWER, sPdfViewers, "%s");
+    		configureApp(ExternalApps.PDFVIEWER, sPdfViewers, "%s",info);
     		String[] sPsViewers =  {"evince", "okular", "ghostview"};
-    		configureApp(ExternalApps.POSTSCRIPTVIEWER, sPsViewers, "%s");
+    		configureApp(ExternalApps.POSTSCRIPTVIEWER, sPsViewers, "%s",info);
+    		
+    		displayAutoConfigInfo(info.toString());
     	}
     	changeApplication(xWindow);
         return true;
@@ -311,6 +339,32 @@ public final class ConfigurationDialog
             case 9: return ExternalApps.POSTSCRIPTVIEWER;
         }
         return "???";
+    }
+    
+    private XDialog getDialog(String sDialogName) {
+    	XMultiComponentFactory xMCF = xContext.getServiceManager();
+    	try {
+    		Object provider = xMCF.createInstanceWithContext(
+    				"com.sun.star.awt.DialogProvider2", xContext);
+    		XDialogProvider2 xDialogProvider = (XDialogProvider2)
+    		UnoRuntime.queryInterface(XDialogProvider2.class, provider);
+    		String sDialogUrl = "vnd.sun.star.script:"+sDialogName+"?location=application";
+    		return xDialogProvider.createDialogWithHandler(sDialogUrl, this);
+    	}
+    	catch (Exception e) {
+    		return null;
+    	}
+     }
+
+    
+    private void displayAutoConfigInfo(String sText) {
+    	XDialog xDialog = getDialog("W4LDialogs.AutoConfigInfo");
+    	if (xDialog!=null) {
+    		DialogAccess info = new DialogAccess(xDialog);
+    		info.setTextFieldText("Info", sText);
+    		xDialog.execute();
+    		xDialog.endExecute();
+    	}
     }
     
     // Some helpers copied from DialogBase

@@ -77,8 +77,9 @@ public final class TeXify {
      *  @param nBackend the desired backend format (generic, dvips, pdftex)
      *  @param bView set the true if the result should be displayed in the viewer
      *  @throws IOException if the document cannot be read
+     *  @return true if the first LaTeX run was succesful
      */
-    public void process(File file, short nBackend, boolean bView) throws IOException {
+    public boolean process(File file, short nBackend, boolean bView) throws IOException {
         // Remove extension from file
         if (file.getName().endsWith(".tex")) {
             file = new File(file.getParentFile(),
@@ -89,8 +90,10 @@ public final class TeXify {
         externalApps.load();
 
         // Process LaTeX document
+        boolean bResult = false;
         if (nBackend==GENERIC) {
-            doTeXify(genericTexify, file);
+            bResult = doTeXify(genericTexify, file);
+            if (!bResult) return false;
             if (externalApps.execute(ExternalApps.DVIVIEWER,
                 new File(file.getParentFile(),file.getName()+".dvi").getPath(),
                 file.getParentFile(), false)>0) {
@@ -98,7 +101,8 @@ public final class TeXify {
             }
         }
         else if (nBackend==PDFTEX) {
-            doTeXify(pdfTexify, file);
+        	bResult = doTeXify(pdfTexify, file);
+            if (!bResult) return false;
             if (externalApps.execute(ExternalApps.PDFVIEWER,
                 new File(file.getParentFile(),file.getName()+".pdf").getPath(),
                 file.getParentFile(), false)>0) {
@@ -106,7 +110,8 @@ public final class TeXify {
             }
         }
         else if (nBackend==DVIPS) {
-            doTeXify(dvipsTexify, file);
+        	bResult = doTeXify(dvipsTexify, file);
+            if (!bResult) return false;
             if (externalApps.execute(ExternalApps.POSTSCRIPTVIEWER,
                 new File(file.getParentFile(),file.getName()+".ps").getPath(),
                 file.getParentFile(), false)>0) {
@@ -114,25 +119,30 @@ public final class TeXify {
             }
         }
         else if (nBackend==XETEX) {
-        	doTeXify(xeTexify, file);
+        	bResult = doTeXify(xeTexify, file);
+            if (!bResult) return false;
             if (externalApps.execute(ExternalApps.PDFVIEWER,
                     new File(file.getParentFile(),file.getName()+".pdf").getPath(),
                     file.getParentFile(), false)>0) {
                     throw new IOException("Error executing pdf viewer");
                 }
         }
+        return bResult;
 
     }
 	
-    private void doTeXify(String[] sAppList, File file) throws IOException {
+    private boolean doTeXify(String[] sAppList, File file) throws IOException {
         for (int i=0; i<sAppList.length; i++) {
             // Execute external application
             int nReturnCode = externalApps.execute(
                 sAppList[i], file.getName(), file.getParentFile(), true);
-            if (nReturnCode>0) {
+            System.out.println("Return code from "+sAppList[i]+": "+nReturnCode);
+            if (i==0 && nReturnCode>0) {
+            	return false;
                 //throw new IOException("Error executing "+sAppList[i]);
             } 
         }
+        return true;
     }
 
 }

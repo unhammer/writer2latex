@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-11-08)
+ *  Version 1.2 (2009-11-19)
  *
  */
 
@@ -105,6 +105,15 @@ public class ComplexOption {
 	 */
 	public Set<String> keySet() {
 		return options.keySet();
+	}
+	
+	/** Test if this complex options contains a specific option name
+	 * 
+	 *  @param sName the name to test
+	 *  @return true if the name exists
+	 */
+	public boolean containsKey(String sName) {
+		return options.containsKey(sName);
 	}
 	
 

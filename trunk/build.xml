@@ -2,7 +2,7 @@
   ############################################################################
   # This is the Ant build file for writer2latex
   # Original: Sep 2004 (mgn)
-  # version 1.2 (2009-03-30)
+  # version 1.2 (2009-11-23)
   ############################################################################
 -->
 <project name="w2l" default="help" basedir=".">
@@ -46,6 +46,7 @@
     <property name="target" location="target"/>
     <property name="target.lib" location="target/lib"/>
     <property name="source.idl" location="source/idl"/>
+    <property name="source.dll" location="source/dll"/>
     <!-- classpath for the application; needs java-uno classes -->
     <path id="main.class.path"> 
         <!-- java uno classes -->
@@ -196,8 +197,14 @@
                 <patternset>
                 	<include name="org/openoffice/da/comp/w2lcommon/helper/**/*"/>
                 	<include name="org/openoffice/da/comp/writer4latex/**/*"/>
+                	<include name="com/sun/star/lib/loader/**/*"/>
                 </patternset>
             </fileset>
+        	<fileset dir="${source.dll}">
+        		<patternset>
+        			<include name="com/sun/star/lib/loader/win/unowinreg.dll"/>
+       			</patternset>
+        	</fileset>
             <manifest>
                 <attribute name="Built-By" value="${user.name}"/>
                 <attribute name="Class-Path" value="jaxp.jar parser.jar"/>

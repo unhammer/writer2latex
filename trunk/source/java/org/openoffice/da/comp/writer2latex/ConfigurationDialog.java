@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-11-08)
+ *  Version 1.2 (2009-11-19)
  *
  */ 
  
@@ -88,13 +88,13 @@ public final class ConfigurationDialog extends WeakBase
     short nCurrentFamily = -1;
     String sCurrentStyleName = null;
     short nCurrentAttribute = -1;
-    short nCurrentMaxLevel = -1;
     short nCurrentWriterLevel = 0;
     String sCurrentMathSymbol = null;
     String sCurrentText = null;
     private String sTitle = null;
     private DialogAccess dlg = null;
     private StyleNameProvider styleNameProvider = null;
+    private CustomSymbolNameProvider customSymbolNameProvider = null;
     
     /** The component will be registered under this name.
      */
@@ -143,6 +143,7 @@ public final class ConfigurationDialog extends WeakBase
         stringReplace = new ComplexOption();
         
         styleNameProvider = new StyleNameProvider(xContext);
+        customSymbolNameProvider = new CustomSymbolNameProvider(xContext);
     }
         	
     // Implement XContainerWindowEventHandler
@@ -163,12 +164,10 @@ public final class ConfigurationDialog extends WeakBase
             }
             // Headings page
             else if (sMethod.equals("MaxLevelChange")) {
-            	saveHeadings();
                 updateHeadingsControls();
                 return true;
             }
             else if (sMethod.equals("WriterLevelChange")) {
-            	saveHeadings();
                 updateHeadingsControls();
                 return true;
             }
@@ -178,39 +177,31 @@ public final class ConfigurationDialog extends WeakBase
             }
             // Styles page
             else if (sMethod.equals("StyleFamilyChange")) {
-            	saveStyles();
             	updateStylesControls();
             	return true;
             }
             else if (sMethod.equals("StyleNameChange")) {
-            	saveStyles();
             	updateStylesControls();
             	return true;
             }
             else if (sMethod.equals("NewStyleClick")) {
-            	if (nCurrentFamily>-1) {
-            		String sNewName = appendItem("StyleName",styleNameProvider.getInternalNames(sOOoFamilyNames[nCurrentFamily]).keySet());
-            		if (sNewName!=null) {
-            			Map<String,String> attr = new HashMap<String,String>();
-            			attr.put("before", "");
-            			attr.put("after", "");
-            			attr.put("after", "");
-            			attr.put("verbatim", "");
-            			attr.put("line-break","");
-            			styleMap[nCurrentFamily].put(sNewName, attr);
-            		}
-            		saveStyles();
-            		updateStylesControls();
-            	}
+            	newStyleClick();
             	return true;
             }
             else if (sMethod.equals("DeleteStyleClick")) {
-            	if (nCurrentFamily>-1 && sCurrentStyleName!=null) {
-            		if (deleteCurrentItem("StyleName")) {
-            			styleMap[nCurrentFamily].remove(sCurrentStyleName);
-                		updateStylesControls();
-            		}
-            	}
+            	deleteStyleClick();
+            	return true;
+            }
+            else if (sMethod.equals("AddNextClick")) {
+            	addNextClick();
+            	return true;
+            }
+            else if (sMethod.equals("RemoveNextClick")) {
+            	removeNextClick();
+            	return true;
+            }
+            else if (sMethod.equals("LoadDefaultsClick")) {
+            	loadDefaultsClick();
             	return true;
             }
             // Characters page
@@ -219,7 +210,6 @@ public final class ConfigurationDialog extends WeakBase
                 return true;
             }
             else if (sMethod.equals("FormattingAttributeChange")) {
-            	saveCharacters();
             	updateCharactersControls();
                 return true;
             }
@@ -257,50 +247,27 @@ public final class ConfigurationDialog extends WeakBase
             }
             // Text and math page
             else if (sMethod.equals("MathSymbolNameChange")) {
-            	saveTextAndMath();
             	updateTextAndMathControls();
             	return true;
             }
             else if (sMethod.equals("NewSymbolClick")) {
-            	String sNewName = appendItem("MathSymbolName",new HashSet<String>());
-            	if (sNewName!=null) {
-            		Map<String,String> attr = new HashMap<String,String>();
-            		attr.put("latex", "");
-            		mathSymbols.put(sNewName, attr);
-            	}
-            	saveTextAndMath();
-            	updateTextAndMathControls();
+            	newSymbolClick();
             	return true;
             }
             else if (sMethod.equals("DeleteSymbolClick")) {
-            	if (deleteCurrentItem("MathSymbolName")) {
-            		mathSymbols.remove(sCurrentMathSymbol);
-            		updateTextAndMathControls();
-            	}
+            	deleteSymbolClick();
             	return true;
             }
             else if (sMethod.equals("TextInputChange")) {
-            	saveTextAndMath();
             	updateTextAndMathControls();
             	return true;
             }
             else if (sMethod.equals("NewTextClick")) {
-            	String sNewName = appendItem("TextInput", new HashSet<String>());
-            	if (sNewName!=null) {
-            		Map<String,String> attr = new HashMap<String,String>();
-            		attr.put("latex-code", "");
-            		attr.put("fontenc", "any");
-            		stringReplace.put(sNewName, attr);
-            	}
-            	saveTextAndMath();
-            	updateTextAndMathControls();
+            	newTextClick();
             	return true;
             }
             else if (sMethod.equals("DeleteTextClick")) {
-            	if (deleteCurrentItem("TextInput")) {
-            		stringReplace.remove(sCurrentText);
-            		updateTextAndMathControls();
-            	}
+            	deleteTextClick();
             	return true;
             }            
         }
@@ -317,7 +284,7 @@ public final class ConfigurationDialog extends WeakBase
         String[] sNames = { "external_event", 
         		"NoPreambleChange", // Documentclass
         		"MaxLevelChange", "WriterLevelChange", "NoIndexChange", // Headings
-        		"StyleFamilyChange", "StyleNameChange", "NewStyleClick", "DeleteStyleClick", // Styles
+        		"StyleFamilyChange", "StyleNameChange", "NewStyleClick", "DeleteStyleClick", "AddNextClick", "RemoveNextClick", "LoadDefaultsClick", // Styles
         		"UseSoulChange", "FormattingAttributeChange", "CustomAttributeChange", // Characters
         		"ExportGeometryChange", "ExportHeaderAndFooterChange", // Pages
         		"NoTablesChange", "UseSupertabularChange", "UseLongtableChange", // Tables
@@ -342,7 +309,7 @@ public final class ConfigurationDialog extends WeakBase
         return sSupportedServiceNames;
     }
 	
-    // Private stuff    
+    // Private stuff
     private boolean handleExternalEvent(Object aEventObject)
     throws com.sun.star.uno.Exception {
     	try {
@@ -350,55 +317,11 @@ public final class ConfigurationDialog extends WeakBase
     		if (sMethod.equals("ok")) {
     			loadConfig();
     			getControls();
-    			for (int i=0; i<5; i++) {
-    				ComplexOption configMap = config.getComplexOption(sFamilyNames[i]+"-map"); 
-    				configMap.clear();
-    				Map<String,String> internalNames = styleNameProvider.getInternalNames(sOOoFamilyNames[i]);
-    				for (String sDisplayName : styleMap[i].keySet()) {
-    					String sName = sDisplayName;
-    					if (internalNames!=null && internalNames.containsKey(sDisplayName)) {
-    						sName = internalNames.get(sDisplayName);
-    					}
-   						configMap.copy(sName, styleMap[i].get(sDisplayName));
-    				}
-    			}
-    			config.getComplexOption("text-attribute-map").clear();
-    			config.getComplexOption("text-attribute-map").copyAll(attributeMap);
-    			if (nCurrentMaxLevel>-1) {
-    				for (int i=nCurrentMaxLevel+1; i<11; i++) {
-    					headingMap.remove(Integer.toString(i));
-    				}
-    			}
-    			config.getComplexOption("heading-map").clear();
-    			config.getComplexOption("heading-map").copyAll(headingMap);
-    			config.getComplexOption("math-symbol-map").clear();
-    			config.getComplexOption("math-symbol-map").copyAll(mathSymbols);
-    			config.getComplexOption("string-replace").clear();
-    			config.getComplexOption("string-replace").copyAll(stringReplace);
     			saveConfig();
     			return true;
-    		} else if (sMethod.equals("back") || sMethod.equals("initialize")) {
+    		}
+    		else if (sMethod.equals("back") || sMethod.equals("initialize")) {
     			loadConfig();
-    			for (int i=0; i<5; i++) {
-    				ComplexOption configMap = config.getComplexOption(sFamilyNames[i]+"-map"); 
-    				styleMap[i].clear();
-    				Map<String,String> displayNames = styleNameProvider.getDisplayNames(sOOoFamilyNames[i]);
-    				for (String sName : configMap.keySet()) {
-    					String sDisplayName = sName;
-    					if (displayNames!=null && displayNames.containsKey(sName)) {
-    						sDisplayName = displayNames.get(sName);
-    					}
-   						styleMap[i].copy(sDisplayName, configMap.get(sName));
-    				}
-    			}
-    			attributeMap.clear();
-    			attributeMap.copyAll(config.getComplexOption("text-attribute-map"));
-    			headingMap.clear();
-    			headingMap.copyAll(config.getComplexOption("heading-map"));
-    			mathSymbols.clear();
-    			mathSymbols.copyAll(config.getComplexOption("math-symbol-map"));
-    			stringReplace.clear();
-    			stringReplace.copyAll(config.getComplexOption("string-replace"));
     			setControls();
     			return true;
     		}
@@ -657,13 +580,17 @@ public final class ConfigurationDialog extends WeakBase
     // This page handles the heading map as well as the options no_index, use_titlesec and use_titletoc
     
     private void loadHeadings() {
+    	// Load heading map from config
+		headingMap.clear();
+		headingMap.copyAll(config.getComplexOption("heading-map"));
+		nCurrentWriterLevel = -1;
+    	
     	// Determine the max level (from 0 to 10)
-    	Set<String> writerLevels = headingMap.keySet();
-    	nCurrentMaxLevel = 0;
-    	while(nCurrentMaxLevel<10 && writerLevels.contains(Integer.toString(nCurrentMaxLevel+1))) {
-    		nCurrentMaxLevel++;
+    	short nMaxLevel = 0;
+    	while(nMaxLevel<10 && headingMap.containsKey(Integer.toString(nMaxLevel+1))) {
+    		nMaxLevel++;
     	}
-    	dlg.setListBoxSelectedItem("MaxLevel", nCurrentMaxLevel);
+    	dlg.setListBoxSelectedItem("MaxLevel", nMaxLevel);
     	
     	dlg.setCheckBoxStateAsBoolean("UseTitlesec","true".equals(config.getOption("use_titlesec")));
     	dlg.setCheckBoxStateAsBoolean("NoIndex","true".equals(config.getOption("no_index")));
@@ -673,6 +600,23 @@ public final class ConfigurationDialog extends WeakBase
     }
     
     private void saveHeadings() {
+    	updateHeadingMap();
+    	
+    	// Save heading map to config
+    	config.getComplexOption("heading-map").clear();
+    	int nMaxLevel = dlg.getListBoxSelectedItem("MaxLevel");
+		for (int i=1; i<=nMaxLevel; i++) {
+			String sLevel = Integer.toString(i);
+			config.getComplexOption("heading-map").copy(sLevel,headingMap.get(sLevel));
+		}
+
+    	// Save other controls to config
+		config.setOption("use_titlesec", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseTitlesec")));    	
+    	config.setOption("no_index", Boolean.toString(dlg.getCheckBoxStateAsBoolean("NoIndex")));
+    	config.setOption("use_titletoc", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseTitletoc")));    		
+    }
+    
+    private void updateHeadingMap() {
     	// Save the current writer level in our cache
     	if (nCurrentWriterLevel>-1) {
     		Map<String,String> attr = new HashMap<String,String>();
@@ -680,32 +624,30 @@ public final class ConfigurationDialog extends WeakBase
     		attr.put("level", dlg.getComboBoxText("LaTeXLevel"));
     		headingMap.put(Integer.toString(nCurrentWriterLevel+1), attr);
     	}
-
-    	config.setOption("use_titlesec", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseTitlesec")));    	
-    	config.setOption("no_index", Boolean.toString(dlg.getCheckBoxStateAsBoolean("NoIndex")));
-    	config.setOption("use_titletoc", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseTitletoc")));    		
     }
     
     private void updateHeadingsControls() {
+    	updateHeadingMap();
+    	
     	// Adjust the presented writer levels to the max level
-    	nCurrentMaxLevel = dlg.getListBoxSelectedItem("MaxLevel");
+    	int nMaxLevel = dlg.getListBoxSelectedItem("MaxLevel");
     	nCurrentWriterLevel = dlg.getListBoxSelectedItem("WriterLevel");
-    	String[] sWriterLevels = new String[nCurrentMaxLevel];
-    	for (int i=0; i<nCurrentMaxLevel; i++) {
+    	String[] sWriterLevels = new String[nMaxLevel];
+    	for (int i=0; i<nMaxLevel; i++) {
     		sWriterLevels[i]=Integer.toString(i+1);
     	}
     	dlg.setListBoxStringItemList("WriterLevel", sWriterLevels);
-    	if (nCurrentWriterLevel+1>nCurrentMaxLevel) { nCurrentWriterLevel = (short)(nCurrentMaxLevel-1); }
-    	else if (nCurrentWriterLevel<0 && nCurrentMaxLevel>0) { nCurrentWriterLevel=0; }
+    	if (nCurrentWriterLevel+1>nMaxLevel) { nCurrentWriterLevel = (short)(nMaxLevel-1); }
+    	else if (nCurrentWriterLevel<0 && nMaxLevel>0) { nCurrentWriterLevel=0; }
     	dlg.setListBoxSelectedItem("WriterLevel", nCurrentWriterLevel);
     	
     	// Load the values for the current level
     	if (nCurrentWriterLevel>-1) {
     		String sLevel = Integer.toString(nCurrentWriterLevel+1);
-    		if (headingMap.keySet().contains(sLevel)) {
+    		if (headingMap.containsKey(sLevel)) {
     			Map<String,String> attr = headingMap.get(sLevel);
-    			dlg.setComboBoxText("LaTeXLevel", attr.get("level"));
-    			dlg.setComboBoxText("LaTeXName", attr.get("name"));
+    			dlg.setComboBoxText("LaTeXLevel", attr.containsKey("level") ? attr.get("level") : "");
+    			dlg.setComboBoxText("LaTeXName", attr.containsKey("name") ? attr.get("name") : "");
     		}
     		else {
     			dlg.setListBoxSelectedItem("LaTeXLevel", (short)2);
@@ -728,14 +670,36 @@ public final class ConfigurationDialog extends WeakBase
     	dlg.setControlEnabled("UseTitletoc", false);
     	//boolean bNoIndex = dlg.getCheckBoxStateAsBoolean("NoIndex");
     	//dlg.setControlEnabled("UseTitletoc", !bNoIndex);
-
     }
     
     // The page "Styles"
     // This page handles the various style maps as well as the options other_styles and formatting
+	// Limitation: Cannot handle the values "error" and "warning" for other_styles
     
     private void loadStyles() {
-    	String sFormatting = config.getOption("formatting");
+    	// Display paragraph maps first
+    	dlg.setListBoxSelectedItem("StyleFamily", (short)1);
+    	nCurrentFamily = -1;
+    	sCurrentStyleName = null;
+    	
+    	// Load style maps from config (translating keys to display names)
+		for (int i=0; i<5; i++) {
+			ComplexOption configMap = config.getComplexOption(sFamilyNames[i]+"-map"); 
+			styleMap[i].clear();
+	    	Map<String,String> displayNames = styleNameProvider.getDisplayNames(sOOoFamilyNames[i]);
+			copyStyles(configMap, styleMap[i], displayNames);
+		}
+    	
+		// Load other controls from config
+		String sOtherStyles = config.getOption("other_styles");
+		if ("accept".equals(sOtherStyles)) {
+			dlg.setListBoxSelectedItem("OtherStyles", (short)1);
+		}
+		else {
+			dlg.setListBoxSelectedItem("OtherStyles", (short)0);
+		}
+
+		String sFormatting = config.getOption("formatting");
     	if ("ignore_all".equals(sFormatting)) {
     		dlg.setListBoxSelectedItem("Formatting", (short)0);
     	}
@@ -756,13 +720,46 @@ public final class ConfigurationDialog extends WeakBase
     }
     
     private void saveStyles() {
+    	updateStyleMaps();
+    	
+    	// Save style maps to config (translating keys back to internal names)
+		for (int i=0; i<5; i++) {
+			ComplexOption configMap = config.getComplexOption(sFamilyNames[i]+"-map"); 
+			configMap.clear();
+			Map<String,String> internalNames = styleNameProvider.getInternalNames(sOOoFamilyNames[i]);
+			copyStyles(styleMap[i], configMap, internalNames);
+		}
+
+		// Save other controls to config
+		switch (dlg.getListBoxSelectedItem("OtherStyles")) {
+		case 0: config.setOption("other_styles", "ignore"); break;
+		case 1: config.setOption("other_styles", "accept");
+		}
+    	
+    	switch (dlg.getListBoxSelectedItem("Formatting")) {
+    	case 0: config.setOption("formatting", "ignore_all"); break;
+    	case 1: config.setOption("formatting", "ignore_most"); break;
+    	case 2: config.setOption("formatting", "convert_basic"); break;
+    	case 3: config.setOption("formatting", "convert_most"); break;
+    	case 4: config.setOption("formatting", "convert_all");
+    	}
+    }
+    
+    private void updateStyleMaps() {
     	// Save the current style map, if any
     	if (nCurrentFamily>-1 && sCurrentStyleName!=null) {
     		Map<String,String> attr=new HashMap<String,String>();
     		attr.put("before", dlg.getTextFieldText("Before"));
     		attr.put("after", dlg.getTextFieldText("After"));
     		if (dlg.getControlEnabled("Next")) {
-    			attr.put("next", dlg.getTextFieldText("Next"));
+    			String[] sNextItems = dlg.getListBoxStringItemList("Next");
+    			int nCount = sNextItems.length;
+    			String sList = "";
+    			for (int i=0; i<nCount; i++) {
+    				if (i>0) sList+=";";
+    				sList+=sNextItems[i];
+    			}
+    			attr.put("next", sList);
     		}
     		if (dlg.getControlEnabled("LineBreak")) {
     			attr.put("line-break", Boolean.toString(dlg.getCheckBoxStateAsBoolean("LineBreak")));
@@ -772,18 +769,11 @@ public final class ConfigurationDialog extends WeakBase
     		}
     		styleMap[nCurrentFamily].put(sCurrentStyleName, attr);
     	}
-    	
-    	switch (dlg.getListBoxSelectedItem("Formatting")) {
-    	case 0: config.setOption("formatting", "ignore_all"); break;
-    	case 1: config.setOption("formatting", "ignore_most"); break;
-    	case 2: config.setOption("formatting", "convert_basic"); break;
-    	case 3: config.setOption("formatting", "convert_most"); break;
-    	case 4: config.setOption("formatting", "convert_all");
-    	}
-
     }
     
     private void updateStylesControls() {
+    	updateStyleMaps();
+    	
     	short nNewFamily = dlg.getListBoxSelectedItem("StyleFamily");
     	if (nNewFamily>-1 && nNewFamily!=nCurrentFamily) {
     		// The user has changed the family; load and display the corresponding style names
@@ -798,6 +788,8 @@ public final class ConfigurationDialog extends WeakBase
         	dlg.setListBoxSelectedItem("StyleName", (short)Math.min(sStyleNames.length-1, 0));
         	dlg.setControlEnabled("NextLabel", nNewFamily==2);
         	dlg.setControlEnabled("Next", nNewFamily==2);
+        	dlg.setControlEnabled("AddNextButton", nNewFamily==2);
+        	dlg.setControlEnabled("RemoveNextButton", nNewFamily==2);
         	dlg.setControlEnabled("Verbatim", nNewFamily<2);
         	dlg.setControlEnabled("LineBreak", nNewFamily==1);
         	nCurrentFamily = nNewFamily;
@@ -810,21 +802,127 @@ public final class ConfigurationDialog extends WeakBase
     			
     			Map<String,String> attr = styleMap[nCurrentFamily].get(sCurrentStyleName);
     			dlg.setTextFieldText("Before", attr.containsKey("before") ? attr.get("before") : "");
-    			dlg.setTextFieldText("After", attr.containsKey("after") ? attr.get("before") : "");
-    			dlg.setTextFieldText("Next", attr.containsKey("next") ? attr.get("next") : "");
-    			dlg.setTextFieldText("Verbatim", attr.containsKey("verbatim") ? attr.get("verbatim") : "");
-    			dlg.setTextFieldText("LineBreak", attr.containsKey("line-break") ? attr.get("line-break") : "");
+    			dlg.setTextFieldText("After", attr.containsKey("after") ? attr.get("after") : "");
+    			String[] sNextItems;
+    			if (attr.containsKey("next")) {
+    				sNextItems = attr.get("next").split(";");
+    			}
+    			else {
+    				sNextItems = new String[0];
+    			}
+    			dlg.setListBoxStringItemList("Next", sNextItems);
+            	dlg.setListBoxSelectedItem("Next", (short)Math.min(sNextItems.length-1, 0));
+    			dlg.setCheckBoxStateAsBoolean("Verbatim", 
+    					attr.containsKey("verbatim") ? "true".equals(attr.get("verbatim")) : false);
+    			dlg.setCheckBoxStateAsBoolean("LineBreak",
+    					attr.containsKey("line-break") ? "true".equals(attr.get("line-break")) : false);
     			dlg.setControlEnabled("DeleteStyleButton", true);
     		}
     		else {
     			sCurrentStyleName = null;
     			dlg.setTextFieldText("Before", "");
     			dlg.setTextFieldText("After", "");
-    			dlg.setTextFieldText("Next", "");
+    			dlg.setListBoxStringItemList("Next", new String[0]);
     			dlg.setCheckBoxStateAsBoolean("Verbatim", false);
     			dlg.setCheckBoxStateAsBoolean("LineBreak", false);
     			dlg.setControlEnabled("DeleteStyleButton", false);
     		}
+    	}
+    }
+    
+    private void newStyleClick() {
+    	if (nCurrentFamily>-1) {
+    		String sNewName = appendItem("StyleName",styleNameProvider.getInternalNames(sOOoFamilyNames[nCurrentFamily]).keySet());
+    		if (sNewName!=null) {
+    			Map<String,String> attr = new HashMap<String,String>();
+    			attr.put("before", "");
+    			attr.put("after", "");
+    			attr.put("after", "");
+    			attr.put("verbatim", "");
+    			attr.put("line-break","");
+    			styleMap[nCurrentFamily].put(sNewName, attr);
+    		}
+    		saveStyles();
+    		updateStylesControls();
+    	}
+    }
+    
+    private void deleteStyleClick() {
+    	if (nCurrentFamily>-1 && sCurrentStyleName!=null) {
+    		if (deleteCurrentItem("StyleName")) {
+    			styleMap[nCurrentFamily].remove(sCurrentStyleName);
+    			sCurrentStyleName = null;
+        		updateStylesControls();
+    		}
+    	}
+    }
+    
+    private void addNextClick() {
+		appendItem("Next",styleNameProvider.getInternalNames(sOOoFamilyNames[nCurrentFamily]).keySet());
+		saveStyles();
+		updateStylesControls();
+    }
+    
+    private void removeNextClick() {
+		deleteCurrentItem("Next");
+		updateStylesControls();
+    }
+    
+    private void loadDefaultsClick() {
+		saveStyles();
+		// Force update of the ui
+		nCurrentFamily = -1;
+		sCurrentStyleName = null;
+		
+		// Count styles that we will overwrite
+    	Config clean = ConverterFactory.createConverter("application/x-latex").getConfig();
+    	clean.readDefaultConfig("clean.xml");
+
+    	int nCount = 0;
+		for (int i=0; i<5; i++) {
+			ComplexOption cleanMap = clean.getComplexOption(sFamilyNames[i]+"-map"); 
+	    	Map<String,String> displayNames = styleNameProvider.getDisplayNames(sOOoFamilyNames[i]);
+	    	for (String sName : cleanMap.keySet()) {
+	    		String sDisplayName = (displayNames!=null && displayNames.containsKey(sName)) ? displayNames.get(sName) : ""; 
+	    		if (styleMap[i].containsKey(sDisplayName)) { nCount++; }
+	    	}
+		}
+		
+		// Display confirmation dialog
+		boolean bConfirm = false;
+		XDialog xDialog=getDialog("W2LDialogs2.LoadDefaults");
+    	if (xDialog!=null) {
+    		DialogAccess ldlg = new DialogAccess(xDialog);
+    		if (nCount>0) {
+    			String sLabel = ldlg.getLabelText("OverwriteLabel");
+    			sLabel = sLabel.replaceAll("%s", Integer.toString(nCount));
+    			ldlg.setLabelText("OverwriteLabel", sLabel);
+    		}
+    		else {
+    			ldlg.setLabelText("OverwriteLabel", "");
+    		}
+    		bConfirm = xDialog.execute()==ExecutableDialogResults.OK;
+    		xDialog.endExecute();
+    	}
+
+		// Do the replacement
+    	if (bConfirm) { 
+    		for (int i=0; i<5; i++) {
+    			ComplexOption cleanMap = clean.getComplexOption(sFamilyNames[i]+"-map"); 
+    			Map<String,String> displayNames = styleNameProvider.getDisplayNames(sOOoFamilyNames[i]);
+    			copyStyles(cleanMap, styleMap[i], displayNames);
+    		}
+    	}
+		updateStylesControls();
+    }
+    
+    private void copyStyles(ComplexOption source, ComplexOption target, Map<String,String> nameTranslation) {
+    	for (String sName : source.keySet()) {
+    		String sNewName = sName;
+    		if (nameTranslation!=null && nameTranslation.containsKey(sName)) {
+    			sNewName = nameTranslation.get(sName);
+    		}
+    		target.copy(sNewName, source.get(sName));
     	}
     }
     
@@ -833,6 +931,13 @@ public final class ConfigurationDialog extends WeakBase
     // In addition it handles style maps for formatting attributes
     
     private void loadCharacters() {
+    	// Load attribute style map from config
+		attributeMap.clear();
+		attributeMap.copyAll(config.getComplexOption("text-attribute-map"));
+		nCurrentAttribute = -1;
+		dlg.setListBoxSelectedItem("FormattingAttribute", (short)0);
+
+    	// Load other controls from config
     	dlg.setCheckBoxStateAsBoolean("UseHyperref","true".equals(config.getOption("use_hyperref")));
     	dlg.setCheckBoxStateAsBoolean("UseColor","true".equals(config.getOption("use_color")));
     	dlg.setCheckBoxStateAsBoolean("UseSoul","true".equals(config.getOption("use_soul")));
@@ -842,35 +947,48 @@ public final class ConfigurationDialog extends WeakBase
     }
     
     private void saveCharacters() {
-    	// Save the current attribute map, if any
-    	if (nCurrentAttribute>-1) {
-    		if (dlg.getCheckBoxStateAsBoolean("CustomAttribute")) {
-    			HashMap<String,String> attr = new HashMap<String,String>();
-    			attr.put("before", dlg.getTextFieldText("Before"));
-    			attr.put("after", dlg.getTextFieldText("After"));
-    			attributeMap.put(sAttributeNames[nCurrentAttribute], attr);
-    		}
-    		else {
-    			attributeMap.remove(sAttributeNames[nCurrentAttribute]);
+    	updateCharactersMap();
+    	
+    	// Save the attribute style map to config
+    	config.getComplexOption("text-attribute-map").clear();
+    	for (String s : attributeMap.keySet()) {
+    		if (!attributeMap.get(s).containsKey("deleted")) {
+    			config.getComplexOption("text-attribute-map").copy(s, attributeMap.get(s));
     		}
     	}
-    	
+
+		// Save other controls to config
     	config.setOption("use_hyperref", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseHyperref")));    	
     	config.setOption("use_color", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseColor")));    	
     	config.setOption("use_soul", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseSoul")));    	
     	config.setOption("use_ulem", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseUlem")));    
     }
     
+    private void updateCharactersMap() {
+    	// Save the current attribute map, if any
+    	if (nCurrentAttribute>-1) {
+    		HashMap<String,String> attr = new HashMap<String,String>();
+    		if (!dlg.getCheckBoxStateAsBoolean("CustomAttribute")) {
+    			// don't delete the map now, but defer this to the dialog is closed
+    			attr.put("deleted", "true");
+    		}
+    		attr.put("before", dlg.getTextFieldText("Before"));
+    		attr.put("after", dlg.getTextFieldText("After"));
+    		attributeMap.put(sAttributeNames[nCurrentAttribute], attr);
+    	}    	
+    }
+    
     private void updateCharactersControls() {
+    	updateCharactersMap();
+    	
     	short nNewAttribute = dlg.getListBoxSelectedItem("FormattingAttribute");
     	if (nNewAttribute>-1 && nCurrentAttribute!=nNewAttribute) {
     		String sName = sAttributeNames[nNewAttribute];
-    		if (attributeMap.keySet().contains(sName)) {
-    			dlg.setCheckBoxStateAsBoolean("CustomAttribute", true);
-    			dlg.setTextFieldText("Before", 
-    				attributeMap.get(sName).containsKey("before") ? attributeMap.get(sName).get("before") : "");
-    			dlg.setTextFieldText("After",
-    				attributeMap.get(sName).containsKey("after") ? attributeMap.get(sName).get("after") : "");
+    		if (attributeMap.containsKey(sName)) {
+    			Map<String,String> attr = attributeMap.get(sName);
+    			dlg.setCheckBoxStateAsBoolean("CustomAttribute", !attr.containsKey("deleted"));
+    			dlg.setTextFieldText("Before", attr.containsKey("before") ? attr.get("before") : "");
+    			dlg.setTextFieldText("After", attr.containsKey("after") ? attr.get("after") : "");
     		}
     		else {
     			dlg.setCheckBoxStateAsBoolean("CustomAttribute", false);
@@ -1036,7 +1154,6 @@ public final class ConfigurationDialog extends WeakBase
     	dlg.setControlEnabled("TableLastFootStyle", !bNoTables && (bSupertabular || bLongtable));
     	dlg.setControlEnabled("TableSequenceLabel", !bNoTables);
     	dlg.setControlEnabled("TableSequenceName", !bNoTables);
-    	
     }
     
     // The page "Figures"
@@ -1075,45 +1192,53 @@ public final class ConfigurationDialog extends WeakBase
     // text replacements and math symbol definitions
     
     private void loadTextAndMath() {
+		// Get math symbols from config
+		if (mathSymbols!=null) { mathSymbols.clear(); }
+		else { mathSymbols = new ComplexOption(); }
+		mathSymbols.copyAll(config.getComplexOption("math-symbol-map"));
+		sCurrentMathSymbol = null;
+    	dlg.setListBoxStringItemList("MathSymbolName", sortStringSet(mathSymbols.keySet()));
+    	dlg.setListBoxSelectedItem("MathSymbolName", (short)Math.min(0,mathSymbols.keySet().size()-1));
+
+    	// Get string replace from config
+    	if (stringReplace!=null) { stringReplace.clear(); }
+		else { stringReplace = new ComplexOption(); }
+		stringReplace.copyAll(config.getComplexOption("string-replace"));
+		sCurrentText = null;
+    	dlg.setListBoxStringItemList("TextInput", sortStringSet(stringReplace.keySet()));
+    	dlg.setListBoxSelectedItem("TextInput", (short)Math.min(0,stringReplace.keySet().size()-1));
+    	    	
+    	// Get other options from config
     	dlg.setCheckBoxStateAsBoolean("UseOoomath","true".equals(config.getOption("use_ooomath")));
-    	
-       	Set<String> symbolnames = config.getComplexOption("math-symbol-map").keySet();
-    	String[] sSymbolNames = new String[symbolnames.size()];
-    	int i=0;
-    	for (String s : symbolnames) {
-    		sSymbolNames[i++] = s;
-    	}
-    	sortStringArray(sSymbolNames);
-    	dlg.setListBoxStringItemList("MathSymbolName", sSymbolNames);
-    	dlg.setListBoxSelectedItem("MathSymbolName", (short)0);
-    	//sCurrentMathSymbol = symbolnames.size()>0 ? sSymbolNames[0] : null;
-    	
-    	Set<String> names = config.getComplexOption("string-replace").keySet();
-    	String[] sNames = new String[names.size()];
-    	int j=0;
-    	for (String s : names) {
-    		sNames[j++] = s;
-    	}
-    	sortStringArray(sNames);
-    	dlg.setListBoxStringItemList("TextInput", sNames);
-    	dlg.setListBoxSelectedItem("TextInput", (short)0);
-    	//sCurrentText = sNames[0];
-    	
     	dlg.setTextFieldText("TabStopLaTeX", config.getOption("tabstop"));
     	
     	updateTextAndMathControls();
     }
     
     private void saveTextAndMath() {
-    	config.setOption("use_ooomath", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseOoomath")));
+    	updateTextAndMathMaps();
     	
+    	// Save math symbols to config
+		config.getComplexOption("math-symbol-map").clear();
+		config.getComplexOption("math-symbol-map").copyAll(mathSymbols);
+
+		// Save string replace to config
+		config.getComplexOption("string-replace").clear();
+		config.getComplexOption("string-replace").copyAll(stringReplace);
+    	
+		// Save other options to config
+		config.setOption("use_ooomath", Boolean.toString(dlg.getCheckBoxStateAsBoolean("UseOoomath")));
+    	config.setOption("tabstop", dlg.getTextFieldText("TabStopLaTeX"));
+    }
+    
+    private void updateTextAndMathMaps() {
     	// Save the current math symbol in our cache
     	if (sCurrentMathSymbol!=null) {
     		Map<String,String> attr = new HashMap<String,String>();
     		attr.put("latex", dlg.getTextFieldText("MathLaTeX"));
     		mathSymbols.put(sCurrentMathSymbol, attr);
     	}
-    	
+
     	// Save the current string replace in our cache
     	if (sCurrentText!=null) {
     		Map<String,String> attr = new HashMap<String,String>();
@@ -1121,11 +1246,11 @@ public final class ConfigurationDialog extends WeakBase
     		attr.put("fontenc", "any");
     		stringReplace.put(sCurrentText, attr);
     	}
-    	
-    	config.setOption("tabstop", dlg.getTextFieldText("TabStopLaTeX"));
     }
     
     private void updateTextAndMathControls() {
+    	updateTextAndMathMaps();
+    	
     	// Get the current math symbol, if any
     	short nSymbolItem = dlg.getListBoxSelectedItem("MathSymbolName");
     	if (nSymbolItem>=0) {
@@ -1163,7 +1288,56 @@ public final class ConfigurationDialog extends WeakBase
     	
     }
     
+    private void newSymbolClick() {
+    	String sNewName = appendItem("MathSymbolName",customSymbolNameProvider.getNames());
+    	if (sNewName!=null) {
+    		Map<String,String> attr = new HashMap<String,String>();
+    		attr.put("latex", "");
+    		mathSymbols.put(sNewName, attr);
+    	}
+    	saveTextAndMath();
+    	updateTextAndMathControls();
+    }
+    
+    private void deleteSymbolClick() {
+    	if (deleteCurrentItem("MathSymbolName")) {
+    		mathSymbols.remove(sCurrentMathSymbol);
+    		sCurrentMathSymbol = null;
+    		updateTextAndMathControls();
+    	}
+    }
+    
+    private void newTextClick() {
+    	String sNewName = appendItem("TextInput", new HashSet<String>());
+    	if (sNewName!=null) {
+    		Map<String,String> attr = new HashMap<String,String>();
+    		attr.put("latex-code", "");
+    		attr.put("fontenc", "any");
+    		stringReplace.put(sNewName, attr);
+    	}
+    	saveTextAndMath();
+    	updateTextAndMathControls();	
+    }
+    
+    private void deleteTextClick() {
+    	if (deleteCurrentItem("TextInput")) {
+    		stringReplace.remove(sCurrentText);
+    		sCurrentText = null;
+    		updateTextAndMathControls();
+    	}
+    }
+    
     // Utilities
+    private String[] sortStringSet(Set<String> theSet) {
+    	String[] theArray = new String[theSet.size()];
+    	int i=0;
+    	for (String s : theSet) {
+    		theArray[i++] = s;
+    	}
+    	sortStringArray(theArray);
+    	return theArray;
+    }
+    
     private void sortStringArray(String[] theArray) {
     	// TODO: Get locale from OOo rather than the system
         Collator collator = Collator.getInstance();

@@ -29,7 +29,6 @@ package org.openoffice.da.comp.w2lcommon.helper;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;

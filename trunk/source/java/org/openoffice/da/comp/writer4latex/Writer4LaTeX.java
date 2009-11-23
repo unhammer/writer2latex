@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-06-19)
+ *  Version 1.2 (2009-11-19)
  *
  */ 
  
@@ -223,27 +223,35 @@ public final class Writer4LaTeX extends WeakBase
 		
         if (texify==null) { texify = new TeXify(m_xContext); }
         File file = new File(urlToFile(sBasePath),sBaseFileName);
+        
+        boolean bResult = true;
 		
         try {
             if (sBackend=="pdftex") {
-                texify.process(file, TeXify.PDFTEX, true);
+                bResult = texify.process(file, TeXify.PDFTEX, true);
             }
             else if (sBackend=="dvips") {
-                texify.process(file, TeXify.DVIPS, true);
+            	bResult = texify.process(file, TeXify.DVIPS, true);
             }
             else if (sBackend=="xetex") {
-                texify.process(file, TeXify.XETEX, true);
+            	bResult = texify.process(file, TeXify.XETEX, true);
             }
             else if (sBackend=="generic") {
-                texify.process(file, TeXify.GENERIC, true);
+            	bResult = texify.process(file, TeXify.GENERIC, true);
             }
         }
         catch (IOException e) {
             MessageBox msgBox = new MessageBox(m_xContext, m_xFrame);
             msgBox.showMessage("Writer4LaTeX Error",e.getMessage());
         }
-		
-        xStatus.setValue(10); // The user will not really see this...
+        
+        xStatus.setValue(10); // The user will usually not see this...
+
+        if (!bResult) {
+            MessageBox msgBox = new MessageBox(m_xContext, m_xFrame);
+            msgBox.showMessage("Writer4LaTeX Error","Failed to execute LaTeX - see log for details");        	
+        }
+        
         xStatus.end();
     }
 	

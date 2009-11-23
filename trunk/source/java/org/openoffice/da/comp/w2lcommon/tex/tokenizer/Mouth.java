@@ -73,7 +73,7 @@ public class Mouth {
 	}
 	
 	private class Eyes {
-		private BufferedReader br; // The inpuy
+		private BufferedReader br; // The input
 		private String sLine; // The current line
 		private int nLen; // The length of the current line
 		private int nIndex; // The current index in the current line
