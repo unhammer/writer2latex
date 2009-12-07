@@ -6,6 +6,7 @@ The source is available under the terms and conditions of the
 GNU LESSER GENERAL PUBLIC LICENSE, version 2.1.
 Please see the file COPYING.TXT for details.
 
+
 Overview
 --------
 
@@ -22,19 +23,16 @@ The source of Writer2LaTeX consists of three major parts:
 Currently parts of the source for Writer2LaTeX are somewhat messy and
 undocumented. This situation is improving from time to time :-)
 
+
 Third-party software
 --------------------
 
-Writer2LaTeX includes some classes from the OpenOffice.org project
-* com.sun.star.lib.loader.* are part of the SDK for OOo
-* writer2latex.xmerge.* contains some classes which are part of the xmerge
-  project within OOo (some of the classes are slightly modified)
+Writer2LaTeX includes some classes from the OpenOffice.org project:
+writer2latex.xmerge.* contains some classes which are part of the xmerge
+project within OOo (some of the classes are slightly modified)
 See copyright notices within the source files
 
-Also, the windows DLL file unowinreg.dll is part of the SDK for OOo,
-the source can be found at http://svn.services.openoffice.org/
-
-Finally, writer2latex.util.Base64 is Harald Harders public domain Base64 class
+Also, writer2latex.util.Base64 is Harald Harders public domain Base64 class
 
 
 Building Writer2LaTeX
@@ -78,4 +76,3 @@ Henrik Just, November 2009
 
 
 Thanks to Michael Niedermair for writing the original ant build file
-

@@ -688,6 +688,18 @@ public final class ConfigurationDialog extends WeakBase
 			styleMap[i].clear();
 	    	Map<String,String> displayNames = styleNameProvider.getDisplayNames(sOOoFamilyNames[i]);
 			copyStyles(configMap, styleMap[i], displayNames);
+			for (String sName : styleMap[i].keySet()) {
+				Map<String,String> attr = styleMap[i].get(sName);
+				if (attr.containsKey("next")) {
+					String[] sNext = attr.get("next").split(";");
+					String sNewNext = "";
+					for (String sNextName : sNext) {
+						if (sNewNext.length()>0) { sNewNext+=";"; }
+						sNewNext+=displayNames.get(sNextName);
+					}
+					attr.put("next", sNewNext);
+				}
+			}
 		}
     	
 		// Load other controls from config
@@ -728,6 +740,18 @@ public final class ConfigurationDialog extends WeakBase
 			configMap.clear();
 			Map<String,String> internalNames = styleNameProvider.getInternalNames(sOOoFamilyNames[i]);
 			copyStyles(styleMap[i], configMap, internalNames);
+			for (String sName : configMap.keySet()) {
+				Map<String,String> attr = configMap.get(sName);
+				if (attr.containsKey("next")) {
+					String[] sNext = attr.get("next").split(";");
+					String sNewNext = "";
+					for (String sNextName : sNext) {
+						if (sNewNext.length()>0) { sNewNext+=";"; }
+						sNewNext+=internalNames.get(sNextName);
+					}
+					attr.put("next", sNewNext);
+				}
+			}
 		}
 
 		// Save other controls to config

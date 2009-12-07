@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-22)
+ *  Version 1.2 (2009-12-07)
  *
  */
 
@@ -29,6 +29,8 @@ package writer2latex.office;
 //import java.io.ByteArrayInputStream;
 //import java.io.ByteArrayOutputStream; 
 //import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.HashSet;
 
 import org.w3c.dom.Node;
@@ -56,6 +58,7 @@ public final class ImageLoader {
     private String sOutFileName;
     private boolean bUseSubdir = false;
     private int nImageCount = 0;
+    private NumberFormat formatter;
 	
     // should EPS be extracted from SVM?
     private boolean bExtractEPS;
@@ -71,6 +74,7 @@ public final class ImageLoader {
         this.oooDoc = oooDoc;
         this.sOutFileName = sOutFileName;
         this.bExtractEPS = bExtractEPS;
+        this.formatter = new DecimalFormat("000");
     }
 	
     public void setOutFileName(String sOutFileName) { this.sOutFileName = sOutFileName; }
@@ -94,7 +98,7 @@ public final class ImageLoader {
     private boolean isAcceptedFormat(String sMime) { return acceptedFormats.contains(sMime); }
 	
     public void setGraphicConverter(GraphicConverter gcv) { this.gcv = gcv; }
-	
+    
     public BinaryGraphicsDocument getImage(Node node) {
         // node must be a draw:image element.
         // variables to hold data about the image:
@@ -142,7 +146,7 @@ public final class ImageLoader {
         if (blob==null) { return null; }
 
         // Assign a name (without extension) 
-        String sName = sOutFileName+"-img"+(++nImageCount);
+        String sName = sOutFileName+"-img"+formatter.format(++nImageCount);
         if (bUseSubdir) { sName = sOutFileName + "-img/" + sName; }
      
         BinaryGraphicsDocument bgd = null;

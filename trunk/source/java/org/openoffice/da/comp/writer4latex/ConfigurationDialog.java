@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-11-19)
+ *  Version 1.2 (2009-11-29)
  *
  */ 
  
@@ -278,30 +278,85 @@ public final class ConfigurationDialog
     	info.append("Failed to find "+sName+"\n");
     	return false;
     }
+    
+    // Windows: Test that the given path contains MikTeX
+    private boolean containsMikTeX(String sPath) {
+    	File dir = new File(sPath);
+    	if (dir.exists() && dir.canRead()) {
+    		File latex = new File(dir,"latex.exe");
+    		return latex.exists();
+    	}
+    	return false;
+    }
 	
+    // Windows: Configure a certain MikTeX application
+    private void configureMikTeX(String sPath, String sName, String sAppName, String sArguments, StringBuffer info) {
+    	File app = new File(new File(sPath),sAppName+".exe");
+    	if (app.exists()) {
+    		externalApps.setApplication(sName, sAppName, sArguments);
+			info.append("  Found "+sName+": "+sAppName+" - OK\n");
+    	}
+    	else {
+    		externalApps.setApplication(sName, "???", "???");
+			info.append("  Failed to find "+sName+"\n");    		
+    	}
+    }
+
     // Configure the applications automatically (OS dependent)
     private boolean autoConfigure(XWindow xWindow) {
 		String sOsName = System.getProperty("os.name");
+		StringBuffer info = new StringBuffer();
+		info.append("Results of configuration:\n\n");
+		info.append("Your system identifies itself as "+sOsName+"\n\n");
     	if (sOsName.startsWith("Windows")) {
-    		// TODO: Get information from the windows registry using unowinreg.dll from the SDK
+
+    		// TODO: Get information from the windows registry using external vbs script
     		// Assume MikTeX
-    		externalApps.setApplication(ExternalApps.LATEX, "latex", "--interaction=batchmode %s");
-    		externalApps.setApplication(ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s");
-    		externalApps.setApplication(ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s");
-    		externalApps.setApplication(ExternalApps.DVIPS, "dvips", "%s");
-    		externalApps.setApplication(ExternalApps.BIBTEX, "bibtex", "%s");
-    		externalApps.setApplication(ExternalApps.MAKEINDEX, "makeindex", "%s");
-    		externalApps.setApplication(ExternalApps.MK4HT, "mk4ht", "%c %s");
-    		externalApps.setApplication(ExternalApps.DVIVIEWER, "yap", "--single-instance %s");
+    		String sMikTeXPath = null;
+    		String[] sPaths = System.getenv("PATH").split(";");
+    		for (String s : sPaths) {
+    			if (s.toLowerCase().indexOf("miktex")>-1 && containsMikTeX(s)) {
+    				sMikTeXPath = s;
+    				break;
+    			}
+    		}
+    		if (sMikTeXPath==null) {
+        		for (String s : sPaths) {
+        			if (containsMikTeX(s)) {
+        				sMikTeXPath = s;
+        				break;
+        			}
+        		}    			
+    		}
+    		if (sMikTeXPath!=null) {
+    			info.append("Found MikTeX\n");
+    			configureMikTeX(sMikTeXPath, ExternalApps.LATEX, "latex", "--interaction=batchmode %s", info);
+    			configureMikTeX(sMikTeXPath, ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s", info);
+    			configureMikTeX(sMikTeXPath, ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s", info);
+    			configureMikTeX(sMikTeXPath, ExternalApps.DVIPS, "dvips", "%s", info);
+    			configureMikTeX(sMikTeXPath, ExternalApps.BIBTEX, "bibtex", "%s", info);
+    			configureMikTeX(sMikTeXPath, ExternalApps.MAKEINDEX, "makeindex", "%s", info);
+    			configureMikTeX(sMikTeXPath, ExternalApps.MK4HT, "mk4ht", "%c %s", info);
+    			configureMikTeX(sMikTeXPath, ExternalApps.DVIVIEWER, "yap", "--single-instance %s", info);
+    		}
+    		else {
+    			info.append("Failed to find MikTeX\n");
+    			info.append("Writer4LaTeX has been configured to work if MikTeX is added to your path\n");
+    			externalApps.setApplication(ExternalApps.LATEX, "latex", "--interaction=batchmode %s");
+    			externalApps.setApplication(ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s");
+    			externalApps.setApplication(ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s");
+    			externalApps.setApplication(ExternalApps.DVIPS, "dvips", "%s");
+    			externalApps.setApplication(ExternalApps.BIBTEX, "bibtex", "%s");
+    			externalApps.setApplication(ExternalApps.MAKEINDEX, "makeindex", "%s");
+    			externalApps.setApplication(ExternalApps.MK4HT, "mk4ht", "%c %s");
+    			externalApps.setApplication(ExternalApps.DVIVIEWER, "yap", "--single-instance %s");
+    		}
     		// And assume gsview for pdf and ps
     		// gsview32 may not be in the path, but at least this helps a bit
     		externalApps.setApplication(ExternalApps.PDFVIEWER, "gsview32.exe", "-e \"%s\"");
     		externalApps.setApplication(ExternalApps.POSTSCRIPTVIEWER, "gsview32.exe", "-e \"%s\"");  
-    		displayAutoConfigInfo("Configured for MikTeX...");
     	}
     	else { // Assume a unix-like system supporting the "which" command
-    		StringBuffer info = new StringBuffer();
-    		info.append("Results of configuration:\n\n");
     		configureApp(ExternalApps.LATEX, "latex", "--interaction=batchmode %s",info);
     		configureApp(ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s",info);
     		configureApp(ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s",info);
@@ -317,8 +372,8 @@ public final class ConfigurationDialog
     		String[] sPsViewers =  {"evince", "okular", "ghostview"};
     		configureApp(ExternalApps.POSTSCRIPTVIEWER, sPsViewers, "%s",info);
     		
-    		displayAutoConfigInfo(info.toString());
     	}
+		displayAutoConfigInfo(info.toString());
     	changeApplication(xWindow);
         return true;
     }

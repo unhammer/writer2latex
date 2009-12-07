@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-31)
+ *  Version 1.2 (2009-11-29)
  *
  */ 
  
