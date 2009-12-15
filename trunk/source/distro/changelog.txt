@@ -2,6 +2,9 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[w2x] Added support for text:start-value in outline numbering and list styles (the latter
+  is only relevant if use_list_hack is true)
+
 [all] Use zeropadding on exported images (ie file-img001 etc.)
 
 [w2l] Bugfix: Add \par after display equation when formatting>=convert_most

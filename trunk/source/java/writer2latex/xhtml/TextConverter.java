@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-09-05)
+ *  Version 1.2 (2009-12-15)
  *
  */
 
@@ -751,13 +751,11 @@ public class TextConverter extends ConverterHelper {
         // Restart numbering, if required
         if (counter!=null) {
             boolean bContinueNumbering = "true".equals(Misc.getAttribute(onode,XMLString.TEXT_CONTINUE_NUMBERING));
-            if (bContinueNumbering) {
-                if (config.xhtmlUseListHack()) {
-                    hnode.setAttribute("start",Integer.toString(counter.getValue(nLevel)+1));
-                }
-            }
-            else if (counter!=null) {
+            if (!bContinueNumbering && counter!=null) {
                 counter.restart(nLevel);
+            }
+            if (config.xhtmlUseListHack() && counter.getValue(nLevel)>0) {
+                hnode.setAttribute("start",Integer.toString(counter.getValue(nLevel)+1));                	
             }
         }
 

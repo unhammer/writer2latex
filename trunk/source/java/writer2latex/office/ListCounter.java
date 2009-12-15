@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2005 by Henrik Just
+ *  Copyright: 2002-2009 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2007-10-17)
+ *  Version 1.2 (2009-12-15)
  *
  */
 
@@ -34,8 +34,9 @@ import writer2latex.util.*;
  *
  */
 public class ListCounter {
-    private int nCounter[] = new int[11];
-    private String sNumFormat[] = new String[11];
+    private int[] nCounter = new int[11];
+    private String[] sNumFormat = new String[11];
+    private int[] nStartValue = new int[11];
     private ListStyle style;
     private int nLevel=1; // current level
 	
@@ -53,8 +54,10 @@ public class ListCounter {
             this.style = style;
             for (int i=1; i<=10; i++) {
                 sNumFormat[i] = style.getLevelProperty(i,XMLString.STYLE_NUM_FORMAT);
+                nStartValue[i] = Misc.getPosInteger(style.getLevelProperty(i, XMLString.TEXT_START_VALUE),1);
             }
         }
+        restart(1);
     }
 	
     public ListCounter step(int nLevel) {
@@ -73,7 +76,7 @@ public class ListCounter {
     }
 	
     public ListCounter restart(int nLevel) {
-        restart(nLevel,0);
+        restart(nLevel,nStartValue[nLevel]-1);
         return this;
     }
 	
