@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-21)
+ *  Version 1.2 (2010-02-19)
  *
  */
 
@@ -73,9 +73,15 @@ public final class MathmlConverter extends ConverterHelper {
         // TODO: Use settings to determine display mode/text mode
         // formula must be a math:math node
         // First try to find a StarMath annotation
-        Node semantics = Misc.getChildByTagName(formula,XMLString.MATH_SEMANTICS);
+    	Node semantics = Misc.getChildByTagName(formula,XMLString.SEMANTICS); // Since OOo 3.2
+    	if (semantics==null) {
+    		semantics = Misc.getChildByTagName(formula,XMLString.MATH_SEMANTICS);
+    	}
 		if (semantics!=null) {
-            Node annotation = Misc.getChildByTagName(semantics,XMLString.MATH_ANNOTATION);
+			Node annotation = Misc.getChildByTagName(semantics,XMLString.ANNOTATION); // Since OOo 3.2
+			if (annotation==null) {
+				annotation = Misc.getChildByTagName(semantics,XMLString.MATH_ANNOTATION);
+			}
             if (annotation!=null) {
                 String sStarMath = "";
                 if (annotation.hasChildNodes()) {
@@ -216,7 +222,11 @@ public final class MathmlConverter extends ConverterHelper {
                     if (MIMETypes.MATH.equals(object.getType()) || MIMETypes.ODF.equals(object.getType())) { // Formula!
                         try {
                             Document formuladoc = ((EmbeddedXMLObject) object).getContentDOM();
-                            return Misc.getChildByTagName(formuladoc,XMLString.MATH_MATH);
+                            Element formula = Misc.getChildByTagName(formuladoc,XMLString.MATH); // Since OOo 3.2
+                            if (formula==null) {
+                            	formula = Misc.getChildByTagName(formuladoc,XMLString.MATH_MATH);
+                            }
+                            return formula;
                         }
                         catch (org.xml.sax.SAXException e) {
                             e.printStackTrace();
@@ -229,7 +239,10 @@ public final class MathmlConverter extends ConverterHelper {
             }
         }
         else { // flat xml, object is contained in node
-            return Misc.getChildByTagName(node,XMLString.MATH_MATH);
+            Element formula = Misc.getChildByTagName(node,XMLString.MATH); // Since OOo 3.2
+            if (formula==null) {
+            	formula = Misc.getChildByTagName(node,XMLString.MATH_MATH);
+            }
         }
         return null;
     }

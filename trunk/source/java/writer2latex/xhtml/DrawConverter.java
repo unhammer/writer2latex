@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-09-07)
+ *  Version 1.2 (2010-02-19)
  *
  */
  
@@ -336,7 +336,10 @@ public class DrawConverter extends ConverterHelper {
             }
         }
         else { // flat xml format
-            Node formula = Misc.getChildByTagName(onode,XMLString.MATH_MATH);
+            Node formula = Misc.getChildByTagName(onode,XMLString.MATH); // Since OOo 3.2
+            if (formula==null) {
+            	formula = Misc.getChildByTagName(onode,XMLString.MATH_MATH);
+            }
             if (formula != null) {
                 hnode.appendChild(converter.createTextNode(" "));
                 getMathCv().convert(formula,hnode);

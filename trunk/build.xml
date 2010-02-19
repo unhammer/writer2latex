@@ -2,15 +2,14 @@
   ############################################################################
   # This is the Ant build file for writer2latex
   # Original: Sep 2004 (mgn)
-  # version 1.2 (2009-12-07)
+  # version 1.2 (2010-02-14)
   ############################################################################
 -->
 <project name="w2l" default="help" basedir=".">
 
     <!-- set this property to the location of your SO/OOo installation -->
-	<!--<property name="OFFICE_HOME" location="c:/Program Files/OpenOffice.org 2.4"/>-->
-	<property name="OFFICE_HOME" location="/opt/openoffice.org/basis3.0" />
-	<property name="URE_HOME" location="/opt/openoffice.org/ure" />
+	<property name="OFFICE_CLASSES" location="/usr/share/java/openoffice" />
+	<property name="URE_CLASSES" location="/usr/share/java/openoffice" />
 
     <description>writer2latex - build file</description>
 
@@ -49,9 +48,9 @@
     <!-- classpath for the application; needs java-uno classes -->
     <path id="main.class.path"> 
         <!-- java uno classes -->
-    	<filelist dir="${URE_HOME}/share/java"
+    	<filelist dir="${URE_CLASSES}"
 	        files="jurt.jar,juh.jar,ridl.jar"/>
-        <filelist dir="${OFFICE_HOME}/program/classes"
+        <filelist dir="${OFFICE_CLASSES}"
     		files="unoil.jar"/>
         <!-- additional uno interfaces generated from idl -->
         <pathelement path="${source.idl}/writer2latex"/>

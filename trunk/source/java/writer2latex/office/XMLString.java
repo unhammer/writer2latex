@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-20)
+ *  Version 1.2 (2010-02-19)
  *
  */
 
@@ -455,5 +455,9 @@ public class XMLString {
     public static final String MATH_MATH="math:math";
     public static final String MATH_SEMANTICS="math:semantics";
 	public static final String MATH_ANNOTATION="math:annotation";
+	// math without namespace
+	public static final String MATH="math";
+    public static final String SEMANTICS="semantics";
+	public static final String ANNOTATION="annotation";
     
 }

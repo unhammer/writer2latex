@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-19)
+ *  Version 1.2 (2010-02-19)
  *
  */
 
@@ -51,8 +51,10 @@ public class MathConverter extends ConverterHelper {
         }
         else {
             Document htmlDOM = hnode.getOwnerDocument();
-            NodeList annotationList
-                = ((Element) onode).getElementsByTagName(XMLString.MATH_ANNOTATION);
+            NodeList annotationList = ((Element) onode).getElementsByTagName(XMLString.ANNOTATION); // Since OOo 3.2
+            if (annotationList.getLength()>0) {
+            	annotationList = ((Element) onode).getElementsByTagName(XMLString.MATH_ANNOTATION);
+            }
             if (annotationList.getLength()>0 && annotationList.item(0).hasChildNodes()) {
                 // Insert the StarMath annotation as a kbd element
                 Element kbd = htmlDOM.createElement("kbd");
@@ -74,9 +76,17 @@ public class MathConverter extends ConverterHelper {
 
     public void convertNode(Node onode, Node hnode) {
         if (onode.getNodeType()==Node.ELEMENT_NODE) {
-            if (onode.getNodeName().equals(XMLString.MATH_SEMANTICS)) {
+            if (onode.getNodeName().equals(XMLString.SEMANTICS)) { // Since OOo 3.2
                 // ignore this construction
                 convertNodeList(onode.getChildNodes(),hnode);
+            }
+            else if (onode.getNodeName().equals(XMLString.MATH_SEMANTICS)) {
+                // ignore this construction
+                convertNodeList(onode.getChildNodes(),hnode);
+            }
+            else if (onode.getNodeName().equals(XMLString.ANNOTATION)) { // Since OOo 3.2
+                // ignore the annotation (StarMath) completely
+                // (mozilla renders it for some reason)
             }
             else if (onode.getNodeName().equals(XMLString.MATH_ANNOTATION)) {
                 // ignore the annotation (StarMath) completely
@@ -116,7 +126,8 @@ public class MathConverter extends ConverterHelper {
 	
     private String stripNamespace(String s) {
         int nPos = s.indexOf(':');
-        return s.substring(nPos+1);
+        if (nPos>-1) { return s.substring(nPos+1); }
+        else { return s; }
     }
 	
     // OOo exports some characters (from the OpenSymbol/StarSymbol font)

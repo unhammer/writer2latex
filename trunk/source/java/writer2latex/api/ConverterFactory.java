@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-12-15)
+ *  Version 1.2 (2010-02-19)
  *
  */
  
@@ -33,7 +33,7 @@ public class ConverterFactory {
 
     // Version information
     private static final String VERSION = "1.1.1";
-    private static final String DATE = "2009-12-15";
+    private static final String DATE = "2010-02-19";
 	
     /** Return version information
      *  @return the Writer2LaTeX version in the form
