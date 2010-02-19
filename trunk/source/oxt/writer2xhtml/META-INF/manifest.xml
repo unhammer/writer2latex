@@ -28,5 +28,5 @@
     <manifest:file-entry
      manifest:full-path="writer2xhtml.rdb"
      manifest:media-type="application/vnd.sun.star.uno-typelibrary;type=RDB"/>
-
+     
 </manifest:manifest>

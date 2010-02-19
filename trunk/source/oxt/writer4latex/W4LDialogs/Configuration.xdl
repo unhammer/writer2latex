@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Configuration" dlg:left="139" dlg:top="84" dlg:width="260" dlg:height="101" dlg:closeable="true" dlg:moveable="true" dlg:title="Writer4LaTeX Configuration" dlg:withtitlebar="false">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Configuration" dlg:left="139" dlg:top="84" dlg:width="260" dlg:height="101" dlg:closeable="true" dlg:moveable="true" dlg:title="Writer4LaTeX Configuration" dlg:withtitlebar="false" dlg:help-url="org.openoffice.da.writer4latex.oxt:ConfigurationDialog">
  <dlg:bulletinboard>
   <dlg:text dlg:id="ExternalAppsLabel" dlg:tab-index="0" dlg:left="6" dlg:top="4" dlg:width="210" dlg:height="12" dlg:value="External Applications"/>
   <dlg:text dlg:id="AppLabel" dlg:tab-index="1" dlg:left="12" dlg:top="18" dlg:width="55" dlg:height="12" dlg:value="Application"/>
@@ -8,7 +8,7 @@
    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:BrowseClick" script:language="UNO"/>
   </dlg:button>
   <dlg:text dlg:id="ExecutableLabel" dlg:tab-index="3" dlg:left="12" dlg:top="32" dlg:width="55" dlg:height="12" dlg:value="Executable"/>
-  <dlg:menulist dlg:id="Application" dlg:tab-index="2" dlg:left="72" dlg:top="17" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="9">
+  <dlg:menulist dlg:id="Application" dlg:tab-index="2" dlg:left="72" dlg:top="17" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="10" dlg:help-url="org.openoffice.da.writer4latex.oxt:ConfigurationApplication">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="LaTeX" dlg:selected="true"/>
     <dlg:menuitem dlg:value="PdfLaTeX"/>
@@ -23,16 +23,15 @@
    </dlg:menupopup>
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:ApplicationChange" script:language="UNO"/>
   </dlg:menulist>
-  <dlg:textfield dlg:id="Executable" dlg:tab-index="4" dlg:left="72" dlg:top="31" dlg:width="120" dlg:height="12">
+  <dlg:textfield dlg:id="Executable" dlg:tab-index="4" dlg:left="72" dlg:top="31" dlg:width="120" dlg:height="12" dlg:help-url="org.openoffice.da.writer4latex.oxt:ConfigurationExecutable">
    <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.UNO:ExecutableUnfocus" script:language="UNO"/>
   </dlg:textfield>
-  <dlg:textfield dlg:id="Options" dlg:tab-index="7" dlg:left="72" dlg:top="45" dlg:width="120" dlg:height="12">
+  <dlg:textfield dlg:id="Options" dlg:tab-index="7" dlg:left="72" dlg:top="45" dlg:width="120" dlg:height="12" dlg:help-url="org.openoffice.da.writer4latex.oxt:ConfigurationOptions">
    <script:event script:event-name="on-blur" script:macro-name="vnd.sun.star.UNO:OptionsUnfocus" script:language="UNO"/>
   </dlg:textfield>
-  <dlg:button dlg:id="AutoButton" dlg:tab-index="8" dlg:left="72" dlg:top="65" dlg:width="120" dlg:height="14" dlg:value="Automatic configuration">
+  <dlg:button dlg:id="AutoButton" dlg:tab-index="8" dlg:left="72" dlg:top="65" dlg:width="120" dlg:height="14" dlg:value="Automatic configuration" dlg:help-url="org.openoffice.da.writer4latex.oxt:ConfigurationAutoButton">
    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:AutomaticClick" script:language="UNO"/>
   </dlg:button>
-  <dlg:button dlg:id="CommandButton1" dlg:tab-index="9" dlg:left="205" dlg:top="85" dlg:width="2" dlg:height="0" dlg:value="CommandButton1"/>
   <dlg:text dlg:id="OptionsLabel" dlg:tab-index="6" dlg:left="12" dlg:top="46" dlg:width="55" dlg:height="12" dlg:value="Options"/>
  </dlg:bulletinboard>
 </dlg:window>

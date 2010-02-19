@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<tree_view version="14-feb-2010">
+  <help_section application="writer4latex" id="w4l01" title="Writer4LaTeX">
+      <topic id="writer4latex/org.openoffice.da.writer4latex.oxt/introduction.xhp">Introduction</topic>
+      <topic id="writer4latex/org.openoffice.da.writer4latex.oxt/configuration.xhp">Configuration</topic>
+      <topic id="writer4latex/org.openoffice.da.writer4latex.oxt/menu.xhp">Menu reference</topic>
+      <topic id="writer4latex/org.openoffice.da.writer4latex.oxt/guidelines.xhp">Guidelines</topic>
+      <topic id="writer4latex/org.openoffice.da.writer4latex.oxt/templates.xhp">Using the templates</topic>
+  </help_section>
+</tree_view>

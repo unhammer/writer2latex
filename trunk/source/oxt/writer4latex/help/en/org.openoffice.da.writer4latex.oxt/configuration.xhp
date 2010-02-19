@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer4latex-configuration" indexer="include">
+            <title xml-lang="en-US">Configuration</title>
+            <filename>org.openoffice.da.writer4latex.oxt/configuration.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex.oxt:ConfigurationDialog" id="bm_configurationdialog"/>
+        <paragraph role="heading" level="1" xml-lang="en-US">Configuration</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Before you can use Writer4LaTeX you must configure it to use your LaTeX
+        distribution as well as viewers for the different output formats.</paragraph>
+        <table>
+        	<tablerow>
+        		<tablecell>
+        			<paragraph role="tablecontent" xml-lang="en-US">To access this function...</paragraph>
+        		</tablecell>
+		 	</tablerow>
+       		<tablerow>
+        		<tablecell>
+        			<paragraph role="tablecontent" xml-lang="en-US">Select <emph>Tools - Extension Manager - Writer4LaTeX</emph>
+        			and click <emph>Configure</emph></paragraph>
+        			<paragraph role="tablecontent" xml-lang="en-US">Select <emph>Tools - Options - %PRODUCTNAME Writer - Writer4LaTeX</emph>
+        			</paragraph>
+        		</tablecell>
+        	</tablerow>
+        </table>
+
+		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex.oxt:ConfigurationAutoButton" id="bm_configurationautobutton"/>
+		<paragraph role="heading" level="2" xml-lang="en-US">Automatic Configuration</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US">If you click this button, Writer4LaTeX will try to locate the external programs
+		and configure them. You will be presented with a short report of the results. Any applications that Writer4LaTeX cannot find for
+		you must be configured manually.</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex.oxt:ConfigurationAutoButton" visibility="hidden">Click here to let Writer4LaTeX configure your external applications automatically</ahelp></paragraph>
+
+		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex.oxt:ConfigurationApplication" id="bm_configurationapplication"/>
+		<paragraph role="heading" level="2" xml-lang="en-US">Application</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US">Select the external application you wish to configure in the list.</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US">The available applications are:</paragraph>
+		<list type="unordered">
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US">PdfLaTeX: The pdflatex executable (used if you select PDF as your backend format)</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US">LaTeX: The latex executable (used for other backend formats)</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US">Dvips: The DVI to PostScript converter dvips (used if you select PostScript as your backend format)</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US">BibTeX: The bibtex executable (used if your document contains a bibliography)</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US">MakeIndex: The makeindex executable (used if your document contains an alphabetical index)</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US">DVI Viewer: Application to view DVI files</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US">PDF Viewer: Application to view PDF files</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US">PostScript Viewer: Application to view PostScript files</paragraph>
+			</listitem>
+		</list>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex.oxt:ConfigurationApplication" visibility="hidden">Select the external application you wish to configure here</ahelp></paragraph>
+
+		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex.oxt:ConfigurationExecutable" id="bm_configurationexecutable"/>
+		<paragraph role="heading" level="2" xml-lang="en-US">Executable</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US">Type the full path to the executable or click <emph>Browse</emph> to find
+		the executable in your file system</paragraph>	
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex.oxt:ConfigurationExecutable" visibility="hidden">Type the full path to the executable here or find it using the Browse button</ahelp></paragraph>
+
+		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex.oxt:ConfigurationOptions" id="bm_configurationoptions"/>
+		<paragraph role="heading" level="2" xml-lang="en-US">Options</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US">Fill out any additional options here. Often you will only need the file name,
+		which is denoted %s.</paragraph>		
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex.oxt:ConfigurationOptions" visibility="hidden">Fill out any additional options here, using %s to represent the file name</ahelp></paragraph>
+	</body>
+</helpdocument>

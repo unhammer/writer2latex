@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer4latex-menu" indexer="include">
+            <title xml-lang="en-US">The LaTeX menu</title>
+            <filename>org.openoffice.da.writer4latex.oxt/menu.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">The LaTeX menu</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Writer4LaTeX offers the top level menu <emph>LaTeX</emph> in Writer
+        with the following commands.</paragraph>
+
+		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex:ProcessDocument" id="bm_processdocument"/>
+        <paragraph role="heading" level="2" xml-lang="en-US">Run LaTeX...</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">...</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex:ProcessDocument" visibility="hidden">Run LaTeX</ahelp></paragraph>
+
+		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex:ProcessDirectly" id="bm_processdirectly"/>
+        <paragraph role="heading" level="2" xml-lang="en-US">Run LaTeX directly</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">...</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex:ProcessDirectly" visibility="hidden">Run LaTeX directly</ahelp></paragraph>
+
+		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex:ViewLog" id="bm_viewlog"/>
+        <paragraph role="heading" level="2" xml-lang="en-US">View Log files</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">...</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex:ViewLog" visibility="hidden">View log files</ahelp></paragraph>
+	</body>
+</helpdocument>

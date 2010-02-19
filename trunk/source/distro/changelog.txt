@@ -2,6 +2,13 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[w4l] Added help files
+
+[w2x] Bugfix: A textposition of 0% is no longer considered to be superscript
+
+[all] OFFICE_HOME and URE_HOME in build.xml renamed to OFFICE_CLASSES and URE_CLASSES,
+  which should now point directly to the directory containing the jars
+
 [w2x] Added support for text:start-value in outline numbering and list styles (the latter
   is only relevant if use_list_hack is true)
 

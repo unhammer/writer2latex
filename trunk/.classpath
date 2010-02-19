@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="source/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/usr/share/java/openoffice/juh.jar"/>
+	<classpathentry kind="lib" path="/usr/share/java/openoffice/jurt.jar"/>
+	<classpathentry kind="lib" path="/usr/share/java/openoffice/ridl.jar"/>
+	<classpathentry kind="lib" path="/usr/share/java/openoffice/unoil.jar"/>
+	<classpathentry kind="lib" path="source/idl/writer2latex"/>
+	<classpathentry kind="lib" path="source/idl/writer2xhtml"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

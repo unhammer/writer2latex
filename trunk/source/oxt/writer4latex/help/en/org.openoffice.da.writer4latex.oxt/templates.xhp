@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer4latex-templates" indexer="include">
+            <title xml-lang="en-US">Using the templates</title>
+            <filename>org.openoffice.da.writer4latex.oxt/templates.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Using the templates</paragraph>
+        <paragraph role="heading" level="2" xml-lang="en-US">The article template</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">This template contains a number of styles that corresponds to LaTeX code.
+        If you use these styles and makes sure to use the configuration <emph>W4L: Article</emph> when you convert your document
+        (this is selected automatically) with Writer2LaTeX, you will get a result that resembles a handwritten LaTeX file.
+        Note that hard formatting and any other styles will be ignored. The available styles are summarized in the following table.</paragraph>
+        
+       	<table>
+       		<tablerow>
+       			<tablecell>
+       				<paragraph role="tablehead" xml-lang="en-US">%PRODUCTNAME Writer Style</paragraph>
+       			</tablecell>
+       			<tablecell>
+       				<paragraph role="tablehead" xml-lang="en-US">LaTeX code</paragraph>
+       			</tablecell>
+       		</tablerow>
+       		<tablerow>
+       			<tablecell>
+       				<paragraph role="tablecontent" xml-lang="en-US">Title</paragraph>
+       			</tablecell>
+       			<tablecell>
+       				<paragraph role="tablecontent" xml-lang="en-US">\title{...}</paragraph>
+       			</tablecell>
+       		</tablerow>
+       		<tablerow>
+       			<tablecell>
+       				<paragraph role="tablecontent" xml-lang="en-US"></paragraph>
+       			</tablecell>
+       			<tablecell>
+       				<paragraph role="tablecontent" xml-lang="en-US"></paragraph>
+       			</tablecell>
+       		</tablerow>
+       	</table>
+<!--author
+\author{...}
+date
+\date{...}
+abstract title
+renews \abstractname
+abstract
+abstract environment
+part
+\part{...}
+Heading 2
+\section{...}
+Heading 3
+\subsection{...}
+Heading 4
+\subsubsection{...}
+Heading 5
+\paragraph{...}
+Heading 6
+\subparagraph{...}
+flushleft
+flushleft environment
+flushright
+flushright environment
+center
+center environment
+verse
+verse environment
+quote
+quote environment
+quotation
+quotation environment
+Preformatted text
+verbatim environment3
+theorem
+theorem environment
+itemize
+itemize list
+enumerate
+enurerate list
+List Heading
+description list (item label)
+List Contents
+description list (item text)
+    verb
+\verb|...|
+Emphasis
+\emph{...}
+Strong Emphasis
+\textbf{...}
+textrm
+\textrm{...}
+textsf
+\textsf{...}
+texttt
+\texttt{...}
+textup
+\textup{...}
+textsl
+\textsl{...}
+textit
+\textit{...}
+textsc
+\textsc{...}
+textmd
+\textmd{...}
+textbf
+\textbf{...}
+tiny
+{\tiny ...}
+scriptsize
+{\sciptsize ...}
+footnotesize
+{\footnotesize ...}
+small
+{\small ...}
+normalsize
+{\normalsize ...}
+large
+{\large ...}
+Large
+{\Large ...}
+LARGE
+{\LARGE ...}
+huge
+{\huge ...}
+Huge
+{\Huge ...}-->
+        
+        
+	</body>
+</helpdocument>

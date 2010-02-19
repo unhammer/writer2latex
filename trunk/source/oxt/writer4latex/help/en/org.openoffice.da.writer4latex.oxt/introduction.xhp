@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer4latex-introduction" indexer="include">
+            <title xml-lang="en-US">Introduction</title>
+            <filename>org.openoffice.da.writer4latex.oxt/introduction.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">About Writer4LaTeX</paragraph>
+        
+        <paragraph role="paragraph" xml-lang="en-US">The purpose of the Writer4LaTeX extension is to turn Writer into a frontend for LaTeX.
+        By installing Writer4LaTeX you will thus be available to author well-structured LaTeX documents using (almost) the full power of
+        %PRODUCTNAME Writer.
+		The functionality of %PRODUCTNAME Writer with Writer4LaTeX can be compared to the application
+		<link href="http://www.lyx.org" name="Link to the Lyx Website">LyX</link>.
+		</paragraph>
+
+		<paragraph role="heading" level="2" xml-lang="en-US">Authoring LaTeX files with Writer4LaTeX</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">You can use Writer4LaTeX in two different ways
+        </paragraph>
+        <list type="unordered" bullet="disc">
+			<listitem>
+        		<paragraph role="paragraph" xml-lang="en-US">You can prepare your documents with Writer as you usually do,
+        		keeping a few
+        		<link href="org.openoffice.da.writer4latex.oxt/guidelines.xhp" name="Guidelines">guidelines</link> in mind.
+        		You can then invoke Writer4LaTeX to convert your document into LaTeX, process the LaTeX document and display the final result. You are free to create either  a LaTeX document that preserves as much of your formatting as possible – or create a clean LaTeX document that will resemble a LaTeX document created by hand.
+        		</paragraph>
+        	</listitem>
+        	<listitem>
+        		<paragraph role="paragraph" xml-lang="en-US">You can use some special
+        		<link href="org.openoffice.da.writer4latex.oxt/templates.xhp" name="Using the templates">Writer templates</link>
+        		provided with Writer4LaTeX to
+        		create your documents. Using the styles supported by these templates, you can easily create standard LaTeX documents
+        		using the opportunities of standard LaTeX document classes.
+        		</paragraph>
+		        <paragraph role="paragraph" xml-lang="en-US">For this initial version, templates for the standard LaTeX classes article
+		        are provided. More templates will be added later (report, book, beamer...), and you can also add your own templates.
+		        </paragraph>
+        	</listitem>
+        </list>
+        
+		<paragraph role="heading" level="2" xml-lang="en-US">LaTeX import</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">You can import existing LaTeX documents into Writer.
+        This feature uses Eitan M. Gurari's excellent TeX4ht system. Note however, that this doesn't mean that roundtrip
+        editing %PRODUCTNAME Writer ↔ LaTeX is possible. The intended use of the import feature is to be able to work on documents
+        that were orginally authored in LaTeX.
+        </paragraph>
+
+		<paragraph role="heading" level="2" xml-lang="en-US">Before you start</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Before you can use Writer4LaTeX, you need to
+        <link href="org.openoffice.da.writer4latex.oxt/configuration.xhp" name="Configuration">configure</link> it.
+        This requires that you have
+        a working TeX installation on your system such as MikTeX for Windows or TeX Live for unix/linux.
+        </paragraph>
+    </body>
+</helpdocument>

@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-09-08)
+ *  Version 1.2 (2010-02-14)
  *
  */
 
@@ -240,6 +240,7 @@ public class TextStyleConverter extends StyleWithPropertiesConverterHelper {
         if (sPos==null) return false;
         if (sPos.startsWith("sub")) return false;
         if (sPos.startsWith("-")) return false;
+        if (sPos.startsWith("0%")) return false;
         return true;
     }
 
@@ -354,7 +355,9 @@ public class TextStyleConverter extends StyleWithPropertiesConverterHelper {
                 }
                 if (s!=null) { props.addValue("font-size",Misc.multiply(s4,scale(s))); }
                 else { props.addValue("font-size",s4); }
-                props.addValue("vertical-align",s3);
+                if (!"0%".equals(s3)) {
+                	props.addValue("vertical-align",s3);
+                }
             }
             else if (s!=null) {
                 props.addValue("font-size",scale(s));
