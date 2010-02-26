@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-24) 
+ *  Version 1.2 (2010-02-26) 
  *
  */
 
@@ -235,10 +235,12 @@ public final class ConverterPalette extends ConverterBase {
             createMeta("author",metaData.getCreator(),declarations);
             // According to the spec, the date has the format YYYY-MM-DDThh:mm:ss
             String sDate = metaData.getDate();
-            if (sDate.length()==19 && sDate.charAt(10)=='T') {
-                sDate = sDate.substring(0,10);
+            if (sDate!=null) {
+            	if (sDate.length()==19 && sDate.charAt(10)=='T') {
+            		sDate = sDate.substring(0,10);
+            	}
+            	createMeta("date",sDate,declarations);
             }
-            createMeta("date",sDate,declarations);
         }
 		
         // Create options for documentclass

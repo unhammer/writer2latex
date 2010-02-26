@@ -13,17 +13,20 @@
 
 		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex:ProcessDocument" id="bm_processdocument"/>
         <paragraph role="heading" level="2" xml-lang="en-US">Run LaTeX...</paragraph>
-        <paragraph role="paragraph" xml-lang="en-US">...</paragraph>
-		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex:ProcessDocument" visibility="hidden">Run LaTeX</ahelp></paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Convert the document to LaTeX and display the result in an external viewer.
+        You can configure the export in the dialog.</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex:ProcessDocument" visibility="hidden">Run LaTeX and display the result</ahelp></paragraph>
 
 		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex:ProcessDirectly" id="bm_processdirectly"/>
         <paragraph role="heading" level="2" xml-lang="en-US">Run LaTeX directly</paragraph>
-        <paragraph role="paragraph" xml-lang="en-US">...</paragraph>
-		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex:ProcessDirectly" visibility="hidden">Run LaTeX directly</ahelp></paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Convert the document to LaTeX and display the result in an external viewer.
+        This command does not display the configuration dialog, but reuses the last settings.</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex:ProcessDirectly" visibility="hidden">Run LaTeX directly and display the result</ahelp></paragraph>
 
 		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex:ViewLog" id="bm_viewlog"/>
         <paragraph role="heading" level="2" xml-lang="en-US">View Log files</paragraph>
-        <paragraph role="paragraph" xml-lang="en-US">...</paragraph>
-		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex:ViewLog" visibility="hidden">View log files</ahelp></paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">In case of any problems in the conversion process, you can view the log files created by
+        LaTeX, MakeIndex and BibTeX here</paragraph>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex:ViewLog" visibility="hidden">View log files created by LaTeX, MakeIndex and BibTeX</ahelp></paragraph>
 	</body>
 </helpdocument>

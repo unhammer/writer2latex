@@ -11,21 +11,11 @@
         <paragraph role="heading" level="1" xml-lang="en-US">Configuration</paragraph>
         <paragraph role="paragraph" xml-lang="en-US">Before you can use Writer4LaTeX you must configure it to use your LaTeX
         distribution as well as viewers for the different output formats.</paragraph>
-        <table>
-        	<tablerow>
-        		<tablecell>
-        			<paragraph role="tablecontent" xml-lang="en-US">To access this function...</paragraph>
-        		</tablecell>
-		 	</tablerow>
-       		<tablerow>
-        		<tablecell>
-        			<paragraph role="tablecontent" xml-lang="en-US">Select <emph>Tools - Extension Manager - Writer4LaTeX</emph>
-        			and click <emph>Configure</emph></paragraph>
-        			<paragraph role="tablecontent" xml-lang="en-US">Select <emph>Tools - Options - %PRODUCTNAME Writer - Writer4LaTeX</emph>
-        			</paragraph>
-        		</tablecell>
-        	</tablerow>
-        </table>
+        <section id="howtoget" xml-lang="en-US">
+        	Select <emph>Tools - Extension Manager - Writer4LaTeX</emph>
+        	and click <emph>Configure</emph><br/>
+        	Select <emph>Tools - Options - %PRODUCTNAME Writer - Writer4LaTeX</emph>
+        </section>
 
 		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex.oxt:ConfigurationAutoButton" id="bm_configurationautobutton"/>
 		<paragraph role="heading" level="2" xml-lang="en-US">Automatic Configuration</paragraph>
@@ -75,7 +65,7 @@
 		<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer4latex.oxt:ConfigurationOptions" id="bm_configurationoptions"/>
 		<paragraph role="heading" level="2" xml-lang="en-US">Options</paragraph>
 		<paragraph role="paragraph" xml-lang="en-US">Fill out any additional options here. Often you will only need the file name,
-		which is denoted %s.</paragraph>		
+		which is denoted <emph>%s</emph>.</paragraph>		
 		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer4latex.oxt:ConfigurationOptions" visibility="hidden">Fill out any additional options here, using %s to represent the file name</ahelp></paragraph>
 	</body>
 </helpdocument>

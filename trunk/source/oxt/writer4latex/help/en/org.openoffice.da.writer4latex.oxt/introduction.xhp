@@ -7,7 +7,7 @@
         </topic>
     </meta>
     <body>
-        <paragraph role="heading" level="1" xml-lang="en-US">About Writer4LaTeX</paragraph>
+        <paragraph role="heading" level="1" xml-lang="en-US">Introduction to Writer4LaTeX</paragraph>
         
         <paragraph role="paragraph" xml-lang="en-US">The purpose of the Writer4LaTeX extension is to turn Writer into a frontend for LaTeX.
         By installing Writer4LaTeX you will thus be available to author well-structured LaTeX documents using (almost) the full power of
@@ -41,9 +41,13 @@
         </list>
         
 		<paragraph role="heading" level="2" xml-lang="en-US">LaTeX import</paragraph>
-        <paragraph role="paragraph" xml-lang="en-US">You can import existing LaTeX documents into Writer.
-        This feature uses Eitan M. Gurari's excellent TeX4ht system. Note however, that this doesn't mean that roundtrip
-        editing %PRODUCTNAME Writer ↔ LaTeX is possible. The intended use of the import feature is to be able to work on documents
+        <paragraph role="paragraph" xml-lang="en-US">You can
+        <link href="org.openoffice.da.writer4latex.oxt/import.xhp" name="Import TeX files">import</link>
+        existing LaTeX documents into Writer.
+        This feature uses Eitan M. Gurari's excellent 
+        <link href="http://www.cse.ohio-state.edu/~gurari/TeX4ht/" name="Link to the TeX4ht Website">TeX4ht</link>
+        system. Note however, that this feature doesn't make roundtrip
+        editing %PRODUCTNAME Writer ↔ LaTeX is possible. The intended use of the import feature to make it possible to work on documents
         that were orginally authored in LaTeX.
         </paragraph>
 

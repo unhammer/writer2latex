@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer4latex-import" indexer="include">
+            <title xml-lang="en-US">TeX import</title>
+            <filename>org.openoffice.da.writer4latex.oxt/import.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Importing TeX files</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Coming soon to an extension near you!</paragraph>
+	</body>
+</helpdocument>

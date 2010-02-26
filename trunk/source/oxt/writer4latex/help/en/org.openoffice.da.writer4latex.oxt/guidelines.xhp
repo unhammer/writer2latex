@@ -8,5 +8,41 @@
     </meta>
     <body>
         <paragraph role="heading" level="1" xml-lang="en-US">Guidelines</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Not every feature in %PRODUCTNAME Writer is supported by LaTeX. To avoid unexpected
+        results follow these guidelines.</paragraph>
+        <list type="unordered">
+        	<listitem>
+        		<paragraph role="paragraph" xml-lang="en-US"><emph>Page styles</emph>: %PRODUCTNAME Writer offers a sofisticated
+        		page style scheme, where every page style can define another style to be used for the next page.
+        		You can thus have something like Style A → Style B → Style C.
+        		In LaTeX this is only possible in the first step of a page sequence:
+        		The example above will produce Style A → Style B → Style B in LaTeX.
+        		You should beware of this when you design your page styles. Note that explicit change of page style with
+        		<emph>Insert - Manual break</emph> is not affected by this limitation.</paragraph>
+        		<paragraph role="paragraph" xml-lang="en-US">In LaTeX the same page geometry is used for all pages. The dimensions are
+        		taken from the first page of your document.</paragraph>
+        		<paragraph role="paragraph" xml-lang="en-US">Do not create headers and footers with more than one line of text,
+        		these will not be exported correctly to LaTeX.</paragraph>
+        	</listitem>
+        	<listitem>
+        		<paragraph role="paragraph" xml-lang="en-US"><emph>Background color</emph>: Background color is currently not supported
+        		except in table cells. You should avoid using background color elsewhere.</paragraph>
+        	</listitem>
+        	<listitem>
+        		<paragraph role="paragraph" xml-lang="en-US"><emph>Graphics</emph>: Anchor graphics to paragraph or to character if you
+        		want a floating graphic. If you want the graphic to be a part of the text flow, anchor it to character. Do not anchor
+        		graphics to page as this will make the graphics turn up the wrong place in your document.
+        		You are advised not to wrap text around graphics as this is not exported to LaTeX anyway.</paragraph>
+        		<paragraph role="paragraph" xml-lang="en-US">Also, do not use drawing objects inserted directly in the text (using the
+        		Drawing toolbar). These will not be converted to LaTeX.
+        		If you need to insert a drawing, insert an embedded Draw object (<emph>Insert - Object</emph>).</paragraph>
+        	</listitem>
+        	<listitem>
+        		<paragraph role="paragraph" xml-lang="en-US"><emph>Tables</emph>: Avoid using cells spanning several rows, as this
+        		is currently not supported. Cells spanning several columns are fully supported.</paragraph>
+        	</listitem>
+        </list>
+        <paragraph role="paragraph" xml-lang="en-US">In general you should be aware that not all formatting is exported. The export of formatting
+        depends on the selected LaTeX format.</paragraph>
 	</body>
 </helpdocument>

@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-05)
+ *  Version 1.2 (2010-02-26)
  *
  */
 
@@ -504,11 +504,14 @@ public class Converter extends ConverterBase {
             // Insert the actual meta data
             createMeta("DC.title",metaData.getTitle());
             // DC.subject actually contains subject+keywords, so we merge them
-            String sDCSubject = metaData.getSubject();
-            if (metaData.getSubject().length()>0 && metaData.getKeywords().length()>0) {
-                sDCSubject+=", ";
+            String sDCSubject = "";
+            if (metaData.getSubject()!=null && metaData.getSubject().length()>0) {
+            	sDCSubject = metaData.getSubject();
             }
-            sDCSubject+=metaData.getKeywords();
+            if (metaData.getKeywords()!=null && metaData.getKeywords().length()>0) {
+            	if (sDCSubject.length()>0) { sDCSubject+=", "; }
+            	sDCSubject += metaData.getKeywords();
+            }
             createMeta("DC.subject",sDCSubject);
             createMeta("DC.description",metaData.getDescription());
             createMeta("DC.creator",metaData.getCreator());

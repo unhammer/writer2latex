@@ -2,6 +2,10 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[w2l] Bugfix: Avoid null pointer exception on empty metadata (date)
+
+[w2x] Bugfix: Avoid null pointer exception on empty metadata (subject, keywords)
+
 [w2x] Adapted to work with MathML without namespace (fix for change in OOo 3.2)
 
 [w2l] Adapted to work with MathML without namespace (fix for change in OOo 3.2)
