@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-05-22)
+ *  Version 1.0.1 (2010-03-01)
  *
  */
  
@@ -153,7 +153,10 @@ public class DrawConverter extends ConverterHelper {
                         try {
                             Document settings = ((EmbeddedXMLObject) object).getSettingsDOM();
                             Document formuladoc = ((EmbeddedXMLObject) object).getContentDOM();
-                            Element formula = Misc.getChildByTagName(formuladoc,XMLString.MATH_MATH);
+                            Element formula = Misc.getChildByTagName(formuladoc,XMLString.MATH); // Since OOo3.2
+                            if (formula==null) {
+                            	formula = Misc.getChildByTagName(formuladoc,XMLString.MATH_MATH);
+                            }
                             ldp.append(" $")
                                .append(palette.getMathmlCv().convert(settings,formula))
                                .append("$");
@@ -184,7 +187,10 @@ public class DrawConverter extends ConverterHelper {
             }
         }
         else { // flat xml, object is contained in node
-            Element formula = Misc.getChildByTagName(node,XMLString.MATH_MATH);
+            Element formula = Misc.getChildByTagName(node,XMLString.MATH); // Since OOo 3.2
+            if (formula==null) {
+            	formula = Misc.getChildByTagName(node,XMLString.MATH_MATH);
+            }
             if (formula!=null) {
                 ldp.append(" $")
                    .append(palette.getMathmlCv().convert(null,formula))

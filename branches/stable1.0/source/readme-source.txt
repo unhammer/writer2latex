@@ -1,7 +1,7 @@
-Writer2LaTeX source version 1.0
-===============================
+Writer2LaTeX source version 1.0.1
+=================================
 
-Writer2LaTeX is (c) 2002-2009 by Henrik Just.
+Writer2LaTeX is (c) 2002-2010 by Henrik Just.
 The source is available under the terms and conditions of the
 GNU LESSER GENERAL PUBLIC LICENSE, version 2.1.
 Please see the file COPYING.TXT for details.
@@ -61,7 +61,7 @@ In addition to oxt, the build file supports the following targets:
     clean
 
 
-Henrik Just, September 2009
+Henrik Just, March 2010
 
 
 Thanks to Michael Niedermair for writing the original ant build file

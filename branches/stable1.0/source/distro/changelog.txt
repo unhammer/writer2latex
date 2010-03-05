@@ -1,4 +1,13 @@
-Changelog for Writer2LaTeX version 0.5 -> 1.0
+Changelog for Writer2LaTeX version 0.5 -> 1.0.1
+
+---------- version 1.0.1 final --------
+
+[w2x] Adapted to work with MathML without namespace (fix for change in OOo 3.2)
+
+[w2l] Adapted to work with MathML without namespace (fix for change in OOo 3.2)
+
+[all] OFFICE_HOME and URE_HOME in build.xml renamed to OFFICE_CLASSES and URE_CLASSES,
+  which should now point directly to the directory containing the jars
 
 ---------- version 1.0 final ----------
 
