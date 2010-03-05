@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-02-26)
+ *  Version 1.2 (2010-03-02)
  *
  */
 
@@ -442,12 +442,7 @@ public class Converter extends ConverterBase {
     public Element nextOutFile() {
         if (nOutFileIndex>=0) { textCv.insertFootnotes(htmlDoc.getContentNode()); }
         htmlDoc = new XhtmlDocument(getOutFileName(++nOutFileIndex,false),nType);
-        htmlDoc.setEncoding(config.xhtmlEncoding());
-        htmlDoc.setNoDoctype(config.xhtmlNoDoctype());
-        htmlDoc.setAddBOM(config.xhtmlAddBOM());
-        htmlDoc.setUseNamedEntities(config.useNamedEntities());
-        htmlDoc.setHexadecimalEntities(config.hexadecimalEntities());
-        htmlDoc.setXsltPath(config.getXsltPath());
+        htmlDoc.setConfig(config);
         if (template!=null) { htmlDoc.readFromTemplate(template); }
         else if (bNeedHeaderFooter) { htmlDoc.createHeaderFooter(); }
         outFiles.add(nOutFileIndex,htmlDoc);

@@ -2,7 +2,7 @@
   ############################################################################
   # This is the Ant build file for writer2latex
   # Original: Sep 2004 (mgn)
-  # version 1.2 (2010-02-14)
+  # version 1.2 (2010-03-04)
   ############################################################################
 -->
 <project name="w2l" default="help" basedir=".">
@@ -157,12 +157,19 @@
                 <patternset>
                     <exclude name="**/*Test.class"/>
                     <exclude name="**/AllTests.class"/>
-		    		<include name="**/*.xml"/>
-                	<include name="**/*.class"/>
-                    <exclude name="writer2latex/Application.class"/>
-                    <exclude name="writer2latex/latex/**/*"/>
-                    <exclude name="writer2latex/bibtex/**/*"/>
-                	<exclude name="org/openoffice/da/comp/writer2latex/**/*"/>
+                	<include name="org/openoffice/da/comp/w2lcommon/**/*.class"/>
+                	<include name="org/openoffice/da/comp/writer2xhtml/**/*.class"/>
+                	<include name="writer2latex/api/**/*.class"/>
+                	<include name="writer2latex/base/**/*.class"/>
+                	<include name="writer2latex/office/**/*.class"/>
+                	<include name="writer2latex/util/**/*.class"/>
+                	<include name="writer2latex/xhtml/**/*.class"/>
+                	<include name="writer2latex/xhtml/**/*.xml"/>
+                	<include name="writer2latex/xmerge/**/*.class"/>
+                	<!-- include the portions of w2l necessary to convert formulas -->
+                	<include name="writer2latex/latex/StarMathConverter.class"/>
+                	<include name="writer2latex/latex/LaTeXDocumentPortion.class"/>
+                	<include name="writer2latex/latex/i18n/*.class"/>
                 </patternset>
             </fileset>
             <!-- also include uno interface as generated from idl -->

@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-04-30)
+ *  Version 1.2 (2010-03-03)
  *
  */
 
@@ -336,7 +336,7 @@ public class ListStyleConverter extends StyleConverter {
 	private void createLabels(ListStyle style, String[] sName, int nMaxLevel,
 			boolean bDeclareCounters, boolean bRenewLabels,
 			boolean bUseTextStyle, LaTeXDocumentPortion ldp) {
-//		Declare counters if required (eg. "\newcounter{countername1}[countername2]")
+		// Declare counters if required (eg. "\newcounter{countername1}[countername2]")
 		if (bDeclareCounters) {
 			int j = 0;
 			for (int i=1; i<=nMaxLevel; i++) {
@@ -348,14 +348,14 @@ public class ListStyleConverter extends StyleConverter {
 				}
 			}
 		}
-//		Create numbering for each level (eg. "\arabic{countername}")
+		// Create numbering for each level (eg. "\arabic{countername}")
 		String[] sNumFormat = new String[nMaxLevel+1];
 		for (int i=1; i<=nMaxLevel; i++) {
 			String s = numFormat(style.getLevelProperty(i,XMLString.STYLE_NUM_FORMAT));
 			if (s==null) { sNumFormat[i]=""; }
 			else { sNumFormat[i] = s + "{" + sName[i] + "}"; }
 		}
-//		Create numberings (ie. define "\thecountername"):
+		// Create numberings (ie. define "\thecountername"):
 		for (int i=1; i<=nMaxLevel; i++) {
 			if (style.isNumber(i)) {
 				ldp.append("\\renewcommand\\the").append(sName[i]).append("{");
@@ -369,22 +369,22 @@ public class ListStyleConverter extends StyleConverter {
 				ldp.append("}").nl();
 			}
 		}
-//		Create labels (ie. define "\labelcountername"):
+		// Create labels (ie. define "\labelcountername"):
 		for (int i=1; i<=nMaxLevel; i++) {
 			ldp.append(bRenewLabels ? "\\renewcommand" : "\\newcommand")
 			.append("\\label").append(sName[i]).append("{");
-//			Apply text style if required
+			// Apply text style if required
 			BeforeAfter baText = new BeforeAfter();
 			if (bUseTextStyle) {
 				String sStyleName = style.getLevelProperty(i,XMLString.TEXT_STYLE_NAME);
 				palette.getCharSc().applyTextStyle(sStyleName,baText,new Context());
 			}
 
-//			Create label content
+			// Create label content
 			if (style.isNumber(i)) {
 				String sPrefix = style.getLevelProperty(i,XMLString.STYLE_NUM_PREFIX);
 				String sSuffix = style.getLevelProperty(i,XMLString.STYLE_NUM_SUFFIX);
-//				Apply style
+				// Apply style
 				ldp.append(baText.getBefore());
 				if (sPrefix!=null) { ldp.append(sPrefix); }
 				ldp.append("\\the").append(sName[i]);
@@ -393,16 +393,19 @@ public class ListStyleConverter extends StyleConverter {
 			}
 			else if (style.isBullet(i)) {
 				String sBullet = style.getLevelProperty(i,XMLString.TEXT_BULLET_CHAR);
-//				Apply style
+				// Apply style
 				ldp.append(baText.getBefore());
 				if (sBullet!=null) {
-//					Bullets are usually symbols, so this should be OK:
+					String sFontName = palette.getCharSc().getFontName(style.getLevelProperty(i,XMLString.TEXT_STYLE_NAME));
+					palette.getI18n().pushSpecialTable(sFontName);
+					// Bullets are usually symbols, so this should be OK:
 					ldp.append(palette.getI18n().convert(sBullet,false,"en"));
+					palette.getI18n().popSpecialTable();
 				}
 				ldp.append(baText.getAfter());
 			}
 			else {
-//				TODO: Support images!
+				// TODO: Support images!
 				ldp.append("\\textbullet");
 			}
 

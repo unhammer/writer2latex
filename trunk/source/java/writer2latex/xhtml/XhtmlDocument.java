@@ -16,15 +16,14 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-05)
+ *  Version 1.2 (2010-03-03)
  *
  */
  
- //TODO: Remove redundant lang and dir attributes
  //TODO: Add named entities outside ISO-latin 1
 
 package writer2latex.xhtml;
@@ -86,7 +85,12 @@ public class XhtmlDocument extends DOMDocument {
     private char cLimit = 65535;
     private boolean bNoDoctype = false;
     private boolean bAddBOM = false;
+    private boolean bPrettyPrint = true;
     private String sXsltPath = "";
+    private String sContentId = "content";
+    private String sHeaderId = "header";
+    private String sFooterId = "footer";
+    private String sPanelId = "panel";
 	
     // Content
     private Element headNode = null;
@@ -176,13 +180,13 @@ public class XhtmlDocument extends DOMDocument {
 	
     public void createHeaderFooter() {
         headerNode = getContentDOM().createElement("div");
-        headerNode.setAttribute("id","header");
+        headerNode.setAttribute("id",sHeaderId);
         bodyNode.appendChild(headerNode);
         contentNode = getContentDOM().createElement("div");
-        contentNode.setAttribute("id","content");
+        contentNode.setAttribute("id",sContentId);
         bodyNode.appendChild(contentNode);
         footerNode = getContentDOM().createElement("div");
-        footerNode.setAttribute("id","footer");
+        footerNode.setAttribute("id",sFooterId);
         bodyNode.appendChild(footerNode);
     }
 	
@@ -230,10 +234,10 @@ public class XhtmlDocument extends DOMDocument {
         }
         else if ("div".equals(sTagName)) {
             String sId = elm.getAttribute("id");
-            if ("content".equals(sId)) { contentNode = elm; }
-            else if ("header".equals(sId)) { headerNode = elm; }
-            else if ("footer".equals(sId)) { footerNode = elm; }
-            else if ("panel".equals(sId)) { panelNode = elm; }
+            if (sContentId.equals(sId)) { contentNode = elm; }
+            else if (sHeaderId.equals(sId)) { headerNode = elm; }
+            else if (sFooterId.equals(sId)) { footerNode = elm; }
+            else if (sPanelId.equals(sId)) { panelNode = elm; }
         }
 		
         Node child = elm.getFirstChild();
@@ -262,44 +266,71 @@ public class XhtmlDocument extends DOMDocument {
             headNode.appendChild(titleNode);
         }
     }
-	
-    public void setEncoding(String s) {
-        s = s.toUpperCase();
-        if ("UTF-16".equals(s)) {
-            sEncoding = s;
+    
+    public void setConfig(XhtmlConfig config) {
+        sEncoding = config.xhtmlEncoding().toUpperCase();
+        if ("UTF-16".equals(sEncoding)) {
             cLimit = 65535;
         }
-        else if ("ISO-8859-1".equals(s)) {
-            sEncoding = s;
+        else if ("ISO-8859-1".equals(sEncoding)) {
             cLimit = 255;
         }
-        else if ("US-ASCII".equals(s)) {
-            sEncoding = s;
+        else if ("US-ASCII".equals(sEncoding)) {
             cLimit = 127;
         }
         else {
             sEncoding = "UTF-8";
             cLimit = 65535;
         }
+        
+        bAddBOM = config.xhtmlAddBOM();
+        bNoDoctype = config.xhtmlNoDoctype();
+        bPrettyPrint = config.prettyPrint();
+        bUseNamedEntities = config.useNamedEntities();
+        bHexadecimalEntities = config.hexadecimalEntities();
+        sXsltPath = config.getXsltPath();
+        
+        String[] sTemplateIds = config.templateIds().split(",");
+        int nIdCount = sTemplateIds.length;
+        if (nIdCount>0) sContentId = sTemplateIds[0].trim(); else sContentId = "content";
+        if (nIdCount>1) sHeaderId = sTemplateIds[1].trim(); else sHeaderId = "header";
+        if (nIdCount>2) sFooterId = sTemplateIds[2].trim(); else sFooterId = "footer";
+        if (nIdCount>3) sPanelId = sTemplateIds[3].trim(); else sPanelId = "panel";
     }
-	
+		
     public String getEncoding() { return sEncoding; }
 	
-    public void setNoDoctype(boolean b) { bNoDoctype = b; }
-	
-    public void setAddBOM(boolean b) { bAddBOM = b; }
-    
-    public void setUseNamedEntities(boolean b) {
-        bUseNamedEntities = b;
-    }
-	
-    public void setHexadecimalEntities(boolean b) {
-        bHexadecimalEntities = b;
-    }
-	
-    public void setXsltPath(String s) { sXsltPath = s; }
-
     public String getFileExtension() { return super.getFileExtension(); }
+    
+    private void optimize(Element node, String sLang, String sDir) {
+    	if (node.hasAttribute("xml:lang")) {
+    		if (node.getAttribute("xml:lang").equals(sLang)) {
+    			node.removeAttribute("xml:lang");
+    			if (node.hasAttribute("lang")) {
+    				node.removeAttribute("lang");
+    			}
+    		}
+    		else {
+    			sLang = node.getAttribute("xml:lang");
+    		}
+    	}
+    	if (node.hasAttribute("xml:dir")) {
+    		if (node.getAttribute("xml:dir").equals(sDir)) {
+    			node.removeAttribute("xml:dir");
+    		}
+    		else {
+    			sDir = node.getAttribute("xml:dir");
+    		}
+    	}
+    	
+    	Node child = node.getFirstChild();
+    	while (child!=null) {
+    		if (child.getNodeType()==Node.ELEMENT_NODE) {
+    			optimize((Element)child, sLang, sDir);
+    		}
+    		child = child.getNextSibling();
+    	}
+    }
 
     /**
      *  Write out content to the supplied <code>OutputStream</code>.
@@ -334,7 +365,9 @@ public class XhtmlDocument extends DOMDocument {
             osw.write(getContentDOM().getDoctype().getSystemId());
             osw.write("\">\n");
         }
-        write(getContentDOM().getDocumentElement(),0,osw);
+        Element doc = getContentDOM().getDocumentElement(); 
+        optimize(doc,null,null);
+        write(doc,0,osw);
         osw.flush();
         osw.close();
     }
@@ -357,7 +390,7 @@ public class XhtmlDocument extends DOMDocument {
                     osw.write("<"+node.getNodeName());
                     writeAttributes(node,osw);
                     osw.write(" />");
-                    if (nLevel>=0) { osw.write("\n"); }
+                    if (bPrettyPrint && nLevel>=0) { osw.write("\n"); }
                 }
                 else if (node.hasChildNodes()) {
                     // Block pretty print from this node?
@@ -374,7 +407,7 @@ public class XhtmlDocument extends DOMDocument {
                     osw.write("<"+node.getNodeName());
                     writeAttributes(node,osw);
                     osw.write(">");
-                    if (nLevel>=0 && !bBlockPrettyPrint) { osw.write("\n"); }
+                    if (bPrettyPrint && nLevel>=0 && !bBlockPrettyPrint) { osw.write("\n"); }
                     // Print children
                     for (int i = 0; i < nLen; i++) {
                         int nNextLevel;
@@ -385,7 +418,7 @@ public class XhtmlDocument extends DOMDocument {
                     // Print end tag
                     if (nLevel>=0 && !bBlockPrettyPrint) { writeSpaces(nLevel,osw); }
                     osw.write("</"+node.getNodeName()+">");
-                    if (nLevel>=0) { osw.write("\n"); }
+                    if (bPrettyPrint && nLevel>=0) { osw.write("\n"); }
                 }
                 else { // empty element
                     if (nLevel>=0) { writeSpaces(nLevel,osw); }
@@ -398,7 +431,7 @@ public class XhtmlDocument extends DOMDocument {
                     else {
                         osw.write(" />");
                     }
-                    if (nLevel>=0) { osw.write("\n"); }
+                    if (bPrettyPrint && nLevel>=0) { osw.write("\n"); }
                 }
                 break;
             case Node.TEXT_NODE:
@@ -409,7 +442,7 @@ public class XhtmlDocument extends DOMDocument {
                 osw.write("<!-- ");
                 write(node.getNodeValue(),osw);
                 osw.write(" -->");
-                if (nLevel>=0) { osw.write("\n"); }
+                if (bPrettyPrint && nLevel>=0) { osw.write("\n"); }
         }
     }
 	
@@ -427,7 +460,9 @@ public class XhtmlDocument extends DOMDocument {
     }
 
     private void writeSpaces(int nCount, OutputStreamWriter osw) throws IOException {
-        for (int i=0; i<nCount; i++) { osw.write("  "); }
+    	if (bPrettyPrint) {
+    		for (int i=0; i<nCount; i++) { osw.write("  "); }
+    	}
     }
 	
     private void write(String s, OutputStreamWriter osw) throws IOException {

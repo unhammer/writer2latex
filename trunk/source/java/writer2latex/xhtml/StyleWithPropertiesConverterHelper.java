@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-22)
+ *  Version 1.2 (2010-03-03)
  *
  */
 
@@ -62,7 +62,7 @@ public abstract class StyleWithPropertiesConverterHelper
         StyleWithProperties style = (StyleWithProperties) getStyles().getStyle(sStyleName);
         info.sTagName = getDefaultTagName(style);
         if (style!=null) {
-            applyLang(style,info);
+            if (config.multilingual()) { applyLang(style,info); }
             applyDirection(style,info);
             if (style.isAutomatic()) {
                 // Apply parent style + hard formatting
@@ -108,7 +108,8 @@ public abstract class StyleWithPropertiesConverterHelper
                     buf.append(styleNames.getExportName(sDisplayName));
                     buf.append(" {");
                     buf.append(props.toString());
-                    buf.append("}\n");
+                    buf.append("}");
+                    buf.append(config.prettyPrint() ? "\n" : " ");
                     // TODO: Create a method "getStyleDeclarationsInner"
                     // to be used by eg. FrameStyleConverter
                 }

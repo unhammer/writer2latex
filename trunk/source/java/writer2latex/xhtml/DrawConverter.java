@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-02-19)
+ *  Version 1.2 (2010-03-03)
  *
  */
  
@@ -305,9 +305,13 @@ public class DrawConverter extends ConverterHelper {
                 if (MIMETypes.MATH.equals(object.getType()) || MIMETypes.ODF.equals(object.getType())) { // Formula!
                     EmbeddedXMLObject xmlObject = (EmbeddedXMLObject) object;
                     // Document settings = object.getSettingsDOM();
+                    Element replacementImage = null;
+                    if (ofr.isOpenDocument()) { // look for replacement image
+                        replacementImage = Misc.getChildByTagName(getFrame(onode),XMLString.DRAW_IMAGE);
+                    }
                     try {
                         hnode.appendChild(converter.createTextNode(" "));
-                        getMathCv().convert(xmlObject.getContentDOM().getDocumentElement(),hnode);
+                        getMathCv().convert(replacementImage,xmlObject.getContentDOM().getDocumentElement(),hnode);
                         hnode.appendChild(converter.createTextNode(" "));
                     }
                     catch (SAXException e) {
@@ -341,8 +345,12 @@ public class DrawConverter extends ConverterHelper {
             	formula = Misc.getChildByTagName(onode,XMLString.MATH_MATH);
             }
             if (formula != null) {
+            	Element replacementImage = null;
+                if (ofr.isOpenDocument()) { // look for replacement image
+                    replacementImage = Misc.getChildByTagName(getFrame(onode),XMLString.DRAW_IMAGE);
+                }
                 hnode.appendChild(converter.createTextNode(" "));
-                getMathCv().convert(formula,hnode);
+                getMathCv().convert(replacementImage,formula,hnode);
                 hnode.appendChild(converter.createTextNode(" "));
             }
             else { // unsupported object

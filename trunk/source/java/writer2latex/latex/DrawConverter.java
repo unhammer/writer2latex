@@ -187,7 +187,7 @@ public class DrawConverter extends ConverterHelper {
             }
         }
         else { // flat xml, object is contained in node
-            Element formula = Misc.getChildByTagName(node,XMLString.MATH);
+            Element formula = Misc.getChildByTagName(node,XMLString.MATH); // Since OOo 3.2
             if (formula==null) {
             	formula = Misc.getChildByTagName(node,XMLString.MATH_MATH);
             }

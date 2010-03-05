@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-22)
+ *  Version 1.2 (2010-03-01)
  *
  */
 
@@ -79,7 +79,7 @@ public class FrameStyleConverter extends StyleWithPropertiesConverterHelper {
                            .append(getDefaultTagName(null))
                            .append(".").append(getClassNamePrefix())
                            .append(styleNames.getExportName(sDisplayName))
-                           .append(" p {").append(props.toString()).append("}\n");
+                           .append(" p {").append(props.toString()).append("}").append(config.prettyPrint() ? "\n" : " ");
                     }
                 }
             }

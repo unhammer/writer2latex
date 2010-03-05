@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-02-19)
+ *  Version 1.2 (2010-03-04)
  *
  */
 
@@ -33,48 +33,106 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
 import writer2latex.office.*;
+import writer2latex.util.Misc;
+import writer2latex.xmerge.BinaryGraphicsDocument;
+import writer2latex.latex.StarMathConverter;
 
+/** This class converts formulas: Either as MathML, as an image or as plain text (StarMath or LaTeX format)
+ */
 public class MathConverter extends ConverterHelper {
+	
+	private StarMathConverter smc = null;
 
     private boolean bSupportMathML;
+    private boolean bUseImage;
+    private boolean bUseLaTeX;
 	
+    /** Create a new <code>MathConverter</code>
+     * 
+     * @param ofr the OfficeReader to query about the document 
+     * @param config the configuration determining the type of export
+     * @param converter the converter instance
+     * @param bSupportMathML true if the formula should be exported as MathML
+     */
     public MathConverter(OfficeReader ofr, XhtmlConfig config, Converter converter,
         boolean bSupportMathML) {
 
         super(ofr,config,converter);
         this.bSupportMathML = bSupportMathML;
+        this.bUseImage = config.formulas()==XhtmlConfig.IMAGE_LATEX || config.formulas()==XhtmlConfig.IMAGE_STARMATH;
+        this.bUseLaTeX = config.formulas()==XhtmlConfig.IMAGE_LATEX || config.formulas()==XhtmlConfig.LATEX;
+        
+        if (bUseLaTeX) { smc = new StarMathConverter(); }
     }
 	
-    public void convert(Node onode, Node hnode) {
+    /** Convert a formula
+     * 
+     * @param image image version of the formula (or null if no image is available)
+     * @param onode the math node
+     * @param hnode the xhtml node to which content should be added
+     */
+    public void convert(Node image, Node onode, Node hnode) {
         if (bSupportMathML) {
-            convertNode(onode,hnode);
+            convertAsMathML(onode,hnode);
         }
         else {
-            Document htmlDOM = hnode.getOwnerDocument();
-            NodeList annotationList = ((Element) onode).getElementsByTagName(XMLString.ANNOTATION); // Since OOo 3.2
-            if (annotationList.getLength()>0) {
-            	annotationList = ((Element) onode).getElementsByTagName(XMLString.MATH_ANNOTATION);
-            }
-            if (annotationList.getLength()>0 && annotationList.item(0).hasChildNodes()) {
-                // Insert the StarMath annotation as a kbd element
-                Element kbd = htmlDOM.createElement("kbd");
-                hnode.appendChild(kbd);
-                NodeList list = annotationList.item(0).getChildNodes();
-                int nLen = list.getLength();
-                for (int i=0; i<nLen; i++) {
-                    Node child = list.item(i);
-                    if (child.getNodeType()==Node.TEXT_NODE) {
-                        kbd.appendChild(htmlDOM.createTextNode(child.getNodeValue()));
-                    }
-                }
-            }
-            else {
-                hnode.appendChild(htmlDOM.createTextNode("[Warning: formula ignored]"));
-            }
+        	convertAsImageOrText(image,onode,hnode);
         }
     }
+    
+    // For plain xhtml: Convert the formula as an image or as plain text
+    private void convertAsImageOrText(Node image, Node onode, Node hnode) {
+    	NodeList annotationList = ((Element) onode).getElementsByTagName(XMLString.ANNOTATION); // Since OOo 3.2
+    	if (annotationList.getLength()==0) {
+    		annotationList = ((Element) onode).getElementsByTagName(XMLString.MATH_ANNOTATION);
+    	}
+    	if (annotationList.getLength()>0 && annotationList.item(0).hasChildNodes()) {
+    		// First create the annotation (either StarMath or LaTeX)
+    		String sAnnotation = "";
+    		Node child = annotationList.item(0).getFirstChild();
+    		while (child!=null) {
+    			sAnnotation+=child.getNodeValue();
+    			child = child.getNextSibling();
+    		}
+    		if (bUseLaTeX) { sAnnotation = smc.convert(sAnnotation); }
 
-    public void convertNode(Node onode, Node hnode) {
+    		// Next insert the image if required and available
+    		if (bUseImage) {
+    			// Get the image from the ImageLoader
+    			String sHref = Misc.getAttribute(onode,XMLString.XLINK_HREF);
+    			if (sHref==null || sHref.length()==0 || ofr.isInPackage(sHref)) {
+    				BinaryGraphicsDocument bgd = converter.getImageLoader().getImage(image);
+    				if (bgd!=null) {
+    					String sMIME = bgd.getDocumentMIMEType();
+    					if (MIMETypes.PNG.equals(sMIME) || MIMETypes.JPEG.equals(sMIME) || MIMETypes.GIF.equals(sMIME)) {
+    						converter.addDocument(bgd);
+    	    				// Create the image and add the StarMath/LaTeX formula as alternative text
+    	    				Element img = converter.createElement("img");
+    	    				img.setAttribute("src",bgd.getFileName());
+    	    				img.setAttribute("class", "formula");
+    	    				img.setAttribute("alt",sAnnotation);
+
+    	    				hnode.appendChild(img);
+    	    				
+    	    				return;
+    					}
+    				}
+    			}
+    		}
+
+    		// Otherwise insert the StarMath/LaTeX annotation as a kbd element
+    		Element kbd = converter.createElement("kbd");
+    		kbd.setAttribute("class", "formula");
+    		hnode.appendChild(kbd);
+    		kbd.appendChild(converter.createTextNode(sAnnotation));
+    	}
+    	else {
+    		hnode.appendChild(converter.createTextNode("[Warning: formula ignored]"));
+    	}
+    }
+    
+    // For xhtml+mathml: Insert the mathml, removing the namespace (if any) and the annotation
+    public void convertAsMathML(Node onode, Node hnode) {
         if (onode.getNodeType()==Node.ELEMENT_NODE) {
             if (onode.getNodeName().equals(XMLString.SEMANTICS)) { // Since OOo 3.2
                 // ignore this construction
@@ -120,7 +178,7 @@ public class MathConverter extends ConverterHelper {
         if (list==null) { return; }
         int nLen = list.getLength();
         for (int i=0; i<nLen; i++) {
-            convertNode(list.item(i),hnode);
+            convertAsMathML(list.item(i),hnode);
         }
     }
 	
@@ -144,7 +202,7 @@ public class MathConverter extends ConverterHelper {
 
     // This method maps {Open|Star}Symbol private use area to real unicode
     // positions. This is the same table as in w2l/latex/style/symbols.xml.
-    // The named entities list is contributed by Bruno Mascret
+    // The list is contributed by Bruno Mascret
     private char replacePrivateChar(char c) {
         switch (c) {
             case '\uE002': return '\u2666';

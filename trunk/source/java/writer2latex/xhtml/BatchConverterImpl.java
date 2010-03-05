@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-09-05) 
+ *  Version 1.2 (2010-03-02) 
  *
  */
  
@@ -90,11 +90,7 @@ public class BatchConverterImpl extends BatchConverterBase {
     public OutputFile createIndexFile(String sHeading, IndexPageEntry[] entries) {
         // Create the index page (with header/footer or from template)
         XhtmlDocument htmlDoc = new XhtmlDocument("index",XhtmlDocument.XHTML10);
-        htmlDoc.setEncoding(config.xhtmlEncoding());
-        htmlDoc.setNoDoctype(config.xhtmlNoDoctype());
-        htmlDoc.setAddBOM(config.xhtmlAddBOM());
-        htmlDoc.setUseNamedEntities(config.useNamedEntities());
-        htmlDoc.setHexadecimalEntities(config.hexadecimalEntities());
+        htmlDoc.setConfig(config);
         if (template!=null) { htmlDoc.readFromTemplate(template); }
         else { htmlDoc.createHeaderFooter(); }
 

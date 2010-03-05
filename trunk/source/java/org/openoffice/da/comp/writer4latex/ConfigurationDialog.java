@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-11-29)
+ *  Version 1.2 (2010-03-05)
  *
  */ 
  
@@ -279,65 +279,71 @@ public final class ConfigurationDialog
     	return false;
     }
     
-    // Windows: Test that the given path contains MikTeX
-    private boolean containsMikTeX(String sPath) {
+    // Windows: Test that the given path contains a given executable
+    private boolean containsExecutable(String sPath,String sExecutable) {
     	File dir = new File(sPath);
     	if (dir.exists() && dir.canRead()) {
-    		File latex = new File(dir,"latex.exe");
-    		return latex.exists();
+    		File exe = new File(dir,sExecutable);
+    		return exe.exists();
     	}
     	return false;
     }
 	
     // Windows: Configure a certain MikTeX application
-    private void configureMikTeX(String sPath, String sName, String sAppName, String sArguments, StringBuffer info) {
+    private boolean configureMikTeX(String sPath, String sName, String sAppName, String sArguments, StringBuffer info, boolean bRequired) {
     	File app = new File(new File(sPath),sAppName+".exe");
     	if (app.exists()) {
     		externalApps.setApplication(sName, sAppName, sArguments);
 			info.append("  Found "+sName+": "+sAppName+" - OK\n");
+			return true;
     	}
-    	else {
+    	else if (bRequired) {
     		externalApps.setApplication(sName, "???", "???");
 			info.append("  Failed to find "+sName+"\n");    		
     	}
+    	return false;
     }
 
     // Configure the applications automatically (OS dependent)
     private boolean autoConfigure(XWindow xWindow) {
 		String sOsName = System.getProperty("os.name");
+		String sOsVersion = System.getProperty("os.version");
+		String sOsArch = System.getProperty("os.arch");
 		StringBuffer info = new StringBuffer();
 		info.append("Results of configuration:\n\n");
-		info.append("Your system identifies itself as "+sOsName+"\n\n");
+		info.append("Your system identifies itself as "+sOsName+" version "+sOsVersion+ " (" + sOsArch +")\n\n");
     	if (sOsName.startsWith("Windows")) {
-
-    		// TODO: Get information from the windows registry using external vbs script
     		// Assume MikTeX
     		String sMikTeXPath = null;
     		String[] sPaths = System.getenv("PATH").split(";");
     		for (String s : sPaths) {
-    			if (s.toLowerCase().indexOf("miktex")>-1 && containsMikTeX(s)) {
+    			if (s.toLowerCase().indexOf("miktex")>-1 && containsExecutable(s,"latex.exe")) {
     				sMikTeXPath = s;
     				break;
     			}
     		}
     		if (sMikTeXPath==null) {
         		for (String s : sPaths) {
-        			if (containsMikTeX(s)) {
+        			if (containsExecutable(s,"latex.exe")) {
         				sMikTeXPath = s;
         				break;
         			}
         		}    			
     		}
+
+    		boolean bFoundTexworks = false;
     		if (sMikTeXPath!=null) {
     			info.append("Found MikTeX\n");
-    			configureMikTeX(sMikTeXPath, ExternalApps.LATEX, "latex", "--interaction=batchmode %s", info);
-    			configureMikTeX(sMikTeXPath, ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s", info);
-    			configureMikTeX(sMikTeXPath, ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s", info);
-    			configureMikTeX(sMikTeXPath, ExternalApps.DVIPS, "dvips", "%s", info);
-    			configureMikTeX(sMikTeXPath, ExternalApps.BIBTEX, "bibtex", "%s", info);
-    			configureMikTeX(sMikTeXPath, ExternalApps.MAKEINDEX, "makeindex", "%s", info);
-    			configureMikTeX(sMikTeXPath, ExternalApps.MK4HT, "mk4ht", "%c %s", info);
-    			configureMikTeX(sMikTeXPath, ExternalApps.DVIVIEWER, "yap", "--single-instance %s", info);
+    			configureMikTeX(sMikTeXPath, ExternalApps.LATEX, "latex", "--interaction=batchmode %s", info, true);
+    			configureMikTeX(sMikTeXPath, ExternalApps.PDFLATEX, "pdflatex", "--interaction=batchmode %s", info, true);
+    			configureMikTeX(sMikTeXPath, ExternalApps.XELATEX, "xelatex", "--interaction=batchmode %s", info, true);
+    			configureMikTeX(sMikTeXPath, ExternalApps.DVIPS, "dvips", "%s", info, true);
+    			configureMikTeX(sMikTeXPath, ExternalApps.BIBTEX, "bibtex", "%s", info, true);
+    			configureMikTeX(sMikTeXPath, ExternalApps.MAKEINDEX, "makeindex", "%s", info, true);
+    			configureMikTeX(sMikTeXPath, ExternalApps.MK4HT, "mk4ht", "%c %s", info, true);
+    			configureMikTeX(sMikTeXPath, ExternalApps.DVIVIEWER, "yap", "--single-instance %s", info, true);
+    			// MikTeX 2.8 provides texworks for pdf viewing
+    			bFoundTexworks = configureMikTeX(sMikTeXPath, ExternalApps.PDFVIEWER, "texworks", "%s", info, true);
     		}
     		else {
     			info.append("Failed to find MikTeX\n");
@@ -351,10 +357,29 @@ public final class ConfigurationDialog
     			externalApps.setApplication(ExternalApps.MK4HT, "mk4ht", "%c %s");
     			externalApps.setApplication(ExternalApps.DVIVIEWER, "yap", "--single-instance %s");
     		}
-    		// And assume gsview for pdf and ps
-    		// gsview32 may not be in the path, but at least this helps a bit
-    		externalApps.setApplication(ExternalApps.PDFVIEWER, "gsview32.exe", "-e \"%s\"");
-    		externalApps.setApplication(ExternalApps.POSTSCRIPTVIEWER, "gsview32.exe", "-e \"%s\"");  
+    		info.append("\n");
+    		
+    		// Assume gsview for pdf and ps
+    		String sGsview = null;
+    		String sProgramFiles = System.getenv("ProgramFiles");
+    		if (sProgramFiles!=null) {
+    			if (containsExecutable(sProgramFiles+"\\ghostgum\\gsview","gsview32.exe")) {
+    				sGsview = sProgramFiles+"\\ghostgum\\gsview\\gsview32.exe";
+    			}
+    		}
+    		
+    		if (sGsview!=null) {
+    			info.append("Found gsview - OK\n");
+    		}
+    		else {
+    			info.append("Failed to find gsview\n");
+    			sGsview = "gsview32.exe"; // at least this helps a bit..
+    		}
+    		if (!bFoundTexworks) {
+    			externalApps.setApplication(ExternalApps.PDFVIEWER, sGsview, "-e \"%s\"");
+    		}
+    		externalApps.setApplication(ExternalApps.POSTSCRIPTVIEWER, sGsview, "-e \"%s\"");  
+
     	}
     	else { // Assume a unix-like system supporting the "which" command
     		configureApp(ExternalApps.LATEX, "latex", "--interaction=batchmode %s",info);
@@ -373,6 +398,10 @@ public final class ConfigurationDialog
     		configureApp(ExternalApps.POSTSCRIPTVIEWER, sPsViewers, "%s",info);
     		
     	}
+    	// Maybe add some info for Ubuntu users
+    	// sudo apt-get install texlive
+    	// sudo apt-get install texlive-xetex
+    	// sudo apt-get install tex4ht
 		displayAutoConfigInfo(info.toString());
     	changeApplication(xWindow);
         return true;

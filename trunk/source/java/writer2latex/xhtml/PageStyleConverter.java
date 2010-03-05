@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-09-08)
+ *  Version 1.2 (2010-03-01)
  *
  */
 
@@ -105,7 +105,8 @@ public class PageStyleConverter extends StyleConverterHelper {
             // The export the results
             buf.append(sIndent)
                .append(".masterpage").append(styleNames.getExportName(sDisplayName))
-               .append(" {").append(info.props.toString()).append("}\n");
+               .append(" {").append(info.props.toString()).append("}")
+               .append(config.prettyPrint() ? "\n" : " ");
         }
         return buf.toString();
     }

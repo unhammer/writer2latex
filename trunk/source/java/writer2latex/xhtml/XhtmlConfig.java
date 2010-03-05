@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-02-14)
+ *  Version 1.2 (2010-03-04)
  *
  */
 
@@ -38,7 +38,7 @@ import writer2latex.util.Misc;
 
 public class XhtmlConfig extends writer2latex.base.ConfigBase {
     // Implement configuration methods
-    protected int getOptionCount() { return 37; }
+    protected int getOptionCount() { return 42; }
     protected String getDefaultConfigPath() { return "/writer2latex/xhtml/config/"; }
 	
     // Override setOption: To be backwards compatible, we must accept options
@@ -55,6 +55,12 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     public static final int IGNORE_STYLES = 1;
     public static final int IGNORE_HARD = 2;
     public static final int CONVERT_ALL = 3;
+    
+    // Formulas (for xhtml 1.0 strict)
+    public static final int STARMATH = 0;
+    public static final int LATEX = 1;
+    public static final int IMAGE_STARMATH = 2;
+    public static final int IMAGE_LATEX = 3;
 	
     // Options
     private static final int IGNORE_HARD_LINE_BREAKS = 0;
@@ -66,34 +72,39 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     private static final int ENCODING = 6;
     private static final int USE_NAMED_ENTITIES = 7;
     private static final int HEXADECIMAL_ENTITIES = 8;
-    private static final int CUSTOM_STYLESHEET = 9;
-    private static final int FORMATTING = 10;
-    private static final int FRAME_FORMATTING = 11;
-    private static final int SECTION_FORMATTING = 12;
-    private static final int TABLE_FORMATTING = 13;
-    private static final int IGNORE_TABLE_DIMENSIONS = 14;
-    private static final int USE_DUBLIN_CORE = 15;
-    private static final int NOTES = 16;
-    private static final int CONVERT_TO_PX = 17;
-    private static final int SCALING = 18;
-    private static final int COLUMN_SCALING = 19;
-    private static final int FLOAT_OBJECTS = 20;
-    private static final int TABSTOP_STYLE = 21;
-    private static final int USE_LIST_HACK = 22;
-    private static final int SPLIT_LEVEL = 23;
-    private static final int REPEAT_LEVELS = 24;
-    private static final int CALC_SPLIT = 25;
-    private static final int DISPLAY_HIDDEN_SHEETS = 26;
-    private static final int DISPLAY_HIDDEN_ROWS_COLS = 27;
-    private static final int DISPLAY_FILTERED_ROWS_COLS = 28;
-    private static final int APPLY_PRINT_RANGES = 29;
-    private static final int USE_TITLE_AS_HEADING = 30;
-    private static final int USE_SHEET_NAMES_AS_HEADINGS = 31;
-    private static final int XSLT_PATH = 32;
-    private static final int SAVE_IMAGES_IN_SUBDIR = 33;
-    private static final int UPLINK = 34;
-    private static final int DIRECTORY_ICON = 35;
-    private static final int DOCUMENT_ICON = 36;
+    private static final int PRETTY_PRINT = 9;
+    private static final int MULTILINGUAL = 10;
+    private static final int TEMPLATE_IDS = 11;
+    private static final int SEPARATE_STYLESHEET = 12;
+    private static final int CUSTOM_STYLESHEET = 13;
+    private static final int FORMATTING = 14;
+    private static final int FRAME_FORMATTING = 15;
+    private static final int SECTION_FORMATTING = 16;
+    private static final int TABLE_FORMATTING = 17;
+    private static final int IGNORE_TABLE_DIMENSIONS = 18;
+    private static final int USE_DUBLIN_CORE = 19;
+    private static final int NOTES = 20;
+    private static final int CONVERT_TO_PX = 21;
+    private static final int SCALING = 22;
+    private static final int COLUMN_SCALING = 23;
+    private static final int FLOAT_OBJECTS = 24;
+    private static final int TABSTOP_STYLE = 25;
+    private static final int USE_LIST_HACK = 26;
+    private static final int FORMULAS = 27;
+    private static final int SPLIT_LEVEL = 28;
+    private static final int REPEAT_LEVELS = 29;
+    private static final int CALC_SPLIT = 30;
+    private static final int DISPLAY_HIDDEN_SHEETS = 31;
+    private static final int DISPLAY_HIDDEN_ROWS_COLS = 32;
+    private static final int DISPLAY_FILTERED_ROWS_COLS = 33;
+    private static final int APPLY_PRINT_RANGES = 34;
+    private static final int USE_TITLE_AS_HEADING = 35;
+    private static final int USE_SHEET_NAMES_AS_HEADINGS = 36;
+    private static final int XSLT_PATH = 37;
+    private static final int SAVE_IMAGES_IN_SUBDIR = 38;
+    private static final int UPLINK = 39;
+    private static final int DIRECTORY_ICON = 40;
+    private static final int DOCUMENT_ICON = 41;
 
     protected XhtmlStyleMap xpar = new XhtmlStyleMap();
     protected XhtmlStyleMap xtext = new XhtmlStyleMap();
@@ -113,6 +124,10 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
         options[ENCODING] = new Option("encoding","UTF-8");
         options[USE_NAMED_ENTITIES] = new BooleanOption("use_named_entities","false");
         options[HEXADECIMAL_ENTITIES] = new BooleanOption("hexadecimal_entities","true");
+        options[PRETTY_PRINT] = new BooleanOption("pretty_print","true");
+        options[MULTILINGUAL] = new BooleanOption("multilingual","true");
+        options[TEMPLATE_IDS] = new Option("template_ids","");
+        options[SEPARATE_STYLESHEET] = new BooleanOption("separate_stylesheet","false");
         options[CUSTOM_STYLESHEET] = new Option("custom_stylesheet","");
         options[FORMATTING] = new XhtmlFormatOption("formatting","convert_all");
         options[FRAME_FORMATTING] = new XhtmlFormatOption("frame_formatting","convert_all");
@@ -127,6 +142,15 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
         options[FLOAT_OBJECTS] = new BooleanOption("float_objects","true");
         options[TABSTOP_STYLE] = new Option("tabstop_style","");
         options[USE_LIST_HACK] = new BooleanOption("use_list_hack","false");
+        options[FORMULAS] = new IntegerOption("formulas","starmath") {
+        	public void setString(String sValue) {
+        		super.setString(sValue);
+        		if ("latex".equals(sValue)) { nValue = LATEX; }
+        		else if ("image+latex".equals(sValue)) { nValue = IMAGE_LATEX; }
+        		else if ("starmath".equals(sValue)) { nValue = 	STARMATH; }
+        		else { nValue = IMAGE_STARMATH; }
+        	}
+        };
         options[SPLIT_LEVEL] = new IntegerOption("split_level","0") {
             public void setString(String sValue) {
                 super.setString(sValue);
@@ -219,6 +243,10 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     public String xhtmlEncoding() { return options[ENCODING].getString(); }
     public boolean useNamedEntities() { return ((BooleanOption) options[USE_NAMED_ENTITIES]).getValue(); }
     public boolean hexadecimalEntities() { return ((BooleanOption) options[HEXADECIMAL_ENTITIES]).getValue(); }
+    public boolean prettyPrint() { return ((BooleanOption) options[PRETTY_PRINT]).getValue(); }
+    public boolean multilingual() { return ((BooleanOption) options[MULTILINGUAL]).getValue(); }
+    public String templateIds() { return options[TEMPLATE_IDS].getString(); }
+    public boolean separateStylesheet() { return ((BooleanOption) options[SEPARATE_STYLESHEET]).getValue(); }
     public String xhtmlCustomStylesheet() { return options[CUSTOM_STYLESHEET].getString(); }
     public int xhtmlFormatting() { return ((XhtmlFormatOption) options[FORMATTING]).getValue(); }
     public int xhtmlFrameFormatting() { return ((XhtmlFormatOption) options[FRAME_FORMATTING]).getValue(); }
@@ -233,6 +261,7 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     public boolean xhtmlFloatObjects() { return ((BooleanOption) options[FLOAT_OBJECTS]).getValue(); }
     public String getXhtmlTabstopStyle() { return options[TABSTOP_STYLE].getString(); }
     public boolean xhtmlUseListHack() { return ((BooleanOption) options[USE_LIST_HACK]).getValue(); }
+    public int formulas() { return ((IntegerOption) options[FORMULAS]).getValue(); }
     public int getXhtmlSplitLevel() { return ((IntegerOption) options[SPLIT_LEVEL]).getValue(); }
     public int getXhtmlRepeatLevels() { return ((IntegerOption) options[REPEAT_LEVELS]).getValue(); }
     public boolean xhtmlCalcSplit() { return ((BooleanOption) options[CALC_SPLIT]).getValue(); }

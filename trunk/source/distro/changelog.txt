@@ -2,6 +2,21 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[w2l] Bugfix: Font is now selected correctly in list labels
+
+[w2x] New option formulas (values starmath, latex, image+starmath (default), image+latex)
+  to control export of formulas in xhtml 1.0 strict
+  
+[w2x] Avoid exporting redundant lang+dir information
+
+[w2x] New option multilingual (default true) to turn of export of language information
+  (except on the root element <html>)
+
+[w2x] New option template_ids (default empty) to give the id's used to identity the parts
+  of an xhtml template in the order content,header,footer,panel
+
+[w2x] New option pretty_print (default true) to turn of pretty printing of xhtml source
+
 [w2l] Bugfix: Avoid null pointer exception on empty metadata (date)
 
 [w2x] Bugfix: Avoid null pointer exception on empty metadata (subject, keywords)
@@ -20,7 +35,7 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 [w2x] Added support for text:start-value in outline numbering and list styles (the latter
   is only relevant if use_list_hack is true)
 
-[all] Use zeropadding on exported images (ie file-img001 etc.)
+[all] Use zeropadding on exported images (ie. file-img001 etc.)
 
 [w2l] Bugfix: Add \par after display equation when formatting>=convert_most
 
