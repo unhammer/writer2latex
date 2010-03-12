@@ -19,7 +19,7 @@
 		<paragraph role="heading" level="2" xml-lang="en-US">Authoring LaTeX files with Writer4LaTeX</paragraph>
         <paragraph role="paragraph" xml-lang="en-US">You can use Writer4LaTeX in two different ways
         </paragraph>
-        <list type="unordered" bullet="disc">
+        <list type="unordered">
 			<listitem>
         		<paragraph role="paragraph" xml-lang="en-US">You can prepare your documents with Writer as you usually do,
         		keeping a few
@@ -47,15 +47,67 @@
         This feature uses Eitan M. Gurari's excellent 
         <link href="http://www.cse.ohio-state.edu/~gurari/TeX4ht/" name="Link to the TeX4ht Website">TeX4ht</link>
         system. Note however, that this feature doesn't make roundtrip
-        editing %PRODUCTNAME Writer ↔ LaTeX is possible. The intended use of the import feature to make it possible to work on documents
-        that were orginally authored in LaTeX.
+        editing %PRODUCTNAME Writer ↔ LaTeX is possible. The intended use of the import feature to make documents
+        that were originally authored in LaTeX.
         </paragraph>
 
 		<paragraph role="heading" level="2" xml-lang="en-US">Before you start</paragraph>
         <paragraph role="paragraph" xml-lang="en-US">Before you can use Writer4LaTeX, you need to
         <link href="org.openoffice.da.writer4latex.oxt/configuration.xhp" name="Configuration">configure</link> it.
-        This requires that you have
-        a working TeX installation on your system such as MikTeX for Windows or TeX Live for unix/linux.
-        </paragraph>
+        This requires that you have installed certain software on your system.</paragraph>
+        <switch select="sys">
+  			<case select="WIN">
+  				<list type="unordered">
+  					<listitem>
+    					<paragraph role="paragraph" xml-lang="en-US">The LaTeX export filter Writer2LaTeX must be installed in %PRODUCTNAME.
+    					You can get this extension at
+    					<link href="http://extensions.services.openoffice.org/project/writer2latex" name="Writer2LaTeX download">http://extensions.services.openoffice.org/project/writer2latex</link>.</paragraph>
+    				</listitem>
+  					<listitem>
+    					<paragraph role="paragraph" xml-lang="en-US">Writer4LaTeX needs a working LaTeX distribution including TeX4ht.
+    					MikTeX is recommended and can be downloaded from
+    					<link href="http://www.miktex.org" name="MikTeX download">http://www.miktex.org</link>.</paragraph>
+    				</listitem>
+  					<listitem>
+    					<paragraph role="paragraph" xml-lang="en-US">Finally you should install viewers for PDF and PostScript files.
+    					Gsview is recommended and can be downloaded from
+    					<link href="http://pages.cs.wisc.edu/~ghost/gsview/" name="gsview download">http://pages.cs.wisc.edu/~ghost/gsview/</link>.
+    					Note that you have to install ghostscript as well (follow the links on the web site).</paragraph>
+    				</listitem>
+    			</list>
+  			</case>
+  			<case select="UNIX">
+  				<list type="unordered">
+  					<listitem>
+    					<paragraph role="paragraph" xml-lang="en-US">The LaTeX export filter Writer2LaTeX must be installed in %PRODUCTNAME.
+    					You can get this extension at
+    					<link href="http://extensions.services.openoffice.org/project/writer2latex" name="Writer2LaTeX download">http://extensions.services.openoffice.org/project/writer2latex</link>.</paragraph>
+    				</listitem>
+  					<listitem>
+    					<paragraph role="paragraph" xml-lang="en-US">Writer4LaTeX needs a working LaTeX distribution which includes TeX4ht.
+    					<link href="http://www.tug.org/texlive/" name="TeX live">TeX live</link>
+    					is recommended and is available for most UNIX-like systems. The installation depends on your system.
+    					If you are using Debian or Ubuntu you can for example install the required packages by typing these commands from a terminal window:</paragraph>
+						<paragraph role="code" xml-lang="en-US">sudo apt-get install texlive
+						<br/>sudo apt-get install texlive-latex-extra
+    					<br/>sudo apt-get install texlive-xetex
+    					<br/>sudo apt-get install tex4ht</paragraph>
+    				</listitem>
+  					<listitem>
+    					<paragraph role="paragraph" xml-lang="en-US">Finally you should install viewers for DVI, PDF and PostScript files.
+    					The viewers evince and okular can handle all formats and are recommended.
+    					You can also use a combination of the viewers xdvi, xpdf and ghostview.
+    					</paragraph>
+    				</listitem>
+    			</list>
+  			</case>
+  			<case select="MAC">
+  				<paragraph>Writer4LaTeX has not been tested on Mac OS X, but it should be possible to configure it manually
+  				if you have installed a LaTeX distribution and viewers for DVI, PDF and PostScript documents.</paragraph>
+				<paragraph role="paragraph" xml-lang="en-US">You also need to install the LaTeX export filter Writer2LaTeX
+				in %PRODUCTNAME. You can get this extension at
+				<link href="http://extensions.services.openoffice.org/project/writer2latex" name="Writer2LaTeX download">http://extensions.services.openoffice.org/project/writer2latex</link>.</paragraph>
+  			</case>
+		</switch>
     </body>
 </helpdocument>

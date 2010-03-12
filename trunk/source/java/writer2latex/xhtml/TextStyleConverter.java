@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-02-14)
+ *  Version 1.2 (2010-03-12)
  *
  */
 
@@ -196,61 +196,6 @@ public class TextStyleConverter extends StyleWithPropertiesConverterHelper {
      */
     public void applyProperties(StyleWithProperties style, CSVList props, boolean bInherit) {
         cssText(style,props,bInherit);
-    }
-	
-    // Methods to query individual formatting properties (no inheritance)
-	
-    // Does this style contain the bold attribute?
-    public boolean isBold(StyleWithProperties style) {
-        String s = style.getProperty(XMLString.FO_FONT_WEIGHT,false);
-        return s!=null && "bold".equals(s);
-    }
-
-    // Does this style contain the italics/oblique attribute?
-    public boolean isItalics(StyleWithProperties style) {
-        String s = style.getProperty(XMLString.FO_FONT_STYLE,false);
-        return s!=null && !"normal".equals(s);
-    }
-	
-    // Does this style contain a fixed pitch font?
-    public boolean isFixed(StyleWithProperties style) {
-        String s = style.getProperty(XMLString.STYLE_FONT_NAME,false);
-        String s2 = null;
-        String s3 = null;
-        if (s!=null) {
-            FontDeclaration fd = (FontDeclaration) ofr.getFontDeclarations().getStyle(s);
-            if (fd!=null) {
-                s2 = fd.getFontFamilyGeneric();
-                s3 = fd.getFontPitch();
-            }
-        }
-        else {            
-            s = style.getProperty(XMLString.FO_FONT_FAMILY,false);
-            s2 = style.getProperty(XMLString.STYLE_FONT_FAMILY_GENERIC,false);
-            s3 = style.getProperty(XMLString.STYLE_FONT_PITCH,false);
-        }
-        if ("fixed".equals(s3)) { return true; }
-        if ("modern".equals(s2)) { return true; }
-        return false;
-    }
-
-    // Does this style specify superscript?
-    public boolean isSuperscript(StyleWithProperties style) {
-        String sPos = style.getProperty(XMLString.STYLE_TEXT_POSITION,false);
-        if (sPos==null) return false;
-        if (sPos.startsWith("sub")) return false;
-        if (sPos.startsWith("-")) return false;
-        if (sPos.startsWith("0%")) return false;
-        return true;
-    }
-
-    // Does this style specify subscript?
-    public boolean isSubscript(StyleWithProperties style) {
-        String sPos = style.getProperty(XMLString.STYLE_TEXT_POSITION,false);
-        if (sPos==null) return false;
-        if (sPos.startsWith("sub")) return true;
-        if (sPos.startsWith("-")) return true;
-        return false;
     }
 	
     ////////////////////////////////////////////////////////////////////////////

@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-12-15)
+ *  Version 1.2 (2010-03-12)
  *
  */
 
@@ -40,6 +40,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 
 import writer2latex.util.Misc;
+import writer2latex.office.FontDeclaration;
 import writer2latex.office.XMLString;
 import writer2latex.office.IndexMark;
 import writer2latex.office.ListCounter;
@@ -1725,7 +1726,86 @@ public class TextConverter extends ConverterHelper {
     ///////////////////////////////////////////////////////////////////////////
     // UTILITY METHODS
     ///////////////////////////////////////////////////////////////////////////
+    
+    // Methods to query individual formatting properties (no inheritance)
+	
+    // Does this style contain the bold attribute?
+    private boolean isBold(StyleWithProperties style) {
+        String s = style.getProperty(XMLString.FO_FONT_WEIGHT,false);
+        return s!=null && "bold".equals(s);
+    }
 
+    // Does this style contain the italics/oblique attribute?
+    private boolean isItalics(StyleWithProperties style) {
+        String s = style.getProperty(XMLString.FO_FONT_STYLE,false);
+        return s!=null && !"normal".equals(s);
+    }
+	
+    // Does this style contain a fixed pitch font?
+    private boolean isFixed(StyleWithProperties style) {
+        String s = style.getProperty(XMLString.STYLE_FONT_NAME,false);
+        String s2 = null;
+        String s3 = null;
+        if (s!=null) {
+            FontDeclaration fd = (FontDeclaration) ofr.getFontDeclarations().getStyle(s);
+            if (fd!=null) {
+                s2 = fd.getFontFamilyGeneric();
+                s3 = fd.getFontPitch();
+            }
+        }
+        else {            
+            s = style.getProperty(XMLString.FO_FONT_FAMILY,false);
+            s2 = style.getProperty(XMLString.STYLE_FONT_FAMILY_GENERIC,false);
+            s3 = style.getProperty(XMLString.STYLE_FONT_PITCH,false);
+        }
+        if ("fixed".equals(s3)) { return true; }
+        if ("modern".equals(s2)) { return true; }
+        return false;
+    }
+
+    // Does this style specify superscript?
+    private boolean isSuperscript(StyleWithProperties style) {
+        String sPos = style.getProperty(XMLString.STYLE_TEXT_POSITION,false);
+        if (sPos==null) return false;
+        if (sPos.startsWith("sub")) return false;
+        if (sPos.startsWith("-")) return false;
+        if (sPos.startsWith("0%")) return false;
+        return true;
+    }
+
+    // Does this style specify subscript?
+    private boolean isSubscript(StyleWithProperties style) {
+        String sPos = style.getProperty(XMLString.STYLE_TEXT_POSITION,false);
+        if (sPos==null) return false;
+        if (sPos.startsWith("sub")) return true;
+        if (sPos.startsWith("-")) return true;
+        return false;
+    }
+    
+    // Does this style specify underline?
+    private boolean isUnderline(StyleWithProperties style) {
+    	String s;
+        if (ofr.isOpenDocument()) {
+            s = style.getProperty(XMLString.STYLE_TEXT_UNDERLINE_STYLE,false);
+        }
+        else {
+            s = style.getProperty(XMLString.STYLE_TEXT_UNDERLINE,false);
+        }
+        return s!=null && !"none".equals(s);
+    }
+	
+    // Does this style specify overstrike?
+    private boolean isOverstrike(StyleWithProperties style) {
+    	String s;
+        if (ofr.isOpenDocument()) {
+            s = style.getProperty(XMLString.STYLE_TEXT_LINE_THROUGH_STYLE,false);
+        }
+        else {
+            s = style.getProperty(XMLString.STYLE_TEXT_CROSSING_OUT,false);
+        }
+        return s!=null && !"none".equals(s);
+    }
+	
     /* apply hard formatting attribute style maps */
     private Element applyAttributes(Element node, StyleWithProperties style) {
         // Do nothing if we convert hard formatting
@@ -1733,11 +1813,13 @@ public class TextConverter extends ConverterHelper {
         // Do nothing if this is not an automatic style
         if (style==null) { return node; }
         if (!style.isAutomatic()) { return node; }
-        node = applyAttribute(node,"bold",getTextSc().isBold(style));
-        node = applyAttribute(node,"italics",getTextSc().isItalics(style));
-        node = applyAttribute(node,"fixed",getTextSc().isFixed(style));
-        node = applyAttribute(node,"superscript",getTextSc().isSuperscript(style));
-        node = applyAttribute(node,"subscript",getTextSc().isSubscript(style));
+        node = applyAttribute(node,"bold",isBold(style));
+        node = applyAttribute(node,"italics",isItalics(style));
+        node = applyAttribute(node,"fixed",isFixed(style));
+        node = applyAttribute(node,"superscript",isSuperscript(style));
+        node = applyAttribute(node,"subscript",isSubscript(style));
+        node = applyAttribute(node,"underline",isUnderline(style));
+        node = applyAttribute(node,"overstrike",isOverstrike(style));
         return node;
     }
 	

@@ -2,6 +2,10 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.1 ----------
 
+[w2x] Added two attribute style maps: "underline" and "overstrike"
+
+[w2l] Style maps now (again) works in tables
+
 [w2l] Bugfix: Font is now selected correctly in list labels
 
 [w2x] New option formulas (values starmath, latex, image+starmath (default), image+latex)

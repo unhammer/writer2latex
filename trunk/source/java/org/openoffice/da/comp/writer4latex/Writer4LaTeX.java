@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-11-19)
+ *  Version 1.2 (2010-03-12)
  *
  */ 
  
@@ -34,6 +34,7 @@ import java.net.URISyntaxException;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertyAccess;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
@@ -46,6 +47,7 @@ import com.sun.star.ui.dialogs.XExecutableDialog;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
+import org.openoffice.da.comp.w2lcommon.helper.MacroExpander;
 import org.openoffice.da.comp.w2lcommon.helper.MessageBox;
 import org.openoffice.da.comp.w2lcommon.helper.PropertyHelper;
 import org.openoffice.da.comp.w2lcommon.helper.RegistryHelper;
@@ -378,7 +380,16 @@ public final class Writer4LaTeX extends WeakBase
             case 5: filterData.put("ConfigURL","$(user)/writer2latex.xml");
             		filterData.put("AutoCreate","true"); break;
             default:
-            	loadOption(xProps,filterData,"ConfigName","ConfigURL");
+            	// Get the actual URL from the registry
+            	String sConfigName = XPropertySetHelper.getPropertyValueAsString(xProps, "ConfigName");
+            	
+                Object configurations = XPropertySetHelper.getPropertyValue(xProps,"Configurations");
+                XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class,configurations);
+                Object config = xNameAccess.getByName(sConfigName);
+                XPropertySet xCfgProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,config);
+                
+                MacroExpander expander = new MacroExpander(m_xContext);
+                filterData.put("ConfigURL",expander.expandMacros(XPropertySetHelper.getPropertyValueAsString(xCfgProps,"ConfigURL")));
             }
             
     		// Read the options

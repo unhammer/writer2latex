@@ -401,6 +401,7 @@ public final class ConfigurationDialog
     	// Maybe add some info for Ubuntu users
     	// sudo apt-get install texlive
     	// sudo apt-get install texlive-xetex
+    	// sudo apt-get install texlive-latex-extra
     	// sudo apt-get install tex4ht
 		displayAutoConfigInfo(info.toString());
     	changeApplication(xWindow);

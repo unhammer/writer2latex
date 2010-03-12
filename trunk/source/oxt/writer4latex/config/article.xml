@@ -2,7 +2,7 @@
 <!-- article.xml
      This is a configuration file for Writer4LaTeX.
      It contains a lot of style mappings, which correspond to
-     the template LaTeX-article.stw.
+     the template LaTeX-article.odt.
      Some definitions have been chosen for compatibility with tex4ht
  -->
 
@@ -32,6 +32,10 @@
   <option name="bibtex_style" value="plain" />
   <option name="formatting" value="ignore_most" />
   <option name="page_formatting" value="ignore_all" />
+  <option name="table_first_head_style" value="table first head" />
+  <option name="table_head_style" value="table head" />
+  <option name="table_foot_style" value="table foot" />
+  <option name="table_last_foot_style" value="table last foot" />
   <option name="ignore_empty_paragraphs" value="true" />
   <option name="ignore_hard_page_breaks" value="false" />
   <option name="ignore_hard_line_breaks" value="false" />
@@ -65,15 +69,17 @@
     <heading-level-map writer-level="6" name="subparagraph" level="5" />
   </heading-map>
   
-  <!-- Defintions for \maketitle. At least one of the styles Title, Author, Date
+  <!-- Defintions for \maketitle. At least one of the styles Title/title, Author, Date
        in any order will give correct results.
        Uses a predefined style from OOo for the title -->
   <style-map name="Title" class="paragraph" before="\title{" after="}" line-break="false" />
+  <style-map name="title" class="paragraph" before="\title{" after="}" line-break="false" />
   <style-map name="author" class="paragraph" before="\author{" after="}" line-break="false" />
   <style-map name="date" class="paragraph" before="\date{" after="}" line-break="false" />
   <style-map name="Title" class="paragraph-block" next="author;date" before="" after="\maketitle" />
-  <style-map name="author" class="paragraph-block" next="Title;date" before="" after="\maketitle" />
-  <style-map name="date" class="paragraph-block" next="Title;author" before="" after="\maketitle" />
+  <style-map name="title" class="paragraph-block" next="author;date" before="" after="\maketitle" />
+  <style-map name="author" class="paragraph-block" next="Title;title;date" before="" after="\maketitle" />
+  <style-map name="date" class="paragraph-block" next="Title;title;author" before="" after="\maketitle" />
   
   <!-- Definitions for the abstract. The abstract can contain any number of paragraphs -->
   <style-map name="abstract title" class="paragraph" before="\renewcommand\abstractname{" after="}" line-break="false" />
@@ -103,6 +109,10 @@
   <style-map name="Quotations" class="paragraph-block" next="Quotations" before="\begin{quotation}" after="\end{quotation}" />
   <style-map name="Quotations" class="paragraph" before="" after="" />
 
+  <!-- quotation; using custom style -->
+  <style-map name="quotation" class="paragraph-block" next="quotation" before="\begin{quotation}" after="\end{quotation}" />
+  <style-map name="quotation" class="paragraph" before="" after="" />
+
   <!-- verse -->
   <style-map name="verse" class="paragraph-block" next="verse" before="\begin{verse}" after="\end{verse}" />
   <style-map name="verse" class="paragraph" before="" after="" />
@@ -113,6 +123,16 @@
        character content will be lost). -->
   <style-map name="Preformatted Text" class="paragraph-block" next="Preformatted Text" before="\begin{verbatim}" after="\end{verbatim}" />
   <style-map name="Preformatted Text" class="paragraph" before="" after="" verbatim="true" />
+
+  <!-- verbatim; using custom style -->
+  <style-map name="verbatim" class="paragraph-block" next="verbatim" before="\begin{verbatim}" after="\end{verbatim}" />
+  <style-map name="verbatim" class="paragraph" before="" after="" verbatim="true" />
+  
+  <!-- definitions for multi page table support -->
+  <style-map name="table first head" class="paragraph" before="" after="" />
+  <style-map name="table head" class="paragraph" before="" after="" />
+  <style-map name="table foot" class="paragraph" before="" after="" />
+  <style-map name="table last foot" class="paragraph" before="" after="" />
 
   <!-- Definitions for some standard OOo paragraph styles -->
   <style-map name="Text body" class="paragraph" before="" after="" />
@@ -126,6 +146,7 @@
   <style-map name="obeylines-h" class="text" before="" after="" />  
   <style-map name="verb" class="text" before="\verb|" after="|" verbatim="true" />  
   <style-map name="Emphasis" class="text" before="\emph{" after="}" />
+  <style-map name="emph" class="text" before="\emph{" after="}" />
   <style-map name="Strong Emphasis" class="text" before="\textbf{" after="}" />
   <style-map name="textrm" class="text" before="\textrm{" after="}" />
   <style-map name="textsf" class="text" before="\textsf{" after="}" />
@@ -158,13 +179,18 @@
   <style-map name="List Heading" class="paragraph" before="\item[" after="]" line-break="false" />
   <style-map name="List Contents" class="paragraph" before="" after="" />
 
+  <!-- Definitions for description list. Uses custom styles -->
+  <style-map name="description item" class="paragraph-block" next="description item;description text" before="\begin{description}" after="\end{description}"/>
+  <style-map name="description item" class="paragraph" before="\item[" after="]" line-break="false" />
+  <style-map name="description text" class="paragraph" before="" after="" />
+
   <!-- Definitions for itemize and enumerate -->
   <style-map name="itemize" class="paragraph" before="" after="" />
   <style-map name="enumerate" class="paragraph" before="" after="" />
   
   <!-- Definitions for verbatim LaTeX code -->
   <style-map name="LaTeX" class="paragraph" before="" after="" verbatim="true" />
-  <style-map name="LaTeX" class="text" before="" after="" verbatim="true" />
+  <style-map name="LaTeX" class="text" before="" after="{}" verbatim="true" />
 
 </config>
 

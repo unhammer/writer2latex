@@ -292,7 +292,7 @@ public class XhtmlDocument extends DOMDocument {
         
         String[] sTemplateIds = config.templateIds().split(",");
         int nIdCount = sTemplateIds.length;
-        if (nIdCount>0) sContentId = sTemplateIds[0].trim(); else sContentId = "content";
+        if (nIdCount>0 && sTemplateIds[0].trim().length()>0) sContentId = sTemplateIds[0].trim(); else sContentId = "content";
         if (nIdCount>1) sHeaderId = sTemplateIds[1].trim(); else sHeaderId = "header";
         if (nIdCount>2) sFooterId = sTemplateIds[2].trim(); else sFooterId = "footer";
         if (nIdCount>3) sPanelId = sTemplateIds[3].trim(); else sPanelId = "panel";

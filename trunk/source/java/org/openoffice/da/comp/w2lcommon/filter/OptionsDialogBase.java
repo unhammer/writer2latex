@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2019 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-05-01)
+ *  Version 1.2 (2010-03-12)
  *
  */ 
  
@@ -36,7 +36,6 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XServiceName;
@@ -46,9 +45,9 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XChangesBatch;
-import com.sun.star.util.XMacroExpander;
 
 import org.openoffice.da.comp.w2lcommon.helper.DialogBase;
+import org.openoffice.da.comp.w2lcommon.helper.MacroExpander;
 import org.openoffice.da.comp.w2lcommon.helper.PropertyHelper;
 import org.openoffice.da.comp.w2lcommon.helper.XPropertySetHelper;
 
@@ -169,26 +168,6 @@ public abstract class OptionsDialogBase extends DialogBase implements
 	
     //////////////////////////////////////////////////////////////////////////
     // Some private utility methods
-	
-    // Perform macro extansion
-    private String expandMacros(String s) {
-        if (s.startsWith("vnd.sun.star.expand:")) {
-            // The string contains a macro, usually as a result of using %origin% in the registry
-            s = s.substring(20);
-            Object expander = xContext.getValueByName("/singletons/com.sun.star.util.theMacroExpander");
-            XMacroExpander xExpander = (XMacroExpander) UnoRuntime.queryInterface (XMacroExpander.class, expander);
-            try {
-                return xExpander.expandMacros(s);
-            }
-            catch (IllegalArgumentException e) {
-                // Unknown macro name found, proceed and hope for the best
-                return s;
-            }
-        }
-        else {
-            return s;
-        }
-    }
 	
     // Get the template name from the document with ui focus
     private String getTemplateName() {
@@ -419,8 +398,9 @@ public abstract class OptionsDialogBase extends DialogBase implements
                 Object config = xNameAccess.getByName(sConfigNames[i]);
                 XPropertySet xCfgProps = (XPropertySet)
                     UnoRuntime.queryInterface(XPropertySet.class,config);
-                filterData.put("ConfigURL",expandMacros(XPropertySetHelper.getPropertyValueAsString(xCfgProps,"ConfigURL")));
-                filterData.put("TemplateURL",expandMacros(XPropertySetHelper.getPropertyValueAsString(xCfgProps,"TargetTemplateURL")));
+                MacroExpander expander = new MacroExpander(xContext);
+                filterData.put("ConfigURL",expander.expandMacros(XPropertySetHelper.getPropertyValueAsString(xCfgProps,"ConfigURL")));
+                filterData.put("TemplateURL",expander.expandMacros(XPropertySetHelper.getPropertyValueAsString(xCfgProps,"TargetTemplateURL")));
                 XPropertySetHelper.setPropertyValue(xProps,"ConfigName",sConfigNames[i]);
                 bFound = true;
             }

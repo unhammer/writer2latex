@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-23)
+ *  Version 1.2 (2010-03-12)
  *
  */
 
@@ -179,7 +179,9 @@ public class ParConverter extends StyleConverter {
 		
         // Add newline if *between* paragraphs
         if (!bLastInBlock) { ba.add("","\n"); }
-
+        
+        context.setVerbatim(false);
+        
         if (context.isInSimpleTable()) {
             if (config.formatting()!=LaTeXConfig.IGNORE_ALL) {
                 // only character formatting!
@@ -190,6 +192,20 @@ public class ParConverter extends StyleConverter {
                     if (ba.getBefore().length()>0) { ba.add(" ",""); }
                 }
             }
+        }
+        else if (config.getParStyleMap().contains(ofr.getParStyles().getDisplayName(sName))) {
+        	// We have a style map in the configuration
+            StyleMap sm = config.getParStyleMap();
+            String sDisplayName = ofr.getParStyles().getDisplayName(sName);
+            String sBefore = sm.getBefore(sDisplayName);
+            String sAfter = sm.getAfter(sDisplayName);
+            ba.add(sBefore, sAfter);
+            // Add line breaks inside?
+            if (sm.getLineBreak(sDisplayName)) {
+                if (sBefore.length()>0) { ba.add("\n",""); }
+                if (sAfter.length()>0 && !"}".equals(sAfter)) { ba.add("","\n"); }
+            }
+            if (sm.getVerbatim(sDisplayName)) { context.setVerbatim(true); }
         }
         else if (bNoTextPar && (config.formatting()==LaTeXConfig.CONVERT_BASIC || config.formatting()==LaTeXConfig.IGNORE_MOST) ) {
             // only alignment!
@@ -251,7 +267,6 @@ public class ParConverter extends StyleConverter {
         StyleWithProperties style = ofr.getParStyle(sName);
         if (style==null) { return; }
         context.updateFormattingFromStyle(style);
-        context.setVerbatim(styleMap.getVerbatim(sName));
     }
 
 	
