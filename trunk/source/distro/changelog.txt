@@ -1,6 +1,12 @@
 Changelog for Writer2LaTeX version 1.0 -> 1.2
 
+---------- version 1.1.2 ----------
+
+[w2x] Added user interface to edit custom configuration
+
 ---------- version 1.1.1 ----------
+
+[w2l] Added user interface to edit custom configuration
 
 [w2x] Added two attribute style maps: "underline" and "overstrike"
 

@@ -22,7 +22,15 @@
      manifest:media-type="application/vnd.sun.star.configuration-data"/>
 
     <manifest:file-entry
+     manifest:full-path="OptionPages.xcu"
+     manifest:media-type="application/vnd.sun.star.configuration-data"/>
+
+    <manifest:file-entry
      manifest:full-path="W2XDialogs/"
+     manifest:media-type="application/vnd.sun.star.basic-library"/>
+	 
+    <manifest:file-entry
+     manifest:full-path="W2XDialogs2/"
      manifest:media-type="application/vnd.sun.star.basic-library"/>
 	 
     <manifest:file-entry
