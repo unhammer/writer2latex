@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-02-19)
+ *  Version 1.2 (2010-03-15)
  *
  */
  
@@ -490,7 +490,7 @@ public class DrawConverter extends ConverterHelper {
     
     public void flushFloatingFrames(LaTeXDocumentPortion ldp, Context oc) {
 	    // todo: fix language
-        LinkedList floatingFrames = floatingFramesStack.peek();
+        LinkedList<Element> floatingFrames = floatingFramesStack.peek();
         int n = floatingFrames.size();
         if (n==0) { return; }
         for (int i=0; i<n; i++) {

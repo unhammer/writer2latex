@@ -16,9 +16,9 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *  
- *  Version 1.0 (2009-09-14)
+ *  Version 1.2 (2010-03-15)
  *
  *  All Rights Reserved.
  */
@@ -143,7 +143,7 @@ public class TableReader {
         // (Calc exports a lot of empty rows at columns bottom/right)
         int nRows = cells.size();
         for (int nRow=0; nRow<nRows; nRow++) {
-            LinkedList row = cells.get(nRow);
+        	LinkedList<Element> row = cells.get(nRow);
             nCols = row.size();
             int nMaxCol = 0;
             int nMaxRow = 0;
@@ -443,7 +443,7 @@ public class TableReader {
 	
     public Element getCell(int nRow, int nCol) {
         if (nRow<0 || nRow>=cells.size()) { return null; }
-        LinkedList row = cells.get(nRow);
+        LinkedList<Element> row = cells.get(nRow);
         if (nCol<0 || nCol>=row.size()) { return null; }
         return (Element) row.get(nCol);
     }

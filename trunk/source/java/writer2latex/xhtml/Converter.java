@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-02)
+ *  Version 1.2 (2010-03-15)
  *
  */
 
@@ -102,7 +102,7 @@ public class Converter extends ConverterBase {
 
     // override
     public void readTemplate(InputStream is) throws IOException {
-        template = new XhtmlDocument("Template",nType);
+        template = new XhtmlDocument("Template",nType,-1);
         template.read(is);
     }
 	
@@ -441,7 +441,7 @@ public class Converter extends ConverterBase {
     // Prepare next output file
     public Element nextOutFile() {
         if (nOutFileIndex>=0) { textCv.insertFootnotes(htmlDoc.getContentNode()); }
-        htmlDoc = new XhtmlDocument(getOutFileName(++nOutFileIndex,false),nType);
+        htmlDoc = new XhtmlDocument(getOutFileName(++nOutFileIndex,false),nType,nOutFileIndex);
         htmlDoc.setConfig(config);
         if (template!=null) { htmlDoc.readFromTemplate(template); }
         else if (bNeedHeaderFooter) { htmlDoc.createHeaderFooter(); }

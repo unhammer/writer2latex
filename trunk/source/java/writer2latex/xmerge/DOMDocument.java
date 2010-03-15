@@ -37,7 +37,7 @@
  ************************************************************************/
  
 // This version is adapted for writer2latex
-// Version 1.0 (2008-11-23)
+// Version 1.2 (2010-03-15)
 
 package writer2latex.xmerge;
 
@@ -392,6 +392,15 @@ public class DOMDocument
        
         return doc;
     }
+
+    // TODO: We need these because we implement OutputFile (don't do that..)
+	public String getMIMEType() {
+		return "";
+	}
+
+	public int getSequenceNumber() {
+		return -1;
+	}
 
 }
 

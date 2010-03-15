@@ -16,16 +16,17 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-23)
+ *  Version 1.2 (2010-03-15)
  *
  */
 
 package writer2latex.latex;
 
+import writer2latex.api.MIMETypes;
 import writer2latex.xmerge.Document;
 
 import java.io.IOException;
@@ -47,6 +48,8 @@ public class LaTeXDocument implements Document {
     private int nWrap;
     
     private LaTeXDocumentPortion contents;
+    
+    private int nSequenceNumber = -1;
 
     /**
      * <p>Constructs a new LaTeX Document.</p>
@@ -56,10 +59,12 @@ public class LaTeXDocument implements Document {
      *
      * @param   sName   The name of the <code>LaTeXDocument</code>.
      * @param   nWrap   Lines should be wrapped after this position
+     * @param   nSequenceNumber this file has this sequence number in the result
      */
-    public LaTeXDocument(String sName,int nWrap) {
+    public LaTeXDocument(String sName,int nWrap, int nSequenceNumber) {
         this.nWrap = nWrap;
         this.sName = trimDocumentName(sName);
+        this.nSequenceNumber = nSequenceNumber;
         contents = new LaTeXDocumentPortion(true);
     }
     
@@ -95,7 +100,14 @@ public class LaTeXDocument implements Document {
         return new String(sName + FILE_EXTENSION);
     }
     
-    
+	public String getMIMEType() {
+		return MIMETypes.LATEX;
+	}
+
+	public int getSequenceNumber() {
+		return nSequenceNumber;
+	}
+	
     /**
      * <p>Writes out the <code>Document</code> content to the specified
      * <code>OutputStream</code>.</p>
@@ -148,5 +160,6 @@ public class LaTeXDocument implements Document {
 
         return name;
     }
+
 }
     

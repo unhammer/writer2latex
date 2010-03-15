@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2009-02-17)
+ *  Version 1.2 (2010-03-15)
  *
  */
 
@@ -45,6 +45,9 @@ public class SectionConverter extends ConverterHelper {
 	
     // Filenames for external sections
     private ExportNameCollection fileNames = new ExportNameCollection(true);
+    
+    // Current sequence number (until this class creates further LaTeX files, the master file is the only document)
+    private int nSequenceNumber = 0;
 
     /** <p>Constructs a new <code>SectionStyleConverter</code>.</p>
      */
@@ -80,7 +83,7 @@ public class SectionConverter extends ConverterHelper {
 
         LaTeXDocumentPortion sectionLdp = ldp;
         if (sFileName!=null) {
-            LaTeXDocument newDoc = new LaTeXDocument(sFileName,config.getWrapLinesAfter());
+            LaTeXDocument newDoc = new LaTeXDocument(sFileName,config.getWrapLinesAfter(),++nSequenceNumber);
             if (config.getBackend()!=LaTeXConfig.XETEX) {
                 newDoc.setEncoding(ClassicI18n.writeJavaEncoding(config.getInputencoding()));            	
             }

@@ -2,6 +2,9 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.2 ----------
 
+[all] API change: New methods getMIMEType() and getSequenceNumber() added
+  to the OutputFile interface
+
 [w2x] Added user interface to edit custom configuration
 
 ---------- version 1.1.1 ----------

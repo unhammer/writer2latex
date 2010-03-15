@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-23)
+ *  Version 1.2 (2010-03-15)
  *
  */
 
@@ -161,5 +161,15 @@ public class BinaryGraphicsDocument implements Document {
      * @return  String  The document's MIME type.
      */
     public String getDocumentMIMEType(){ return sMimeType; }
+
+
+	public String getMIMEType() {
+		return sMimeType;
+	}
+
+
+	public int getSequenceNumber() {
+		return -1;
+	}
     
 }

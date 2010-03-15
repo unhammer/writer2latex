@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-26) 
+ *  Version 1.2 (2010-03-15) 
  * 
  */
 
@@ -286,9 +286,9 @@ public class ClassicI18n extends I18n {
 
         // Load babel with the used languages
         CSVList babelopt = new CSVList(",");		
-        Iterator langiter = languages.iterator();
+        Iterator<String> langiter = languages.iterator();
         while (langiter.hasNext()) {
-            String sLang = (String) langiter.next();
+            String sLang = langiter.next();
             if (!sLang.equals(sDefaultLanguage)) {
                 if ("el".equals(sLang) && this.polytonicGreek()) {
                     babelopt.addValue("polutonikogreek");

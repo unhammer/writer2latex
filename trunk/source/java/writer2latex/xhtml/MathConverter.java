@@ -20,13 +20,12 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-04)
+ *  Version 1.2 (2010-03-15)
  *
  */
 
 package writer2latex.xhtml;
 
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;

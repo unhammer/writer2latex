@@ -125,7 +125,49 @@
           </prop>
         </node>
 
-       
+        <node oor:name="org.openoffice.da.writer2xhtml.configuration.styles2" 
+          oor:op="fuse">
+          <prop oor:name="Id">
+            <value>org.openoffice.da.writer2xhtml.configuration.styles2</value>
+          </prop>
+          <prop oor:name="GroupId">
+            <value>org.openoffice.da.writer2xhtml.configuration</value>
+          </prop>
+          <prop oor:name="GroupIndex">
+            <value>4</value>
+          </prop>
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Styles part II</value>
+          </prop>
+          <prop oor:name="OptionsPage">
+            <value>%origin%/W2XDialogs2/StylesPartII.xdl</value>
+          </prop>
+          <prop oor:name="EventHandlerService">
+             <value></value>
+          </prop>
+        </node>
+
+        <node oor:name="org.openoffice.da.writer2xhtml.configuration.content" 
+          oor:op="fuse">
+          <prop oor:name="Id">
+            <value>org.openoffice.da.writer2xhtml.configuration.content</value>
+          </prop>
+          <prop oor:name="GroupId">
+            <value>org.openoffice.da.writer2xhtml.configuration</value>
+          </prop>
+          <prop oor:name="GroupIndex">
+            <value>5</value>
+          </prop>
+          <prop oor:name="Label">
+            <value xml:lang="en-US">Content</value>
+          </prop>
+          <prop oor:name="OptionsPage">
+            <value>%origin%/W2XDialogs2/Content.xdl</value>
+          </prop>
+          <prop oor:name="EventHandlerService">
+             <value></value>
+          </prop>
+        </node>
 
 	  </node>
     </node>

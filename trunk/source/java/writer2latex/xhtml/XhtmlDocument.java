@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-03)
+ *  Version 1.2 (2010-03-15)
  *
  */
  
@@ -42,6 +42,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 //import javax.xml.parsers.ParserConfigurationException;
 
+import writer2latex.api.MIMETypes;
 import writer2latex.xmerge.DOMDocument;
 
 import java.io.InputStream;
@@ -77,6 +78,9 @@ public class XhtmlDocument extends DOMDocument {
 
     // Type of document
     private int nType;
+    
+    // Sequence number
+    private int nSequenceNumber;
 
     // Configuration
     private String sEncoding = "UTF-8";	
@@ -111,10 +115,12 @@ public class XhtmlDocument extends DOMDocument {
      *  writer2latex.xmerge.DOMDocument.
      *  @param  name  <code>Document</code> name.
      *  @param  nType the type of document
+     *  @param  nSequenceNumber the sequence number of this file in the export
      */
-    public XhtmlDocument(String name, int nType) {
+    public XhtmlDocument(String name, int nType, int nSequenceNumber) {
         super(name,sExtension[nType]);
         this.nType = nType;
+        this.nSequenceNumber = nSequenceNumber;
         // Define publicId and systemId
         String sPublicId = null;
         String sSystemId = null;		
@@ -160,6 +166,20 @@ public class XhtmlDocument extends DOMDocument {
         contentNode = bodyNode;
         setContentDOM(contentDOM);
         
+    }
+    
+    @Override public String getMIMEType() {
+    	switch (nType) {
+    	case XHTML10: return MIMETypes.XHTML;
+    	case XHTML11: return MIMETypes.XHTML_MATHML; // TODO: Change the constant names in MIMETypes, this is a bit confusing...
+    	case XHTML_MATHML: return MIMETypes.XHTML_MATHML;
+    	case XHTML_MATHML_XSL: return MIMETypes.XHTML_MATHML_XSL;
+    	}
+    	return "";
+    }
+    
+    @Override public int getSequenceNumber() {
+    	return nSequenceNumber;
     }
 	
     public Element getHeadNode() { return headNode; }

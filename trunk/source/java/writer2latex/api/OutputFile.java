@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-23)
+ *  Version 1.2 (2010-03-15)
  *
  */
  
@@ -49,5 +49,20 @@ public interface OutputFile {
      *  @return  the file name of this <code>OutputFile</code>
      */
     public String getFileName();
+    
+    /** Get the MIME type of the <code>OutputFile</code>.
+     * 
+     *  @return string reprensentation of the MIME type
+     */
+    public String getMIMEType();
+    
+    /** Get the sequence number of this <code>OutputFile</code>.
+     *  The master document has the sequence number 0.
+     *  Other files which are part of the main document flow has a unique, positive sequence number.
+     *  Auxiliary files like images always has the sequence number -1.
+     * 
+     *  @return the sequence number
+     */
+    public int getSequenceNumber();
 
 }

@@ -8,7 +8,7 @@
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:UseSoulChange" script:language="UNO"/>
   </dlg:checkbox>
   <dlg:checkbox dlg:id="UseUlem" dlg:tab-index="3" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Use ulem.sty (underline and strike out text)" dlg:checked="false"/>
-  <dlg:text dlg:id="FormattingAttributeLabel" dlg:tab-index="4" dlg:left="10" dlg:top="92" dlg:width="100" dlg:height="12" dlg:value="Attribute"/>
+  <dlg:text dlg:id="FormattingAttributeLabel" dlg:tab-index="4" dlg:left="10" dlg:top="92" dlg:width="100" dlg:height="12" dlg:value="Formatting attribute"/>
   <dlg:menulist dlg:id="FormattingAttribute" dlg:tab-index="5" dlg:left="120" dlg:top="90" dlg:width="130" dlg:height="12" dlg:spin="true">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Bold"/>

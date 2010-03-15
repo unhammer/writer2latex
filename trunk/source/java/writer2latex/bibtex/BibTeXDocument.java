@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-06-05)
+ *  Version 1.2 (2010-03-15)
  *
  */
 
@@ -36,6 +36,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import writer2latex.api.ConverterFactory;
+import writer2latex.api.MIMETypes;
 import writer2latex.latex.LaTeXConfig;
 import writer2latex.latex.i18n.ClassicI18n;
 import writer2latex.latex.i18n.I18n;
@@ -101,6 +102,13 @@ public class BibTeXDocument implements Document {
         return new String(sName + FILE_EXTENSION);
     }
     
+	public String getMIMEType() {
+		return MIMETypes.BIBTEX;
+	}
+
+	public int getSequenceNumber() {
+		return -1;
+	}
     
     /**
      * <p>Writes out the <code>Document</code> content to the specified
@@ -234,5 +242,6 @@ public class BibTeXDocument implements Document {
 
         return name;
     }
+
 }
     

@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-02-26) 
+ *  Version 1.2 (2010-03-15) 
  *
  */
 
@@ -57,7 +57,7 @@ public final class ConverterPalette extends ConverterBase {
 
     // The main outfile
     private LaTeXDocument texDoc;
-
+    
     // Various data used in conversion
     private Context mainContext; // main context
     private CSVList globalOptions; // global options
@@ -174,7 +174,7 @@ public final class ConverterPalette extends ConverterBase {
         info = new Info(ofr,config,this);
 
         // Create master document and add this
-        this.texDoc = new LaTeXDocument(sTargetFileName,config.getWrapLinesAfter());
+        this.texDoc = new LaTeXDocument(sTargetFileName,config.getWrapLinesAfter(),0);
         if (config.getBackend()!=LaTeXConfig.XETEX) {
             texDoc.setEncoding(ClassicI18n.writeJavaEncoding(config.getInputencoding()));        	
         }
