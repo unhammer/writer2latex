@@ -2,8 +2,12 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.2 ----------
 
-[all] API change: New methods getMIMEType() and getSequenceNumber() added
-  to the OutputFile interface
+[all] API change: The interface ConverterResult supports additional methods
+  to access the main document flow as a List, an "external" table of contents
+  and meta data of the source document. New interfaces TocEntry and MetaData
+  have been introduced to support this.
+
+[all] API change: New method getMIMEType() added to the OutputFile interface
 
 [w2x] Added user interface to edit custom configuration
 

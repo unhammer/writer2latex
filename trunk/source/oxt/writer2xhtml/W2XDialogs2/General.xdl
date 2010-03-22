@@ -23,6 +23,6 @@
   </dlg:menulist>
   <dlg:checkbox dlg:id="UseNamedEntities" dlg:tab-index="6" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Use named character entities" dlg:checked="false"/>
   <dlg:checkbox dlg:id="Multilingual" dlg:tab-index="7" dlg:left="10" dlg:top="78" dlg:width="240" dlg:height="12" dlg:value="Include detailed language information" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="PrettyPrinting" dlg:tab-index="8" dlg:left="10" dlg:top="92" dlg:width="240" dlg:height="12" dlg:value="Use &quot;pretty printing&quot;" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="PrettyPrint" dlg:tab-index="8" dlg:left="10" dlg:top="92" dlg:width="240" dlg:height="12" dlg:value="Use &quot;pretty printing&quot;" dlg:checked="false"/>
  </dlg:bulletinboard>
 </dlg:window>

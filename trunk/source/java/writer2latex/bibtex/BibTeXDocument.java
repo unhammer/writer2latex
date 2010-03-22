@@ -106,10 +106,6 @@ public class BibTeXDocument implements Document {
 		return MIMETypes.BIBTEX;
 	}
 
-	public int getSequenceNumber() {
-		return -1;
-	}
-    
     /**
      * <p>Writes out the <code>Document</code> content to the specified
      * <code>OutputStream</code>.</p>

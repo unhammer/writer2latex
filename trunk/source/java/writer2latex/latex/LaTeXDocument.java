@@ -49,8 +49,6 @@ public class LaTeXDocument implements Document {
     
     private LaTeXDocumentPortion contents;
     
-    private int nSequenceNumber = -1;
-
     /**
      * <p>Constructs a new LaTeX Document.</p>
      *
@@ -59,12 +57,10 @@ public class LaTeXDocument implements Document {
      *
      * @param   sName   The name of the <code>LaTeXDocument</code>.
      * @param   nWrap   Lines should be wrapped after this position
-     * @param   nSequenceNumber this file has this sequence number in the result
      */
-    public LaTeXDocument(String sName,int nWrap, int nSequenceNumber) {
+    public LaTeXDocument(String sName,int nWrap) {
         this.nWrap = nWrap;
         this.sName = trimDocumentName(sName);
-        this.nSequenceNumber = nSequenceNumber;
         contents = new LaTeXDocumentPortion(true);
     }
     
@@ -104,10 +100,6 @@ public class LaTeXDocument implements Document {
 		return MIMETypes.LATEX;
 	}
 
-	public int getSequenceNumber() {
-		return nSequenceNumber;
-	}
-	
     /**
      * <p>Writes out the <code>Document</code> content to the specified
      * <code>OutputStream</code>.</p>

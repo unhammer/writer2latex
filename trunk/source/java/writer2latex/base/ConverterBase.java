@@ -40,7 +40,6 @@ import writer2latex.office.ImageLoader;
 import writer2latex.office.MetaData;
 import writer2latex.office.OfficeReader;
 import writer2latex.xmerge.EmbeddedObject;
-import writer2latex.xmerge.ConvertData;
 import writer2latex.xmerge.OfficeDocument;
 
 /**<p>Abstract base implementation of <code>writer2latex.api.Converter</code></p>
@@ -58,12 +57,12 @@ public abstract class ConverterBase implements Converter {
 
     // The output file(s)
     protected String sTargetFileName;
-    protected ConvertData convertData;
+    protected ConverterResultImpl convertData;
 		
     // Constructor
     public ConverterBase() {
         graphicConverter = null;
-        convertData = new ConvertData();
+        convertData = new ConverterResultImpl();
     }
 	
     // Implement the interface

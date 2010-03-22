@@ -55,7 +55,7 @@
             <value>%origin%/W2XDialogs2/General.xdl</value>
           </prop>
           <prop oor:name="EventHandlerService">
-             <value></value>
+             <value>org.openoffice.da.writer2xhtml.ConfigurationDialog</value>
           </prop>
         </node>
 
@@ -99,7 +99,7 @@
             <value>%origin%/W2XDialogs2/Formatting.xdl</value>
           </prop>
           <prop oor:name="EventHandlerService">
-             <value></value>
+             <value>org.openoffice.da.writer2xhtml.ConfigurationDialog</value>
           </prop>
         </node>
 
@@ -165,7 +165,7 @@
             <value>%origin%/W2XDialogs2/Content.xdl</value>
           </prop>
           <prop oor:name="EventHandlerService">
-             <value></value>
+             <value>org.openoffice.da.writer2xhtml.ConfigurationDialog</value>
           </prop>
         </node>
 

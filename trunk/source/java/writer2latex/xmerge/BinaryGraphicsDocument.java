@@ -166,10 +166,5 @@ public class BinaryGraphicsDocument implements Document {
 	public String getMIMEType() {
 		return sMimeType;
 	}
-
-
-	public int getSequenceNumber() {
-		return -1;
-	}
     
 }

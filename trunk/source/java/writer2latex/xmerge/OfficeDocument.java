@@ -101,7 +101,7 @@ public class OfficeDocument
     /** DOM <code>Document</code> of content.xml. */
     private Document styleDoc = null;
     
-    /** DOM <code>Docuemtn</code> of META-INF/manifest.xml. */
+    /** DOM <code>Document</code> of META-INF/manifest.xml. */
     private Document manifestDoc = null;
 
     private String documentName = null;
@@ -1288,9 +1288,5 @@ public class OfficeDocument
 		return "";
 	}
 
-
-	public int getSequenceNumber() {
-		return -1;
-	}
 }
 

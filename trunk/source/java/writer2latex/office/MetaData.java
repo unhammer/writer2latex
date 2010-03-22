@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-23)
+ *  Version 1.2 (2010-03-15)
  *
  */
 
@@ -38,7 +38,7 @@ import writer2latex.xmerge.OfficeDocument;
 /**
  *  <p>This class represents the metadata of an OOo Writer document.</p>
  */
-public class MetaData {
+public class MetaData implements writer2latex.api.MetaData {
     // Dublin Core
     private String sTitle = "";
     private String sCreator = "";

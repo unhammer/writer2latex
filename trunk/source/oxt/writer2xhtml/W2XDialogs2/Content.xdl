@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Content" dlg:left="139" dlg:top="84" dlg:width="258" dlg:height="172" dlg:closeable="true" dlg:moveable="true" dlg:withtitlebar="false">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Content" dlg:left="139" dlg:top="84" dlg:width="258" dlg:height="172" dlg:closeable="true" dlg:moveable="true" dlg:title="Content" dlg:withtitlebar="false">
  <dlg:bulletinboard>
   <dlg:text dlg:id="FormulasHeadingLabel" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="245" dlg:height="12" dlg:value="Formulas"/>
   <dlg:text dlg:id="FormulasLabel" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="110" dlg:height="12" dlg:value="Include as"/>
-  <dlg:menulist dlg:id="ListBox1" dlg:tab-index="2" dlg:left="130" dlg:top="20" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="4">
+  <dlg:menulist dlg:id="Formulas" dlg:tab-index="2" dlg:left="130" dlg:top="20" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="4">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Image with StarMath code"/>
     <dlg:menuitem dlg:value="Image with LaTeX code"/>

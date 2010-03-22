@@ -393,13 +393,9 @@ public class DOMDocument
         return doc;
     }
 
-    // TODO: We need these because we implement OutputFile (don't do that..)
+    // We need this because we implement OutputFile
 	public String getMIMEType() {
 		return "";
-	}
-
-	public int getSequenceNumber() {
-		return -1;
 	}
 
 }

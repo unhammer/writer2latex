@@ -98,7 +98,7 @@ public interface Config {
 	/** Get a complex option
 	 * 
 	 * @param sName the name of the complex option
-	 * @return
+	 * @return the option
 	 */
 	public ComplexOption getComplexOption(String sName);
 	

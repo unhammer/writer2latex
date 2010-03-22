@@ -79,9 +79,6 @@ public class XhtmlDocument extends DOMDocument {
     // Type of document
     private int nType;
     
-    // Sequence number
-    private int nSequenceNumber;
-
     // Configuration
     private String sEncoding = "UTF-8";	
     private boolean bUseNamedEntities = false;
@@ -115,12 +112,10 @@ public class XhtmlDocument extends DOMDocument {
      *  writer2latex.xmerge.DOMDocument.
      *  @param  name  <code>Document</code> name.
      *  @param  nType the type of document
-     *  @param  nSequenceNumber the sequence number of this file in the export
      */
-    public XhtmlDocument(String name, int nType, int nSequenceNumber) {
+    public XhtmlDocument(String name, int nType) {
         super(name,sExtension[nType]);
         this.nType = nType;
-        this.nSequenceNumber = nSequenceNumber;
         // Define publicId and systemId
         String sPublicId = null;
         String sSystemId = null;		
@@ -178,10 +173,6 @@ public class XhtmlDocument extends DOMDocument {
     	return "";
     }
     
-    @Override public int getSequenceNumber() {
-    	return nSequenceNumber;
-    }
-	
     public Element getHeadNode() { return headNode; }
 	
     public Element getBodyNode() { return bodyNode; }

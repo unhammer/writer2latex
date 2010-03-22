@@ -69,7 +69,7 @@ public class BatchConverterImpl extends BatchConverterBase {
     }
 
     public void readTemplate(InputStream is) throws IOException {
-        template = new XhtmlDocument("Template",XhtmlDocument.XHTML10,-1);
+        template = new XhtmlDocument("Template",XhtmlDocument.XHTML10);
         try {
             template.read(is);
         }
@@ -89,7 +89,7 @@ public class BatchConverterImpl extends BatchConverterBase {
 	
     public OutputFile createIndexFile(String sHeading, IndexPageEntry[] entries) {
         // Create the index page (with header/footer or from template)
-        XhtmlDocument htmlDoc = new XhtmlDocument("index",XhtmlDocument.XHTML10,0);
+        XhtmlDocument htmlDoc = new XhtmlDocument("index",XhtmlDocument.XHTML10);
         htmlDoc.setConfig(config);
         if (template!=null) { htmlDoc.readFromTemplate(template); }
         else { htmlDoc.createHeaderFooter(); }

@@ -46,9 +46,6 @@ public class SectionConverter extends ConverterHelper {
     // Filenames for external sections
     private ExportNameCollection fileNames = new ExportNameCollection(true);
     
-    // Current sequence number (until this class creates further LaTeX files, the master file is the only document)
-    private int nSequenceNumber = 0;
-
     /** <p>Constructs a new <code>SectionStyleConverter</code>.</p>
      */
     public SectionConverter(OfficeReader ofr, LaTeXConfig config,
@@ -83,7 +80,7 @@ public class SectionConverter extends ConverterHelper {
 
         LaTeXDocumentPortion sectionLdp = ldp;
         if (sFileName!=null) {
-            LaTeXDocument newDoc = new LaTeXDocument(sFileName,config.getWrapLinesAfter(),++nSequenceNumber);
+            LaTeXDocument newDoc = new LaTeXDocument(sFileName,config.getWrapLinesAfter());
             if (config.getBackend()!=LaTeXConfig.XETEX) {
                 newDoc.setEncoding(ClassicI18n.writeJavaEncoding(config.getInputencoding()));            	
             }

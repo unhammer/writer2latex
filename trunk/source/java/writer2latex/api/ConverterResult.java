@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-24)
+ *  Version 1.2 (2010-03-16)
  *
  */
  
@@ -45,6 +45,11 @@ public interface ConverterResult {
      *  @return  an <code>Iterator</code> of all files
      */
     public Iterator<OutputFile> iterator();
+    
+    /** Get the meta data associated with the source document
+     *  @return the meta data
+     */
+    public MetaData getMetaData();
     
     /** Write all files of the <code>ConverterResult</code> to a directory.
      *  Subdirectories are created as required by the individual

@@ -1,46 +1,30 @@
 /************************************************************************
- *
- *  The Contents of this file are made available subject to the terms of
- *
- *         - GNU Lesser General Public License Version 2.1
- *
- *  Sun Microsystems Inc., October, 2000
- *
- *  GNU Lesser General Public License Version 2.1
- *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
- *  901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License version 2.1, as published by the Free Software Foundation.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
- *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
- *
- *  Copyright: 2000 by Sun Microsystems, Inc.
- *
- *  All Rights Reserved.
- *
- *  Contributor(s): _______________________________________
- *
- *
- ************************************************************************/
- 
-// This version is adapted for Writer2LaTeX
-// Change: The first document added will become the "master document" 2006/10/05
-// Version 1.0 (2008-11-24)
+*
+*  ConverterResultImpl.java
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License version 2.1, as published by the Free Software Foundation.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*  MA  02111-1307  USA
+*
+*  Copyright: 2002-2010 by Henrik Just
+*
+*  All Rights Reserved.
+* 
+*  Version 1.2 (2010-03-22)
+*
+*/ 
 
-package writer2latex.xmerge;
+package writer2latex.base;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,6 +33,7 @@ import java.util.Vector;
 import java.util.Iterator;
 
 import writer2latex.api.ConverterResult;
+import writer2latex.api.MetaData;
 import writer2latex.api.OutputFile;
 
 /**
@@ -58,9 +43,10 @@ import writer2latex.api.OutputFile;
  *  name and a <code>Vector</code> of <code>OutputFile</code> objects.</p>
  *
  *  @author  Martin Maher 
+ *  TODO: Rewrite to support extended API
  */
-public class ConvertData implements ConverterResult {
-
+public class ConverterResultImpl implements ConverterResult {
+	
     /**
      *  Vector of <code>OutputFile</code> objects.
      */
@@ -73,6 +59,8 @@ public class ConvertData implements ConverterResult {
      *  Name of the <code>ConvertData</code> object.
      */
 	private String name;
+	
+	private MetaData metaData = null;
 	
 
     /**
@@ -139,6 +127,14 @@ public class ConvertData implements ConverterResult {
      */
     public Iterator<OutputFile> iterator() {
         return v.iterator();
+	}
+
+	public MetaData getMetaData() {
+		return metaData;
+	}
+	
+	public void setMetaData(MetaData metaData) {
+		this.metaData = metaData;
 	}
 
 

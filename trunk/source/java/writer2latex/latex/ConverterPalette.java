@@ -174,7 +174,7 @@ public final class ConverterPalette extends ConverterBase {
         info = new Info(ofr,config,this);
 
         // Create master document and add this
-        this.texDoc = new LaTeXDocument(sTargetFileName,config.getWrapLinesAfter(),0);
+        this.texDoc = new LaTeXDocument(sTargetFileName,config.getWrapLinesAfter());
         if (config.getBackend()!=LaTeXConfig.XETEX) {
             texDoc.setEncoding(ClassicI18n.writeJavaEncoding(config.getInputencoding()));        	
         }

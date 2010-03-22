@@ -102,7 +102,7 @@ public class Converter extends ConverterBase {
 
     // override
     public void readTemplate(InputStream is) throws IOException {
-        template = new XhtmlDocument("Template",nType,-1);
+        template = new XhtmlDocument("Template",nType);
         template.read(is);
     }
 	
@@ -441,7 +441,7 @@ public class Converter extends ConverterBase {
     // Prepare next output file
     public Element nextOutFile() {
         if (nOutFileIndex>=0) { textCv.insertFootnotes(htmlDoc.getContentNode()); }
-        htmlDoc = new XhtmlDocument(getOutFileName(++nOutFileIndex,false),nType,nOutFileIndex);
+        htmlDoc = new XhtmlDocument(getOutFileName(++nOutFileIndex,false),nType);
         htmlDoc.setConfig(config);
         if (template!=null) { htmlDoc.readFromTemplate(template); }
         else if (bNeedHeaderFooter) { htmlDoc.createHeaderFooter(); }
