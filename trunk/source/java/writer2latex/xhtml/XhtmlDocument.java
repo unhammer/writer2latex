@@ -173,6 +173,10 @@ public class XhtmlDocument extends DOMDocument {
     	return "";
     }
     
+    @Override public boolean isMasterDocument() {
+    	return true;
+    }
+    
     public Element getHeadNode() { return headNode; }
 	
     public Element getBodyNode() { return bodyNode; }

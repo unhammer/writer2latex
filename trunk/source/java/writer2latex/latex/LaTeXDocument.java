@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-15)
+ *  Version 1.2 (2010-03-28)
  *
  */
 
@@ -42,6 +42,8 @@ public class LaTeXDocument implements Document {
     private static final String FILE_EXTENSION = ".tex";
 	
     private String sName;
+    
+    private boolean bIsMaster;
 	
     private String sEncoding = "ASCII";
 	
@@ -57,10 +59,12 @@ public class LaTeXDocument implements Document {
      *
      * @param   sName   The name of the <code>LaTeXDocument</code>.
      * @param   nWrap   Lines should be wrapped after this position
+     * @param   bIsMaster true if this is a master document
      */
-    public LaTeXDocument(String sName,int nWrap) {
+    public LaTeXDocument(String sName,int nWrap,boolean bIsMaster) {
         this.nWrap = nWrap;
         this.sName = trimDocumentName(sName);
+        this.bIsMaster = bIsMaster;
         contents = new LaTeXDocumentPortion(true);
     }
     
@@ -98,6 +102,10 @@ public class LaTeXDocument implements Document {
     
 	public String getMIMEType() {
 		return MIMETypes.LATEX;
+	}
+	
+	public boolean isMasterDocument() {
+		return bIsMaster;
 	}
 
     /**

@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2001-2008 by Henrik Just
+ *  Copyright: 2001-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  version 1.0 (2008-11-22)
+ *  version 1.2 (2010-03-28)
  *
  */
 
@@ -70,7 +70,7 @@ public final class Converter extends ConverterBase {
     public void convertInner() throws IOException {      
         sTargetFileName = Misc.trimDocumentName(sTargetFileName,".bib");
 
-        BibTeXDocument bibDoc = new BibTeXDocument(sTargetFileName);
+        BibTeXDocument bibDoc = new BibTeXDocument(sTargetFileName,true);
 
         // Collect all text:bibliography-mark elements from the content
         Element doc = ofr.getContent();
@@ -85,7 +85,7 @@ public final class Converter extends ConverterBase {
         }
       
         // Add result
-        convertData.addDocument(bibDoc);
+        converterResult.addDocument(bibDoc);
     }
 
 }

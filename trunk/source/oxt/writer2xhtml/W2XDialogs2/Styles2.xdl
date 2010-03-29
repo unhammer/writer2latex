@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="StylesPartII" dlg:left="139" dlg:top="84" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:moveable="true" dlg:withtitlebar="false">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Styles2" dlg:left="139" dlg:top="84" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:moveable="true" dlg:title="Styles2" dlg:withtitlebar="false">
  <dlg:bulletinboard>
-  <dlg:text dlg:id="HardFormattingLabel" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="245" dlg:height="12" dlg:value="Mappings for hard formatting"/>
+  <dlg:text dlg:id="HardFormattingLabel" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="245" dlg:height="12" dlg:value="Style mappings for hard formatting"/>
   <dlg:text dlg:id="FormattingAttributeLabel" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="100" dlg:height="12" dlg:value="Formatting attribute"/>
   <dlg:menulist dlg:id="FormattingAttribute" dlg:tab-index="2" dlg:left="120" dlg:top="20" dlg:width="130" dlg:height="12" dlg:spin="true" dlg:linecount="7">
    <dlg:menupopup>
@@ -19,5 +19,8 @@
   <dlg:combobox dlg:id="Xhtml" dlg:tab-index="4" dlg:left="120" dlg:top="34" dlg:width="130" dlg:height="12" dlg:spin="true"/>
   <dlg:text dlg:id="CSSLabel" dlg:tab-index="5" dlg:left="10" dlg:top="50" dlg:width="100" dlg:height="12" dlg:value="CSS class"/>
   <dlg:textfield dlg:id="Css" dlg:tab-index="6" dlg:left="120" dlg:top="48" dlg:width="130" dlg:height="12"/>
+  <dlg:text dlg:id="OtherStylesLabel" dlg:tab-index="7" dlg:left="5" dlg:top="64" dlg:width="245" dlg:height="12" dlg:value="Other styles"/>
+  <dlg:text dlg:id="TabstopLabel" dlg:tab-index="8" dlg:left="10" dlg:top="78" dlg:width="100" dlg:height="12" dlg:value="CSS class for tabulator stop"/>
+  <dlg:textfield dlg:id="TabstopStyle" dlg:tab-index="9" dlg:left="120" dlg:top="76" dlg:width="130" dlg:height="12"/>
  </dlg:bulletinboard>
 </dlg:window>

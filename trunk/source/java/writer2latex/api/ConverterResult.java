@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-16)
+ *  Version 1.2 (2010-03-28)
  *
  */
  
@@ -29,6 +29,7 @@ package writer2latex.api;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 /** A <code>ConverterResult</code> represent a document, which is the result
  *  of a conversion performed by a <code>Converter</code>implementation.
@@ -36,12 +37,16 @@ import java.util.Iterator;
 public interface ConverterResult {
     
     /** Get the master document
+     *  Deprecated as of Writer2LaTeX 1.2: The master document is always the first document
+     *  returned by the <code>iterator</code> 
+     * 
      *  @return <code>OutputFile</code> the master document
      */
-    public OutputFile getMasterDocument();
+    @Deprecated public OutputFile getMasterDocument();
 
     /** Gets an <code>Iterator</code> to access all files in the
-     *  <code>ConverterResult</code>. This <em>includes</em> the master document.
+     *  <code>ConverterResult</code>. The iterator will return the master documents first
+     *  in logical order (starting with the primary master document)
      *  @return  an <code>Iterator</code> of all files
      */
     public Iterator<OutputFile> iterator();
@@ -50,6 +55,37 @@ public interface ConverterResult {
      *  @return the meta data
      */
     public MetaData getMetaData();
+    
+    /** Get the content table (based on headings) for this <code>ConverterResult</code>
+     * 
+     *  @return list view of the content
+     */
+    public List<ContentEntry> getContent();
+    
+    /** Get the entry which contains the table of contents
+     * 
+     *  @return the entry
+     */
+    public ContentEntry getTocFile();
+    
+    
+    /** Get the entry which contains the list of tables
+     * 
+     *  @return the entry
+     */
+    public ContentEntry getLotFile();
+    
+    /** Get the entry which contains the list of figures
+     * 
+     *  @return the entry
+     */
+    public ContentEntry getLofFile();
+    
+    /** Get the entry which contains the alphabetical index
+     * 
+     *  @return the entry
+     */
+    public ContentEntry getIndexFile();
     
     /** Write all files of the <code>ConverterResult</code> to a directory.
      *  Subdirectories are created as required by the individual

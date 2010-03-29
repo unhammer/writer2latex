@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-15)
+ *  Version 1.2 (2010-03-25)
  *
  */
 
@@ -44,8 +44,10 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 import writer2latex.api.Config;
+import writer2latex.api.ContentEntry;
 import writer2latex.api.ConverterFactory;
 //import writer2latex.api.ConverterResult;
+import writer2latex.base.ContentEntryImpl;
 import writer2latex.base.ConverterBase;
 //import writer2latex.latex.LaTeXDocumentPortion;
 //import writer2latex.latex.util.Context;
@@ -57,7 +59,7 @@ import writer2latex.util.ExportNameCollection;
 import writer2latex.util.Misc;
 
 /**
- * <p>This class converts an OpenDocument file to an XHTML(+MathML) document<.</p>
+ * <p>This class converts an OpenDocument file to an XHTML(+MathML) document.</p>
  *
  */
 public class Converter extends ConverterBase {
@@ -86,6 +88,8 @@ public class Converter extends ConverterBase {
     private XhtmlDocument htmlDoc; // current outfile
     private Document htmlDOM; // current DOM, usually within htmlDoc
     private boolean bNeedHeaderFooter = false;
+    private int nTocFileIndex = -1;
+    private int nAlphabeticalIndex = -1;
 
     // Hyperlinks
     Hashtable<String, Integer> targets = new Hashtable<String, Integer>();
@@ -123,6 +127,28 @@ public class Converter extends ConverterBase {
     protected int getType() { return nType; }
 	
     protected int getOutFileIndex() { return nOutFileIndex; }
+    
+    protected void addContentEntry(String sTitle, int nLevel, String sTarget) {
+    	converterResult.addContentEntry(new ContentEntryImpl(sTitle,nLevel,htmlDoc,sTarget));
+    }
+    
+    protected void setTocFile(String sTarget) {
+    	converterResult.setTocFile(new ContentEntryImpl(l10n.get(L10n.CONTENTS),1,htmlDoc,sTarget));
+    	nTocFileIndex = nOutFileIndex;
+    }
+	
+    protected void setLofFile(String sTarget) {
+    	converterResult.setLofFile(new ContentEntryImpl("Figures",1,htmlDoc,sTarget));
+    }
+	
+    protected void setLotFile(String sTarget) {
+    	converterResult.setLotFile(new ContentEntryImpl("Tables",1,htmlDoc,sTarget));
+    }
+	
+    protected void setIndexFile(String sTarget) {
+    	converterResult.setIndexFile(new ContentEntryImpl(l10n.get(L10n.INDEX),1,htmlDoc,sTarget));
+    	nAlphabeticalIndex = nOutFileIndex;
+    }
 	
     protected Element createElement(String s) { return htmlDOM.createElement(s); }
 	
@@ -327,13 +353,14 @@ public class Converter extends ConverterBase {
                 }
             }
         }
-
+        
     }
 	
     private void addNavigationLink(Document dom, Node node, String s, int nIndex) {
         if (nIndex>=0 && nIndex<=nOutFileIndex) {
             Element a = dom.createElement("a");
             a.setAttribute("href",Misc.makeHref(getOutFileName(nIndex,true)));
+            a.setAttribute("href",getOutFileName(nIndex,true));
             a.appendChild(dom.createTextNode(s));
             //node.appendChild(dom.createTextNode("["));
             node.appendChild(a);
@@ -446,7 +473,7 @@ public class Converter extends ConverterBase {
         if (template!=null) { htmlDoc.readFromTemplate(template); }
         else if (bNeedHeaderFooter) { htmlDoc.createHeaderFooter(); }
         outFiles.add(nOutFileIndex,htmlDoc);
-        convertData.addDocument(htmlDoc);
+        converterResult.addDocument(htmlDoc);
         
         // Create head + body
         htmlDOM = htmlDoc.getContentDOM();

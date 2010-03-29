@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-15)
+ *  Version 1.2 (2010-03-29)
  *
  */
 
@@ -142,6 +142,10 @@ public class MetaData implements writer2latex.api.MetaData {
      *  @return the language of the document
      */
     public String getLanguage() { return sLanguage; }
+    
+    public void setLanguage(String sLanguage) {
+    	this.sLanguage = sLanguage;
+    }
 
     /** <p> Get the subject of this document (may be null)</p>
      *  @return the subject of the document

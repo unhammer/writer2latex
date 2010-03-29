@@ -37,7 +37,7 @@
  ************************************************************************/
  
 // This version is adapted for Writer2LaTeX
-// Version 1.2 (2010-03-15)
+// Version 1.2 (2010-03-28)
 
 package writer2latex.xmerge;
 
@@ -1286,6 +1286,10 @@ public class OfficeDocument
     // TODO: We need these because we implement OutputFile (but in fact we shouldn't)
 	public String getMIMEType() {
 		return "";
+	}
+	
+	public boolean isMasterDocument() {
+		return false;
 	}
 
 }

@@ -4,8 +4,9 @@
  <library:element library:name="ConfigurationRoot"/>
  <library:element library:name="General"/>
  <library:element library:name="Template"/>
+ <library:element library:name="Stylesheets"/>
+ <library:element library:name="Styles1"/>
+ <library:element library:name="Styles2"/>
  <library:element library:name="Formatting"/>
- <library:element library:name="StylesPartI"/>
- <library:element library:name="StylesPartII"/>
  <library:element library:name="Content"/>
 </library:library>

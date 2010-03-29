@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-15)
+ *  Version 1.2 (2010-03-28)
  *
  */
 
@@ -165,6 +165,10 @@ public class BinaryGraphicsDocument implements Document {
 
 	public String getMIMEType() {
 		return sMimeType;
+	}
+	
+	public boolean isMasterDocument() {
+		return false;
 	}
     
 }

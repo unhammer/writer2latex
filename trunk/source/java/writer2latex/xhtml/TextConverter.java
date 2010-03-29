@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-12)
+ *  Version 1.2 (2010-03-26)
  *
  */
 
@@ -568,10 +568,17 @@ public class TextConverter extends ConverterHelper {
                 heading.appendChild(span);
                 span.appendChild( converter.createTextNode(sLabel) );
             }
-			
+            			
             // Add to toc
             if (!bInToc) {
                 converter.addTarget(heading,"toc"+(++nTocIndex));
+                
+                // Add in external content
+                if (nLevel<=nSplit) {
+                	converter.addContentEntry(sLabel+(sLabel.length()>0 ? " " : "")+Misc.getPCDATA(onode), nLevel, null);
+                }
+
+                // Add to real toc
                 TocEntry entry = new TocEntry();
                 entry.onode = (Element) onode;
                 entry.sLabel = sLabel;
@@ -1014,6 +1021,8 @@ public class TextConverter extends ConverterHelper {
         if (!ofr.getTocReader((Element)onode).isByChapter()) { 
             nTocFileIndex = converter.getOutFileIndex(); 
         }
+        
+        converter.setTocFile(null);
 
         Element div = converter.createElement("div");
         hnode.appendChild(div);
@@ -1175,6 +1184,8 @@ public class TextConverter extends ConverterHelper {
      */
     private void handleAlphabeticalIndex (Node onode, Node hnode) {
         nAlphabeticalIndex = converter.getOutFileIndex();
+        converter.setIndexFile(null);
+        
         Node source = Misc.getChildByTagName(onode,XMLString.TEXT_ALPHABETICAL_INDEX_SOURCE);
         if (source!=null) {
             Element div = converter.createElement("div");

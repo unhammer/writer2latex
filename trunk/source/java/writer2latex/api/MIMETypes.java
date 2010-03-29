@@ -16,17 +16,17 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-05-29)
+ *  Version 1.2 (2010-03-29)
  *
  */
 
 package writer2latex.api;
 
-/* Some helpers to handle the MIME types used by OOo
+/* Some helpers to handle the MIME types used by OOo and Writer2LaTeX
  */
 
 public class MIMETypes {
@@ -50,6 +50,7 @@ public class MIMETypes {
     public static final String XHTML11="application/xhtml11";
     public static final String XHTML_MATHML="application/xhtml+xml";
     public static final String XHTML_MATHML_XSL="application/xml";
+    public static final String EPUB="application/epub+zip";
     public static final String LATEX="application/x-latex";
     public static final String BIBTEX="application/x-bibtex";
     public static final String TEXT="text";

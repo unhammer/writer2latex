@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-06-05)
+ *  Version 1.2 (2010-03-28)
  *
  */
 
@@ -103,7 +103,7 @@ public class BibConverter extends ConverterHelper {
                    .append("}").nl();
             }
             else {
-                if (bibDoc==null) { bibDoc = new BibTeXDocument(palette.getOutFileName()); }
+                if (bibDoc==null) { bibDoc = new BibTeXDocument(palette.getOutFileName(),false); }
                 ldp.append("\\bibliography{")
                    .append(bibDoc.getName())
                    .append("}").nl();
@@ -129,7 +129,7 @@ public class BibConverter extends ConverterHelper {
             String sIdentifier = node.getAttribute(XMLString.TEXT_IDENTIFIER);
             if (sIdentifier!=null) {
                 if (config.externalBibtexFiles().length()==0) {
-                    if (bibDoc==null) { bibDoc = new BibTeXDocument(palette.getOutFileName()); }
+                    if (bibDoc==null) { bibDoc = new BibTeXDocument(palette.getOutFileName(),false); }
                     if (!bibDoc.containsKey(sIdentifier)) {
                         bibDoc.put(new BibMark(node));
                     }

@@ -393,9 +393,13 @@ public class DOMDocument
         return doc;
     }
 
-    // We need this because we implement OutputFile
+    // We need these because we implement OutputFile
 	public String getMIMEType() {
 		return "";
+	}
+	
+	public boolean isMasterDocument() {
+		return false;
 	}
 
 }

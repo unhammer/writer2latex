@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-15) 
+ *  Version 1.2 (2010-03-28) 
  *
  */
 
@@ -174,7 +174,7 @@ public final class ConverterPalette extends ConverterBase {
         info = new Info(ofr,config,this);
 
         // Create master document and add this
-        this.texDoc = new LaTeXDocument(sTargetFileName,config.getWrapLinesAfter());
+        this.texDoc = new LaTeXDocument(sTargetFileName,config.getWrapLinesAfter(),true);
         if (config.getBackend()!=LaTeXConfig.XETEX) {
             texDoc.setEncoding(ClassicI18n.writeJavaEncoding(config.getInputencoding()));        	
         }
@@ -182,7 +182,7 @@ public final class ConverterPalette extends ConverterBase {
             texDoc.setEncoding("UTF-8");        	
         	
         }
-        convertData.addDocument(texDoc);
+        converterResult.addDocument(texDoc);
 
         // Create other data
         globalOptions = new CSVList(',');
@@ -288,7 +288,7 @@ public final class ConverterPalette extends ConverterBase {
 		
         // Add BibTeX document if there's any bibliographic data
         if (bibCv.getBibTeXDocument()!=null) {
-            convertData.addDocument(bibCv.getBibTeXDocument());
+            converterResult.addDocument(bibCv.getBibTeXDocument());
         }
     }
 	

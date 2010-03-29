@@ -161,6 +161,7 @@
                 	<include name="org/openoffice/da/comp/writer2xhtml/**/*.class"/>
                 	<include name="writer2latex/api/**/*.class"/>
                 	<include name="writer2latex/base/**/*.class"/>
+                	<include name="writer2latex/epub/**/*.class"/>
                 	<include name="writer2latex/office/**/*.class"/>
                 	<include name="writer2latex/util/**/*.class"/>
                 	<include name="writer2latex/xhtml/**/*.class"/>

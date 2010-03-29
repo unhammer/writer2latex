@@ -20,7 +20,7 @@
 *
 *  All Rights Reserved.
 * 
-*  Version 1.2 (2010-03-22)
+*  Version 1.2 (2010-03-26)
 *
 */ 
 
@@ -354,11 +354,11 @@ public abstract class ConfigurationDialogBase extends WeakBase implements XConta
 			config.setOption(sConfigName, Boolean.toString(dlg.getCheckBoxStateAsBoolean(sCheckBoxName)));
 		}
 		
-		protected void textBoxFromConfig(DialogAccess dlg, String sTextBoxName, String sConfigName) {
+		protected void textFieldFromConfig(DialogAccess dlg, String sTextBoxName, String sConfigName) {
 			dlg.setTextFieldText(sTextBoxName, config.getOption(sConfigName));	
 		}
 		
-		protected void textBoxToConfig(DialogAccess dlg, String sTextBoxName, String sConfigName) {
+		protected void textFieldToConfig(DialogAccess dlg, String sTextBoxName, String sConfigName) {
 			config.setOption(sConfigName, dlg.getTextFieldText(sTextBoxName));
 		}
 		

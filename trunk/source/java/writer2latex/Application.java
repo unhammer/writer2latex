@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-06-11) 
+ *  Version 1.2 (2010-03-29) 
  *
  */
  
@@ -46,13 +46,13 @@ import writer2latex.api.MIMETypes;
 import writer2latex.util.Misc;
 
 /**
- * <p>Commandline utility to convert an OpenOffice.org Writer XML file into XHTML/LaTeX/BibTeX</p>
+ * <p>Command line utility to convert an OpenOffice.org Writer XML file into XHTML/LaTeX/BibTeX</p>
  * <p>The utility is invoked with the following command line:</p>
  * <pre>java -jar writer2latex.jar [options] source [target]</pre>
  * <p>Where the available options are
  * <ul>
  * <li><code>-latex</code>, <code>-bibtex</code>, <code>-xhtml</code>,
-       <code>-xhtml+mathml</code>, <code>-xhtml+mathml+xsl</code>
+       <code>-xhtml+mathml</code>, <code>-xhtml+mathml+xsl</code>, <code>-epub</code>
  * <li><code>-recurse</code>
  * <li><code>-ultraclean</code>, <code>-clean</code>, <code>-pdfscreen</code>,
  * <code>-pdfprint</code>, <code>-cleanxhtml</code>
@@ -279,6 +279,7 @@ public final class Application {
         System.out.println("   -xhtml11");
         System.out.println("   -xhtml+mathml");
         System.out.println("   -xhtml+mathml+xsl");
+        System.out.println("   -epub");
         System.out.println("   -recurse");
         System.out.println("   -template[=]<template file>");
         System.out.println("   -ultraclean");
@@ -312,6 +313,7 @@ public final class Application {
                 else if ("-xhtml11".equals(sArg)) { sTargetMIME = MIMETypes.XHTML11; }
                 else if ("-xhtml+mathml".equals(sArg)) { sTargetMIME = MIMETypes.XHTML_MATHML; }
                 else if ("-xhtml+mathml+xsl".equals(sArg)) { sTargetMIME = MIMETypes.XHTML_MATHML_XSL; }
+                else if ("-epub".equals(sArg)) { sTargetMIME = MIMETypes.EPUB; }
                 else if ("-recurse".equals(sArg)) { bRecurse = true; }
                 else if ("-ultraclean".equals(sArg)) { configFileNames.add("*ultraclean.xml"); }
                 else if ("-clean".equals(sArg)) { configFileNames.add("*clean.xml"); }

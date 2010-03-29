@@ -20,7 +20,7 @@
 *
 *  All Rights Reserved.
 * 
-*  Version 1.2 (2010-03-22)
+*  Version 1.2 (2010-03-28)
 *
 */ 
 
@@ -29,125 +29,164 @@ package writer2latex.base;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 import java.util.Iterator;
 
 import writer2latex.api.ConverterResult;
 import writer2latex.api.MetaData;
 import writer2latex.api.OutputFile;
+import writer2latex.api.ContentEntry;
 
-/**
- *  <p><code>ConvertData</code> is used as a container for passing
- *  <code>OutputFile</code> objects in and out of the <code>Convert</code>
- *  class.  The <code>ConvertData</code> contains a <code>String</code>
- *  name and a <code>Vector</code> of <code>OutputFile</code> objects.</p>
- *
- *  @author  Martin Maher 
- *  TODO: Rewrite to support extended API
+/** <code>ConverterResultImpl</code> is a straightforward implementation of <code>ConverterResult</code>
  */
 public class ConverterResultImpl implements ConverterResult {
 	
-    /**
-     *  Vector of <code>OutputFile</code> objects.
-     */
-	private Vector<OutputFile> v = new Vector<OutputFile>();
+	private List<OutputFile> files;
 	
-    /** Master doc */
-    private OutputFile masterDoc = null;
-
-    /**
-     *  Name of the <code>ConvertData</code> object.
-     */
-	private String name;
+	private List<ContentEntry> content; 
+	private ContentEntry tocFile;
+	private ContentEntry lofFile;
+	private ContentEntry lotFile;
+	private ContentEntry indexFile;
 	
 	private MetaData metaData = null;
 	
-
-    /**
-     *  Resets ConvertData.  This empties all <code>OutputFile</code>
-     *  objects from this class.  This allows reuse of a
-     *  <code>ConvertData</code>.
-     */
-    public void reset() {
-		name = null;
-                v.removeAllElements();
-	}
-        
-    /**
-     *  Returns the <code>OutputFile</code> name.
-     *
-     *  @return  The <code>OutputFile</code> name.
-     */
-    public String getName() {
-		return name;
-	}
-
-
-    /**
-     *  Sets the <code>OutputFile</code> name.
-     *
-     *  @param  docName  The name of the <code>OutputFile</code>.
-     */
-    public void setName(String docName) {
-		name = docName;
-	}
-
-    /**
-     *  Adds a <code>OutputFile</code> to the vector.
-     *
-     *  @param  doc  The <code>OutputFile</code> to add.
-     */
-    public void addDocument(OutputFile doc) {
-        if (v.size()==0) { masterDoc = doc; }
-        v.add(doc);
+	private int nMasterCount;
+	
+	/** Construct a new <code>ConverterResultImpl</code> with empty content
+	 */
+	public ConverterResultImpl() {
+		reset();
 	}
 	
-    /** Get the master document
+    /** Resets all data.  This empties all <code>OutputFile</code> and <code>ContentEntry</code> objects
+     *  objects from this class.  This allows reuse of a <code>ConvertResult</code> object.
+     */
+    public void reset() {
+        files = new Vector<OutputFile>();
+        content = new Vector<ContentEntry>();
+        tocFile = null;
+        lofFile = null;
+        lotFile = null;
+        indexFile = null;
+        metaData = null;
+        nMasterCount = 0;
+	}
+
+    /** Adds an <code>OutputFile</code> to the list
+     *
+     *  @param  file  The <code>OutputFile</code> to add.
+     */
+    public void addDocument(OutputFile file) {
+    	if (file.isMasterDocument()) {
+    		files.add(nMasterCount++, file);
+    	}
+    	else {
+    		files.add(file);
+    	}
+	}
+		
+    /** Get the first master document
+     * 
      *  @return <code>OutputFile</code> the master document
      */
     public OutputFile getMasterDocument() {
-        return masterDoc;
+        return files.size()>0 ? files.get(0) : null;
     }
-	
-    /** Check if a given document is the master document
-     *  @param doc  The <code>OutputFile</code> to check
-     *  @return true if this is the master document
-     */
-    public boolean isMasterDocument(OutputFile doc) {
-        return doc == masterDoc;
-    }
-
 	
     /**
-     *  Gets an <code>Iterator</code> to access the <code>Vector</code>
+     *  Gets an <code>Iterator</code> to access the <code>List</code>
      *  of <code>OutputFile</code> objects
      *
      *  @return  The <code>Iterator</code> to access the
-     *           <code>Vector</code> of <code>OutputFile</code> objects.
+     *           <code>List</code> of <code>OutputFile</code> objects.
      */
     public Iterator<OutputFile> iterator() {
-        return v.iterator();
+        return files.iterator();
 	}
 
-	public MetaData getMetaData() {
-		return metaData;
-	}
-	
+    /** Add an entry to the "external" table of contents
+     * 
+     *  @param entry the entry to add
+     */
+    public void addContentEntry(ContentEntry entry) {
+    	content.add(entry);
+    }
+    
+    public List<ContentEntry> getContent() {
+    	return Collections.unmodifiableList(content);
+    }
+    
+    /** Define the entry which contains the table of contents
+     * 
+     * @param entry the entry
+     */
+    public void setTocFile(ContentEntry entry) {
+    	tocFile = entry;
+    }
+    
+    public ContentEntry getTocFile() {
+    	return tocFile;
+    }
+    
+    /** Define the entry which contains the list of figures
+     * 
+     * @param entry the entry
+     */
+    public void setLofFile(ContentEntry entry) {
+    	lofFile = entry;
+    }
+    
+    public ContentEntry getLofFile() {
+    	return lofFile;
+    }
+    
+    /** Define the entry which contains the list of tables
+     * 
+     * @param entry the entry
+     */
+    public void setLotFile(ContentEntry entry) {
+    	lotFile = entry;
+    }
+    
+    public ContentEntry getLotFile() {
+    	return lotFile;
+    }
+    
+    /** Define the entry which contains the alphabetical index
+     * 
+     * @param entry the entry
+     */
+    public void setIndexFile(ContentEntry entry) {
+    	indexFile = entry;
+    }
+    
+    public ContentEntry getIndexFile() {
+    	return indexFile;
+    }
+    
+    /** Set the meta data of this <code>ConverterResult</code> 
+     * 
+     * @param metaData the meta data
+     */
 	public void setMetaData(MetaData metaData) {
 		this.metaData = metaData;
 	}
-
-
-    /**
-     *  Gets the number of <code>OutputFile</code> objects currently stored 
-     *
-     *  @return  The number of <code>OutputFile</code> objects currently
-     *           stored.
-     */
-    public int getNumDocuments() {
-		return (v.size());
+	
+	/** Get the meta data of this <code>ConverterResult</code>
+	 *  
+	 *  @return the meta data
+	 */
+    public MetaData getMetaData() {
+		return metaData;
 	}
     
+    /** Write all files to a given directory
+     * 
+     *  @param dir the directory to use
+     */
     public void write(File dir) throws IOException {
         if (dir!=null && !dir.exists()) throw new IOException("Directory does not exist");
         Iterator<OutputFile> docEnum = iterator();

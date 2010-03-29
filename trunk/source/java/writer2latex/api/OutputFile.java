@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-15)
+ *  Version 1.2 (2010-03-28)
  *
  */
  
@@ -29,7 +29,7 @@ package writer2latex.api;
 import java.io.OutputStream;
 import java.io.IOException;
 
-/** An <code>OutputFile</code> represent a single file in a
+/** An <code>OutputFile</code> represents a single file in a
  *  {@link ConverterResult}, which is output from a {@link Converter}
  *  implementation.
  */
@@ -56,4 +56,10 @@ public interface OutputFile {
      */
     public String getMIMEType();
     
+    /** Test whether this document is part of the main document flow (master documents) or
+     *  an auxiliary document  
+     * 
+     *  @return true if this document is a master document
+     */
+    public boolean isMasterDocument();
 }

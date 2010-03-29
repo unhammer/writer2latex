@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-12)
+ *  Version 1.2 (2010-03-29)
  *
  */
  
@@ -33,11 +33,12 @@ public class ConverterFactory {
 
     // Version information
     private static final String VERSION = "1.1.2";
-    private static final String DATE = "2010-03-14";
+    private static final String DATE = "2010-03-29";
 	
-    /** Return version information
-     *  @return the Writer2LaTeX version in the form
-     *  (major version).(minor version).(development version).(patch level)
+    /** Return the Writer2LaTeX version in the form
+     *  (major version).(minor version).(patch level)<br/>
+     *  Development versions have an odd minor version number
+     *  @return the version number
      */
     public static String getVersion() { return VERSION; }
 
@@ -60,6 +61,7 @@ public class ConverterFactory {
      *    <li><code>application/xhtml+xml</code> for XHTML+MathML</li>
      *    <li><code>application/xml</code> for XHTML+MathML using stylesheets from w3c's
      *        math working group</li>
+     *    <li><code>application/epub+zip</code></li> for EPUB format    
      *  </ul>
      *  
      *  @param sMIME the MIME type of the target format
@@ -85,6 +87,9 @@ public class ConverterFactory {
         }
         else if (MIMETypes.XHTML_MATHML_XSL.equals(sMIME)) {
             converter = createInstance("writer2latex.xhtml.XhtmlMathMLXSLConverter");
+        }
+        else if (MIMETypes.EPUB.equals(sMIME)) {
+            converter = createInstance("writer2latex.epub.EPUBConverter");
         }
         return converter instanceof Converter ? (Converter) converter : null;
     }
@@ -117,7 +122,7 @@ public class ConverterFactory {
 	
     private static Object createInstance(String sClassName) {
         try {
-		        return Class.forName(sClassName).newInstance();
+		    return Class.forName(sClassName).newInstance();
         }
         catch (java.lang.ClassNotFoundException e) {
             return null;

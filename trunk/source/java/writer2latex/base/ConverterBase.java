@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-23)
+ *  Version 1.2 (2010-03-29)
  *
  */
 
@@ -31,7 +31,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.IOException;
-
 import writer2latex.api.GraphicConverter;
 import writer2latex.api.Converter;
 import writer2latex.api.ConverterResult;
@@ -57,12 +56,12 @@ public abstract class ConverterBase implements Converter {
 
     // The output file(s)
     protected String sTargetFileName;
-    protected ConverterResultImpl convertData;
+    protected ConverterResultImpl converterResult;
 		
     // Constructor
     public ConverterBase() {
         graphicConverter = null;
-        convertData = new ConverterResultImpl();
+        converterResult = new ConverterResultImpl();
     }
 	
     // Implement the interface
@@ -91,11 +90,16 @@ public abstract class ConverterBase implements Converter {
 
         // Prepare output
         this.sTargetFileName = sTargetFileName;
-        convertData.reset();
+        converterResult.reset();
+        
+        converterResult.setMetaData(metaData);
+        if (metaData.getLanguage()==null || metaData.getLanguage().length()==0) {
+        	metaData.setLanguage(ofr.getMajorityLanguage());
+        }
 		
         convertInner();
-		
-        return convertData;
+        
+        return converterResult;
     }
 	
     // The subclass must provide the implementation
@@ -105,7 +109,7 @@ public abstract class ConverterBase implements Converter {
     
     public ImageLoader getImageLoader() { return imageLoader; }
 	
-    public void addDocument(OutputFile doc) { convertData.addDocument(doc); }
+    public void addDocument(OutputFile doc) { converterResult.addDocument(doc); }
 	
     public EmbeddedObject getEmbeddedObject(String sHref) {
         return odDoc.getEmbeddedObject(sHref);

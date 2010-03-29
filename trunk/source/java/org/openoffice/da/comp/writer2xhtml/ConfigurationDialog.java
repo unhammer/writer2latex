@@ -20,7 +20,7 @@
 *
 *  All Rights Reserved.
 * 
-*  Version 1.2 (2010-03-22)
+*  Version 1.2 (2010-03-26)
 *
 */ 
 package org.openoffice.da.comp.writer2xhtml;
@@ -69,9 +69,11 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     	
     	pageHandlers.put("General", new GeneralHandler());
     	//pageHandlers.put("Template", new TemplateHandler());
+    	pageHandlers.put("Stylesheets", new StylesheetsHandler());
     	pageHandlers.put("Formatting", new FormattingHandler());
-    	//pageHandlers.put("StylesPartI", new StylesPartIHandler());
-    	//pageHandlers.put("StylesPartII", new StylesPartIIHandler());
+    	//pageHandlers.put("Styles1", new StylesPartIHandler());
+    	//pageHandlers.put("Styles2", new StylesPartIIHandler());
+    	pageHandlers.put("Formatting", new FormattingHandler());
     	pageHandlers.put("Content", new ContentHandler());
     }
     
@@ -129,6 +131,57 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     		boolean bUnicode = dlg.getListBoxSelectedItem("Encoding")<2;
     		dlg.setControlEnabled("HexadecimalEntitiesLabel", !bUnicode);
     		dlg.setControlEnabled("HexadecimalEntities", !bUnicode);
+    	}
+    	
+    }
+
+    private class StylesheetsHandler extends PageHandler {
+    	
+    	@Override protected void setControls(DialogAccess dlg) {
+    		dlg.setCheckBoxStateAsBoolean("UseCustomStylesheet", config.getOption("custom_stylesheet").length()>0);
+    		textFieldFromConfig(dlg, "CustomStylesheet", "custom_stylesheet");
+    		
+    		useCustomStylesheetChange(dlg);
+    		includeCustomStylesheetChange(dlg);
+    	}
+    	
+    	@Override protected void getControls(DialogAccess dlg) {
+    		if (dlg.getCheckBoxStateAsBoolean("UseCustomStylesheet")) {
+        		textFieldToConfig(dlg, "CustomStylesheet", "custom_stylesheet");    			
+    		}
+    		else {
+    			config.setOption("custom_stylesheet", "");
+    		}
+    	}
+    	
+    	@Override protected boolean handleEvent(DialogAccess dlg, String sMethod) {
+    		if (sMethod.equals("UseCustomStylesheetChange")) {
+    			useCustomStylesheetChange(dlg);
+    			return true;
+    		}
+    		else if (sMethod.equals("IncludeCustomStylesheetChange")) {
+    			includeCustomStylesheetChange(dlg);
+    			return true;
+    		}
+    		else if (sMethod.equals("LoadButtonClick")) {
+    			loadButtonClick(dlg);
+    			return true;
+    		}
+    		return false;
+    	}
+    	
+    	private void useCustomStylesheetChange(DialogAccess dlg) {
+    		boolean bUseCustomStylesheet = dlg.getCheckBoxStateAsBoolean("UseCustomStylesheet");
+    		dlg.setControlEnabled("CustomStylesheetLabel", bUseCustomStylesheet);
+    		dlg.setControlEnabled("CustomStylesheet", bUseCustomStylesheet);
+    	}
+    	
+    	private void includeCustomStylesheetChange(DialogAccess dlg) {
+    		dlg.setControlEnabled("IncludedCustomStylesheet", dlg.getCheckBoxStateAsBoolean("IncludeCustomStylesheet"));
+    	}
+    	
+    	private void loadButtonClick(DialogAccess dlg) {
+    		// TODO
     	}
     	
     }

@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-15)
+ *  Version 1.2 (2010-03-28)
  *
  */
 
@@ -55,6 +55,8 @@ public class BibTeXDocument implements Document {
     private Hashtable<String, BibMark> entries = new Hashtable<String, BibMark>();
     private ExportNameCollection exportNames = new ExportNameCollection("",true,"_-:");
     private I18n i18n;
+    
+    private boolean bIsMaster;
 
     /**
      * <p>Constructs a new BibTeX Document.</p>
@@ -64,8 +66,9 @@ public class BibTeXDocument implements Document {
      *
      * @param   sName    The name of the <code>BibTeXDocument</code>.
      */
-    public BibTeXDocument(String sName) {
+    public BibTeXDocument(String sName, boolean bIsMaster) {
         this.sName = trimDocumentName(sName);
+        this.bIsMaster = bIsMaster;
         // Use default config (only ascii, no extra font packages)
         i18n = new ClassicI18n(new LaTeXConfig());
     }
@@ -104,6 +107,10 @@ public class BibTeXDocument implements Document {
     
 	public String getMIMEType() {
 		return MIMETypes.BIBTEX;
+	}
+	
+	public boolean isMasterDocument() {
+		return bIsMaster;
 	}
 
     /**
