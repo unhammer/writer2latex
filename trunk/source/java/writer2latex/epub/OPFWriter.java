@@ -41,16 +41,14 @@ import org.w3c.dom.Element;
 import writer2latex.api.ContentEntry;
 import writer2latex.api.ConverterResult;
 import writer2latex.api.OutputFile;
-import writer2latex.util.Misc;
 import writer2latex.xmerge.NewDOMDocument;
 
-/** This class writes an OPF-file for an EPUB document (see http://www.idpf.org/2007/opf/OPF_2.0_final_spec.html)
- * 
+/** This class writes an OPF-file for an EPUB document (see http://www.idpf.org/2007/opf/OPF_2.0_final_spec.html).
  */
 public class OPFWriter extends NewDOMDocument {
 
-	public OPFWriter(ConverterResult cr, String sUUID, String sNcxFileName, String sFileName) {
-		super(Misc.removeExtension(sFileName), "opf");
+	public OPFWriter(ConverterResult cr, String sUUID) {
+		super("book", "opf");
 		
         // create DOM
         Document contentDOM = null;
@@ -123,7 +121,7 @@ public class OPFWriter extends NewDOMDocument {
         }
         
         Element item = contentDOM.createElement("item");
-        item.setAttribute("href", sNcxFileName);
+        item.setAttribute("href", "book.ncx");
         item.setAttribute("media-type", "application/x-dtbncx+xml");
         item.setAttribute("id", "ncx");
         manifest.appendChild(item);

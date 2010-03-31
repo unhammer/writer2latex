@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-25)
+ *  Version 1.2 (2010-03-31)
  *
  */
 
@@ -44,7 +44,6 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 import writer2latex.api.Config;
-import writer2latex.api.ContentEntry;
 import writer2latex.api.ConverterFactory;
 //import writer2latex.api.ConverterResult;
 import writer2latex.base.ContentEntryImpl;
@@ -83,6 +82,7 @@ public class Converter extends ConverterBase {
 
     // The xhtml output file(s)
     protected int nType = XhtmlDocument.XHTML10; // the doctype
+    private boolean bOPS = false; // Do we need to be OPS conforming?
     Vector<XhtmlDocument> outFiles;
     private int nOutFileIndex;
     private XhtmlDocument htmlDoc; // current outfile
@@ -157,15 +157,18 @@ public class Converter extends ConverterBase {
     protected Node importNode(Node node, boolean bDeep) { return htmlDOM.importNode(node,bDeep); }
 	
     protected L10n getL10n() { return l10n; }
+    
+    public void setOPS(boolean b) { bOPS = true; }
+    
+    public boolean isOPS() { return bOPS; }
 	
-    // override
-    public void convertInner() throws IOException {      
+    @Override public void convertInner() throws IOException {      
         sTargetFileName = Misc.trimDocumentName(sTargetFileName,XhtmlDocument.getExtension(nType));
 		
         outFiles = new Vector<XhtmlDocument>();
         nOutFileIndex = -1;
 
-        bNeedHeaderFooter = ofr.isSpreadsheet() || ofr.isPresentation() || config.getXhtmlSplitLevel()>0 || config.getXhtmlUplink().length()>0;
+        bNeedHeaderFooter = !bOPS && (ofr.isSpreadsheet() || ofr.isPresentation() || config.getXhtmlSplitLevel()>0 || config.getXhtmlUplink().length()>0);
 
         l10n = new L10n();
         
@@ -612,6 +615,8 @@ public class Converter extends ConverterBase {
         }
         else { // external link
             anchor = htmlDOM.createElement("a");
+            
+            sHref = ofr.fixRelativeLink(sHref);
 	
             // Workaround for an OOo problem:
             if (sHref.indexOf("?")==-1) { // No question mark

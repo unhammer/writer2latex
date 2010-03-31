@@ -38,11 +38,11 @@ import org.w3c.dom.Element;
 import writer2latex.xmerge.NewDOMDocument;
 
 /** This class creates the required META-INF/container.xml file for an EPUB package 
- *  (see http://www.idpf.org/ocf/ocf1.0/download/ocf10.htm)
+ *  (see http://www.idpf.org/ocf/ocf1.0/download/ocf10.htm).
  */
 public class ContainerWriter extends NewDOMDocument {
 	
-	public ContainerWriter(String sRootFile) {
+	public ContainerWriter() {
 		super("container", "xml");
 		
         // create DOM
@@ -67,7 +67,7 @@ public class ContainerWriter extends NewDOMDocument {
         container.appendChild(rootfiles);
         
         Element rootfile = contentDOM.createElement("rootfile");
-        rootfile.setAttribute("full-path", sRootFile);
+        rootfile.setAttribute("full-path", "OEBPS/book.opf");
         rootfile.setAttribute("media-type", "application/oebps-package+xml");
         rootfiles.appendChild(rootfile);
         

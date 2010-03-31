@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-15)
+ *  Version 1.2 (2010-03-29)
  *
  */
  
@@ -343,11 +343,7 @@ public class DrawConverter extends ConverterHelper {
         if (node.hasAttribute(XMLString.XLINK_HREF) && !ofr.isInPackage(sHref)) {
             // Linked image is not yet handled by ImageLoader. This is a temp.
             // solution (will go away when ImageLoader is finished)
-            sFileName = sHref;
-            // In OpenDocument package format ../ means "leave the package"
-            if (ofr.isOpenDocument() && ofr.isPackageFormat() && sFileName.startsWith("../")) {
-                sFileName=sFileName.substring(3);
-            }
+            sFileName = ofr.fixRelativeLink(sHref);
             int nExtStart = sHref.lastIndexOf(".");
             String sExt = nExtStart>=0 ? sHref.substring(nExtStart).toLowerCase() : "";
             // Accept only relative filenames and supported filetypes:

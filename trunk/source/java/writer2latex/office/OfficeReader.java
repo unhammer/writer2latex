@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2008-09-30)
+ *  Version 1.2 (2010-03-29)
  *
  */
 
@@ -334,6 +334,19 @@ public class OfficeReader {
         if (sUrl.startsWith("./")) { sUrl=sUrl.substring(2); }
         return oooDoc.getEmbeddedObject(sUrl)!=null; 
     } 
+    
+    /** In OpenDocument package format ../ means "leave the package".
+     *  Consequently this prefix must be removed to obtain a valid link 
+     *  
+     * @param sLink
+     * @return the corrected link
+     */
+    public String fixRelativeLink(String sLink) {
+        if (isOpenDocument() && isPackageFormat() && sLink.startsWith("../")) {
+            return sLink.substring(3);
+        }
+        return sLink;
+    }
 	
     ///////////////////////////////////////////////////////////////////////////
     // Accessor methods

@@ -2,6 +2,8 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.2 ----------
 
+[w2x] Bugfix: Corrected problem with relative links (this affected package format only)
+
 [w2x] Added EPUB export
 
 [all] API change: The interface ConverterResult supports an additional method

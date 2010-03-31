@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  version 1.2 (2010-03-29)
+ *  version 1.2 (2010-03-31)
  *
  */
 
@@ -30,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -37,8 +38,9 @@ import writer2latex.api.ConverterResult;
 import writer2latex.api.OutputFile;
 import writer2latex.util.Misc;
 
-/** This class repackages an XHTML document into EPUB format
- * 
+/** This class repackages an XHTML document into EPUB format.
+ *  Some filenames are hard wired in this implementation: The main directory is OEBPS and
+ *  the OPF and NCX files are book.opf and book.ncx respectively 
  */
 public class EPUBWriter implements OutputFile {
 	
@@ -66,9 +68,12 @@ public class EPUBWriter implements OutputFile {
 	}
 
 	public void write(OutputStream os) throws IOException {
+		// Create a universal unique ID
+		String sUUID = UUID.randomUUID().toString(); 
+		
 		ZipOutputStream zos = new ZipOutputStream(os);
 		
-		// Write MIME type as first entry
+		// Write uncompressed MIME type as first entry
 		ZipEntry mimeEntry = new ZipEntry("mimetype");
 		mimeEntry.setMethod(ZipEntry.STORED);
 		mimeEntry.setCrc(0x2CAB616F);
@@ -78,27 +83,27 @@ public class EPUBWriter implements OutputFile {
 		zos.closeEntry();
 		
 		// Write container entry next
-		OutputFile containerWriter = new ContainerWriter("OEBPS/book.opf");
+		OutputFile containerWriter = new ContainerWriter();
 		ZipEntry containerEntry = new ZipEntry("META-INF/container.xml");
 		zos.putNextEntry(containerEntry);
 		writeZipEntry(containerWriter,zos);
 		zos.closeEntry();
 		
 		// Then manifest
-		OutputFile manifest = new OPFWriter(xhtmlResult, "xxx", "book.ncx", "book.opf");
+		OutputFile manifest = new OPFWriter(xhtmlResult, sUUID);
 		ZipEntry manifestEntry = new ZipEntry("OEBPS/book.opf");
 		zos.putNextEntry(manifestEntry);
 		writeZipEntry(manifest,zos);
 		zos.closeEntry();
 		
 		// And content table
-		OutputFile ncx = new NCXWriter(xhtmlResult, "xxx", "book.ncx");
+		OutputFile ncx = new NCXWriter(xhtmlResult, sUUID);
 		ZipEntry ncxEntry = new ZipEntry("OEBPS/book.ncx");
 		zos.putNextEntry(ncxEntry);
 		writeZipEntry(ncx,zos);
 		zos.closeEntry();
 		
-		// Finally XHTML content in the OEBPS sub directory
+		// Finally XHTML content
 		Iterator<OutputFile> iter = xhtmlResult.iterator();
 		while (iter.hasNext()) {
 			OutputFile file = iter.next();

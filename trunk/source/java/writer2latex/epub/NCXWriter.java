@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  version 1.2 (2010-03-29)
+ *  version 1.2 (2010-03-30)
  *
  */
 
@@ -39,17 +39,15 @@ import org.w3c.dom.Element;
 
 import writer2latex.api.ContentEntry;
 import writer2latex.api.ConverterResult;
-import writer2latex.util.Misc;
 import writer2latex.xmerge.NewDOMDocument;
 
 /** This class creates the required NXC file for an EPUB document
- *  (see http://www.idpf.org/2007/opf/OPF_2.0_final_spec.html#Section2.4)
- * 
+ *  (see http://www.idpf.org/2007/opf/OPF_2.0_final_spec.html#Section2.4).
  */
 public class NCXWriter extends NewDOMDocument {
 	
-	public NCXWriter(ConverterResult cr, String sUUID, String sFileName) {
-		super(Misc.removeExtension(sFileName), "ncx");
+	public NCXWriter(ConverterResult cr, String sUUID) {
+		super("book", "ncx");
 		
         // create DOM
         Document contentDOM = null;
@@ -63,8 +61,6 @@ public class NCXWriter extends NewDOMDocument {
         catch (ParserConfigurationException t) { // this should never happen
             throw new RuntimeException(t);
         }
-        
-        System.out.println("populating the ncx");
         
         // Populate the DOM tree
         Element ncx = contentDOM.getDocumentElement();
@@ -83,7 +79,7 @@ public class NCXWriter extends NewDOMDocument {
         
         Element depth = contentDOM.createElement("meta");
         depth.setAttribute("name","dtb:depth");
-        depth.setAttribute("content", "1");
+        // Setting the content attribute later
         head.appendChild(depth);
         
         Element totalPageCount = contentDOM.createElement("meta");
@@ -107,35 +103,57 @@ public class NCXWriter extends NewDOMDocument {
         Element navMap = contentDOM.createElement("navMap");
         ncx.appendChild(navMap);
         
+        Element currentContainer = ncx;
+        int nCurrentLevel = 0;
+        int nDepth = 0;
         int nPlayOrder = 0;
+        
         Iterator<ContentEntry> content = cr.getContent().iterator();
         while (content.hasNext()) {
         	ContentEntry entry = content.next();
-        	//if (entry.getLevel()==1) {
-        	System.out.println("Found content entry "+entry.getTitle());
-        		Element navPoint = contentDOM.createElement("navPoint");
-        		navPoint.setAttribute("playOrder", Integer.toString(++nPlayOrder));
-        		navPoint.setAttribute("id", "text"+nPlayOrder);
-        		navMap.appendChild(navPoint);
-        		
-        		Element navLabel = contentDOM.createElement("navLabel");
-        		navPoint.appendChild(navLabel);
-        		Element navLabelText = contentDOM.createElement("text");
-        		navLabel.appendChild(navLabelText);
-        		navLabelText.appendChild(contentDOM.createTextNode(entry.getTitle()));
-        		
-        		Element navPointContent = contentDOM.createElement("content");
-    			String sHref = entry.getFile().getFileName();
-    			if (entry.getTarget()!=null) { sHref+="#"+entry.getTarget(); }
-        		navPointContent.setAttribute("src", sHref);
-        		navPoint.appendChild(navPointContent);
-        	//}
+        	int nEntryLevel = Math.max(entry.getLevel(), 1);
+        	
+        	if (nEntryLevel<nCurrentLevel) {
+        		// Return to higher level
+        		for (int i=nEntryLevel; i<nCurrentLevel; i++) {
+        			currentContainer = (Element) currentContainer.getParentNode();
+        		}
+        		nCurrentLevel = nEntryLevel;
+        	}
+        	else if (nEntryLevel>nCurrentLevel) {
+        		// To lower level (always one step; a jump from e.g. heading 1 to heading 3 in the document
+        		// is considered an error)
+        		currentContainer = (Element) currentContainer.getLastChild();
+        		nCurrentLevel++;
+        	}
+        	
+        	Element navPoint = contentDOM.createElement("navPoint");
+        	navPoint.setAttribute("playOrder", Integer.toString(++nPlayOrder));
+        	navPoint.setAttribute("id", "text"+nPlayOrder);
+        	currentContainer.appendChild(navPoint);
+
+        	Element navLabel = contentDOM.createElement("navLabel");
+        	navPoint.appendChild(navLabel);
+        	Element navLabelText = contentDOM.createElement("text");
+        	navLabel.appendChild(navLabelText);
+        	navLabelText.appendChild(contentDOM.createTextNode(entry.getTitle()));
+
+        	Element navPointContent = contentDOM.createElement("content");
+        	String sHref = entry.getFile().getFileName();
+        	if (entry.getTarget()!=null) { sHref+="#"+entry.getTarget(); }
+        	navPointContent.setAttribute("src", sHref);
+        	navPoint.appendChild(navPointContent);
+        	
+        	nDepth = Math.max(nDepth, nCurrentLevel);
         }
         
-        setContentDOM(contentDOM);
+        if (nDepth==0) {
+        	// TODO: We're in trouble: The document has no headings
+        }
         
-        System.out.println("finished populating the ncx");
-
+        depth.setAttribute("content", Integer.toString(nDepth));
+        
+        setContentDOM(contentDOM);
         
 	}
 }

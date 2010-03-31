@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-26)
+ *  Version 1.2 (2010-03-29)
  *
  */
 
@@ -571,11 +571,14 @@ public class TextConverter extends ConverterHelper {
             			
             // Add to toc
             if (!bInToc) {
-                converter.addTarget(heading,"toc"+(++nTocIndex));
+            	String sTarget = "toc"+(++nTocIndex);
+                converter.addTarget(heading,sTarget);
                 
-                // Add in external content
-                if (nLevel<=nSplit) {
-                	converter.addContentEntry(sLabel+(sLabel.length()>0 ? " " : "")+Misc.getPCDATA(onode), nLevel, null);
+                // Add in external content. For single file output we include all level 1 headings + their target
+                // For multi-file output, the included heading levels depends on the split leve, and we don't include targets 
+                if (nLevel<=Math.max(nSplit,1)) {
+                	converter.addContentEntry(sLabel+(sLabel.length()>0 ? " " : "")+Misc.getPCDATA(onode), nLevel,
+                			nSplit==0 ? sTarget : null);
                 }
 
                 // Add to real toc
