@@ -77,7 +77,7 @@
             <value>%origin%/W2XDialogs2/Template.xdl</value>
           </prop>
           <prop oor:name="EventHandlerService">
-             <value></value>
+             <value>org.openoffice.da.writer2xhtml.ConfigurationDialog</value>
           </prop>
         </node>
 
@@ -115,13 +115,13 @@
             <value>3</value>
           </prop>
           <prop oor:name="Label">
-            <value xml:lang="en-US">Styles part 1</value>
+            <value xml:lang="en-US">Master styles</value>
           </prop>
           <prop oor:name="OptionsPage">
             <value>%origin%/W2XDialogs2/Styles1.xdl</value>
           </prop>
           <prop oor:name="EventHandlerService">
-             <value></value>
+             <value>org.openoffice.da.writer2xhtml.ConfigurationDialog</value>
           </prop>
         </node>
 
@@ -137,13 +137,13 @@
             <value>4</value>
           </prop>
           <prop oor:name="Label">
-            <value xml:lang="en-US">Styles part 2</value>
+            <value xml:lang="en-US">Other styles</value>
           </prop>
           <prop oor:name="OptionsPage">
             <value>%origin%/W2XDialogs2/Styles2.xdl</value>
           </prop>
           <prop oor:name="EventHandlerService">
-             <value></value>
+             <value>org.openoffice.da.writer2xhtml.ConfigurationDialog</value>
           </prop>
         </node>
 

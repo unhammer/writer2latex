@@ -20,17 +20,20 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-04)
+ *  Version 1.2 (2010-04-09)
  *
  */
 
 package writer2latex.xhtml;
 
-import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import writer2latex.api.ComplexOption;
 import writer2latex.base.BooleanOption;
 import writer2latex.base.IntegerOption;
 import writer2latex.base.Option;
@@ -106,11 +109,11 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     private static final int DIRECTORY_ICON = 40;
     private static final int DOCUMENT_ICON = 41;
 
-    protected XhtmlStyleMap xpar = new XhtmlStyleMap();
-    protected XhtmlStyleMap xtext = new XhtmlStyleMap();
-    protected XhtmlStyleMap xframe = new XhtmlStyleMap();
-    protected XhtmlStyleMap xlist = new XhtmlStyleMap();
-    protected XhtmlStyleMap xattr = new XhtmlStyleMap();
+    protected ComplexOption xpar = addComplexOption("paragraph-map");
+    protected ComplexOption xtext = addComplexOption("text-map");
+    protected ComplexOption xframe = addComplexOption("frame-map");
+    protected ComplexOption xlist = addComplexOption("list-map");
+    protected ComplexOption xattr = addComplexOption("text-attribute-map");
 	
     public XhtmlConfig() {
         super();
@@ -184,26 +187,31 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
             if (sFamily.length()==0) { // try old name
                 sFamily = elm.getAttribute("class");
             }
-            String sBlockElement = elm.getAttribute("block-element");
-            String sBlockCss = elm.getAttribute("block-css");
-            if (sBlockCss.length()==0) { sBlockCss="(none)"; }
             String sElement = elm.getAttribute("element");
             String sCss = elm.getAttribute("css");
             if (sCss.length()==0) { sCss="(none)"; }
+            Map<String,String> attr = new HashMap<String,String>();
+            attr.put("element", sElement);
+            attr.put("css", sCss);
             if ("paragraph".equals(sFamily)) {
-                xpar.put(sName,sBlockElement,sBlockCss,sElement,sCss);
+                String sBlockElement = elm.getAttribute("block-element");
+                String sBlockCss = elm.getAttribute("block-css");
+                if (sBlockCss.length()==0) { sBlockCss="(none)"; }
+                attr.put("block-element", sBlockElement);
+                attr.put("block-css", sBlockCss);
+                xpar.put(sName,attr);
             }
             else if ("text".equals(sFamily)) {
-                xtext.put(sName,sBlockElement,sBlockCss,sElement,sCss);
+                xtext.put(sName,attr);
             }
             else if ("frame".equals(sFamily)) {
-                xframe.put(sName,sBlockElement,sBlockCss,sElement,sCss);
+                xframe.put(sName,attr);
             }
             else if ("list".equals(sFamily)) {
-                xlist.put(sName,sBlockElement,sBlockCss,sElement,sCss);
+                xlist.put(sName,attr);
             }
             else if ("attribute".equals(sFamily)) {
-                xattr.put(sName,sBlockElement,sBlockCss,sElement,sCss);
+                xattr.put(sName,attr);
             }
         }
     }
@@ -213,22 +221,21 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
         writeXStyleMap(dom,xtext,"text");
         writeXStyleMap(dom,xlist,"list");
         writeXStyleMap(dom,xframe,"frame");
-        writeXStyleMap(dom,xframe,"attribute");
+        writeXStyleMap(dom,xattr,"attribute");
     }
 	
-    private void writeXStyleMap(Document dom, XhtmlStyleMap sm, String sFamily) {
-        Enumeration<String> smEnum = sm.getNames();
-        while (smEnum.hasMoreElements()) {
-            String sName = smEnum.nextElement();
+    private void writeXStyleMap(Document dom, ComplexOption option, String sFamily) {
+        Iterator<String> iter = option.keySet().iterator();
+        while (iter.hasNext()) {
+            String sName = iter.next();
             Element smNode = dom.createElement("xhtml-style-map");
             smNode.setAttribute("name",sName);
 	        smNode.setAttribute("family",sFamily);
-            smNode.setAttribute("element",sm.getElement(sName));
-            smNode.setAttribute("css",sm.getCss(sName));
-            String sBlockElement = sm.getBlockElement(sName);
-            if (sBlockElement!=null) { smNode.setAttribute("block-element",sm.getCss(sBlockElement)); }
-            String sBlockCss = sm.getBlockCss(sName);
-            if (sBlockCss!=null) { smNode.setAttribute("block-css",sm.getCss(sBlockCss)); }
+            Map<String,String> attr = option.get(sName);
+            smNode.setAttribute("element",attr.get("element"));
+            smNode.setAttribute("css",attr.get("css"));
+            if (attr.containsKey("block-element")) smNode.setAttribute("block-element",attr.get("block-element"));
+            if (attr.containsKey("block-css")) smNode.setAttribute("block-css",attr.get("block-css"));
             dom.getDocumentElement().appendChild(smNode);
         }
     }
@@ -277,11 +284,24 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     public String getXhtmlDirectoryIcon() { return options[DIRECTORY_ICON].getString(); }
     public String getXhtmlDocumentIcon() { return options[DOCUMENT_ICON].getString(); }
 	
-    public XhtmlStyleMap getXParStyleMap() { return xpar; }
-    public XhtmlStyleMap getXTextStyleMap() { return xtext; }
-    public XhtmlStyleMap getXFrameStyleMap() { return xframe; }
-    public XhtmlStyleMap getXListStyleMap() { return xlist; }
-    public XhtmlStyleMap getXAttrStyleMap() { return xattr; }
+    public XhtmlStyleMap getXParStyleMap() { return getStyleMap(xpar); }
+    public XhtmlStyleMap getXTextStyleMap() { return getStyleMap(xtext); }
+    public XhtmlStyleMap getXFrameStyleMap() { return getStyleMap(xframe); }
+    public XhtmlStyleMap getXListStyleMap() { return getStyleMap(xlist); }
+    public XhtmlStyleMap getXAttrStyleMap() { return getStyleMap(xattr); }
 	
+    private XhtmlStyleMap getStyleMap(ComplexOption co) {
+    	XhtmlStyleMap map = new XhtmlStyleMap();
+    	for (String sName : co.keySet()) {
+    		Map<String,String> attr = co.get(sName);
+    		String sElement = attr.containsKey("element") ? attr.get("element") : "";
+    		String sCss = attr.containsKey("css") ? attr.get("css") : "";
+    		String sBlockElement = attr.containsKey("block-element") ? attr.get("block-element") : "";
+    		String sBlockCss = attr.containsKey("block-css") ? attr.get("block-css") : "";
+    		map.put(sName, sBlockElement, sBlockCss, sElement, sCss);
+    	}
+    	return map;
+
+    }
 }
 

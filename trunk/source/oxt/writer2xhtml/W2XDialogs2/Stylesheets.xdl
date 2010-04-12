@@ -2,18 +2,20 @@
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
 <dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Stylesheets" dlg:left="139" dlg:top="84" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:moveable="true" dlg:title="Stylesheets" dlg:withtitlebar="false">
  <dlg:bulletinboard>
-  <dlg:checkbox dlg:id="UseCustomStylesheet" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="240" dlg:height="12" dlg:value="Insert link to custom style sheet" dlg:checked="false">
+  <dlg:text dlg:id="IncludedCustomStylesheetLabel" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="245" dlg:height="12" dlg:value="Custom style sheets"/>
+  
+  <dlg:checkbox dlg:id="LinkCustomStylesheet" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="240" dlg:height="12" dlg:value="Insert link to custom style sheet" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:LinkCustomStylesheetChange" script:language="UNO"/>
+  </dlg:checkbox>
+  <dlg:text dlg:id="CustomStylesheetURLLabel" dlg:tab-index="2" dlg:left="19" dlg:top="36" dlg:width="55" dlg:height="12" dlg:value="URL"/>
+  <dlg:textfield dlg:id="CustomStylesheetURL" dlg:tab-index="3" dlg:left="80" dlg:top="34" dlg:width="170" dlg:height="12"/>
+  
+  <dlg:checkbox dlg:id="UseCustomStylesheet" dlg:tab-index="4" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:value="Include custom style sheet" dlg:checked="false">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:UseCustomStylesheetChange" script:language="UNO"/>
   </dlg:checkbox>
-  <dlg:text dlg:id="CustomStylesheetLabel" dlg:tab-index="2" dlg:left="19" dlg:top="36" dlg:width="55" dlg:height="12" dlg:value="URL"/>
-  <dlg:textfield dlg:id="CustomStylesheet" dlg:tab-index="3" dlg:left="80" dlg:top="34" dlg:width="170" dlg:height="12"/>
-  <dlg:checkbox dlg:id="IncludeCustomStylesheet" dlg:tab-index="4" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:value="Include custom style sheet" dlg:checked="false">
-   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:IncludeCustomStylesheetChange" script:language="UNO"/>
-  </dlg:checkbox>
-  <dlg:text dlg:id="IncludedCustomStylesheetLabel" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="245" dlg:height="12" dlg:value="Custom style sheets"/>
-  <dlg:textfield dlg:id="IncludedCustomStylesheet" dlg:tab-index="5" dlg:left="18" dlg:top="64" dlg:width="232" dlg:height="84" dlg:hscroll="true" dlg:vscroll="true" dlg:multiline="true"/>
-  <dlg:button dlg:id="LoadButton" dlg:tab-index="6" dlg:left="18" dlg:top="156" dlg:width="60" dlg:height="12" dlg:value="Load...">
-   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:LoadButtonClick" script:language="UNO"/>
+  <dlg:textfield dlg:id="CustomStylesheet" dlg:tab-index="5" dlg:left="18" dlg:top="64" dlg:width="232" dlg:height="84" dlg:hscroll="true" dlg:vscroll="true" dlg:multiline="true"/>
+  <dlg:button dlg:id="LoadStylesheetButton" dlg:tab-index="6" dlg:left="18" dlg:top="156" dlg:width="60" dlg:height="12" dlg:value="Load...">
+   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:LoadStylesheetClick" script:language="UNO"/>
   </dlg:button>
  </dlg:bulletinboard>
 </dlg:window>

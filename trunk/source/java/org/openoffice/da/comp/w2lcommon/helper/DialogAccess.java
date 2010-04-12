@@ -169,7 +169,6 @@ public class DialogAccess {
     }
 	
     public short getListBoxLineCount(String sControlName) {
-        // Returns the first selected element in case of a multiselection
         XPropertySet xPropertySet = getControlProperties(sControlName);
         try {
             return ((Short) xPropertySet.getPropertyValue("LineCount")).shortValue();

@@ -2,17 +2,20 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.2 ----------
 
+[w2x] The custom configuration now supports an optional xhtml template (writer2xhtml-template.xhtml)
+  in the same directory as writer2xhtml.xml
+
+[w2x] The xhtml configuration now also supports complex options in the API
+
 [w2x] Bugfix: Corrected problem with relative links (this affected package format only)
 
 [w2x] Added EPUB export
 
-[all] API change: The interface ConverterResult supports an additional method
-  to access the meta data of the source document. A new interface MetaData has
-  been introduced to support this
+[all] API change: The interface ConverterResult supports an additional method to access the
+  meta data of the source document. A new interface MetaData has been introduced to support this
 
-[all] API change: The interface ConverterResult supports additional methods
-  providing pointers to headings and index tables in the document.
-  A new interface TocEntry has been introduced to support this 
+[all] API change: The interface ConverterResult supports additional methods providing pointers to
+  headings and index tables in the document. A new interface TocEntry has been introduced to support this 
 
 [all] API change: New methods getMIMEType() and isMasterDocument() added to the OutputFile
   interface. The latter is used to identify files that are part of the main document flow

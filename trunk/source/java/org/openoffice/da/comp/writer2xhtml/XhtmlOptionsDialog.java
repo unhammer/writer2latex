@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-16)
+ *  Version 1.2 (2010-04-11)
  *
  */ 
  
@@ -113,6 +113,8 @@ public class XhtmlOptionsDialog extends OptionsDialogBase {
                         "http://www.w3.org/StyleSheets/Core/"+sCoreStyles[nConfig-1]);
                     break;
             case 9: helper.put("ConfigURL","$(user)/writer2xhtml.xml");
+            		helper.put("TemplateURL", "$(user)/writer2xhtml-template.xhtml");
+            		//helper.put("StyleSheetURL", "$(user)/writer2xhtml-style.css");
                     helper.put("AutoCreate","true");
         }
 		

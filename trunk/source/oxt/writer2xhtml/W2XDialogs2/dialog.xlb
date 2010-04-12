@@ -9,4 +9,7 @@
  <library:element library:name="Styles2"/>
  <library:element library:name="Formatting"/>
  <library:element library:name="Content"/>
+ <library:element library:name="NewDialog"/>
+ <library:element library:name="DeleteDialog"/>
+ <library:element library:name="LoadDefaults"/>
 </library:library>

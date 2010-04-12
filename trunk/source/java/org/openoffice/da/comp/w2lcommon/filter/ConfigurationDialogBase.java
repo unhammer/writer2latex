@@ -20,15 +20,18 @@
 *
 *  All Rights Reserved.
 * 
-*  Version 1.2 (2010-03-26)
+*  Version 1.2 (2010-04-12)
 *
 */ 
 
 package org.openoffice.da.comp.w2lcommon.filter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,6 +42,7 @@ import com.sun.star.awt.XContainerWindowEventHandler;
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XDialogProvider2;
 import com.sun.star.awt.XWindow;
+import com.sun.star.container.NoSuchElementException;
 import com.sun.star.io.NotConnectedException;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
@@ -55,10 +59,12 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
 import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
 
+import writer2latex.api.ComplexOption;
 import writer2latex.api.Config;
 import writer2latex.api.ConverterFactory;
 
 import org.openoffice.da.comp.w2lcommon.helper.DialogAccess;
+import org.openoffice.da.comp.w2lcommon.helper.FilePicker;
 import org.openoffice.da.comp.w2lcommon.helper.StyleNameProvider;
 
 /** This is a base implementation of a uno component which supports several option pages
@@ -73,11 +79,14 @@ public abstract class ConfigurationDialogBase extends WeakBase implements XConta
 	// The component context
 	protected XComponentContext xContext;
 	
+	// File picker wrapper
+	private FilePicker filePicker = null;
+	
 	// UNO simple file access service
 	protected XSimpleFileAccess2 sfa2 = null;
-	
-	// Access to display names of the styles in the current document
-	protected StyleNameProvider styleNameProvider = null;
+
+	// UNO path substitution
+    private XStringSubstitution xPathSub = null;
 	
 	// The configuration implementation
 	protected Config config;
@@ -99,6 +108,9 @@ public abstract class ConfigurationDialogBase extends WeakBase implements XConta
 	/** Create a new <code>ConfigurationDialogBase</code> */
 	public ConfigurationDialogBase(XComponentContext xContext) {
        this.xContext = xContext;
+       
+       // Get the file picker
+       filePicker = new FilePicker(xContext);
 
        // Get the SimpleFileAccess service
        try {
@@ -111,7 +123,6 @@ public abstract class ConfigurationDialogBase extends WeakBase implements XConta
        }
 
        // Create the config file name
-       XStringSubstitution xPathSub = null;
        try {
            Object psObject = xContext.getServiceManager().createInstanceWithContext(
               "com.sun.star.util.PathSubstitution", xContext);
@@ -125,8 +136,6 @@ public abstract class ConfigurationDialogBase extends WeakBase implements XConta
        // Create the configuration
        config = ConverterFactory.createConverter(getMIMEType()).getConfig();
        
-       // Get the style name provider
-       styleNameProvider = new StyleNameProvider(xContext);
 	}
        	
 	// Implement XContainerWindowEventHandler
@@ -134,7 +143,7 @@ public abstract class ConfigurationDialogBase extends WeakBase implements XConta
 		throws com.sun.star.lang.WrappedTargetException {
 		XDialog xDialog = (XDialog)UnoRuntime.queryInterface(XDialog.class, xWindow);
 		String sTitle = xDialog.getTitle();
-	   
+		
 		if (!pageHandlers.containsKey(sTitle)) {
 			throw new com.sun.star.lang.WrappedTargetException("Unknown dialog "+sTitle);
 		}
@@ -245,6 +254,205 @@ public abstract class ConfigurationDialogBase extends WeakBase implements XConta
 		
 		protected abstract boolean handleEvent(DialogAccess dlg, String sMethodName);
 
+		
+		// Methods to set and get controls based on config
+		protected void checkBoxFromConfig(DialogAccess dlg, String sCheckBoxName, String sConfigName) {
+			dlg.setCheckBoxStateAsBoolean(sCheckBoxName, "true".equals(config.getOption(sConfigName)));
+		}
+		
+		protected void checkBoxToConfig(DialogAccess dlg, String sCheckBoxName, String sConfigName) {
+			config.setOption(sConfigName, Boolean.toString(dlg.getCheckBoxStateAsBoolean(sCheckBoxName)));
+		}
+		
+		protected void textFieldFromConfig(DialogAccess dlg, String sTextBoxName, String sConfigName) {
+			dlg.setTextFieldText(sTextBoxName, config.getOption(sConfigName));	
+		}
+		
+		protected void textFieldToConfig(DialogAccess dlg, String sTextBoxName, String sConfigName) {
+			config.setOption(sConfigName, dlg.getTextFieldText(sTextBoxName));
+		}
+		
+		protected void listBoxFromConfig(DialogAccess dlg, String sListBoxName, String sConfigName, String[] sConfigValues, short nDefault) {
+			String sCurrentValue = config.getOption(sConfigName);
+			int nCount = sConfigValues.length;
+			for (short i=0; i<nCount; i++) {
+				if (sConfigValues[i].equals(sCurrentValue)) {
+					dlg.setListBoxSelectedItem(sListBoxName, i);
+					return;
+				}
+			}
+			dlg.setListBoxSelectedItem(sListBoxName, nDefault);
+		}
+		
+		protected void listBoxToConfig(DialogAccess dlg, String sListBoxName, String sConfigName, String[] sConfigValues) {
+			config.setOption(sConfigName, sConfigValues[dlg.getListBoxSelectedItem(sListBoxName)]);
+		}
+				
+	}
+	
+	protected abstract class CustomFileHandler extends PageHandler {
+		
+		// The file name
+		private String sCustomFileName;
+		
+		public CustomFileHandler() {
+			super();
+			try {
+			sCustomFileName = xPathSub.substituteVariables("$(user)/"+getFileName(), false);
+			}
+			catch (NoSuchElementException e) {
+				sCustomFileName = getFileName();
+			}
+		}
+		
+		// The subclass must provide these
+		protected abstract String getSuffix();
+		
+		protected abstract String getFileName();
+		
+		protected abstract void useCustomInner(DialogAccess dlg, boolean bUseCustom);
+		
+		@Override protected void setControls(DialogAccess dlg) {
+			String sText = "";
+			boolean bUseCustom = false;
+			if (fileExists(sCustomFileName)) {
+				sText = loadFile(sCustomFileName);
+				bUseCustom = true;
+			}
+			else if (fileExists(sCustomFileName+".bak")) {
+				sText = loadFile(sCustomFileName+".bak");
+			}
+			// Currently ignore failure to load the file
+			if (sText==null) { sText=""; }
+			
+			dlg.setCheckBoxStateAsBoolean("UseCustom"+getSuffix(), bUseCustom);
+			dlg.setTextFieldText("Custom"+getSuffix(), sText);
+			
+			useCustomChange(dlg);
+		}
+		
+		@Override protected void getControls(DialogAccess dlg) {
+			if (dlg.getCheckBoxStateAsBoolean("UseCustom"+getSuffix())) {
+				saveFile(sCustomFileName,dlg.getTextFieldText("Custom"+getSuffix()));
+				killFile(sCustomFileName+".bak");
+			}
+			else {
+				saveFile(sCustomFileName+".bak",dlg.getTextFieldText("Custom"+getSuffix()));
+				killFile(sCustomFileName);				
+			}
+		}
+		
+		@Override protected boolean handleEvent(DialogAccess dlg, String sMethod) {
+			if (sMethod.equals("UseCustom"+getSuffix()+"Change")) {
+				useCustomChange(dlg);
+				return true;
+			}
+			else if (sMethod.equals("Load"+getSuffix()+"Click")) {
+				loadCustomClick(dlg);
+				return true;
+			}
+			return false;
+		}
+
+		private void useCustomChange(DialogAccess dlg) {
+			boolean bUseCustom = dlg.getCheckBoxStateAsBoolean("UseCustom"+getSuffix());
+			dlg.setControlEnabled("Custom"+getSuffix(), bUseCustom);
+			dlg.setControlEnabled("Load"+getSuffix()+"Button", bUseCustom);
+			useCustomInner(dlg,bUseCustom);
+		}
+		
+		private void loadCustomClick(DialogAccess dlg) {
+			String sFileName=filePicker.getPath();
+			if (sFileName!=null) {
+				String sText = loadFile(sFileName);
+				if (sText!=null) {
+					dlg.setTextFieldText("Custom"+getSuffix(), sText);
+				}
+			}
+		}
+		
+		// Helpers for sfa2
+		
+		// Checks that the file exists
+		private boolean fileExists(String sFileName) {
+			try {
+				return sfa2!=null && sfa2.exists(sFileName);
+			}
+			catch (CommandAbortedException e) {
+			}
+			catch (com.sun.star.uno.Exception e) {
+			}
+			return false;
+		}
+		
+		// Delete a file if it exists, return true on success
+		private boolean killFile(String sFileName) {
+			try {
+				if (sfa2!=null && sfa2.exists(sFileName)) {
+					sfa2.kill(sFileName);
+					return true;
+				}
+			}
+			catch (com.sun.star.uno.Exception e) {
+			}
+			return false;
+		}
+		
+		// Load a text file, returns null on failure
+		private String loadFile(String sFileName) {
+			if (sfa2!=null) {
+				try {
+					XInputStream xIs = sfa2.openFileRead(sFileName);
+					if (xIs!=null) {
+						InputStream is = new XInputStreamToInputStreamAdapter(xIs);
+						BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+						StringBuffer buf = new StringBuffer();
+						String sLine;
+						try {
+							while ((sLine = reader.readLine())!=null) {
+								buf.append(sLine).append('\n');
+							}
+						}
+						catch (IOException e) {
+						}
+						return buf.toString();
+					}
+				}
+				catch (com.sun.star.uno.Exception e) {		
+				}
+			}
+			return null;
+		}
+		
+		// Save a text file, return true on success
+		protected boolean saveFile(String sFileName, String sText) {
+			killFile(sFileName);
+			try {
+				XOutputStream xOs = sfa2.openFileWrite(sFileName);
+				if (xOs!=null) {
+					OutputStream os = new XOutputStreamToOutputStreamAdapter(xOs);
+					try {
+						OutputStreamWriter osw = new OutputStreamWriter(os,"UTF-8");
+						osw.write(sText);
+						osw.flush();
+						os.close();
+					}
+					catch (IOException e) {
+						xOs.closeOutput();
+						return false;
+					}
+					xOs.closeOutput();
+					return true;
+				}
+			}
+			catch (com.sun.star.uno.Exception e) {
+			}
+			return false;
+		}
+	}
+	
+	protected abstract class UserListPageHandler extends PageHandler {
+		
 		// Methods to handle user controlled lists
 		protected XDialog getDialog(String sDialogName) {
 			XMultiComponentFactory xMCF = xContext.getServiceManager();
@@ -275,7 +483,7 @@ public abstract class ConfigurationDialogBase extends WeakBase implements XConta
 		   	return false;
 		}
 		   
-		private boolean deleteCurrentItem(DialogAccess dlg, String sListName) {
+		protected boolean deleteCurrentItem(DialogAccess dlg, String sListName) {
 		   	String[] sItems = dlg.getListBoxStringItemList(sListName);
 		   	short nSelected = dlg.getListBoxSelectedItem(sListName);
 		   	if (nSelected>=0 && deleteItem(sItems[nSelected])) {
@@ -318,7 +526,7 @@ public abstract class ConfigurationDialogBase extends WeakBase implements XConta
 		   	return null;
 		}
 		   
-		private String appendItem(DialogAccess dlg, String sListName, Set<String> suggestions) {
+		protected String appendItem(DialogAccess dlg, String sListName, Set<String> suggestions) {
 		   	String[] sItems = dlg.getListBoxStringItemList(sListName);
 		   	String sNewItem = newItem(suggestions);
 		   	if (sNewItem!=null) {
@@ -339,46 +547,339 @@ public abstract class ConfigurationDialogBase extends WeakBase implements XConta
 		   	return sNewItem;
 		}
 		
+	    // Utilities
+	    protected String[] sortStringSet(Set<String> theSet) {
+	    	String[] theArray = new String[theSet.size()];
+	    	int i=0;
+	    	for (String s : theSet) {
+	    		theArray[i++] = s;
+	    	}
+	    	sortStringArray(theArray);
+	    	return theArray;
+	    }
+		
 		protected void sortStringArray(String[] theArray) {
 			// TODO: Get locale from OOo rather than the system
 			Collator collator = Collator.getInstance();
 			Arrays.sort(theArray, collator);
 		}
-		
-		// Methods to set and get controls based on config
-		protected void checkBoxFromConfig(DialogAccess dlg, String sCheckBoxName, String sConfigName) {
-			dlg.setCheckBoxStateAsBoolean(sCheckBoxName, "true".equals(config.getOption(sConfigName)));
-		}
-		
-		protected void checkBoxToConfig(DialogAccess dlg, String sCheckBoxName, String sConfigName) {
-			config.setOption(sConfigName, Boolean.toString(dlg.getCheckBoxStateAsBoolean(sCheckBoxName)));
-		}
-		
-		protected void textFieldFromConfig(DialogAccess dlg, String sTextBoxName, String sConfigName) {
-			dlg.setTextFieldText(sTextBoxName, config.getOption(sConfigName));	
-		}
-		
-		protected void textFieldToConfig(DialogAccess dlg, String sTextBoxName, String sConfigName) {
-			config.setOption(sConfigName, dlg.getTextFieldText(sTextBoxName));
-		}
-		
-		protected void listBoxFromConfig(DialogAccess dlg, String sListBoxName, String sConfigName, String[] sConfigValues, short nDefault) {
-			String sCurrentValue = config.getOption(sConfigName);
-			int nCount = sConfigValues.length;
-			for (short i=0; i<nCount; i++) {
-				if (sConfigValues[i].equals(sCurrentValue)) {
-					dlg.setListBoxSelectedItem(sListBoxName, i);
-					return;
-				}
-			}
-			dlg.setListBoxSelectedItem(sListBoxName, nDefault);
-		}
-		
-		protected void listBoxToConfig(DialogAccess dlg, String sListBoxName, String sConfigName, String[] sConfigValues) {
-			config.setOption(sConfigName, sConfigValues[dlg.getListBoxSelectedItem(sListBoxName)]);
-		}
-				
+
 	}
 	
+	protected abstract class StylesPageHandler extends UserListPageHandler {
+		// The subclass must define these
+		protected String[] sFamilyNames;
+		protected String[] sOOoFamilyNames;
+		
+		// Our data
+		private ComplexOption[] styleMap;
+		protected short nCurrentFamily = -1;
+		private String sCurrentStyleName = null;
+		
+		// Access to display names of the styles in the current document
+		private StyleNameProvider styleNameProvider = null;
+		
+		// Some methods to be implemented by the subclass
+		protected abstract String getDefaultConfigName();
+		
+		protected abstract void getControls(DialogAccess dlg, Map<String,String> attr);
+		
+		protected abstract void setControls(DialogAccess dlg, Map<String,String> attr);
+		
+		protected abstract void clearControls(DialogAccess dlg);
+		
+		protected abstract void prepareControls(DialogAccess dlg);
+		
+		// Constructor
+		protected StylesPageHandler(int nCount) {
+			// Get the style name provider
+			styleNameProvider = new StyleNameProvider(xContext);
+			
+			// Reset the options
+			styleMap = new ComplexOption[nCount];
+			for (int i=0; i<nCount; i++) {
+				styleMap[i] = new ComplexOption();
+			}
+		}
+		
+		// Implement abstract methods from super
+		protected void setControls(DialogAccess dlg) {
+	    	// Load style maps from config (translating keys to display names)
+			int nCount = sFamilyNames.length;
+			for (int i=0; i<nCount; i++) {
+				ComplexOption configMap = config.getComplexOption(sFamilyNames[i]+"-map"); 
+				styleMap[i].clear();
+		    	Map<String,String> displayNames = styleNameProvider.getDisplayNames(sOOoFamilyNames[i]);
+				copyStyles(configMap, styleMap[i], displayNames);
+			}
+	    	
+			// Display paragraph maps first
+	    	nCurrentFamily = -1;
+	    	sCurrentStyleName = null;
+	    	dlg.setListBoxSelectedItem("StyleFamily", (short)1);
+	    	styleFamilyChange(dlg);	    	
+		}
+		
+		protected void getControls(DialogAccess dlg) {
+			updateStyleMaps(dlg);
+
+			// Save style maps to config (translating keys back to internal names)
+			int nCount = sFamilyNames.length;
+			for (int i=0; i<nCount; i++) {
+				ComplexOption configMap = config.getComplexOption(sFamilyNames[i]+"-map"); 
+				configMap.clear();
+				Map<String,String> internalNames = styleNameProvider.getInternalNames(sOOoFamilyNames[i]);
+				copyStyles(styleMap[i], configMap, internalNames);
+			}
+		}
+		
+		protected boolean handleEvent(DialogAccess dlg, String sMethod) {
+			if (sMethod.equals("StyleFamilyChange")) {
+				styleFamilyChange(dlg);
+				return true;
+			}
+			else if (sMethod.equals("StyleNameChange")) {
+				styleNameChange(dlg);
+				return true;
+			}
+			else if (sMethod.equals("NewStyleClick")) {
+				newStyleClick(dlg);
+				return true;
+			}
+			else if (sMethod.equals("DeleteStyleClick")) {
+				deleteStyleClick(dlg);
+				return true;
+			}
+			else if (sMethod.equals("LoadDefaultsClick")) {
+				loadDefaultsClick(dlg);
+				return true;
+			}
+			return false;
+		}
+		
+		// Internal methods
+		private void updateStyleMaps(DialogAccess dlg) {
+			// Save the current style map, if any
+			if (nCurrentFamily>-1 && sCurrentStyleName!=null) {
+				getControls(dlg,styleMap[nCurrentFamily].get(sCurrentStyleName));
+			}
+		}
+		
+		private void styleFamilyChange(DialogAccess dlg) {	
+	    	short nNewFamily = dlg.getListBoxSelectedItem("StyleFamily");
+	    	if (nNewFamily>-1 && nNewFamily!=nCurrentFamily) {
+	    		// The user has changed the family; load and display the corresponding style names 
+		    	updateStyleMaps(dlg);
+		    	nCurrentFamily = nNewFamily;
+		    	sCurrentStyleName = null;
+
+	        	String[] sStyleNames = sortStringSet(styleMap[nNewFamily].keySet());
+	        	dlg.setListBoxStringItemList("StyleName", sStyleNames);
+	        	if (sStyleNames.length>0) {
+	        		dlg.setListBoxSelectedItem("StyleName", (short)0);
+	        	}
+	        	else {
+	        		dlg.setListBoxSelectedItem("StyleName", (short)-1);
+	        	}
+	        	
+	        	updateDeleteButton(dlg);
+	        	prepareControls(dlg);
+	        	styleNameChange(dlg);
+	    	}
+		}
+		
+		private void styleNameChange(DialogAccess dlg) {
+			if (nCurrentFamily>-1) {
+				updateStyleMaps(dlg);
+				short nStyleNameItem = dlg.getListBoxSelectedItem("StyleName");
+				if (nStyleNameItem>=0) {
+					sCurrentStyleName = dlg.getListBoxStringItemList("StyleName")[nStyleNameItem];
+					setControls(dlg,styleMap[nCurrentFamily].get(sCurrentStyleName));
+				}
+				else {
+					sCurrentStyleName = null;
+					clearControls(dlg);
+				}
+			}
+		}
+		
+		private void newStyleClick(DialogAccess dlg) {
+			if (nCurrentFamily>-1) {
+				updateStyleMaps(dlg);
+				String sNewName = appendItem(dlg, "StyleName",styleNameProvider.getInternalNames(sOOoFamilyNames[nCurrentFamily]).keySet());
+				if (sNewName!=null) {
+					styleMap[nCurrentFamily].put(sNewName, new HashMap<String,String>());
+					clearControls(dlg);
+				}
+				updateDeleteButton(dlg);
+			}
+		}
+
+		private void deleteStyleClick(DialogAccess dlg) {
+			if (nCurrentFamily>-1 && sCurrentStyleName!=null) {
+				String sStyleName = sCurrentStyleName;
+				if (deleteCurrentItem(dlg,"StyleName")) {
+					styleMap[nCurrentFamily].remove(sStyleName);
+					styleNameChange(dlg);
+				}
+				updateDeleteButton(dlg);
+			}
+		}
+		
+		private void loadDefaultsClick(DialogAccess dlg) {
+			updateStyleMaps(dlg);
+
+			// Count styles that we will overwrite
+			Config clean = ConverterFactory.createConverter(getMIMEType()).getConfig();
+			clean.readDefaultConfig(getDefaultConfigName());
+
+			int nCount = 0;
+			int nFamilyCount = sFamilyNames.length;
+			for (int i=0; i<nFamilyCount; i++) {
+				ComplexOption cleanMap = clean.getComplexOption(sFamilyNames[i]+"-map"); 
+				Map<String,String> displayNames = styleNameProvider.getDisplayNames(sOOoFamilyNames[i]);
+				for (String sName : cleanMap.keySet()) {
+					String sDisplayName = (displayNames!=null && displayNames.containsKey(sName)) ? displayNames.get(sName) : ""; 
+					if (styleMap[i].containsKey(sDisplayName)) { nCount++; }
+				}
+			}
+
+			// Display confirmation dialog
+			boolean bConfirm = false;
+			XDialog xDialog=getDialog(getDialogLibraryName()+".LoadDefaults");
+			if (xDialog!=null) {
+				DialogAccess ldlg = new DialogAccess(xDialog);
+				if (nCount>0) {
+					String sLabel = ldlg.getLabelText("OverwriteLabel");
+					sLabel = sLabel.replaceAll("%s", Integer.toString(nCount));
+					ldlg.setLabelText("OverwriteLabel", sLabel);
+				}
+				else {
+					ldlg.setLabelText("OverwriteLabel", "");
+				}
+				bConfirm = xDialog.execute()==ExecutableDialogResults.OK;
+				xDialog.endExecute();
+			}
+
+			// Do the replacement
+			if (bConfirm) { 
+				for (int i=0; i<nFamilyCount; i++) {
+					ComplexOption cleanMap = clean.getComplexOption(sFamilyNames[i]+"-map"); 
+					Map<String,String> displayNames = styleNameProvider.getDisplayNames(sOOoFamilyNames[i]);
+					copyStyles(cleanMap, styleMap[i], displayNames);
+				}
+			}
+
+			// Force update of the user interface
+			nCurrentFamily = -1;
+			sCurrentStyleName = null;
+			styleFamilyChange(dlg);
+		}
+		
+		private void updateDeleteButton(DialogAccess dlg) {
+			dlg.setControlEnabled("DeleteStyleButton", dlg.getListBoxStringItemList("StyleName").length>0);
+		}
+
+		private void copyStyles(ComplexOption source, ComplexOption target, Map<String,String> nameTranslation) {
+			for (String sName : source.keySet()) {
+				String sNewName = sName;
+				if (nameTranslation!=null && nameTranslation.containsKey(sName)) {
+					sNewName = nameTranslation.get(sName);
+				}
+				target.copy(sNewName, source.get(sName));
+			}
+		}	
+	}
+	
+	protected abstract class AttributePageHandler extends PageHandler {
+		// The subclass must define this
+		protected String[] sAttributeNames;
+		
+		// Our data
+		private ComplexOption attributeMap = new ComplexOption();
+		private int nCurrentAttribute = -1;
+		
+		// Some methods to be implemented by subclass
+		protected abstract void getControls(DialogAccess dlg, Map<String,String> attr);
+		
+		protected abstract void setControls(DialogAccess dlg, Map<String,String> attr);
+		
+		protected abstract void prepareControls(DialogAccess dlg, boolean bEnable);
+		
+		// Implement abstract methods from our super
+		protected void setControls(DialogAccess dlg) {
+			// Load attribute maps from config
+			attributeMap.clear();
+			attributeMap.copyAll(config.getComplexOption("text-attribute-map"));
+			
+			// Update the dialog
+			nCurrentAttribute = -1;
+			dlg.setListBoxSelectedItem("FormattingAttribute", (short)0);
+			formattingAttributeChange(dlg);
+		}
+		
+		protected void getControls(DialogAccess dlg) {
+			updateAttributeMaps(dlg);
+			
+			// Save attribute maps to config
+			ComplexOption configMap = config.getComplexOption("text-attribute-map");
+			configMap.clear();
+			for (String s: attributeMap.keySet()) {
+				Map<String,String> attr = attributeMap.get(s);
+				if (!attr.containsKey("deleted") || attr.get("deleted").equals("false")) {
+					configMap.copy(s, attr);
+				}
+			}
+		}
+		
+		protected boolean handleEvent(DialogAccess dlg, String sMethod) {
+			if (sMethod.equals("FormattingAttributeChange")) {
+				formattingAttributeChange(dlg);
+				return true;
+			}
+			else if (sMethod.equals("CustomAttributeChange")) {
+				customAttributeChange(dlg);
+				return true;	
+			}
+			return false;
+		}
+		
+		// Internal methods
+		private void updateAttributeMaps(DialogAccess dlg) {
+			// Save the current attribute map, if any
+			if (nCurrentAttribute>-1) {
+				String sName = sAttributeNames[nCurrentAttribute];
+				if (!attributeMap.containsKey(sName)) {
+					attributeMap.put(sName, new HashMap<String,String>());
+				}
+				Map<String,String> attr = attributeMap.get(sName);
+				attr.put("deleted", Boolean.toString(!dlg.getCheckBoxStateAsBoolean("CustomAttribute")));
+				getControls(dlg,attr);
+				attributeMap.put(sName, attr);
+			}
+		}
+		
+		private void formattingAttributeChange(DialogAccess dlg) {
+			updateAttributeMaps(dlg);
+			short nNewAttribute = dlg.getListBoxSelectedItem("FormattingAttribute");
+			if (nNewAttribute>-1 && nNewAttribute!=nCurrentAttribute) {
+				nCurrentAttribute = nNewAttribute;
+				String sName = sAttributeNames[nCurrentAttribute];
+				if (!attributeMap.containsKey(sName)) {
+					attributeMap.put(sName, new HashMap<String,String>());
+					attributeMap.get(sName).put("deleted", "true");
+				}
+				Map<String,String> attr = attributeMap.get(sName);
+				dlg.setCheckBoxStateAsBoolean("CustomAttribute", !attr.containsKey("deleted") || attr.get("deleted").equals("false"));
+				customAttributeChange(dlg);
+				setControls(dlg,attr);
+			}
+		}
+		
+		private void customAttributeChange(DialogAccess dlg) {
+			prepareControls(dlg,dlg.getCheckBoxStateAsBoolean("CustomAttribute"));
+		}
+	}
+
 }
 

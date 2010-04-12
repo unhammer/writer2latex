@@ -20,10 +20,13 @@
 *
 *  All Rights Reserved.
 * 
-*  Version 1.2 (2010-03-26)
+*  Version 1.2 (2010-04-09)
 *
 */ 
+
 package org.openoffice.da.comp.writer2xhtml;
+
+import java.util.Map;
 
 import org.openoffice.da.comp.w2lcommon.filter.ConfigurationDialogBase;
 import org.openoffice.da.comp.w2lcommon.helper.DialogAccess;
@@ -68,22 +71,28 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     	super(xContext);
     	
     	pageHandlers.put("General", new GeneralHandler());
-    	//pageHandlers.put("Template", new TemplateHandler());
+    	pageHandlers.put("Template", new TemplateHandler());
     	pageHandlers.put("Stylesheets", new StylesheetsHandler());
     	pageHandlers.put("Formatting", new FormattingHandler());
-    	//pageHandlers.put("Styles1", new StylesPartIHandler());
-    	//pageHandlers.put("Styles2", new StylesPartIIHandler());
+    	pageHandlers.put("Styles1", new Styles1Handler());
+    	pageHandlers.put("Styles2", new Styles2Handler());
     	pageHandlers.put("Formatting", new FormattingHandler());
     	pageHandlers.put("Content", new ContentHandler());
     }
     
     // Implement remaining method from XContainerWindowEventHandler
     public String[] getSupportedMethodNames() {
-    	String[] sNames = { "EncodingChange" };
+    	String[] sNames = { "EncodingChange", // General
+    			"CustomTemplateChange", "LoadTemplateClick", // Template
+    			"UseCustomStylesheetChange", "IncludeCustomStylesheetClick", "LoadStylesheetClick", // Stylesheet
+    			"StyleFamilyChange", "StyleNameChange", "NewStyleClick", "DeleteStyleClick", "LoadDefaultsClick" // Styles1
+    	};
     	return sNames;
     }
     
     // the page handlers
+	private final String[] sCharElements = { "span", "abbr", "acronym", "b", "big", "cite", "code", "del", "dfn", "em", "i",
+			"ins", "kbd", "samp", "small", "strong", "sub", "sup", "tt", "var", "q" };
 
     private class GeneralHandler extends PageHandler {
     	private final String[] sEncodingValues = { "UTF-8", "UTF-16", "ISO-8859-1", "US-ASCII" };
@@ -134,20 +143,74 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     	}
     	
     }
+    
+    private class TemplateHandler extends CustomFileHandler {
+    	
+    	protected String getSuffix() {
+    		return "Template";
+    	}
+    	
+    	protected String getFileName() {
+    		return "writer2xhtml-template.xhtml";
+    	}
+    	
+    	protected void useCustomInner(DialogAccess dlg, boolean bEnable) {
+    		dlg.setControlEnabled("ContentIdLabel", bEnable);
+    		dlg.setControlEnabled("ContentId", bEnable);
+    		dlg.setControlEnabled("HeaderIdLabel", bEnable);
+    		dlg.setControlEnabled("HeaderId", bEnable);
+    		dlg.setControlEnabled("FooterIdLabel", bEnable);
+    		dlg.setControlEnabled("FooterId", bEnable);
+    		dlg.setControlEnabled("PanelIdLabel", bEnable);
+    		dlg.setControlEnabled("PanelId", bEnable);
+    	}
 
-    private class StylesheetsHandler extends PageHandler {
+    	@Override protected void setControls(DialogAccess dlg) {
+    		super.setControls(dlg);
+    		String[] sCustomIds = config.getOption("template_ids").split(",");
+    		if (sCustomIds.length>0) { dlg.setComboBoxText("ContentId", sCustomIds[0]); }
+    		if (sCustomIds.length>1) { dlg.setComboBoxText("HeaderId", sCustomIds[1]); }
+    		if (sCustomIds.length>2) { dlg.setComboBoxText("FooterId", sCustomIds[2]); }
+    		if (sCustomIds.length>3) { dlg.setComboBoxText("PanelId", sCustomIds[3]); }
+    	}
+
+    	@Override protected void getControls(DialogAccess dlg) {
+    		super.getControls(dlg);
+    		config.setOption("template_ids",
+    				dlg.getComboBoxText("ContentId").trim()+","+
+    				dlg.getComboBoxText("HeaderId").trim()+","+
+    				dlg.getComboBoxText("FooterId").trim()+","+
+    				dlg.getComboBoxText("PanelId").trim());
+    	}
+    	
+    }
+
+    private class StylesheetsHandler extends CustomFileHandler {
+    	
+    	protected String getSuffix() {
+    		return "Stylesheet";
+    	}
+    	
+    	protected String getFileName() {
+    		return "writer2xhtml-styles.css";
+    	}
+    	
+    	protected void useCustomInner(DialogAccess dlg, boolean bEnable) {
+    	}
+
     	
     	@Override protected void setControls(DialogAccess dlg) {
-    		dlg.setCheckBoxStateAsBoolean("UseCustomStylesheet", config.getOption("custom_stylesheet").length()>0);
-    		textFieldFromConfig(dlg, "CustomStylesheet", "custom_stylesheet");
+    		super.setControls(dlg);
+    		dlg.setCheckBoxStateAsBoolean("LinkCustomStylesheet", config.getOption("custom_stylesheet").length()>0);
+    		textFieldFromConfig(dlg, "CustomStylesheetURL", "custom_stylesheet");
     		
-    		useCustomStylesheetChange(dlg);
-    		includeCustomStylesheetChange(dlg);
+    		linkCustomStylesheetChange(dlg);
     	}
     	
     	@Override protected void getControls(DialogAccess dlg) {
-    		if (dlg.getCheckBoxStateAsBoolean("UseCustomStylesheet")) {
-        		textFieldToConfig(dlg, "CustomStylesheet", "custom_stylesheet");    			
+    		super.getControls(dlg);
+    		if (dlg.getCheckBoxStateAsBoolean("LinkCustomStylesheet")) {
+        		textFieldToConfig(dlg, "CustomStylesheetURL", "custom_stylesheet");    			
     		}
     		else {
     			config.setOption("custom_stylesheet", "");
@@ -155,35 +218,133 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     	}
     	
     	@Override protected boolean handleEvent(DialogAccess dlg, String sMethod) {
-    		if (sMethod.equals("UseCustomStylesheetChange")) {
-    			useCustomStylesheetChange(dlg);
+    		if (super.handleEvent(dlg, sMethod)) {
     			return true;
     		}
-    		else if (sMethod.equals("IncludeCustomStylesheetChange")) {
-    			includeCustomStylesheetChange(dlg);
-    			return true;
-    		}
-    		else if (sMethod.equals("LoadButtonClick")) {
-    			loadButtonClick(dlg);
+    		if (sMethod.equals("LinkCustomStylesheetChange")) {
+    			linkCustomStylesheetChange(dlg);
     			return true;
     		}
     		return false;
     	}
     	
-    	private void useCustomStylesheetChange(DialogAccess dlg) {
-    		boolean bUseCustomStylesheet = dlg.getCheckBoxStateAsBoolean("UseCustomStylesheet");
-    		dlg.setControlEnabled("CustomStylesheetLabel", bUseCustomStylesheet);
-    		dlg.setControlEnabled("CustomStylesheet", bUseCustomStylesheet);
+    	private void linkCustomStylesheetChange(DialogAccess dlg) {
+    		boolean bLinkCustomStylesheet = dlg.getCheckBoxStateAsBoolean("LinkCustomStylesheet");
+    		dlg.setControlEnabled("CustomStylesheetURLLabel", bLinkCustomStylesheet);
+    		dlg.setControlEnabled("CustomStylesheetURL", bLinkCustomStylesheet);
     	}
     	
-    	private void includeCustomStylesheetChange(DialogAccess dlg) {
-    		dlg.setControlEnabled("IncludedCustomStylesheet", dlg.getCheckBoxStateAsBoolean("IncludeCustomStylesheet"));
+    }
+    
+    private class Styles1Handler extends StylesPageHandler {
+    	private final String[] sXhtmlFamilyNames = { "text", "paragraph", "list", "frame" };
+    	private final String[] sXhtmlOOoFamilyNames = { "CharacterStyles", "ParagraphStyles", "NumberingStyles", "FrameStyles" };
+    	
+    	private final String[] sParElements = { "p", "h1", "h2", "h3", "h4", "h5", "h6", "address", "dd", "dt", "pre" };
+    	private final String[] sParBlockElements = { "div", "blockquote", "dl" };
+    	private final String[] sEmpty = { };
+    	
+    	private String[][] sElements = new String[4][];
+    	private String[][] sBlockElements = new String[4][];
+    	
+    	protected Styles1Handler() {
+    		super(4);
+    		sFamilyNames = sXhtmlFamilyNames;
+    		sOOoFamilyNames = sXhtmlOOoFamilyNames;
+ 
+    		sElements[0] = sCharElements;
+    		sElements[1] = sParElements;
+    		sElements[2] = sEmpty;
+    		sElements[3] = sEmpty;
+    		
+    		sBlockElements[0] = sEmpty;
+    		sBlockElements[1] = sParBlockElements;
+    		sBlockElements[2] = sEmpty;
+    		sBlockElements[3] = sEmpty;
     	}
     	
-    	private void loadButtonClick(DialogAccess dlg) {
-    		// TODO
+    	protected String getDefaultConfigName() {
+    		return "cleanxhtml.xml";
+    	}
+		
+		protected void setControls(DialogAccess dlg, Map<String,String> attr) {
+			if (!attr.containsKey("element")) { attr.put("element", ""); }
+			if (!attr.containsKey("css")) { attr.put("css", ""); }
+			dlg.setComboBoxText("Element", attr.get("element"));
+			dlg.setTextFieldText("Css", none2empty(attr.get("css")));
+			if (nCurrentFamily==1) {
+				if (!attr.containsKey("block-element")) { attr.put("block-element", ""); }
+				if (!attr.containsKey("block-css")) { attr.put("block-css", ""); }
+				dlg.setComboBoxText("BlockElement", attr.get("block-element"));
+				dlg.setTextFieldText("BlockCss", none2empty(attr.get("block-css")));
+			}
+			else {
+				dlg.setComboBoxText("BlockElement", "");
+				dlg.setTextFieldText("BlockCss", "");								
+			}
+		}
+		
+		protected void getControls(DialogAccess dlg, Map<String,String> attr) {
+			attr.put("element", dlg.getComboBoxText("Element"));
+			attr.put("css", empty2none(dlg.getTextFieldText("Css")));
+			if (nCurrentFamily==1) {
+				attr.put("block-element", dlg.getComboBoxText("BlockElement"));
+				attr.put("block-css", empty2none(dlg.getTextFieldText("BlockCss")));
+			}
+		}
+		
+		protected void clearControls(DialogAccess dlg) {
+			dlg.setComboBoxText("Element", "");
+			dlg.setTextFieldText("Css", "");
+			dlg.setComboBoxText("BlockElement", "");
+			dlg.setTextFieldText("BlockCss", "");
+		}
+		
+		protected void prepareControls(DialogAccess dlg) {
+			dlg.setListBoxStringItemList("Element", sElements[nCurrentFamily]);
+			dlg.setListBoxStringItemList("BlockElement", sBlockElements[nCurrentFamily]);
+			dlg.setControlEnabled("Element", nCurrentFamily<=1);			
+			dlg.setControlEnabled("BlockElement", nCurrentFamily==1);
+			dlg.setControlEnabled("BlockCss", nCurrentFamily==1);		
+		}
+	}
+    
+    private class Styles2Handler extends AttributePageHandler {
+    	private String[] sXhtmlAttributeNames = { "bold", "italics", "fixed", "superscript", "subscript", "underline", "overstrike" };
+    	
+    	public Styles2Handler() {
+    		sAttributeNames = sXhtmlAttributeNames;
     	}
     	
+    	@Override public void setControls(DialogAccess dlg) {
+    		super.setControls(dlg);
+    		textFieldFromConfig(dlg,"TabstopStyle","tabstop_style");
+    	}
+    	
+    	@Override public void getControls(DialogAccess dlg) {
+    		super.getControls(dlg);
+    		textFieldToConfig(dlg,"TabstopStyle","tabstop_style");
+    	}
+    	
+    	protected void setControls(DialogAccess dlg, Map<String,String> attr) {
+    		if (!attr.containsKey("element")) { attr.put("element", ""); }
+    		if (!attr.containsKey("css")) { attr.put("css", ""); }
+    		dlg.setListBoxStringItemList("Element", sCharElements);
+    		dlg.setComboBoxText("Element", attr.get("element"));
+    		dlg.setTextFieldText("Css", none2empty(attr.get("css")));
+    	}
+    	
+    	protected void getControls(DialogAccess dlg, Map<String,String> attr) {
+    		attr.put("element", dlg.getComboBoxText("Element"));
+    		attr.put("css", empty2none(dlg.getTextFieldText("Css")));
+    	}
+    	
+    	protected void prepareControls(DialogAccess dlg, boolean bEnable) {
+    		dlg.setControlEnabled("ElementLabel", bEnable);
+    		dlg.setControlEnabled("Element", bEnable);
+    		dlg.setControlEnabled("CssLabel", bEnable);
+    		dlg.setControlEnabled("Css", bEnable);
+    	}
     }
 
     private class FormattingHandler extends PageHandler {
@@ -203,8 +364,9 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     		
     		checkBoxFromConfig(dlg, "IgnoreTableDimensions", "ignore_table_dimensions");
     		checkBoxFromConfig(dlg, "UseListHack", "use_list_hack");
-    		checkBoxFromConfig(dlg, "ConvertToPx", "convert_to_px");
-    		checkBoxFromConfig(dlg, "SeparateStylesheet", "separate_stylesheet");
+    		//TODO: These have been postponed
+    		//checkBoxFromConfig(dlg, "ConvertToPx", "convert_to_px");
+    		//checkBoxFromConfig(dlg, "SeparateStylesheet", "separate_stylesheet");
     	}
     	
     	@Override protected void getControls(DialogAccess dlg) {
@@ -216,8 +378,9 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     		
     		checkBoxToConfig(dlg, "IgnoreTableDimensions", "ignore_table_dimensions");
     		checkBoxToConfig(dlg, "UseListHack", "use_list_hack");
-    		checkBoxToConfig(dlg, "ConvertToPx", "convert_to_px");
-    		checkBoxToConfig(dlg, "SeparateStylesheet", "separate_stylesheet");
+    		//TODO: These have been postponed
+    		//checkBoxToConfig(dlg, "ConvertToPx", "convert_to_px");
+    		//checkBoxToConfig(dlg, "SeparateStylesheet", "separate_stylesheet");
     	}
     	
     	@Override protected boolean handleEvent(DialogAccess dlg, String sMethod) {
@@ -241,6 +404,15 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     		return false;
     	}
     	
+    }
+    
+    private String none2empty(String s) {
+    	return s.equals("(none)") ? "" : s;
+    }
+    
+    private String empty2none(String s) {
+    	String t = s.trim();
+    	return t.length()==0 ? "(none)" : t;
     }
 	
 

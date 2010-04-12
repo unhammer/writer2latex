@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-05)
+ *  Version 1.2 (2010-04-12)
  *
  */ 
  
@@ -29,6 +29,7 @@ package org.openoffice.da.comp.writer4latex;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Vector;
 
 import com.sun.star.awt.XControl;
@@ -52,6 +53,7 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.WeakBase;
 
 import org.openoffice.da.comp.w2lcommon.helper.DialogAccess;
+import org.openoffice.da.comp.w2lcommon.helper.FilePicker;
 
 /** This class provides a uno component which implements the configuration
  *  of Writer4LaTeX
@@ -61,6 +63,7 @@ public final class ConfigurationDialog
     implements XServiceInfo, XContainerWindowEventHandler {
 
     private XComponentContext xContext;
+    private FilePicker filePicker;
     
     private ExternalApps externalApps;
     
@@ -76,6 +79,7 @@ public final class ConfigurationDialog
     public ConfigurationDialog(XComponentContext xContext) {
         this.xContext = xContext;
         externalApps = new ExternalApps(xContext);
+        filePicker = new FilePicker(xContext);
     }
 	
     // Implement XContainerWindowEventHandler
@@ -161,42 +165,18 @@ public final class ConfigurationDialog
     }
 	
     private boolean browseForExecutable(XWindow xWindow) {
-        XComponent xComponent = null;
-        try {
-            // Create FilePicker
-            Object filePicker = xContext.getServiceManager()
-                .createInstanceWithContext("com.sun.star.ui.dialogs.FilePicker", xContext);
-            XFilePicker xFilePicker = (XFilePicker)
-                UnoRuntime.queryInterface(XFilePicker.class, filePicker);
-            xComponent = (XComponent)
-                UnoRuntime.queryInterface(XComponent.class, xFilePicker);
-
-            // Display the FilePicker
-            XExecutableDialog xExecutable = (XExecutableDialog)
-                UnoRuntime.queryInterface(XExecutableDialog.class, xFilePicker);
-
-            // Get the path
-            if (xExecutable.execute() == ExecutableDialogResults.OK) {
-                String[] sPathList = xFilePicker.getFiles();
-                if (sPathList.length > 0) {
-                    setComboBoxText(xWindow, "Executable", new File(new URI(sPathList[0])).getCanonicalPath());
-                    updateApplication(xWindow);
-                }     
-            }
-        }
-        catch (com.sun.star.uno.Exception e) {
-        }
-        catch (java.net.URISyntaxException e) {
-        }
-        catch (java.io.IOException e) {
-        }
-        finally{
-            // Always dispose the FilePicker component
-            if (xComponent!=null) {
-                xComponent.dispose();
-            }
-        } 
-        return true;
+    	String sPath = filePicker.getPath();
+    	if (sPath!=null) {
+    		try {
+				setComboBoxText(xWindow, "Executable", new File(new URI(sPath)).getCanonicalPath());
+			}
+    		catch (IOException e) {
+			}
+    		catch (URISyntaxException e) {
+			}
+    		updateApplication(xWindow);
+    	}     
+    	return true;
     }
 	
     private boolean updateApplication(XWindow xWindow) {
