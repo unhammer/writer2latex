@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2019 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-12)
+ *  Version 1.2 (2010-04-12)
  *
  */ 
  
@@ -401,6 +401,7 @@ public abstract class OptionsDialogBase extends DialogBase implements
                 MacroExpander expander = new MacroExpander(xContext);
                 filterData.put("ConfigURL",expander.expandMacros(XPropertySetHelper.getPropertyValueAsString(xCfgProps,"ConfigURL")));
                 filterData.put("TemplateURL",expander.expandMacros(XPropertySetHelper.getPropertyValueAsString(xCfgProps,"TargetTemplateURL")));
+                filterData.put("StyleSheetURL",expander.expandMacros(XPropertySetHelper.getPropertyValueAsString(xCfgProps,"StyleSheetURL")));
                 XPropertySetHelper.setPropertyValue(xProps,"ConfigName",sConfigNames[i]);
                 bFound = true;
             }

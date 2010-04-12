@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-04-11)
+ *  Version 1.2 (2010-04-12)
  *
  */ 
  
@@ -109,13 +109,12 @@ public class XhtmlOptionsDialog extends OptionsDialogBase {
             case 6:
             case 7:
             case 8: helper.put("ConfigURL","*cleanxhtml.xml");
-                    helper.put("custom_stylesheet",
-                        "http://www.w3.org/StyleSheets/Core/"+sCoreStyles[nConfig-1]);
+                    helper.put("custom_stylesheet", "http://www.w3.org/StyleSheets/Core/"+sCoreStyles[nConfig-1]);
                     break;
             case 9: helper.put("ConfigURL","$(user)/writer2xhtml.xml");
+            		helper.put("AutoCreate","true");
             		helper.put("TemplateURL", "$(user)/writer2xhtml-template.xhtml");
-            		//helper.put("StyleSheetURL", "$(user)/writer2xhtml-style.css");
-                    helper.put("AutoCreate","true");
+            		helper.put("StyleSheetURL", "$(user)/writer2xhtml-styles.css");
         }
 		
         saveCheckBoxOption(xProps, helper, "ConvertToPx", "convert_to_px");

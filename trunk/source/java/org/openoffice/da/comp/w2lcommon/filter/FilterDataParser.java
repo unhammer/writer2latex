@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-22)
+ *  Version 1.2 (2010-04-12)
  *
  */ 
  
@@ -108,7 +108,7 @@ public class FilterDataParser {
         
         PropertyHelper props = new PropertyHelper(filterData);
         
-        // Get the special properties TemplateURL, ConfigURL and AutoCreate
+        // Get the special properties TemplateURL, StyleSheetURL, ConfigURL and AutoCreate
         Object tpl = props.get("TemplateURL");
         String sTemplate = null;
         if (tpl!=null && AnyConverter.isString(tpl)) {
@@ -120,6 +120,17 @@ public class FilterDataParser {
             }
         }
         
+        Object styles = props.get("StyleSheetURL");
+        String sStyleSheet = null;
+        if (styles!=null && AnyConverter.isString(styles)) {
+            try {
+                sStyleSheet = substituteVariables(AnyConverter.toString(styles));
+            }
+            catch (com.sun.star.lang.IllegalArgumentException e) {
+                // Failed to convert to String; should not happen - ignore   
+            }
+        }
+
         Object auto = props.get("AutoCreate");
         boolean bAutoCreate = false;
         if (auto!=null && AnyConverter.isString(auto)) {
@@ -151,6 +162,31 @@ public class FilterDataParser {
                 if (xIs!=null) {
                     InputStream is = new XInputStreamToInputStreamAdapter(xIs);
                     converter.readTemplate(is);
+                    is.close();
+                    xIs.closeInput();
+                }
+            }
+            catch (IOException e) {
+                // ignore
+            }
+            catch (NotConnectedException e) {
+                // ignore
+            }
+            catch (CommandAbortedException e) {
+                // ignore
+            }
+            catch (com.sun.star.uno.Exception e) {
+                // ignore
+            }
+        }
+
+        // Load the style sheet from the specified URL, if any
+        if (sfa2!=null && sStyleSheet!=null && sStyleSheet.length()>0) {
+            try {
+                XInputStream xIs = sfa2.openFileRead(sStyleSheet);
+                if (xIs!=null) {
+                    InputStream is = new XInputStreamToInputStreamAdapter(xIs);
+                    converter.readStyleSheet(is);
                     is.close();
                     xIs.closeInput();
                 }
@@ -235,7 +271,7 @@ public class FilterDataParser {
         Enumeration<String> keys = props.keys();
         while (keys.hasMoreElements()) {
             String sKey = keys.nextElement();
-            if (!"ConfigURL".equals(sKey) && !"TemplateURL".equals(sKey) && !"AutoCreate".equals(sKey)) {
+            if (!"ConfigURL".equals(sKey) && !"TemplateURL".equals(sKey) && !"StyleSheetURL".equals(sKey) && !"AutoCreate".equals(sKey)) {
                 Object value = props.get(sKey);
                 if (AnyConverter.isString(value)) {
                     try {

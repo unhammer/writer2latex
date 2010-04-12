@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-31)
+ *  Version 1.2 (2010-04-12)
  *
  */
 
@@ -79,6 +79,9 @@ public class Converter extends ConverterBase {
 	
     // The template
     private XhtmlDocument template = null;
+    
+    // The included style sheet
+    private CssDocument styleSheet = null;
 
     // The xhtml output file(s)
     protected int nType = XhtmlDocument.XHTML10; // the doctype
@@ -104,14 +107,25 @@ public class Converter extends ConverterBase {
         this.nType = nType;
     }
 
-    // override
-    public void readTemplate(InputStream is) throws IOException {
+    // override methods to read templates and style sheets
+    @Override public void readTemplate(InputStream is) throws IOException {
         template = new XhtmlDocument("Template",nType);
         template.read(is);
     }
 	
-    public void readTemplate(File file) throws IOException {
+    @Override public void readTemplate(File file) throws IOException {
         readTemplate(new FileInputStream(file));
+    }
+
+    @Override public void readStyleSheet(InputStream is) throws IOException {
+    	if (styleSheet==null) {
+    		styleSheet = new CssDocument("styles.css");
+    	}
+    	styleSheet.read(is);
+    }
+	
+    @Override public void readStyleSheet(File file) throws IOException {
+        readStyleSheet(new FileInputStream(file));
     }
 
     protected StyleConverter getStyleCv() { return styleCv; }
@@ -223,6 +237,11 @@ public class Converter extends ConverterBase {
             }
         }
 
+        // Add included style sheet, if any
+        if (styleSheet!=null) {
+        	converterResult.addDocument(styleSheet);
+        }
+        
         // Export styles (temp.)
         for (int i=0; i<=nOutFileIndex; i++) {
             Document dom = outFiles.get(i).getContentDOM();
@@ -564,6 +583,17 @@ public class Converter extends ConverterBase {
         }*/
         // Note: For single output file, styles are exported to the doc at the end.
 
+        // Add link to included style sheet
+        if (styleSheet!=null) {
+        	Element sty = htmlDOM.createElement("link");
+        	sty.setAttribute("rel", "stylesheet");
+        	sty.setAttribute("type", "text/css");
+        	sty.setAttribute("media", "all");
+        	sty.setAttribute("href", styleSheet.getFileName());
+        	htmlDoc.getHeadNode().appendChild(sty);
+        }
+
+        
         // Recreate nested sections, if any
         if (!textCv.sections.isEmpty()) {
             Iterator<Node> iter = textCv.sections.iterator();

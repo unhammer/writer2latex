@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-29)
+ *  Version 1.2 (2010-04-12)
  *
  */
 
@@ -74,6 +74,12 @@ public abstract class ConverterBase implements Converter {
 	
     // Provide a do noting fallback method
     public void readTemplate(File file) throws IOException { }
+
+    // Provide a do noting fallback method
+    public void readStyleSheet(InputStream is) throws IOException { }
+	
+    // Provide a do noting fallback method
+    public void readStyleSheet(File file) throws IOException { }
 
     public ConverterResult convert(File source, String sTargetFileName) throws FileNotFoundException,IOException {
         return convert(new FileInputStream(source), sTargetFileName);

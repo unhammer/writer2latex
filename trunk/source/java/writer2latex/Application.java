@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-29) 
+ *  Version 1.2 (2010-04-12) 
  *
  */
  
@@ -58,6 +58,7 @@ import writer2latex.util.Misc;
  * <code>-pdfprint</code>, <code>-cleanxhtml</code>
  * <li><code>-config[=]filename</code>
  * <li><code>-template[=]filename</code>
+ * <li><code>-stylesheet[=]filename</code>
  * <li><code>-option[=]value</code>
  * </ul>
  * <p>where <code>option</code> can be any simple option known to Writer2LaTeX
@@ -70,6 +71,7 @@ public final class Application {
     private boolean bRecurse = false;
     private Vector<String> configFileNames = new Vector<String>();
     private String sTemplateFileName = null;
+    private String sStyleSheetFileName = null;
     private Hashtable<String,String> options = new Hashtable<String,String>();
     private String sSource = null;
     private String sTarget = null;
@@ -155,7 +157,7 @@ public final class Application {
             batchCv.setConverter(converter);
         }
 		
-        // Step 5: Read template
+        // Step 5a: Read template
         if (sTemplateFileName!=null) {
             try {
                 System.out.println("Reading template "+sTemplateFileName);
@@ -172,6 +174,23 @@ public final class Application {
             }
             catch (IOException e) {
                 System.out.println("--> Failed to read the template file!");
+                System.out.println("    "+e.getMessage());
+            }
+        }
+		
+        // Step 5b: Read style sheet
+        if (sStyleSheetFileName!=null) {
+            try {
+                System.out.println("Reading style sheet "+sStyleSheetFileName);
+                byte [] styleSheetBytes = Misc.inputStreamToByteArray(new FileInputStream(sStyleSheetFileName));
+                converter.readStyleSheet(new ByteArrayInputStream(styleSheetBytes));
+            }
+            catch (FileNotFoundException e) {
+                System.out.println("--> This file does not exist!");
+                System.out.println("    "+e.getMessage());
+            }
+            catch (IOException e) {
+                System.out.println("--> Failed to read the style sheet file!");
                 System.out.println("    "+e.getMessage());
             }
         }
@@ -282,6 +301,7 @@ public final class Application {
         System.out.println("   -epub");
         System.out.println("   -recurse");
         System.out.println("   -template[=]<template file>");
+        System.out.println("   -stylesheet[=]<style sheet file>");
         System.out.println("   -ultraclean");
         System.out.println("   -clean");
         System.out.println("   -pdfprint");
@@ -332,6 +352,7 @@ public final class Application {
                     }
                     if ("-config".equals(sArg)) { configFileNames.add(sArg2); }
                     else if ("-template".equals(sArg)) { sTemplateFileName = sArg2; }
+                    else if ("-stylesheet".equals(sArg)) { sStyleSheetFileName = sArg2; }
                     else { // configuration option
                         options.put(sArg.substring(1),sArg2);
                     }

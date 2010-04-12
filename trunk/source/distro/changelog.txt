@@ -2,6 +2,8 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.2 ----------
 
+[all] API change: Added the method readStyleSheet to the Converter interface
+
 [w2x] The custom configuration now supports an optional xhtml template (writer2xhtml-template.xhtml)
   in the same directory as writer2xhtml.xml
 

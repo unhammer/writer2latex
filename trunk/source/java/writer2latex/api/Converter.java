@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-23)
+ *  Version 1.2 (2010-04-12)
  *
  */
  
@@ -70,6 +70,25 @@ public interface Converter {
      *  while reading the template
      */
     public void readTemplate(File file) throws IOException;
+
+    /** Read a style sheet to <em>include</em> with the converted document.
+     *  The format of the style sheet depends on the <code>Converter</code>
+     *  implementation.
+     *
+     *  @param is an <code>InputStream</code> from which to read the style sheet
+     *  @throws IOException if some exception occurs while reading the style sheet
+     */
+    public void readStyleSheet(InputStream is) throws IOException;
+
+    /** Read a style sheet to <em>include</em> with the converted document.
+     *  The format of the style sheet depends on the <code>Converter</code>
+     *  implementation.
+     *
+     *  @param file a file from which to read the style sheet
+     *  @throws IOException if the file does not exist or some exception occurs
+     *  while reading the style sheet
+     */
+    public void readStyleSheet(File file) throws IOException;
 
     /** Convert a document
      *
