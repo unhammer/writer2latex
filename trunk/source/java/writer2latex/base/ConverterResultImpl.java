@@ -20,7 +20,7 @@
 *
 *  All Rights Reserved.
 * 
-*  Version 1.2 (2010-03-28)
+*  Version 1.2 (2010-04-13)
 *
 */ 
 
@@ -46,10 +46,13 @@ public class ConverterResultImpl implements ConverterResult {
 	private List<OutputFile> files;
 	
 	private List<ContentEntry> content; 
+	private ContentEntry titlePageFile;
+	private ContentEntry textFile;
 	private ContentEntry tocFile;
 	private ContentEntry lofFile;
 	private ContentEntry lotFile;
 	private ContentEntry indexFile;
+	private ContentEntry bibliographyFile;
 	
 	private MetaData metaData = null;
 	
@@ -67,10 +70,13 @@ public class ConverterResultImpl implements ConverterResult {
     public void reset() {
         files = new Vector<OutputFile>();
         content = new Vector<ContentEntry>();
+        titlePageFile = null;
+        textFile = null;
         tocFile = null;
         lofFile = null;
         lotFile = null;
         indexFile = null;
+        bibliographyFile = null;
         metaData = null;
         nMasterCount = 0;
 	}
@@ -119,6 +125,30 @@ public class ConverterResultImpl implements ConverterResult {
     	return Collections.unmodifiableList(content);
     }
     
+    /** Define the entry which contains the title page
+     * 
+     * @param entry the entry
+     */
+    public void setTitlePageFile(ContentEntry entry) {
+    	titlePageFile = entry;
+    }
+    
+    public ContentEntry getTitlePageFile() {
+    	return titlePageFile;
+    }
+    
+    /** Define the entry which contains the main text file
+     * 
+     * @param entry the entry
+     */
+    public void setTextFile(ContentEntry entry) {
+    	textFile = entry;
+    }
+    
+    public ContentEntry getTextFile() {
+    	return textFile;
+    }
+    
     /** Define the entry which contains the table of contents
      * 
      * @param entry the entry
@@ -165,6 +195,18 @@ public class ConverterResultImpl implements ConverterResult {
     
     public ContentEntry getIndexFile() {
     	return indexFile;
+    }
+    
+    /** Define the entry which contains the bibliography
+     * 
+     * @param entry the entry
+     */
+    public void setBibliographyFile(ContentEntry entry) {
+    	bibliographyFile = entry;
+    }
+    
+    public ContentEntry getBibliographyFile() {
+    	return bibliographyFile;
     }
     
     /** Set the meta data of this <code>ConverterResult</code> 

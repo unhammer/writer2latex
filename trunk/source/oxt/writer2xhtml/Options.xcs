@@ -11,6 +11,7 @@
             <prop oor:name="LockedOptions" oor:type="xs:string" />
             <prop oor:name="ConfigURL" oor:type="xs:string" />
             <prop oor:name="TargetTemplateURL" oor:type="xs:string" />
+            <prop oor:name="StyleSheetURL" oor:type="xs:string" />
         </group>
         <group oor:name="Template">
             <prop oor:name="TemplateName" oor:type="xs:string" />

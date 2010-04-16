@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-04-12)
+ *  Version 1.2 (2010-04-13)
  *
  */
 
@@ -44,6 +44,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 import writer2latex.api.Config;
+import writer2latex.api.ContentEntry;
 import writer2latex.api.ConverterFactory;
 //import writer2latex.api.ConverterResult;
 import writer2latex.base.ContentEntryImpl;
@@ -209,7 +210,6 @@ public class Converter extends ConverterBase {
             }
         }
 
-		//NodeList list;
         // Traverse the body
         Element body = ofr.getContent();
         if (ofr.isSpreadsheet()) { tableCv.convertTableContent(body); }
@@ -219,6 +219,21 @@ public class Converter extends ConverterBase {
         // Add footnotes and endnotes
         textCv.insertFootnotes(htmlDoc.getContentNode());
         textCv.insertEndnotes(htmlDoc.getContentNode());
+        
+        // Set the title page and text page entries
+        if (converterResult.getContent().isEmpty()) {
+        	// No headings in the document: There is no title page and the text page is the first page
+        	converterResult.setTextFile(new ContentEntryImpl("Text", 1, outFiles.get(0), null));
+        	// We also have to add a toc entry (the ncx file cannot be empty)
+        	converterResult.addContentEntry(new ContentEntryImpl("Text", 1, outFiles.get(0), null));
+        }
+        else {
+        	// The title page is the first page
+        	converterResult.setTitlePageFile(new ContentEntryImpl("Title page", 1, outFiles.get(0), null));
+        	// The text page is the one containing the first heading
+        	ContentEntry firstHeading = converterResult.getContent().get(0);
+        	converterResult.setTextFile(new ContentEntryImpl("Text", 1, firstHeading.getFile(), firstHeading.getTarget()));
+        }
 
         // Resolve links
         ListIterator<LinkDescriptor> iter = links.listIterator();
@@ -237,8 +252,8 @@ public class Converter extends ConverterBase {
             }
         }
 
-        // Add included style sheet, if any
-        if (styleSheet!=null) {
+        // Add included style sheet, if any - and we are creating OPS content
+        if (bOPS && styleSheet!=null) {
         	converterResult.addDocument(styleSheet);
         }
         
@@ -529,42 +544,45 @@ public class Converter extends ConverterBase {
             meta.setAttribute("content","text/html; charset="+htmlDoc.getEncoding().toLowerCase());
             htmlDoc.getHeadNode().appendChild(meta);
         }
-		
-        // "Traditional" meta data
-        //createMeta("generator","Writer2LaTeX "+Misc.VERSION);
-        createMeta("description",metaData.getDescription());
-        createMeta("keywords",metaData.getKeywords());
+        
+        // Add meta data (for EPUB the meta data belongs to the .opf file)
+        if (!bOPS) {
+        	// "Traditional" meta data
+        	//createMeta("generator","Writer2LaTeX "+Misc.VERSION);
+        	createMeta("description",metaData.getDescription());
+        	createMeta("keywords",metaData.getKeywords());
 
-        // Dublin core meta data (optional)
-        // Format as recommended on dublincore.org
-        // Declare meta data profile
-        if (config.xhtmlUseDublinCore()) {
-            htmlDoc.getHeadNode().setAttribute("profile","http://dublincore.org/documents/dcq-html/");
-            // Add link to declare namespace
-            Element dclink = htmlDOM.createElement("link");
-            dclink.setAttribute("rel","schema.DC");
-            dclink.setAttribute("href","http://purl.org/dc/elements/1.1/");
-            htmlDoc.getHeadNode().appendChild(dclink);
-            // Insert the actual meta data
-            createMeta("DC.title",metaData.getTitle());
-            // DC.subject actually contains subject+keywords, so we merge them
-            String sDCSubject = "";
-            if (metaData.getSubject()!=null && metaData.getSubject().length()>0) {
-            	sDCSubject = metaData.getSubject();
-            }
-            if (metaData.getKeywords()!=null && metaData.getKeywords().length()>0) {
-            	if (sDCSubject.length()>0) { sDCSubject+=", "; }
-            	sDCSubject += metaData.getKeywords();
-            }
-            createMeta("DC.subject",sDCSubject);
-            createMeta("DC.description",metaData.getDescription());
-            createMeta("DC.creator",metaData.getCreator());
-            createMeta("DC.date",metaData.getDate());
-            createMeta("DC.language",metaData.getLanguage());
+        	// Dublin core meta data (optional)
+        	// Format as recommended on dublincore.org
+        	// Declare meta data profile
+        	if (config.xhtmlUseDublinCore()) {
+        		htmlDoc.getHeadNode().setAttribute("profile","http://dublincore.org/documents/dcq-html/");
+        		// Add link to declare namespace
+        		Element dclink = htmlDOM.createElement("link");
+        		dclink.setAttribute("rel","schema.DC");
+        		dclink.setAttribute("href","http://purl.org/dc/elements/1.1/");
+        		htmlDoc.getHeadNode().appendChild(dclink);
+        		// Insert the actual meta data
+        		createMeta("DC.title",metaData.getTitle());
+        		// DC.subject actually contains subject+keywords, so we merge them
+        		String sDCSubject = "";
+        		if (metaData.getSubject()!=null && metaData.getSubject().length()>0) {
+        			sDCSubject = metaData.getSubject();
+        		}
+        		if (metaData.getKeywords()!=null && metaData.getKeywords().length()>0) {
+        			if (sDCSubject.length()>0) { sDCSubject+=", "; }
+        			sDCSubject += metaData.getKeywords();
+        		}
+        		createMeta("DC.subject",sDCSubject);
+        		createMeta("DC.description",metaData.getDescription());
+        		createMeta("DC.creator",metaData.getCreator());
+        		createMeta("DC.date",metaData.getDate());
+        		createMeta("DC.language",metaData.getLanguage());
+        	}
         }
         
-        // Add link to stylesheet
-        if (config.xhtmlCustomStylesheet().length()>0) {
+        // Add link to stylesheet, if producing nomral XHTML
+        if (!bOPS && config.xhtmlCustomStylesheet().length()>0) {
             Element htmlStyle = htmlDOM.createElement("link");
             htmlStyle.setAttribute("rel","stylesheet");
             htmlStyle.setAttribute("type","text/css");
@@ -583,8 +601,8 @@ public class Converter extends ConverterBase {
         }*/
         // Note: For single output file, styles are exported to the doc at the end.
 
-        // Add link to included style sheet
-        if (styleSheet!=null) {
+        // Add link to included style sheet if producing OPS content
+        if (bOPS && styleSheet!=null) {
         	Element sty = htmlDOM.createElement("link");
         	sty.setAttribute("rel", "stylesheet");
         	sty.setAttribute("type", "text/css");

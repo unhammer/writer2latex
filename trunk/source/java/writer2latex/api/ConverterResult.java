@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-28)
+ *  Version 1.2 (2010-04-13)
  *
  */
  
@@ -62,30 +62,48 @@ public interface ConverterResult {
      */
     public List<ContentEntry> getContent();
     
-    /** Get the entry which contains the table of contents
+    /** Get the entry which contains the table page
+     * 
+     *  @return the entry or null if there is no title page
+     */
+    public ContentEntry getTitlePageFile();
+        
+    /** Get the entry which contains the start of the actual text (the first chapter, or simply the start of
+     *  the document if there are no headings)
      * 
      *  @return the entry
      */
+    public ContentEntry getTextFile();
+        
+    /** Get the entry which contains the table of contents
+     * 
+     *  @return the entry or null if a table of content does not exist
+     */
     public ContentEntry getTocFile();
-    
-    
+        
     /** Get the entry which contains the list of tables
      * 
-     *  @return the entry
+     *  @return the entry or null if a list of tables does not exist
      */
     public ContentEntry getLotFile();
     
     /** Get the entry which contains the list of figures
      * 
-     *  @return the entry
+     *  @return the entry or null if a list of figures does not exist
      */
     public ContentEntry getLofFile();
     
     /** Get the entry which contains the alphabetical index
      * 
-     *  @return the entry
+     *  @return the entry or null if an alphabetical index does not exist
      */
     public ContentEntry getIndexFile();
+    
+    /** Get the entry which contains the bibliography
+     * 
+     *  @return the entry or null if a bibliography does not exist
+     */
+    public ContentEntry getBibliographyFile();
     
     /** Write all files of the <code>ConverterResult</code> to a directory.
      *  Subdirectories are created as required by the individual

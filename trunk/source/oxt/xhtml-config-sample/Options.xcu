@@ -25,6 +25,10 @@
                 <prop oor:name="TargetTemplateURL" oor:type="xs:string">
                     <value>%origin%/config/sampletemplate.xhtml</value>
                 </prop>
+                <!-- This url points to the style sheet to include (intended for EPUB export) -->
+                <prop oor:name="StyleSheetURL" oor:type="xs:string">
+                    <value></value>
+                </prop>
             </node>
         </node>
         <node oor:name="Templates">

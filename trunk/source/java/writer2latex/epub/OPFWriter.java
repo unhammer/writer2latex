@@ -129,15 +129,13 @@ public class OPFWriter extends NewDOMDocument {
         // The guide may contain references to some fundamental structural components
         Element guide = contentDOM.createElement("guide");
         pack.appendChild(guide);        
+       	addGuideReference(contentDOM,guide,"title-page",cr.getTitlePageFile());
+       	addGuideReference(contentDOM,guide,"text",cr.getTextFile());
        	addGuideReference(contentDOM,guide,"toc",cr.getTocFile());
        	addGuideReference(contentDOM,guide,"index",cr.getIndexFile());
        	addGuideReference(contentDOM,guide,"loi",cr.getLofFile());
        	addGuideReference(contentDOM,guide,"lot",cr.getLotFile());
-       	// TODO addGuideReference(contentDOM,guide,"bibliography",cr.getBibliographyile());
-       	List<ContentEntry> contents = cr.getContent();
-       	if (contents.size()>0) {
-       		addGuideReference(contentDOM,guide,"text",contents.get(0));
-       	}
+       	addGuideReference(contentDOM,guide,"bibliography",cr.getBibliographyFile());
         
         setContentDOM(contentDOM);
 	}
