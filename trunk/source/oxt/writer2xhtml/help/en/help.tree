@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<tree_view version="17-apr-2010">
+  <help_section application="writer2xhtml" id="w2x01" title="Writer2xhtml">
+      <!--<topic id="writer2xhtml/org.openoffice.da.writer2xhtml.oxt/general.xhp">General information</topic>-->
+      <topic id="writer2xhtml/org.openoffice.da.writer2xhtml.oxt/export.xhp">XHTML and EPUB Export (Writer)</topic>
+      <topic id="writer2xhtml/org.openoffice.da.writer2xhtml.oxt/export_calc.xhp">XHTML Export (Calc)</topic>
+  </help_section>
+</tree_view>

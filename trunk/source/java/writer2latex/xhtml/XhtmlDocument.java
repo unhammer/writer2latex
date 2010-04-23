@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-15)
+ *  Version 1.2 (2010-04-23)
  *
  */
  
@@ -116,27 +116,7 @@ public class XhtmlDocument extends DOMDocument {
     public XhtmlDocument(String name, int nType) {
         super(name,sExtension[nType]);
         this.nType = nType;
-        // Define publicId and systemId
-        String sPublicId = null;
-        String sSystemId = null;		
-        switch (nType) {
-            case XHTML10 :
-                sPublicId = "-//W3C//DTD XHTML 1.0 Strict//EN";
-                sSystemId = "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd";
-                break; 
-            case XHTML11 :
-                sPublicId = "-//W3C//DTD XHTML 1.1//EN";
-                sSystemId = "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd";
-                break; 
-            case XHTML_MATHML :
-            case XHTML_MATHML_XSL : 
-                sPublicId = "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN";
-                sSystemId = "http://www.w3.org/Math/DTD/mathml2/xhtml-math11-f.dtd";
-                //sSystemId = "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd"; (old version)
-                /* An alternative is to use XHTML + MathML + SVG:
-                sPublicId = "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN",
-                sSystemId = "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd"); */
-        }
+        
 
         // create DOM
         Document contentDOM = null;
@@ -144,7 +124,8 @@ public class XhtmlDocument extends DOMDocument {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             DOMImplementation domImpl = builder.getDOMImplementation();
-            DocumentType doctype = domImpl.createDocumentType("html", sPublicId, sSystemId); 
+            String[] sDocType = getDoctypeStrings();
+            DocumentType doctype = domImpl.createDocumentType("html", sDocType[0], sDocType[1]); 
             contentDOM = domImpl.createDocument("http://www.w3.org/1999/xhtml","html",doctype);
         }
         catch (Throwable t) {
@@ -216,24 +197,67 @@ public class XhtmlDocument extends DOMDocument {
     }
 	
     public void readFromTemplate(XhtmlDocument template) {
-        // Remove all current child nodes
-        Element root = getContentDOM().getDocumentElement();
-        Node child = root.getFirstChild();
-        while (child!=null) {
-            root.removeChild(child);
-            child = root.getFirstChild();
-        }
+        // create a new DOM
+    	Document templateDOM = template.getContentDOM();
+    	Document newDOM = null;
+    	try {
+    		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+    		DocumentBuilder builder = builderFactory.newDocumentBuilder();
+    		DOMImplementation domImpl = builder.getDOMImplementation();
+            String[] sDocType = getDoctypeStrings();
+            DocumentType doctype = domImpl.createDocumentType("html", sDocType[0], sDocType[1]); 
+    		newDOM = domImpl.createDocument("http://www.w3.org/1999/xhtml",
+    				templateDOM.getDocumentElement().getTagName(),doctype);
+    		setContentDOM(newDOM);
+    		
+    		// Import attributes on root element 
+    		Element templateRoot = templateDOM.getDocumentElement();
+    		Element newRoot = newDOM.getDocumentElement();
+    		NamedNodeMap attributes = templateRoot.getAttributes();
+    		int nCount = attributes.getLength();
+    		for (int i=0; i<nCount; i++) {
+    			Node attrNode = attributes.item(i);
+    			newRoot.setAttribute(attrNode.getNodeName(), attrNode.getNodeValue());
+    		}
+    		
+    		// Import all child nodes from template
+    		NodeList children = templateRoot.getChildNodes();
+    		int nLen = children.getLength();
+    		for (int i=0; i<nLen; i++) {
+    			newRoot.appendChild(getContentDOM().importNode(children.item(i),true));
+    		}
 
-        // Import all child nodes from template
-        Element templateRoot = template.getContentDOM().getDocumentElement();
-        NodeList children = templateRoot.getChildNodes();
-        int nLen = children.getLength();
-        for (int i=0; i<nLen; i++) {
-            root.appendChild(getContentDOM().importNode(children.item(i),true));
+    		// get the entry point nodes
+    		collectNodes();
         }
-
-        // get the entry point nodes
-        collectNodes();
+        catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+    
+    private String[] getDoctypeStrings() {
+        // Define publicId and systemId
+        String sPublicId = null;
+        String sSystemId = null;		
+        switch (nType) {
+            case XHTML10 :
+                sPublicId = "-//W3C//DTD XHTML 1.0 Strict//EN";
+                sSystemId = "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd";
+                break; 
+            case XHTML11 :
+                sPublicId = "-//W3C//DTD XHTML 1.1//EN";
+                sSystemId = "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd";
+                break; 
+            case XHTML_MATHML :
+            case XHTML_MATHML_XSL : 
+                sPublicId = "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN";
+                sSystemId = "http://www.w3.org/Math/DTD/mathml2/xhtml-math11-f.dtd";
+                //sSystemId = "http://www.w3.org/TR/MathML2/dtd/xhtml-math11-f.dtd"; (old version)
+                /* An alternative is to use XHTML + MathML + SVG:
+                sPublicId = "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN",
+                sSystemId = "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd"); */
+        }
+        return new String[] { sPublicId, sSystemId };
     }
 	
     private void collectNodes(Element elm) {
@@ -275,8 +299,8 @@ public class XhtmlDocument extends DOMDocument {
 
         Element elm = getContentDOM().getDocumentElement();
         collectNodes(elm);
-        if (contentNode==null) { contentNode = bodyNode; }
-        if (titleNode==null) {
+        if (contentNode==null) { contentNode = bodyNode!=null ? bodyNode : elm; }
+        if (headNode!=null && titleNode==null) {
             titleNode = getContentDOM().createElement("title");
             headNode.appendChild(titleNode);
         }
@@ -361,8 +385,8 @@ public class XhtmlDocument extends DOMDocument {
         // Add a BOM if the user desires so
         if (bAddBOM) { osw.write("\uFEFF"); }
 
-        // Omit xml prolog for pure xhtml documents (to be browser safe)
-        if (nType==XHTML_MATHML || nType==XHTML_MATHML_XSL) {
+        // Omit xml prolog for pure xhtml 1.0 strict documents (to be browser safe)
+        if (nType!=XHTML10) {
             osw.write("<?xml version=\"1.0\" encoding=\""+sEncoding+"\" ?>\n");
         }
         // Either specify doctype or xsl transformation (the user may require
@@ -374,11 +398,14 @@ public class XhtmlDocument extends DOMDocument {
             osw.write("<?xml-stylesheet type=\"text/xsl\" href=\""+sXsltPath+sSlash+"pmathml.xsl\"?>\n");
         }
         else if (!bNoDoctype) {
-            osw.write("<!DOCTYPE html PUBLIC \"");
-            osw.write(getContentDOM().getDoctype().getPublicId());
-            osw.write("\" \"");
-            osw.write(getContentDOM().getDoctype().getSystemId());
-            osw.write("\">\n");
+        	DocumentType docType = getContentDOM().getDoctype();
+        	if (docType!=null) {
+        		osw.write("<!DOCTYPE html PUBLIC \"");
+        		osw.write(docType.getPublicId());
+        		osw.write("\" \"");
+        		osw.write(docType.getSystemId());
+        		osw.write("\">\n");
+        	}
         }
         Element doc = getContentDOM().getDocumentElement(); 
         optimize(doc,null,null);

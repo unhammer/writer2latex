@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-15) 
+ *  Version 1.2 (2010-04-23) 
  *
  */
  
@@ -96,20 +96,23 @@ public class BatchConverterImpl extends BatchConverterBase {
 
         org.w3c.dom.Document htmlDOM = htmlDoc.getContentDOM();
 
-        // Declare charset (we need this for xhtml because we have no <?xml ... ?>)
-        Element meta = htmlDOM.createElement("meta");
-        meta.setAttribute("http-equiv","Content-Type");
-        meta.setAttribute("content","text/html; charset="+htmlDoc.getEncoding().toLowerCase());
-        htmlDoc.getHeadNode().appendChild(meta);
-		
-        // Add link to stylesheet
-        if (config.xhtmlCustomStylesheet().length()>0) {
-            Element htmlStyle = htmlDOM.createElement("link");
-            htmlStyle.setAttribute("rel","stylesheet");
-            htmlStyle.setAttribute("type","text/css");
-            htmlStyle.setAttribute("media","all");
-            htmlStyle.setAttribute("href",config.xhtmlCustomStylesheet());
-            htmlDoc.getHeadNode().appendChild(htmlStyle);
+        Element head = htmlDoc.getHeadNode();
+        if (head!=null) {
+        	// Declare charset (we need this for xhtml because we have no <?xml ... ?>)
+        	Element meta = htmlDOM.createElement("meta");
+        	meta.setAttribute("http-equiv","Content-Type");
+        	meta.setAttribute("content","text/html; charset="+htmlDoc.getEncoding().toLowerCase());
+        	head.appendChild(meta);
+
+        	// Add link to stylesheet
+        	if (config.xhtmlCustomStylesheet().length()>0) {
+        		Element htmlStyle = htmlDOM.createElement("link");
+        		htmlStyle.setAttribute("rel","stylesheet");
+        		htmlStyle.setAttribute("type","text/css");
+        		htmlStyle.setAttribute("media","all");
+        		htmlStyle.setAttribute("href",config.xhtmlCustomStylesheet());
+        		head.appendChild(htmlStyle);
+        	}
         }
 
         // Add uplink to header and footer
@@ -140,7 +143,10 @@ public class BatchConverterImpl extends BatchConverterBase {
         }
 		
         // Add title and heading
-        htmlDoc.getTitleNode().appendChild(htmlDOM.createTextNode(sHeading));
+        Element title = htmlDoc.getTitleNode();
+        if (title!=null) {
+        	title.appendChild(htmlDOM.createTextNode(sHeading));
+        }
         Element h1 = htmlDOM.createElement("h1");
         htmlDoc.getContentNode().appendChild(h1);
         h1.appendChild(htmlDOM.createTextNode(sHeading));

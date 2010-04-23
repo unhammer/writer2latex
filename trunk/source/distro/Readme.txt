@@ -1,7 +1,7 @@
-Writer2LaTeX version 1.1.2 (development release)
+Writer2LaTeX version 1.1.3 (development release)
 ================================================
 
-This is the distribution of Writer2LaTeX version 1.1.2
+This is the distribution of Writer2LaTeX version 1.1.3
 
 Latest version can be found at the web site
   http://writer2latex.sourceforge.net

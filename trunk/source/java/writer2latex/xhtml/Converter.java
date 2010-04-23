@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-04-13)
+ *  Version 1.2 (2010-04-23)
  *
  */
 
@@ -259,12 +259,13 @@ public class Converter extends ConverterBase {
         
         // Export styles (temp.)
         for (int i=0; i<=nOutFileIndex; i++) {
-            Document dom = outFiles.get(i).getContentDOM();
-            NodeList hlist = dom.getElementsByTagName("head");
-            Node styles = styleCv.exportStyles(dom);
-            if (styles!=null) {
-                hlist.item(0).appendChild(styles);
-            }
+        	Element head = outFiles.get(i).getHeadNode();
+        	if (head!=null) {
+        		Node styles = styleCv.exportStyles(outFiles.get(i).getContentDOM());
+        		if (styles!=null) {
+        			head.appendChild(styles);
+        		}
+        	}
         }
         
         // Create headers & footers (if nodes are available)
@@ -531,66 +532,71 @@ public class Converter extends ConverterBase {
         }
 
         // Add title (required by xhtml)
-        String sTitle = metaData.getTitle();
-        if (sTitle==null) { // use filename as fallback
-            sTitle = htmlDoc.getFileName();
-        }
-        htmlDoc.getTitleNode().appendChild( htmlDOM.createTextNode(sTitle) );
-
-        // Declare charset (we need this for xhtml because we have no <?xml ... ?>)
-        if (nType==XhtmlDocument.XHTML10) {
-            Element meta = htmlDOM.createElement("meta");
-            meta.setAttribute("http-equiv","Content-Type");
-            meta.setAttribute("content","text/html; charset="+htmlDoc.getEncoding().toLowerCase());
-            htmlDoc.getHeadNode().appendChild(meta);
-        }
-        
-        // Add meta data (for EPUB the meta data belongs to the .opf file)
-        if (!bOPS) {
-        	// "Traditional" meta data
-        	//createMeta("generator","Writer2LaTeX "+Misc.VERSION);
-        	createMeta("description",metaData.getDescription());
-        	createMeta("keywords",metaData.getKeywords());
-
-        	// Dublin core meta data (optional)
-        	// Format as recommended on dublincore.org
-        	// Declare meta data profile
-        	if (config.xhtmlUseDublinCore()) {
-        		htmlDoc.getHeadNode().setAttribute("profile","http://dublincore.org/documents/dcq-html/");
-        		// Add link to declare namespace
-        		Element dclink = htmlDOM.createElement("link");
-        		dclink.setAttribute("rel","schema.DC");
-        		dclink.setAttribute("href","http://purl.org/dc/elements/1.1/");
-        		htmlDoc.getHeadNode().appendChild(dclink);
-        		// Insert the actual meta data
-        		createMeta("DC.title",metaData.getTitle());
-        		// DC.subject actually contains subject+keywords, so we merge them
-        		String sDCSubject = "";
-        		if (metaData.getSubject()!=null && metaData.getSubject().length()>0) {
-        			sDCSubject = metaData.getSubject();
-        		}
-        		if (metaData.getKeywords()!=null && metaData.getKeywords().length()>0) {
-        			if (sDCSubject.length()>0) { sDCSubject+=", "; }
-        			sDCSubject += metaData.getKeywords();
-        		}
-        		createMeta("DC.subject",sDCSubject);
-        		createMeta("DC.description",metaData.getDescription());
-        		createMeta("DC.creator",metaData.getCreator());
-        		createMeta("DC.date",metaData.getDate());
-        		createMeta("DC.language",metaData.getLanguage());
+        Element title = htmlDoc.getTitleNode();
+        if (title!=null) {
+        	String sTitle = metaData.getTitle();
+        	if (sTitle==null) { // use filename as fallback
+        		sTitle = htmlDoc.getFileName();
         	}
+        	title.appendChild( htmlDOM.createTextNode(sTitle) );
         }
-        
-        // Add link to stylesheet, if producing nomral XHTML
-        if (!bOPS && config.xhtmlCustomStylesheet().length()>0) {
-            Element htmlStyle = htmlDOM.createElement("link");
-            htmlStyle.setAttribute("rel","stylesheet");
-            htmlStyle.setAttribute("type","text/css");
-            htmlStyle.setAttribute("media","all");
-            htmlStyle.setAttribute("href",config.xhtmlCustomStylesheet());
-            htmlDoc.getHeadNode().appendChild(htmlStyle);
-        }
-        /* later....
+
+        Element head = htmlDoc.getHeadNode();
+        if (head!=null) {
+        	// Declare charset (we need this for xhtml because we have no <?xml ... ?>)
+        	if (nType==XhtmlDocument.XHTML10) {
+        		Element meta = htmlDOM.createElement("meta");
+        		meta.setAttribute("http-equiv","Content-Type");
+        		meta.setAttribute("content","text/html; charset="+htmlDoc.getEncoding().toLowerCase());
+        		head.appendChild(meta);
+        	}
+
+        	// Add meta data (for EPUB the meta data belongs to the .opf file)
+        	if (!bOPS) {
+        		// "Traditional" meta data
+        		//createMeta("generator","Writer2LaTeX "+Misc.VERSION);
+        		createMeta(head,"description",metaData.getDescription());
+        		createMeta(head,"keywords",metaData.getKeywords());
+
+        		// Dublin core meta data (optional)
+        		// Format as recommended on dublincore.org
+        		// Declare meta data profile
+        		if (config.xhtmlUseDublinCore()) {
+        			head.setAttribute("profile","http://dublincore.org/documents/dcq-html/");
+        			// Add link to declare namespace
+        			Element dclink = htmlDOM.createElement("link");
+        			dclink.setAttribute("rel","schema.DC");
+        			dclink.setAttribute("href","http://purl.org/dc/elements/1.1/");
+        			head.appendChild(dclink);
+        			// Insert the actual meta data
+        			createMeta(head,"DC.title",metaData.getTitle());
+        			// DC.subject actually contains subject+keywords, so we merge them
+        			String sDCSubject = "";
+        			if (metaData.getSubject()!=null && metaData.getSubject().length()>0) {
+        				sDCSubject = metaData.getSubject();
+        			}
+        			if (metaData.getKeywords()!=null && metaData.getKeywords().length()>0) {
+        				if (sDCSubject.length()>0) { sDCSubject+=", "; }
+        				sDCSubject += metaData.getKeywords();
+        			}
+        			createMeta(head,"DC.subject",sDCSubject);
+        			createMeta(head,"DC.description",metaData.getDescription());
+        			createMeta(head,"DC.creator",metaData.getCreator());
+        			createMeta(head,"DC.date",metaData.getDate());
+        			createMeta(head,"DC.language",metaData.getLanguage());
+        		}
+        	}
+
+        	// Add link to stylesheet, if producing nomral XHTML
+        	if (!bOPS && config.xhtmlCustomStylesheet().length()>0) {
+        		Element htmlStyle = htmlDOM.createElement("link");
+        		htmlStyle.setAttribute("rel","stylesheet");
+        		htmlStyle.setAttribute("type","text/css");
+        		htmlStyle.setAttribute("media","all");
+        		htmlStyle.setAttribute("href",config.xhtmlCustomStylesheet());
+        		head.appendChild(htmlStyle);
+        	}
+        	/* later....
         if (nSplit>0 && !config.xhtmlIgnoreStyles()) {
             Element htmlStyle = htmlDOM.createElement("link");
             htmlStyle.setAttribute("rel","stylesheet");
@@ -599,18 +605,18 @@ public class Converter extends ConverterBase {
             htmlStyle.setAttribute("href",oooDoc.getName()+"-styles.css");
             htmlHead.appendChild(htmlStyle);
         }*/
-        // Note: For single output file, styles are exported to the doc at the end.
+        	// Note: For single output file, styles are exported to the doc at the end.
 
-        // Add link to included style sheet if producing OPS content
-        if (bOPS && styleSheet!=null) {
-        	Element sty = htmlDOM.createElement("link");
-        	sty.setAttribute("rel", "stylesheet");
-        	sty.setAttribute("type", "text/css");
-        	sty.setAttribute("media", "all");
-        	sty.setAttribute("href", styleSheet.getFileName());
-        	htmlDoc.getHeadNode().appendChild(sty);
+        	// Add link to included style sheet if producing OPS content
+        	if (bOPS && styleSheet!=null) {
+        		Element sty = htmlDOM.createElement("link");
+        		sty.setAttribute("rel", "stylesheet");
+        		sty.setAttribute("type", "text/css");
+        		sty.setAttribute("media", "all");
+        		sty.setAttribute("href", styleSheet.getFileName());
+        		head.appendChild(sty);
+        	}
         }
-
         
         // Recreate nested sections, if any
         if (!textCv.sections.isEmpty()) {
@@ -710,12 +716,12 @@ public class Converter extends ConverterBase {
     }
 
 	
-    private void createMeta(String sName, String sValue) {
+    private void createMeta(Element head, String sName, String sValue) {
         if (sValue==null) { return; }
         Element meta = htmlDOM.createElement("meta");
         meta.setAttribute("name",sName);
         meta.setAttribute("content",sValue);
-        htmlDoc.getHeadNode().appendChild(meta);
+        head.appendChild(meta);
     }
 	
 		

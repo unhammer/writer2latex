@@ -1,6 +1,19 @@
 Changelog for Writer2LaTeX version 1.0 -> 1.2
 
+TODO2: Tilføj ?-knap til xhtml export dialoger
+
+---------- version 1.1.3 ----------
+
+[w2x] Bugfix: Now adds XML prolog for XHTML 1.1 documents
+
+[w2x] XHTML templates without <head> and/or <body>are now allowed. If no content element is found, the
+  root element is used
+
+[w2x] Added help content for export dialogs
+
 ---------- version 1.1.2 ----------
+
+[w2l] Added help content for export dialog
 
 [all] API change: Added the method readStyleSheet to the Converter interface
 

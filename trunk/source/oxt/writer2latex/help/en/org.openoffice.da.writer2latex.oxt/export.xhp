@@ -51,7 +51,7 @@
 			</listitem>
 			<listitem>
 				<paragraph role="paragraph" xml-lang="en-US"><emph>Custom</emph> is a user defined format. To configure the custom format,
-				select <emph>Tools - Options - Writer2LaTeX</emph>.
+				choose <emph>Tools - Options - Writer2LaTeX</emph>.
 				</paragraph>
 			</listitem>
         </list>

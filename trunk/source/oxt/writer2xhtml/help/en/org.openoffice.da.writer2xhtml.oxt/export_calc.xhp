@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer2xhtml-export-calc" indexer="include">
+            <title xml-lang="en-US">XHTML Export (Calc)</title>
+            <filename>org.openoffice.da.writer2xhtml.oxt/export_calc.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalc" id="bm_optionscalc"/>
+        <paragraph role="heading" level="1" xml-lang="en-US">XHTML Export (Calc)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Exports the current document to XHTML format.</paragraph>
+        <section id="howtoget" xml-lang="en-US">
+        	Choose <emph>File - Export - XHTML 1.0 strict</emph><br/>
+        	or <emph>File - Export - XHTML 1.1</emph>
+        </section>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcConfig" id="bm_optionscalc_config"/>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcConfig" visibility="hidden">Select the style to use for the XHTML document</ahelp></paragraph>
+		<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#split1"/>
+		<list type="unordered">
+			<listitem>
+				<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#split2"/>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US"><emph>Custom</emph> is a user defined format.
+				 To configure the custom format, choose <emph>Tools - Options - Writer2xhtml</emph>.
+				</paragraph>
+			</listitem>
+		</list>
+		<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#split3"/>
+		
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcScaling" id="bm_optionscalc_scaling"/>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcScaling" visibility="hidden">Select a scaling to apply to all dimensions in the document</ahelp></paragraph>
+		<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#scaling"/>
+		
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcColumnScaling" id="bm_optionscalc_columnscaling"/>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcColumnScaling" visibility="hidden">Select a scaling to apply to all column dimensions in the document</ahelp></paragraph>
+		<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#columnscaling"/>
+		
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcConvertToPx" id="bm_optionscalc_converttopx"/>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcConvertToPx" visibility="hidden">Check this if you want to convert all units to px rather than using the original units</ahelp></paragraph>
+		<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#converttopx"/>
+		
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcOriginalImageSize" id="bm_optionscalc_originalimagesize"/>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcOriginalImageSize" visibility="hidden">Check this to use the natural size of images rather than the size defined in the document</ahelp></paragraph>
+		<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#originalimagesize"/>
+		
+		<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#special"/>
+		
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcNotes" id="bm_optionscalc_notes"/>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcOriginalImageSize" visibility="hidden">Check this if you want to export notes (annotations) in the document</ahelp></paragraph>
+		<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#notes"/>
+		
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcUseDublinCore" id="bm_optionscalc_usedublincore"/>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcUseDublinCore" visibility="hidden">Check this if you want to export all meta data (using the Dublin Core standard)</ahelp></paragraph>
+		<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#usedublincore"/>
+		
+        <paragraph role="heading" level="2" xml-lang="en-US">Sheets</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcDisplayHiddenSheets" id="bm_optionsdisplayhiddensheets"/>
+   		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcDisplayHiddenSheets" visibility="hidden">Check this to display all sheets, even if they are hidden</ahelp></paragraph>
+        <paragraph role="heading" level="3" xml-lang="en-US">Display hidden sheets</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">If you have chosen to hide some sheets in %PRODUCTNAME Calc, you can select this
+        option if you want to display them in the XHTML document anyway.</paragraph>        
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcDisplayHiddenRowsCols" id="bm_optionscalc_displayhiddenrowscols"/>
+   		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcDisplayHiddenRowsCols" visibility="hidden">Check this to display all rows and columns, even if they are hidden</ahelp></paragraph>
+        <paragraph role="heading" level="3" xml-lang="en-US">Display hidden rows and columns</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">The same applies, if you have chosen to hide some columns or rows in your
+        spreadsheet.</paragraph>        
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcDisplayFilteredRowsCols" id="bm_optionscalc_displayfilteredrowscols"/>
+   		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcDisplayFilteredRowsCols" visibility="hidden">Check this to display all rows and columns, even if they are filtered</ahelp></paragraph>
+        <paragraph role="heading" level="3" xml-lang="en-US">Display filtered rows and columns</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">When you export the document, some rows or columns may be invisible because
+        you have applied a filter in %PRODUCTNAME Calc. If you select this option, the invisible rows and columns will be exported
+        to XHTML anyway.</paragraph>        
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcApplyPrintRanges" id="bm_optionscalc_applyprintranges"/>
+   		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcApplyPrintRanges" visibility="hidden">Check this to export the print ranges rather than the complete contents of the sheets</ahelp></paragraph>
+        <paragraph role="heading" level="3" xml-lang="en-US">Apply print ranges</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">If you check this option, the XHTML document will display the parts of the document
+        which are selected for printing using print ranges in %PRODUCTNAME Calc. The display in the browser will thus be similar
+        to what you get when you are printing the document from %PRODUCTNAME Calc. If the option is not checked, the result will instead resemble
+        what you see when you edit the document in %PRODUCTNAME Calc.</paragraph>        
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcUseTitleAsHeading" id="bm_optionscalc_usetitleasheading"/>
+   		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcUseTitleAsHeading" visibility="hidden">Check this to insert the document title as a heading</ahelp></paragraph>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use title as heading</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Use sheet names as headings</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">If you check this option, Calc2xhtml will insert the document title
+        (<emph>File – Properties – Description – Title</emph>) as heading at the top of the XHTML document.</paragraph>        
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcUseSheetNamesAsHeadings" id="bm_optionscalc_usesheetnamesasheadings"/>
+   		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcUseSheetNamesAsHeadings" visibility="hidden">Check this to insert the sheet name as a heading above each sheet</ahelp></paragraph>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use sheet names as headings</paragraph>        
+        <paragraph role="paragraph" xml-lang="en-US">If you check this option, Calc2xhtml will insert the name of each sheet
+        as a heading above the sheet in the XHTML document.</paragraph>        
+		
+		<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#filesheading"/>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcSplit" id="bm_optionscalcsplit"/>
+   		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcSplit" visibility="hidden">Check this to create a separate file for each sheet</ahelp></paragraph>
+        <paragraph role="heading" level="3" xml-lang="en-US">Save sheets in separate files</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">If you select this option, Calc2xhtml will produce a separate file for
+        each sheet, otherwise all sheets will be exported to the same XHTML file. In any case, a simple navigation panel showing
+        all sheet names will be added.</paragraph>        
+		
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:OptionsCalcSaveImagesInSubdir" id="bm_optionscalc_saveimagesinsubdir"/>
+		<paragraph role="paragraph" xml-lang="en-US"><ahelp hid="org.openoffice.da.writer2latex.oxt:OptionsCalcSaveImagesInSubdir" visibility="hidden">Check this to save images in a subdirectory relative to the exported document</ahelp></paragraph>
+		<embed href="org.openoffice.da.writer2xhtml.oxt/export.xhp#saveimagesinsubdir"/>
+		
+	</body>
+</helpdocument>
