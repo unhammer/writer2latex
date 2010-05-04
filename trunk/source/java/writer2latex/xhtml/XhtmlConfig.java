@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-04-09)
+ *  Version 1.2 (2010-05-04)
  *
  */
 
@@ -41,7 +41,7 @@ import writer2latex.util.Misc;
 
 public class XhtmlConfig extends writer2latex.base.ConfigBase {
     // Implement configuration methods
-    protected int getOptionCount() { return 42; }
+    protected int getOptionCount() { return 43; }
     protected String getDefaultConfigPath() { return "/writer2latex/xhtml/config/"; }
 	
     // Override setOption: To be backwards compatible, we must accept options
@@ -93,21 +93,22 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     private static final int FLOAT_OBJECTS = 24;
     private static final int TABSTOP_STYLE = 25;
     private static final int USE_LIST_HACK = 26;
-    private static final int FORMULAS = 27;
-    private static final int SPLIT_LEVEL = 28;
-    private static final int REPEAT_LEVELS = 29;
-    private static final int CALC_SPLIT = 30;
-    private static final int DISPLAY_HIDDEN_SHEETS = 31;
-    private static final int DISPLAY_HIDDEN_ROWS_COLS = 32;
-    private static final int DISPLAY_FILTERED_ROWS_COLS = 33;
-    private static final int APPLY_PRINT_RANGES = 34;
-    private static final int USE_TITLE_AS_HEADING = 35;
-    private static final int USE_SHEET_NAMES_AS_HEADINGS = 36;
-    private static final int XSLT_PATH = 37;
-    private static final int SAVE_IMAGES_IN_SUBDIR = 38;
-    private static final int UPLINK = 39;
-    private static final int DIRECTORY_ICON = 40;
-    private static final int DOCUMENT_ICON = 41;
+    private static final int USE_HARD_LIST_NUMBERING = 27;
+    private static final int FORMULAS = 28;
+    private static final int SPLIT_LEVEL = 29;
+    private static final int REPEAT_LEVELS = 30;
+    private static final int CALC_SPLIT = 31;
+    private static final int DISPLAY_HIDDEN_SHEETS = 32;
+    private static final int DISPLAY_HIDDEN_ROWS_COLS = 33;
+    private static final int DISPLAY_FILTERED_ROWS_COLS = 34;
+    private static final int APPLY_PRINT_RANGES = 35;
+    private static final int USE_TITLE_AS_HEADING = 36;
+    private static final int USE_SHEET_NAMES_AS_HEADINGS = 37;
+    private static final int XSLT_PATH = 38;
+    private static final int SAVE_IMAGES_IN_SUBDIR = 39;
+    private static final int UPLINK = 40;
+    private static final int DIRECTORY_ICON = 41;
+    private static final int DOCUMENT_ICON = 42;
 
     protected ComplexOption xpar = addComplexOption("paragraph-map");
     protected ComplexOption xtext = addComplexOption("text-map");
@@ -145,6 +146,7 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
         options[FLOAT_OBJECTS] = new BooleanOption("float_objects","true");
         options[TABSTOP_STYLE] = new Option("tabstop_style","");
         options[USE_LIST_HACK] = new BooleanOption("use_list_hack","false");
+        options[USE_HARD_LIST_NUMBERING] = new BooleanOption("use_hard_list_numbering","false");
         options[FORMULAS] = new IntegerOption("formulas","starmath") {
         	public void setString(String sValue) {
         		super.setString(sValue);
@@ -268,6 +270,7 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     public boolean xhtmlFloatObjects() { return ((BooleanOption) options[FLOAT_OBJECTS]).getValue(); }
     public String getXhtmlTabstopStyle() { return options[TABSTOP_STYLE].getString(); }
     public boolean xhtmlUseListHack() { return ((BooleanOption) options[USE_LIST_HACK]).getValue(); }
+    public boolean useHardListNumbering() { return ((BooleanOption) options[USE_HARD_LIST_NUMBERING]).getValue(); }
     public int formulas() { return ((IntegerOption) options[FORMULAS]).getValue(); }
     public int getXhtmlSplitLevel() { return ((IntegerOption) options[SPLIT_LEVEL]).getValue(); }
     public int getXhtmlRepeatLevels() { return ((IntegerOption) options[REPEAT_LEVELS]).getValue(); }

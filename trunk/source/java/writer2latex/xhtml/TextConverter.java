@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-29)
+ *  Version 1.2 (2010-05-04)
  *
  */
 
@@ -91,6 +91,8 @@ public class TextConverter extends ConverterHelper {
     private ListCounter outlineNumbering;
     private Hashtable<String, ListCounter> listCounters = new Hashtable<String, ListCounter>();
     private String sCurrentListLabel = null;
+    private ListStyle currentListStyle = null;
+    private int nCurrentListLevel = 0;
     
     // Mode used to handle floats (depends on source doc type and config)
     private int nFloatMode; 
@@ -555,20 +557,8 @@ public class TextConverter extends ConverterHelper {
             ListCounter counter = getListCounter(listStyle); 
             if (bRestart) { counter.restart(nListLevel,nStartValue); }
             String sLabel = counter.step(nListLevel).getLabel();
-            if (!bUnNumbered && sLabel.length()>0) {
-                Element span = converter.createElement("span");
-                StyleInfo info = new StyleInfo();
-                info.sClass = "SectionNumber";
-                if (listStyle!=null) {
-                    String sTextStyleName = listStyle.getLevelProperty(
-                        nListLevel,XMLString.TEXT_STYLE_NAME);
-                    getTextSc().applyStyle(sTextStyleName, info);
-                }
-                getTextSc().applyStyle(info, span);
-                heading.appendChild(span);
-                span.appendChild( converter.createTextNode(sLabel) );
-            }
-            			
+            insertListLabel(listStyle,nListLevel,"SectionNumber",sLabel,heading);
+
             // Add to toc
             if (!bInToc) {
             	String sTarget = "toc"+(++nTocIndex);
@@ -634,16 +624,20 @@ public class TextConverter extends ConverterHelper {
             entry.nFileIndex = converter.getOutFileIndex();
             tocEntries.add(entry);
         }
-        sCurrentListLabel = null;
 		
         if (!bIsEmpty) {
             par = createTextBackground(par, sStyleName);
+            if (config.useHardListNumbering()) {
+            	insertListLabel(currentListStyle, nCurrentListLevel, "ItemNumber", sCurrentListLabel, par);
+            }
+            sCurrentListLabel = null;
             traverseInlineText(onode,par);
         }
         else {
             // An empty paragraph (this includes paragraphs that only contains
             // whitespace) is ignored by the browser, hence we add &nbsp;
             par.appendChild( converter.createTextNode("\u00A0") );
+            sCurrentListLabel = null;
         }        
     }
     
@@ -682,6 +676,22 @@ public class TextConverter extends ConverterHelper {
         else {
             // No style, return a dummy
             return new ListCounter();
+        }
+    }
+    
+    // Helper: Insert a list label formatted with a list style
+    private void insertListLabel(ListStyle style, int nLevel, String sDefaultStyle, String sLabel, Element hnode) {
+        if (sLabel!=null && sLabel.length()>0) {
+            Element span = converter.createElement("span");
+            StyleInfo info = new StyleInfo();
+            info.sClass = sDefaultStyle;
+            if (style!=null) {
+                String sTextStyleName = style.getLevelProperty(nLevel,XMLString.TEXT_STYLE_NAME);
+                getTextSc().applyStyle(sTextStyleName, info);
+            }
+            getTextSc().applyStyle(info, span);
+            hnode.appendChild(span);
+            span.appendChild( converter.createTextNode(sLabel) );
         }
     }
 	
@@ -765,7 +775,7 @@ public class TextConverter extends ConverterHelper {
             if (!bContinueNumbering && counter!=null) {
                 counter.restart(nLevel);
             }
-            if (config.xhtmlUseListHack() && counter.getValue(nLevel)>0) {
+            if (config.xhtmlUseListHack() && !config.useHardListNumbering() && counter.getValue(nLevel)>0) {
                 hnode.setAttribute("start",Integer.toString(counter.getValue(nLevel)+1));                	
             }
         }
@@ -796,12 +806,14 @@ public class TextConverter extends ConverterHelper {
                         else {
                             // add an li element
                             sCurrentListLabel = counter.step(nLevel).getLabel();
+                            currentListStyle = ofr.getListStyle(styleName);
+                            nCurrentListLevel = nLevel;
                             Element item = converter.createElement("li");
                             StyleInfo info = new StyleInfo();
                             getPresentationSc().applyOutlineStyle(nLevel,info);
                             applyStyle(info,item);
                             hnode.appendChild(item);
-                            if (config.xhtmlUseListHack()) {
+                            if (config.xhtmlUseListHack() && !config.useHardListNumbering()) {
                                 boolean bRestart = "true".equals(Misc.getAttribute(child,
                                     XMLString.TEXT_RESTART_NUMBERING));
                                 int nStartValue = Misc.getPosInteger(Misc.getAttribute(child,
@@ -893,7 +905,7 @@ public class TextConverter extends ConverterHelper {
 	
     // A fake list is a list which is converted into a sequence of numbered
     // paragraphs rather than into a list.
-    // Currently this is done for list which only containsheadings
+    // Currently this is done for list which only contains headings
 	
     // Helper: Check to see, if this list contains only headings
     // (If so, we will ignore the list and apply the numbering to the headings)   

@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-02-19)
+ *  Version 1.2 (2010-04-29)
  *
  */
 
@@ -36,6 +36,7 @@ import org.w3c.dom.NodeList;
 //import writer2latex.latex.i18n.I18n;
 import writer2latex.office.MIMETypes;
 import writer2latex.office.OfficeReader;
+import writer2latex.office.TableReader;
 import writer2latex.office.XMLString;
 import writer2latex.util.Misc;
 import writer2latex.xmerge.EmbeddedObject;
@@ -108,41 +109,76 @@ public final class MathmlConverter extends ConverterHelper {
     // Data for display equations
     private Element theEquation = null;
     private Element theSequence = null;
+    
+    /** Try to convert a table as a display equation:
+     *  A 1 row by 2 columns table in which each cell contains exactly one paragraph,
+     *  the left cell contains exactly one formula and the right cell contains exactly
+     *  one sequence number is treated as a (numbered) display equation.
+     *  This happens to coincide with the AutoText provided with OOo Writer :-)
+     *  @param table the table reader
+     *  @param ldp the LaTeXDocumentPortion to contain the converted equation
+     *  @return true if the conversion was successful, false if the table
+     * did not represent a display equation
+     */
+    public boolean handleDisplayEquation(TableReader table, LaTeXDocumentPortion ldp) {
+    	if (table.getRowCount()==1 && table.getColCount()==2 &&
+    		OfficeReader.isSingleParagraph(table.getCell(0, 0)) && OfficeReader.isSingleParagraph(table.getCell(0, 1)) ) {
+    		// Table of the desired form
+    		theEquation = null;
+    		theSequence = null;
+    		if (parseDisplayEquation(Misc.getFirstChildElement(table.getCell(0, 0))) && theEquation!=null && theSequence==null) {
+    			// Found equation in first cell
+    			Element myEquation = theEquation;
+        		theEquation = null;
+        		theSequence = null;
+    			if (parseDisplayEquation(Misc.getFirstChildElement(table.getCell(0, 1))) && theEquation==null && theSequence!=null) {
+    				// Found sequence in second cell
+    				handleDisplayEquation(myEquation, theSequence, ldp);
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
 
     /**Try to convert a paragraph as a display equation:
      * A paragraph which contains exactly one formula + at most one sequence
      * number is treated as a display equation. Other content must be brackets
-     * or whitespace (possible with formatting).
+     * or whitespace (possibly with formatting).
      * @param node the paragraph
      * @param ldp the LaTeXDocumentPortion to contain the converted equation
-     * @return true if the conversion was succesful, false if the paragraph
+     * @return true if the conversion was successful, false if the paragraph
      * did not contain a display equation
      */
     public boolean handleDisplayEquation(Element node, LaTeXDocumentPortion ldp) {
         theEquation = null;
         theSequence = null;
         if (parseDisplayEquation(node) && theEquation!=null) {
-            if (theSequence!=null) {
-                // Numbered equation
-                ldp.append("\\begin{equation}");
-                palette.getFieldCv().handleSequenceLabel(theSequence,ldp);
-                ldp.nl()
-                   .append(convert(null,theEquation)).nl()
-                   .append("\\end{equation}").nl();
-                if (bAddParAfterDisplay) { ldp.nl(); }
-            }
-            else {
-                // Unnumbered equation
-                ldp.append("\\begin{equation*}").nl()
-                   .append(convert(null,theEquation)).nl()
-                   .append("\\end{equation*}").nl();
-                if (bAddParAfterDisplay) { ldp.nl(); }
-            }
-            return true;
+        	handleDisplayEquation(theEquation, theSequence, ldp);
+        	return true;
         }
         else {
             return false;
         }
+    }
+    
+    private void handleDisplayEquation(Element equation, Element sequence, LaTeXDocumentPortion ldp) {
+        if (sequence!=null) {
+            // Numbered equation
+            ldp.append("\\begin{equation}");
+            palette.getFieldCv().handleSequenceLabel(sequence,ldp);
+            ldp.nl()
+               .append(convert(null,equation)).nl()
+               .append("\\end{equation}").nl();
+            if (bAddParAfterDisplay) { ldp.nl(); }
+        }
+        else {
+            // Unnumbered equation
+            ldp.append("\\begin{equation*}").nl()
+               .append(convert(null,equation)).nl()
+               .append("\\end{equation*}").nl();
+            if (bAddParAfterDisplay) { ldp.nl(); }
+        }    	
     }
 	
     private boolean parseDisplayEquation(Node node) {
@@ -210,7 +246,7 @@ public final class MathmlConverter extends ConverterHelper {
         if (Misc.isElement(node,XMLString.DRAW_FRAME)) {
             node=Misc.getFirstChildElement(node);
         }
-
+        
         String sHref = Misc.getAttribute(node,XMLString.XLINK_HREF);
 		
         if (sHref!=null) { // Embedded object in package or linked object
@@ -243,6 +279,7 @@ public final class MathmlConverter extends ConverterHelper {
             if (formula==null) {
             	formula = Misc.getChildByTagName(node,XMLString.MATH_MATH);
             }
+            return formula;
         }
         return null;
     }

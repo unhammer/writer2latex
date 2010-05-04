@@ -1,8 +1,17 @@
 Changelog for Writer2LaTeX version 1.0 -> 1.2
 
-TODO2: Tilføj ?-knap til xhtml export dialoger
+TODO: Problem med genkendelse af display formler i w2l??
 
 ---------- version 1.1.3 ----------
+
+[w2x] New option "use_hard_list_numbering". If this option is set to true (default is false), list labels are exported as
+  part of the text rather than by style. This allows for full support of list numbering.
+
+[w2x] Now includes a space after the list label if the list style defines that the label is followed by a tab or a space
+
+[w2l] Now recognize the "numbered formula" AutoText provided with OOo as a display equation
+
+[w2l] Bugfix: Display equations in flat XML are now recognized correctly
 
 [w2x] Bugfix: Now adds XML prolog for XHTML 1.1 documents
 

@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-12-15)
+ *  Version 1.2 (2010-05-04)
  *
  */
 
@@ -99,20 +99,30 @@ public class ListCounter {
     }
 	
     public String getLabel() {
-        if (sNumFormat[nLevel]==null) return "";
-        int nLevels = Misc.getPosInteger(style.getLevelProperty(nLevel,
-                              XMLString.TEXT_DISPLAY_LEVELS),1);
-        String sPrefix = style.getLevelProperty(nLevel,XMLString.STYLE_NUM_PREFIX);
-        String sSuffix = style.getLevelProperty(nLevel,XMLString.STYLE_NUM_SUFFIX);
-        String sLabel=""; 
-        if (sPrefix!=null) { sLabel+=sPrefix; }
-        for (int j=nLevel-nLevels+1; j<nLevel; j++) {
-            sLabel+=formatNumber(nCounter[j],sNumFormat[j],true)+".";
-        }
-        // TODO: Lettersync
-        sLabel+=formatNumber(nCounter[nLevel],sNumFormat[nLevel],true);
-        if (sSuffix!=null) { sLabel+=sSuffix; }
-        return sLabel;
+    	if (style.isNumber(nLevel)) {
+    		if (sNumFormat[nLevel]==null) return "";
+    		int nLevels = Misc.getPosInteger(style.getLevelProperty(nLevel,
+    				XMLString.TEXT_DISPLAY_LEVELS),1);
+    		String sPrefix = style.getLevelProperty(nLevel,XMLString.STYLE_NUM_PREFIX);
+    		String sSuffix = style.getLevelProperty(nLevel,XMLString.STYLE_NUM_SUFFIX);
+    		String sSpace = "nothing".equals(style.getLevelStyleProperty(nLevel, XMLString.TEXT_LABEL_FOLLOWED_BY)) ? "" : " ";
+    		String sLabel=""; 
+    		if (sPrefix!=null) { sLabel+=sPrefix; }
+    		for (int j=nLevel-nLevels+1; j<nLevel; j++) {
+    			sLabel+=formatNumber(nCounter[j],sNumFormat[j],true)+".";
+    		}
+    		// TODO: Lettersync
+    		sLabel+=formatNumber(nCounter[nLevel],sNumFormat[nLevel],true);
+    		if (sSuffix!=null) { sLabel+=sSuffix; }
+    		if (sSpace!=null) { sLabel+=sSpace; }
+    		return sLabel;
+    	}
+    	else if (style.isBullet(nLevel)) {
+    		return  style.getLevelProperty(nLevel,XMLString.TEXT_BULLET_CHAR);
+    	}
+    	else {
+    		return "";
+    	}
     }
 	
     // Utility method to generate number

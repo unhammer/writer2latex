@@ -20,7 +20,7 @@
 *
 *  All Rights Reserved.
 * 
-*  Version 1.2 (2010-04-09)
+*  Version 1.2 (2010-05-04)
 *
 */ 
 
@@ -364,6 +364,7 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     		
     		checkBoxFromConfig(dlg, "IgnoreTableDimensions", "ignore_table_dimensions");
     		checkBoxFromConfig(dlg, "UseListHack", "use_list_hack");
+    		checkBoxFromConfig(dlg, "UseHardListNumbering", "use_hard_list_numbering");
     		//TODO: These have been postponed
     		//checkBoxFromConfig(dlg, "ConvertToPx", "convert_to_px");
     		//checkBoxFromConfig(dlg, "SeparateStylesheet", "separate_stylesheet");
@@ -378,6 +379,7 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     		
     		checkBoxToConfig(dlg, "IgnoreTableDimensions", "ignore_table_dimensions");
     		checkBoxToConfig(dlg, "UseListHack", "use_list_hack");
+    		checkBoxToConfig(dlg, "UseHardListNumbering", "use_hard_list_numbering");
     		//TODO: These have been postponed
     		//checkBoxToConfig(dlg, "ConvertToPx", "convert_to_px");
     		//checkBoxToConfig(dlg, "SeparateStylesheet", "separate_stylesheet");

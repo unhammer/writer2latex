@@ -24,7 +24,8 @@
   <dlg:checkbox dlg:id="TableFormatting" dlg:tab-index="5" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:value="Convert table formatting" dlg:checked="false"/>
   <dlg:checkbox dlg:id="IgnoreTableDimensions" dlg:tab-index="6" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Ignore table dimensions" dlg:checked="false"/>
   <dlg:checkbox dlg:id="UseListHack" dlg:tab-index="7" dlg:left="10" dlg:top="78" dlg:width="240" dlg:height="12" dlg:value="Use non-standard continued lists" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="ConvertToPx" dlg:tab-index="8" dlg:visible="false" dlg:left="10" dlg:top="92" dlg:width="240" dlg:height="12" dlg:value="Convert units to px (pixels)" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="SeparateStylesheet" dlg:tab-index="9" dlg:visible="false" dlg:left="10" dlg:top="106" dlg:width="240" dlg:height="12" dlg:value="Create separate styles sheet on file split" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="UseHardListNumbering" dlg:tab-index="8" dlg:left="10" dlg:top="92" dlg:width="240" dlg:height="12" dlg:value="Use hard list numbering" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="ConvertToPx" dlg:tab-index="9" dlg:visible="false" dlg:left="10" dlg:top="106" dlg:width="240" dlg:height="12" dlg:value="Convert units to px (pixels)" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="SeparateStylesheet" dlg:tab-index="10" dlg:visible="false" dlg:left="10" dlg:top="120" dlg:width="240" dlg:height="12" dlg:value="Create separate styles sheet on file split" dlg:checked="false"/>
  </dlg:bulletinboard>
 </dlg:window>

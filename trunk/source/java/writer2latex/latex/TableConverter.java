@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-08-23)
+ *  Version 1.2 (2010-04-29)
  *
  */
 
@@ -165,6 +165,8 @@ public class TableConverter extends ConverterHelper {
 
             // Read the table
             table = ofr.getTableReader(node);
+            
+            if (palette.getMathmlCv().handleDisplayEquation(table,ldp)) { return; }
 			
             // Get formatter and update flags according to formatter
             formatter = new TableFormatter(ofr,config,palette,table,!oc.isInMulticols(),oc.isInTable());
