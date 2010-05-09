@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-02-27)
+ *  Version 1.2 (2010-05-09)
  *
  */
 
@@ -49,6 +49,7 @@ class StyleConverter extends ConverterHelper {
     // Helpers for text styles
     private TextStyleConverter textSc;
     private ParStyleConverter parSc;
+    private HeadingStyleConverter headingSc;
     private ListStyleConverter listSc;
     private SectionStyleConverter sectionSc;
 
@@ -71,6 +72,7 @@ class StyleConverter extends ConverterHelper {
         // Create the helpers
         textSc = new TextStyleConverter(ofr,config,converter,nType);
         parSc = new ParStyleConverter(ofr,config,converter,nType);
+        headingSc = new HeadingStyleConverter(ofr,config,converter,nType);
         listSc = new ListStyleConverter(ofr,config,converter,nType);
         sectionSc = new SectionStyleConverter(ofr,config,converter,nType);
         tableSc = new TableStyleConverter(ofr,config,converter,nType);
@@ -85,6 +87,8 @@ class StyleConverter extends ConverterHelper {
     protected TextStyleConverter getTextSc() { return textSc; }
 
     protected ParStyleConverter getParSc() { return parSc; }
+
+    protected HeadingStyleConverter getHeadingSc() { return headingSc; }
 
     protected ListStyleConverter getListSc() { return listSc; }
 
@@ -147,6 +151,7 @@ class StyleConverter extends ConverterHelper {
         //   Presentation documents: frame, presentation, page
         buf.append(getTextSc().getStyleDeclarations(sIndent));
         buf.append(getParSc().getStyleDeclarations(sIndent));
+        buf.append(getHeadingSc().getStyleDeclarations(sIndent));
         buf.append(getListSc().getStyleDeclarations(sIndent));
         buf.append(getSectionSc().getStyleDeclarations(sIndent));
         buf.append(getCellSc().getStyleDeclarations(sIndent));

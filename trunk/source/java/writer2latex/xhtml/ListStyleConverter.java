@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-05-04)
+ *  Version 1.2 (2010-05-05)
  *
  */
 
@@ -102,7 +102,7 @@ public class ListStyleConverter extends StyleConverterHelper {
                         buf.append(props.toString());
                         buf.append("}");
                         buf.append(config.prettyPrint() ? "\n" : " ");
-                        if (config.useHardListNumbering()) {
+                        if (config.listFormatting()==XhtmlConfig.HARD_LABELS) {
                         	// Apply left margin and text indent to the paragraphs contained in the list
                         	CSVList parProps = new CSVList(";");
                         	cssListParMargins(style,nLevel,parProps);
@@ -137,7 +137,7 @@ public class ListStyleConverter extends StyleConverterHelper {
         // so we will stick with the simpler CSS1-like list style properties
         props.addValue("margin-top","0");
         props.addValue("margin-bottom","0");
-        if (!config.useHardListNumbering()) {
+        if (config.listFormatting()!=XhtmlConfig.HARD_LABELS) {
         	// Export the numbering to CSS1
         	String sLevelType = style.getLevelType(nLevel);
         	if (XMLString.TEXT_LIST_LEVEL_STYLE_NUMBER.equals(sLevelType)) {

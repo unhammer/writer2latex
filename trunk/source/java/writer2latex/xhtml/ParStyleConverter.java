@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-01)
+ *  Version 1.2 (2010-05-09)
  *
  */
 
@@ -38,23 +38,19 @@ import writer2latex.util.CSVList;
     pseudo-element or to an additional inline element.
     */
 
-
 /**
  * This class converts OpenDocument paragraph styles to CSS2 styles for
- * use in paragraphs and headings.
+ * use in ordinary paragraphs.
  * This also includes conversion of paragraph properties in other styles
- * (cell styles).
+ * (heading styles, cell styles).
  */
 public class ParStyleConverter extends StyleWithPropertiesConverterHelper {
-
-    // Some bookkeeping for headings
-    private String[] sHeadingStyles = new String[7];
 
     /** Create a new <code>ParStyleConverter</code>
      *  @param ofr an <code>OfficeReader</code> to read style information from
      *  @param config the configuration to use
      *  @param converter the main <code>Converter</code> class
-     *  @param nType the type of xhtml to use
+     *  @param nType the type of XHTML to use
      */
     public ParStyleConverter(OfficeReader ofr, XhtmlConfig config, Converter converter, int nType) {
         super(ofr,config,converter,nType);
@@ -63,37 +59,6 @@ public class ParStyleConverter extends StyleWithPropertiesConverterHelper {
         this.bConvertHard = config.xhtmlFormatting()==XhtmlConfig.CONVERT_ALL || config.xhtmlFormatting()==XhtmlConfig.IGNORE_STYLES;
     }
 	
-    // TODO: Remove me, OfficeReader takes care of this
-    public void setHeadingStyle(int nLevel, String sStyleName) {
-        if (sHeadingStyles[nLevel]==null) {
-		    sHeadingStyles[nLevel] = sStyleName;
-        }
-    }
-
-    /** Convert style information for used styles
-     *  @param sIndent a String of spaces to add before each line
-     */
-    public String getStyleDeclarations(String sIndent) {
-        StringBuffer buf = new StringBuffer();
-        buf.append(super.getStyleDeclarations(sIndent));
-        if (bConvertStyles) {
-            // Styles for headings
-            for (int i=1; i<=6; i++) {
-                if (sHeadingStyles[i]!=null) {
-                    StyleWithProperties style = ofr.getParStyle(sHeadingStyles[i]);
-                    if (style!=null) {
-                        CSVList props = new CSVList(";");
-                        applyProperties(style,props,true);
-                        props.addValue("clear","left");
-                        buf.append(sIndent).append("h").append(i)
-                           .append(" {").append(props.toString()).append("}").append(config.prettyPrint() ? "\n" : " ");
-                    }
-                }
-            }
-        }
-        return buf.toString();
-    }
-
     /** Get the family of paragraph styles
      *  @return the style family
      */

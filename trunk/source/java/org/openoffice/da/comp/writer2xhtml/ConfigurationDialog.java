@@ -20,7 +20,7 @@
 *
 *  All Rights Reserved.
 * 
-*  Version 1.2 (2010-05-04)
+*  Version 1.2 (2010-05-06)
 *
 */ 
 
@@ -237,30 +237,32 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     }
     
     private class Styles1Handler extends StylesPageHandler {
-    	private final String[] sXhtmlFamilyNames = { "text", "paragraph", "list", "frame" };
-    	private final String[] sXhtmlOOoFamilyNames = { "CharacterStyles", "ParagraphStyles", "NumberingStyles", "FrameStyles" };
+    	private final String[] sXhtmlFamilyNames = { "text", "paragraph", "heading", "list", "frame" };
+    	private final String[] sXhtmlOOoFamilyNames = { "CharacterStyles", "ParagraphStyles", "ParagraphStyles", "NumberingStyles", "FrameStyles" };
     	
     	private final String[] sParElements = { "p", "h1", "h2", "h3", "h4", "h5", "h6", "address", "dd", "dt", "pre" };
     	private final String[] sParBlockElements = { "div", "blockquote", "dl" };
     	private final String[] sEmpty = { };
     	
-    	private String[][] sElements = new String[4][];
-    	private String[][] sBlockElements = new String[4][];
+    	private String[][] sElements = new String[5][];
+    	private String[][] sBlockElements = new String[5][];
     	
     	protected Styles1Handler() {
-    		super(4);
+    		super(5);
     		sFamilyNames = sXhtmlFamilyNames;
     		sOOoFamilyNames = sXhtmlOOoFamilyNames;
  
     		sElements[0] = sCharElements;
     		sElements[1] = sParElements;
-    		sElements[2] = sEmpty;
+    		sElements[2] = sParElements;
     		sElements[3] = sEmpty;
+    		sElements[4] = sEmpty;
     		
     		sBlockElements[0] = sEmpty;
     		sBlockElements[1] = sParBlockElements;
-    		sBlockElements[2] = sEmpty;
+    		sBlockElements[2] = sParBlockElements;
     		sBlockElements[3] = sEmpty;
+    		sBlockElements[4] = sEmpty;
     	}
     	
     	protected String getDefaultConfigName() {
@@ -272,7 +274,7 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
 			if (!attr.containsKey("css")) { attr.put("css", ""); }
 			dlg.setComboBoxText("Element", attr.get("element"));
 			dlg.setTextFieldText("Css", none2empty(attr.get("css")));
-			if (nCurrentFamily==1) {
+			if (nCurrentFamily==1 || nCurrentFamily==2) {
 				if (!attr.containsKey("block-element")) { attr.put("block-element", ""); }
 				if (!attr.containsKey("block-css")) { attr.put("block-css", ""); }
 				dlg.setComboBoxText("BlockElement", attr.get("block-element"));
@@ -287,7 +289,7 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
 		protected void getControls(DialogAccess dlg, Map<String,String> attr) {
 			attr.put("element", dlg.getComboBoxText("Element"));
 			attr.put("css", empty2none(dlg.getTextFieldText("Css")));
-			if (nCurrentFamily==1) {
+			if (nCurrentFamily==1 || nCurrentFamily==2) {
 				attr.put("block-element", dlg.getComboBoxText("BlockElement"));
 				attr.put("block-css", empty2none(dlg.getTextFieldText("BlockCss")));
 			}
@@ -303,9 +305,9 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
 		protected void prepareControls(DialogAccess dlg) {
 			dlg.setListBoxStringItemList("Element", sElements[nCurrentFamily]);
 			dlg.setListBoxStringItemList("BlockElement", sBlockElements[nCurrentFamily]);
-			dlg.setControlEnabled("Element", nCurrentFamily<=1);			
-			dlg.setControlEnabled("BlockElement", nCurrentFamily==1);
-			dlg.setControlEnabled("BlockCss", nCurrentFamily==1);		
+			dlg.setControlEnabled("Element", nCurrentFamily<=2);			
+			dlg.setControlEnabled("BlockElement", nCurrentFamily==1 || nCurrentFamily==2);
+			dlg.setControlEnabled("BlockCss", nCurrentFamily==1 || nCurrentFamily==2);		
 		}
 	}
     
@@ -349,6 +351,7 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
 
     private class FormattingHandler extends PageHandler {
     	private final String[] sExportValues = { "convert_all", "ignore_styles", "ignore_hard", "ignore_all" };
+    	private final String[] sListExportValues = { "css1", "css1_hack", "hard_labels" };
     	
     	@Override protected void setControls(DialogAccess dlg) {
     		listBoxFromConfig(dlg, "Formatting", "formatting", sExportValues, (short) 0);
@@ -363,8 +366,8 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
         		config.getOption("table_formatting").equals("ignore_styles"));
     		
     		checkBoxFromConfig(dlg, "IgnoreTableDimensions", "ignore_table_dimensions");
-    		checkBoxFromConfig(dlg, "UseListHack", "use_list_hack");
-    		checkBoxFromConfig(dlg, "UseHardListNumbering", "use_hard_list_numbering");
+    		
+    		listBoxFromConfig(dlg, "ListFormatting", "list_formatting", sListExportValues, (short) 0);
     		//TODO: These have been postponed
     		//checkBoxFromConfig(dlg, "ConvertToPx", "convert_to_px");
     		//checkBoxFromConfig(dlg, "SeparateStylesheet", "separate_stylesheet");
@@ -378,8 +381,8 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     		config.setOption("table_formatting", dlg.getCheckBoxStateAsBoolean("TableFormatting") ? "convert_all" : "ignore_all");
     		
     		checkBoxToConfig(dlg, "IgnoreTableDimensions", "ignore_table_dimensions");
-    		checkBoxToConfig(dlg, "UseListHack", "use_list_hack");
-    		checkBoxToConfig(dlg, "UseHardListNumbering", "use_hard_list_numbering");
+
+    		listBoxToConfig(dlg, "ListFormatting", "list_formatting", sListExportValues);
     		//TODO: These have been postponed
     		//checkBoxToConfig(dlg, "ConvertToPx", "convert_to_px");
     		//checkBoxToConfig(dlg, "SeparateStylesheet", "separate_stylesheet");

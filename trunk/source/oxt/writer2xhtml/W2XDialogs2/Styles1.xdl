@@ -4,10 +4,11 @@
  <dlg:bulletinboard>
   <dlg:text dlg:id="StyleMappingsLabel" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="245" dlg:height="12" dlg:value="Style mappings"/>
   <dlg:text dlg:id="StyleFamilyLabel" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="60" dlg:height="12" dlg:value="Style family"/>
-  <dlg:menulist dlg:id="StyleFamily" dlg:tab-index="2" dlg:left="80" dlg:top="20" dlg:width="170" dlg:height="12" dlg:spin="true">
+  <dlg:menulist dlg:id="StyleFamily" dlg:tab-index="2" dlg:left="80" dlg:top="20" dlg:width="170" dlg:height="12" dlg:spin="true" dlg:linecount="5">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Character"/>
     <dlg:menuitem dlg:value="Paragraph"/>
+    <dlg:menuitem dlg:value="Heading"/>
     <dlg:menuitem dlg:value="List"/>
     <dlg:menuitem dlg:value="Frame"/>
    </dlg:menupopup>

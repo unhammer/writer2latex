@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-02-19)
+ *  Version 1.2 (2010-05-09)
  *
  */
 
@@ -250,6 +250,7 @@ public class XMLString {
     public static final String TEXT_SEQUENCE_DECLS="text:sequence-decls";
     public static final String TEXT_SEQUENCE_DECL="text:sequence-decl";
     public static final String TEXT_OUTLINE_STYLE="text:outline-style";
+    public static final String TEXT_OUTLINE_LEVEL_STYLE="text:outline-level-style";
     public static final String TEXT_LIST_STYLE="text:list-style";
     public static final String TEXT_LIST_LEVEL_STYLE_NUMBER="text:list-level-style-number";
     public static final String TEXT_LIST_LEVEL_STYLE_BULLET="text:list-level-style-bullet";

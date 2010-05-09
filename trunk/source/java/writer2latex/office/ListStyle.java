@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-04-27)
+ *  Version 1.2 (2010-05-09)
  *
  */
 
@@ -58,7 +58,8 @@ public class ListStyle extends OfficeStyle {
     }
 	
     public boolean isNumber(int i) {
-        return XMLString.TEXT_LIST_LEVEL_STYLE_NUMBER.equals(level[i].getName());
+        return XMLString.TEXT_LIST_LEVEL_STYLE_NUMBER.equals(level[i].getName()) ||
+        XMLString.TEXT_OUTLINE_LEVEL_STYLE.equals(level[i].getName());
     }
 	
     public boolean isBullet(int i) {

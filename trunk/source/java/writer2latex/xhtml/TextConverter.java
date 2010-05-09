@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-05-04)
+ *  Version 1.2 (2010-05-09)
  *
  */
 
@@ -396,7 +396,7 @@ public class TextConverter extends ConverterHelper {
                     int nOutlineLevel = getOutlineLevel((Element)child);
                     Node rememberNode = hnode;
                     hnode = maybeSplit(hnode,nOutlineLevel,bAfterHeading);
-                    handleHeading(child,hnode,rememberNode!=hnode);
+                    handleHeading((Element)child,hnode,rememberNode!=hnode);
                 }
                 else if (nodeName.equals(XMLString.TEXT_LIST) || // oasis
                          nodeName.equals(XMLString.TEXT_UNORDERED_LIST) || // old
@@ -498,7 +498,7 @@ public class TextConverter extends ConverterHelper {
         return newhnode.getParentNode();
     }
 	
-    private void handleHeading(Node onode, Node hnode, boolean bAfterSplit) {
+    private void handleHeading(Element onode, Node hnode, boolean bAfterSplit) {
         int nListLevel = getOutlineLevel((Element)onode);
         boolean bUnNumbered = "true".equals(Misc.getAttribute(onode,XMLString.TEXT_IS_LIST_HEADER));
         boolean bRestart = "true".equals(Misc.getAttribute(onode,XMLString.TEXT_RESTART_NUMBERING));
@@ -510,9 +510,10 @@ public class TextConverter extends ConverterHelper {
     /*
      * Process a text:h tag
      */
-    private void handleHeading(Node onode, Node hnode, boolean bAfterSplit,
+    private void handleHeading(Element onode, Node hnode, boolean bAfterSplit,
         ListStyle listStyle, int nListLevel, boolean bUnNumbered,
         boolean bRestart, int nStartValue) {
+    	String sStyleName = onode.getAttribute(XMLString.TEXT_STYLE_NAME);
         // Note: nListLevel may in theory be different from the outline level,
         // though the ui in OOo does not allow this
 
@@ -521,9 +522,9 @@ public class TextConverter extends ConverterHelper {
         // TODO: Offer CSS2 solution as an alternative later.
 
         // Note: Conditional styles are not supported
-        int nLevel = getOutlineLevel((Element)onode);
+        int nLevel = getOutlineLevel(onode);
         if (nLevel<=6) {
-            if (nLevel==1) { currentChapter = (Element) onode; }
+            if (nLevel==1) { currentChapter = onode; }
             // If split output, add headings of higher levels
             if (bAfterSplit && nSplit>0) {
                 int nFirst = nLevel-nRepeatLevels;
@@ -534,22 +535,26 @@ public class TextConverter extends ConverterHelper {
                     }
                 }
             }		
+            
+            // Apply style
+            StyleInfo info = new StyleInfo();
+            info.sTagName = "h"+nLevel;
+            getHeadingSc().applyStyle(nLevel, sStyleName, info);
 
-			// add Hx element
-            Element heading = converter.createElement("h"+nLevel);
-            traverseFloats(onode,hnode,heading);
+			// add root element
+            Element heading = converter.createElement(info.sTagName);
             hnode.appendChild(heading);
+            applyStyle(info,heading);
+            traverseFloats(onode,hnode,heading);
             // Apply writing direction
-            String sStyleName = Misc.getAttribute(onode,XMLString.TEXT_STYLE_NAME);
+            /*String sStyleName = Misc.getAttribute(onode,XMLString.TEXT_STYLE_NAME);
             StyleWithProperties style = ofr.getParStyle(sStyleName);
             if (style!=null) {
                 StyleInfo headInfo = new StyleInfo(); 
                 StyleConverterHelper.applyDirection(style,headInfo);
                 getParSc().applyStyle(headInfo,heading);
-            }
+            }*/
 
-            getParSc().setHeadingStyle(nLevel,sStyleName);
-			
             // Prepend asapNode
             prependAsapNode(heading);
 			
@@ -573,7 +578,7 @@ public class TextConverter extends ConverterHelper {
 
                 // Add to real toc
                 TocEntry entry = new TocEntry();
-                entry.onode = (Element) onode;
+                entry.onode = onode;
                 entry.sLabel = sLabel;
                 entry.nFileIndex = converter.getOutFileIndex();
                 entry.nOutlineLevel = nLevel; 
@@ -581,7 +586,16 @@ public class TextConverter extends ConverterHelper {
                 tocEntries.add(entry);
             }
 
-            traverseInlineText(onode,heading);
+            // Convert content
+            StyleInfo innerInfo = new StyleInfo();
+            getHeadingSc().applyInnerStyle(nLevel, sStyleName, innerInfo);
+            Element content = heading;
+            if (innerInfo.sTagName!=null && innerInfo.sTagName.length()>0) {
+            	content = converter.createElement(innerInfo.sTagName);
+            	heading.appendChild(content);
+            	applyStyle(innerInfo, content);
+            }
+            traverseInlineText(onode,content);
 			
             // Keep track of current headings for split output
             currentHeading[nLevel] = heading;
@@ -627,7 +641,7 @@ public class TextConverter extends ConverterHelper {
 		
         if (!bIsEmpty) {
             par = createTextBackground(par, sStyleName);
-            if (config.useHardListNumbering()) {
+            if (config.listFormatting()==XhtmlConfig.HARD_LABELS) {
             	insertListLabel(currentListStyle, nCurrentListLevel, "ItemNumber", sCurrentListLabel, par);
             }
             sCurrentListLabel = null;
@@ -682,16 +696,19 @@ public class TextConverter extends ConverterHelper {
     // Helper: Insert a list label formatted with a list style
     private void insertListLabel(ListStyle style, int nLevel, String sDefaultStyle, String sLabel, Element hnode) {
         if (sLabel!=null && sLabel.length()>0) {
-            Element span = converter.createElement("span");
             StyleInfo info = new StyleInfo();
-            info.sClass = sDefaultStyle;
             if (style!=null) {
                 String sTextStyleName = style.getLevelProperty(nLevel,XMLString.TEXT_STYLE_NAME);
                 getTextSc().applyStyle(sTextStyleName, info);
             }
-            getTextSc().applyStyle(info, span);
-            hnode.appendChild(span);
-            span.appendChild( converter.createTextNode(sLabel) );
+
+            if (info.sTagName==null) { info.sTagName = "span"; }
+            if (info.sClass==null) { info.sClass = sDefaultStyle; }
+
+            Element content = converter.createElement(info.sTagName);
+            getTextSc().applyStyle(info, content);
+            hnode.appendChild(content);
+            content.appendChild( converter.createTextNode(sLabel) );
         }
     }
 	
@@ -775,7 +792,7 @@ public class TextConverter extends ConverterHelper {
             if (!bContinueNumbering && counter!=null) {
                 counter.restart(nLevel);
             }
-            if (config.xhtmlUseListHack() && !config.useHardListNumbering() && counter.getValue(nLevel)>0) {
+            if (config.listFormatting()==XhtmlConfig.CSS1_HACK && counter.getValue(nLevel)>0) {
                 hnode.setAttribute("start",Integer.toString(counter.getValue(nLevel)+1));                	
             }
         }
@@ -800,7 +817,7 @@ public class TextConverter extends ConverterHelper {
                             bIsImmediateNestedList = true;
                         }
 
-                        if (config.xhtmlUseListHack() && bIsImmediateNestedList) {
+                        if (config.listFormatting()==XhtmlConfig.CSS1_HACK && bIsImmediateNestedList) {
                             traverseListItem(child,nLevel,styleName,hnode);
                         }
                         else {
@@ -813,7 +830,7 @@ public class TextConverter extends ConverterHelper {
                             getPresentationSc().applyOutlineStyle(nLevel,info);
                             applyStyle(info,item);
                             hnode.appendChild(item);
-                            if (config.xhtmlUseListHack() && !config.useHardListNumbering()) {
+                            if (config.listFormatting()==XhtmlConfig.CSS1_HACK) {
                                 boolean bRestart = "true".equals(Misc.getAttribute(child,
                                     XMLString.TEXT_RESTART_NUMBERING));
                                 int nStartValue = Misc.getPosInteger(Misc.getAttribute(child,
@@ -1001,7 +1018,7 @@ public class TextConverter extends ConverterHelper {
                     int nOutlineLevel = getOutlineLevel((Element)onode);
                     Node rememberNode = hnode;
                     hnode = maybeSplit(hnode,nOutlineLevel,bAfterHeading);
-                    handleHeading(child, hnode, rememberNode!=hnode,
+                    handleHeading((Element)child, hnode, rememberNode!=hnode,
                         ofr.getListStyle(sStyleName), nLevel,
                         bUnNumbered, bRestart, nStartValue);
                     nDontSplitLevel--;

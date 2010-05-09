@@ -1,11 +1,12 @@
 Changelog for Writer2LaTeX version 1.0 -> 1.2
 
-TODO: Problem med genkendelse af display formler i w2l??
-
 ---------- version 1.1.3 ----------
 
-[w2x] New option "use_hard_list_numbering". If this option is set to true (default is false), list labels are exported as
-  part of the text rather than by style. This allows for full support of list numbering.
+[w2x] New style map "heading" to map styles applied to headings to custom styles. 
+
+[w2x] The option "use_list_hack" has been renamed to "list_formatting" with the new values "css1", "css1_hack" and "hard_labels".
+  The two first values corresponds to "false" and "true" of the old option. The new value requests that
+  list labels are exported as part of the text rather than by style. This allows for full support of list numbering.
 
 [w2x] Now includes a space after the list label if the list style defines that the label is followed by a tab or a space
 
