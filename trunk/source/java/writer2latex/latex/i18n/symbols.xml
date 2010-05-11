@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- This is a datafile used by Writer2LaTeX
-     Version 1.0 (2009-09-07)
+     Version 1.2 (2010-05-11)
 
 	 The definitions for greek characters are contributed by interzone, info@interzone.gr
      and extended by Johannis Likos. Additional bugfixes by Alexej Kryukov
@@ -32,13 +32,13 @@ PART I: Common symbols, ascii only
 <symbol char="0024" text="\$" math="\$"/>
 <symbol char="0025" text="\%" math="\%"/>
 <symbol char="0026" text="\&amp;" math="\&amp;"/>
-<symbol char="0027" text="{\textquotesingle}" math="'"/>
+<symbol char="0027" text="'" math="'" protect="'"/> <!-- changed from \textquotesingle (was this a good idea?) -->
 <symbol char="0028" text="(" math="("/>
 <symbol char="0029" text=")" math=")"/>
 <symbol char="002A" text="*" math="*"/>
 <symbol char="002B" text="+" math="+"/>
 <symbol char="002C" text="," math=","/>
-<symbol char="002D" text="-" math="-" dashes="true" />
+<symbol char="002D" text="-" math="-" protect="-" />
 <symbol char="002E" text="." math="."/>
 <symbol char="002F" text="/" math="/"/>
 <symbol char="0030" text="0" math="0"/>
@@ -961,18 +961,18 @@ PART I: Common symbols, ascii only
 <symbol char="200A" text="{\thinspace}" />
 <symbol char="200C" text="\textcompwordmark" />
 <symbol char="200D" text="" />
-<symbol char="2010" text="-" dashes="true" />
+<symbol char="2010" text="-" protect="-" />
 <symbol char="2011" text="\nobreakdash-" /> <!-- requires ams -->
-<symbol char="2012" text="--" dashes="true" />
-<symbol char="2013" text="--" dashes="true" />
-<symbol char="2014" text="---" dashes="true" />
-<symbol char="2015" text="---" dashes="true" />
+<symbol char="2012" text="--" protect="-" />
+<symbol char="2013" text="--" protect="-" />
+<symbol char="2014" text="---" protect="-" />
+<symbol char="2015" text="---" protect="-" />
 <symbol char="2016" text="{\textbardbl}" math="\|" />
-<symbol char="2018" text="{\textquoteleft}" /> <!-- ` is unsafe -->
-<symbol char="2019" text="{\textquoteright}" /> <!-- ' is unsafe -->
+<symbol char="2018" text="`" protect="`"/> <!-- or \textquoteleft -->
+<symbol char="2019" text="'" protect="'"/> <!-- or \textquoteright -->
 <symbol char="201A" text="{\quotesinglbase}" />
-<symbol char="201C" text="{\textquotedblleft}" /> <!-- `` is unsafe -->
-<symbol char="201D" text="{\textquotedblright}" /> <!-- '' is unsafe -->
+<symbol char="201C" text="``" protect="`"/> <!--  or \textquotedblleft -->
+<symbol char="201D" text="''" protect="'"/> <!-- or \textquotedblright -->
 <symbol char="201E" text="{\quotedblbase}" />
 <symbol char="2020" text="{\dag}" math="{\dag}" />
 <symbol char="2021" text="{\ddag}" math="{\ddag}" />
@@ -2750,7 +2750,7 @@ definitions to the range 00-FF.
   <symbol char="F0BB" math="{\approx}" />
   <symbol char="F0BC" math="{\ldots}" />
   <symbol char="F0BD" math="{\mid}" />
-  <symbol char="F0BE" text="---" dashes="true" />
+  <symbol char="F0BE" text="---" protect="-" />
   <!--<symbol char="F0BF" math="??" />-->
   <symbol char="F0C0" math="{\aleph}" />
   <symbol char="F0C1" math="{\Im}" />
@@ -2949,7 +2949,7 @@ definitions to the range 00-FF.
 <symbol char="F02A" math="*"/>
 <symbol char="F02B" math="+"/>
 <symbol char="F02C" math=","/>
-<symbol char="F02D" text="-" dashes="true" />
+<symbol char="F02D" text="-" protect="-" />
 <symbol char="F02E" math="."/>
 <symbol char="F02F" math="/"/>
 <symbol char="F030" math="0"/>
@@ -3025,8 +3025,8 @@ definitions to the range 00-FF.
 <symbol char="F078" math="x"/>
 <symbol char="F079" math="y"/>
 <symbol char="F07A" math="z"/>
-<symbol char="F07B" text="{--}" dashes="true"/>
-<symbol char="F07C" text="{---}" dashes="true"/>
+<symbol char="F07B" text="{--}" protect="-"/>
+<symbol char="F07C" text="{---}" protect="-"/>
 <symbol char="F0A1" math="\Gamma " />
 <symbol char="F0A2" math="\Delta "/>
 <symbol char="F0A3" math="\Theta "/>
@@ -3704,7 +3704,7 @@ definitions to the range 00-FF.
    <symbol char="F038" text="\textsubarch{]}" />
    <symbol char="F039" text="\textsubring{}" />
    <symbol char="F030" text="\textsubtilde{}" />
-   <symbol char="F02d" text="-" dashes="true" />
+   <symbol char="F02d" text="-" protect="-" />
    <symbol char="F03d" text="\textrtailn " />
    <symbol char="F084" text="\textdoublepipe " />
    <symbol char="F021" text="\'{}" />

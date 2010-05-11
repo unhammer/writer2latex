@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-15) 
+ *  Version 1.2 (2010-05-11) 
  * 
  */
 
@@ -452,7 +452,8 @@ public class ClassicI18n extends I18n {
     private void convert(String s, int nStart, int nEnd, boolean bMathMode, String sLang, StringBuffer buf, int nFontenc) {
         int nCurFontenc = nFontenc;
         ucparser.reset(table,s,nStart,nEnd);
-        boolean bProtectDashes = true;
+        boolean bIsFirst = true; // Protect all dangerous characters at the start
+        char cProtect = '\u0000'; // Current character to protect
         boolean bTempMathMode = false;
         while (ucparser.next()) {
             char c = ucparser.getChar();
@@ -465,7 +466,7 @@ public class ClassicI18n extends I18n {
                     bTempMathMode = true;
                 }
                 buf.append(convertMathChar(c,nFontenc));
-                bProtectDashes = false;
+                cProtect = '\u0000';
             }
             else if (table.hasTextChar(c)) {
                 if (bTempMathMode) { // switch to text mode
@@ -477,14 +478,12 @@ public class ClassicI18n extends I18n {
                     // The text character is valid in the current font encoding
                     // Note: Change of font encoding is greedy - change?
 
-                    // Prevent unwanted --- ligatures
-                    if (table.isDashes(c)) {
-                        if (bProtectDashes) { buf.append("{}"); }
-                        bProtectDashes = true;
+                    // Prevent unwanted ligatures (-, ', `)
+                	char cProtectThis = table.getProtectChar(c); 
+                    if (cProtectThis!='\u0000' && (cProtectThis==cProtect || bIsFirst)) {
+                        buf.append("{}");
                     }
-                    else {
-                        bProtectDashes = false;
-                    }
+                    cProtect = cProtectThis;
 
                     setFlags(c,nCurFontenc);
                     if (ucparser.hasCombiningChar()) {
@@ -504,7 +503,7 @@ public class ClassicI18n extends I18n {
                 else {
                     // The text character is valid in another font encoding
 					
-                    bProtectDashes = table.isDashes(c);
+                	cProtect = table.getProtectChar(c);
 
                     int nFontenc1 = getFontenc(nFontencs);
                     setFlags(c,nFontenc1);
@@ -534,6 +533,8 @@ public class ClassicI18n extends I18n {
             else {
                 buf.append(notFound(c,nCurFontenc));
             }
+            
+            bIsFirst = false;
         }
 		
         if (bTempMathMode) { // turn of math mode

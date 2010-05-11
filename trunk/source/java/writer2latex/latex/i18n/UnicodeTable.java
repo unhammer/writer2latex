@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2007 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved. 
  * 
- *  Version 0.5 (2007-07-24) 
+ *  Version 1.2 (2010-05-11) 
  * 
  */
 
@@ -87,12 +87,12 @@ class UnicodeTable {
     }
     
     // Add a single text character to the table
-    protected void addTextChar(char c, String sLaTeX, int nFontencs, boolean bDashes){
+    protected void addTextChar(char c, String sLaTeX, int nFontencs, char cProtect){
         int nRow=c/256; int nCol=c%256;
         createEntry(nRow,nCol);
         table[nRow].entries[nCol].sText=sLaTeX;
         table[nRow].entries[nCol].nFontencs=nFontencs;
-        table[nRow].entries[nCol].bDashes=bDashes;
+        table[nRow].entries[nCol].cProtect=cProtect;
     }
 
     // Retrieve entry for a character (or null)
@@ -144,11 +144,11 @@ class UnicodeTable {
         return entry.nFontencs;
     }
 	
-    // Get dashes for text character 
-    public boolean isDashes(char c) {
+    // Get ligature protect character for text character 
+    public char getProtectChar(char c) {
         UnicodeCharacter entry = getEntry(c);
-        if (entry==null) return false;
-        return entry.bDashes;
+        if (entry==null) return '\u0000';
+        return entry.cProtect;
     }
 	
     // Get number of defined characters

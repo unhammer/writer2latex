@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2007 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 0.5 (2007-07-24) 
+ *  Version 1.2 (2010-05-11) 
  * 
  */
 
@@ -37,7 +37,7 @@ class UnicodeCharacter implements Cloneable {
     String sMath;    // LaTeX representation in math mode 
     String sText;    // LaTeX representation in text mode
     int nFontencs;   // Valid font encoding(s) for the text mode representation
-    boolean bDashes; // This character is represented by dashes (-,--,---)
+    char cProtect;   // This character is represented by this character which may produce unwanted ligatures (-, ', `)
 	
     protected Object clone() {
         UnicodeCharacter uc = new UnicodeCharacter();
@@ -45,7 +45,7 @@ class UnicodeCharacter implements Cloneable {
         uc.sMath = this.sMath;
         uc.sText = this.sText;
         uc.nFontencs = this.nFontencs;
-        uc.bDashes = this.bDashes;
+        uc.cProtect = this.cProtect;
         return uc;
     }
 }

@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2009-03-26) 
+ *  Version 1.2 (2010-05-11) 
  * 
  */
 
@@ -102,17 +102,18 @@ public class UnicodeTableHandler extends DefaultHandler{
                         table.addMathChar(c,table.getMathChar(eqc));
                     }
                     if (table.hasTextChar(eqc)) {
-                        table.addTextChar(c,table.getTextChar(eqc),table.getFontencs(eqc),table.isDashes(eqc));
+                        table.addTextChar(c,table.getTextChar(eqc),table.getFontencs(eqc),table.getProtectChar(eqc));
                     }
                 }
                 else {
                     String sType=attributes.getValue("char-type");
                     String sMath=attributes.getValue("math");
                     String sText=attributes.getValue("text");
-                    boolean bDashes="true".equals(attributes.getValue("dashes"));
+                    String sProtect=attributes.getValue("protect");
+                    char cProtect = sProtect!=null && sProtect.length()>0 ? sProtect.charAt(0) : '\u0000';
                     if (sType!=null) table.addCharType(c,sType);
                     if (sMath!=null) table.addMathChar(c,sMath);
-                    if (sText!=null) table.addTextChar(c,sText,nFontencs,bDashes);
+                    if (sText!=null) table.addTextChar(c,sText,nFontencs,cProtect);
                 }
             }
         }
@@ -125,7 +126,7 @@ public class UnicodeTableHandler extends DefaultHandler{
                     table.addMathChar(c,Character.toString(c));
                 }
                 if ("text".equals(sMode) || "both".equals(sMode)) {
-                    table.addTextChar(c,Character.toString(c),nFontencs,false);
+                    table.addTextChar(c,Character.toString(c),nFontencs,'\u0000');
                 }
             }
         }
@@ -143,7 +144,7 @@ public class UnicodeTableHandler extends DefaultHandler{
                         table.addMathChar(c,Character.toString(c));
                     }
                     if (bText) {
-                        table.addTextChar(c,Character.toString(c),nFontencs,false);
+                        table.addTextChar(c,Character.toString(c),nFontencs,'\u0000');
                     }
                 }
             }
