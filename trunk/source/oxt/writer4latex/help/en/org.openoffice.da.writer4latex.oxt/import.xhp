@@ -7,7 +7,7 @@
         </topic>
     </meta>
     <body>
-        <paragraph role="heading" level="1" xml-lang="en-US">Importing TeX files</paragraph>
-        <paragraph role="paragraph" xml-lang="en-US">Coming soon to an extension near you!</paragraph>
+        <!--<paragraph role="heading" level="1" xml-lang="en-US">Importing TeX files</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Coming soon to an extension near you!</paragraph>-->
 	</body>
 </helpdocument>

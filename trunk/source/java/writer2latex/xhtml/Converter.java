@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-05-09)
+ *  Version 1.2 (2010-05-17)
  *
  */
 
@@ -227,10 +227,12 @@ public class Converter extends ConverterBase {
         	converterResult.addContentEntry(new ContentEntryImpl("Text", 1, outFiles.get(0), null));
         }
         else {
-        	// The title page is the first page
-        	converterResult.setTitlePageFile(new ContentEntryImpl("Title page", 1, outFiles.get(0), null));
-        	// The text page is the one containing the first heading
         	ContentEntry firstHeading = converterResult.getContent().get(0);
+        	// The title page is the first page, unless the first page starts with a heading
+        	if (outFiles.get(0)!=firstHeading.getFile() || firstHeading.getTarget()!=null) {
+        		converterResult.setTitlePageFile(new ContentEntryImpl("Title page", 1, outFiles.get(0), null));
+        	}
+        	// The text page is the one containing the first heading
         	converterResult.setTextFile(new ContentEntryImpl("Text", 1, firstHeading.getFile(), firstHeading.getTarget()));
         }
 
@@ -397,7 +399,6 @@ public class Converter extends ConverterBase {
         if (nIndex>=0 && nIndex<=nOutFileIndex) {
             Element a = dom.createElement("a");
             a.setAttribute("href",Misc.makeHref(getOutFileName(nIndex,true)));
-            a.setAttribute("href",getOutFileName(nIndex,true));
             a.appendChild(dom.createTextNode(s));
             //node.appendChild(dom.createTextNode("["));
             node.appendChild(a);

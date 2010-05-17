@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-09-08)
+ *  Version 1.2 (2010-05-13)
  *
  */
 
@@ -74,6 +74,8 @@ public class TableStyleConverter extends StyleWithPropertiesConverterHelper {
      *  @param bInherit true if properties should be inherited from parent style(s)
      */
     public void applyProperties(StyleWithProperties style, CSVList props, boolean bInherit) {
+    	// Page break
+    	getParSc().cssPageBreak(style, props, bInherit);
         // Apply background
         getFrameSc().cssBackground(style,props,bInherit);
         // Table-specific properties

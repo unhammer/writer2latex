@@ -2,14 +2,14 @@
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
 <dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Documentclass" dlg:left="139" dlg:top="84" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:moveable="true" dlg:title="Documentclass" dlg:withtitlebar="false">
  <dlg:bulletinboard>
-  <dlg:checkbox dlg:id="NoPreamble" dlg:tab-index="0" dlg:left="10" dlg:top="8" dlg:width="240" dlg:height="12" dlg:value="Do not include preamble" dlg:checked="false">
+  <dlg:checkbox dlg:id="NoPreamble" dlg:tab-index="0" dlg:left="10" dlg:top="8" dlg:width="240" dlg:height="12" dlg:value="Do not include preamble" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigNoPreamble">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:NoPreambleChange" script:language="UNO"/>
   </dlg:checkbox>
   <dlg:text dlg:id="DocumentclassLabel" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="100" dlg:height="12" dlg:value="Documentclass"/>
-  <dlg:textfield dlg:id="Documentclass" dlg:tab-index="2" dlg:left="120" dlg:top="20" dlg:width="130" dlg:height="12"/>
+  <dlg:textfield dlg:id="Documentclass" dlg:tab-index="2" dlg:left="120" dlg:top="20" dlg:width="130" dlg:height="12" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigDocumentclass"/>
   <dlg:text dlg:id="GlobalOptionsLabel" dlg:tab-index="3" dlg:left="10" dlg:top="36" dlg:width="100" dlg:height="12" dlg:value="Global options"/>
-  <dlg:textfield dlg:id="GlobalOptions" dlg:tab-index="4" dlg:left="120" dlg:top="34" dlg:width="130" dlg:height="12"/>
+  <dlg:textfield dlg:id="GlobalOptions" dlg:tab-index="4" dlg:left="120" dlg:top="34" dlg:width="130" dlg:height="12" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigGlobalOptions"/>
   <dlg:text dlg:id="CustomPreambleLabel" dlg:tab-index="5" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:value="Custom preamble"/>
-  <dlg:textfield dlg:id="CustomPreamble" dlg:tab-index="6" dlg:left="20" dlg:top="64" dlg:width="230" dlg:height="110" dlg:hscroll="true" dlg:vscroll="true" dlg:multiline="true"/>
+  <dlg:textfield dlg:id="CustomPreamble" dlg:tab-index="6" dlg:left="20" dlg:top="64" dlg:width="230" dlg:height="110" dlg:hscroll="true" dlg:vscroll="true" dlg:multiline="true" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigCustomPreamble"/>
  </dlg:bulletinboard>
 </dlg:window>

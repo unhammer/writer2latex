@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-05-09)
+ *  Version 1.2 (2010-05-13)
  *
  */
 
@@ -80,6 +80,7 @@ public class ParStyleConverter extends StyleWithPropertiesConverterHelper {
      *  @param bInherit true if properties should be inherited from parent style(s)
      */
     public void applyProperties(StyleWithProperties style, CSVList props, boolean bInherit) {
+    	cssPageBreak(style,props,bInherit);
         getFrameSc().cssMargins(style,props,bInherit);
         getFrameSc().cssBorder(style,props,bInherit);
         getFrameSc().cssPadding(style,props,bInherit);
@@ -103,6 +104,15 @@ public class ParStyleConverter extends StyleWithPropertiesConverterHelper {
         StyleWithProperties style = ofr.getParStyle(sStyleName);
         if (style==null || !style.isAutomatic()) { return sStyleName; }
         return style.getParentName();
+    }
+    
+    public void cssPageBreak(StyleWithProperties style, CSVList props, boolean bInherit) {
+    	if ("page".equals(style.getProperty(XMLString.FO_BREAK_BEFORE, bInherit))) {
+    		props.addValue("page-break-before", "always");
+    	}
+    	else if ("page".equals(style.getProperty(XMLString.FO_BREAK_AFTER, bInherit))) {
+    		props.addValue("page-break-after", "always");
+    	}
     }
 	
     public void cssPar(StyleWithProperties style, CSVList props, boolean bInherit){

@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2009 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  *  
- *  Version 1.2 (2009-09-06)
+ *  Version 1.2 (2010-05-17)
  *  
  */
  
@@ -54,6 +54,7 @@ import writer2latex.api.Converter;
 import writer2latex.api.ConverterFactory;
 import writer2latex.api.ConverterResult;
 import writer2latex.api.OutputFile;
+import writer2latex.util.Misc;
 
 import java.util.Iterator;
 //import java.util.Enumeration;
@@ -367,7 +368,7 @@ public abstract class ExportFilterBase implements
             
             ConverterResult dataOut = null;
             //try {
-                dataOut = converter.convert(xis,sName);
+                dataOut = converter.convert(xis,Misc.makeFileName(sName));
             //}
             //catch (IOException e) {
                 // Fail silently
@@ -402,7 +403,7 @@ public abstract class ExportFilterBase implements
                     // Additional documents are written directly using ucb
 
                     // Get the file name and the (optional) directory name
-                    String sFullFileName = docOut.getFileName();
+                    String sFullFileName = Misc.makeHref(docOut.getFileName());
                     String sDirName = "";
                     String sFileName = sFullFileName;
                     int nSlash = sFileName.indexOf("/");

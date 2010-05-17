@@ -40,7 +40,7 @@
         	</listitem>
         </list>
         
-		<paragraph role="heading" level="2" xml-lang="en-US">LaTeX import</paragraph>
+		<!--<paragraph role="heading" level="2" xml-lang="en-US">LaTeX import</paragraph>
         <paragraph role="paragraph" xml-lang="en-US">You can
         <link href="org.openoffice.da.writer4latex.oxt/import.xhp" name="Import TeX files">import</link>
         existing LaTeX documents into Writer.
@@ -49,7 +49,7 @@
         system. Note however, that this feature doesn't make roundtrip
         editing %PRODUCTNAME Writer ↔ LaTeX is possible. The intended use of the import feature to make documents
         that were originally authored in LaTeX.
-        </paragraph>
+        </paragraph>-->
 
 		<paragraph role="heading" level="2" xml-lang="en-US">Before you start</paragraph>
         <paragraph role="paragraph" xml-lang="en-US">Before you can use Writer4LaTeX, you need to
@@ -64,7 +64,7 @@
     					<link href="http://extensions.services.openoffice.org/project/writer2latex" name="Writer2LaTeX download">http://extensions.services.openoffice.org/project/writer2latex</link>.</paragraph>
     				</listitem>
   					<listitem>
-    					<paragraph role="paragraph" xml-lang="en-US">Writer4LaTeX needs a working LaTeX distribution including TeX4ht.
+    					<paragraph role="paragraph" xml-lang="en-US">Writer4LaTeX needs a working LaTeX distribution<!-- including TeX4ht-->.
     					MikTeX is recommended and can be downloaded from
     					<link href="http://www.miktex.org" name="MikTeX download">http://www.miktex.org</link>.</paragraph>
     				</listitem>
@@ -84,14 +84,14 @@
     					<link href="http://extensions.services.openoffice.org/project/writer2latex" name="Writer2LaTeX download">http://extensions.services.openoffice.org/project/writer2latex</link>.</paragraph>
     				</listitem>
   					<listitem>
-    					<paragraph role="paragraph" xml-lang="en-US">Writer4LaTeX needs a working LaTeX distribution which includes TeX4ht.
+    					<paragraph role="paragraph" xml-lang="en-US">Writer4LaTeX needs a working LaTeX distribution<!-- which includes TeX4ht-->.
     					<link href="http://www.tug.org/texlive/" name="TeX live">TeX live</link>
     					is recommended and is available for most UNIX-like systems. The installation depends on your system.
     					If you are using Debian or Ubuntu you can for example install the required packages by typing these commands from a terminal window:</paragraph>
 						<paragraph role="code" xml-lang="en-US">sudo apt-get install texlive
 						<br/>sudo apt-get install texlive-latex-extra
     					<br/>sudo apt-get install texlive-xetex
-    					<br/>sudo apt-get install tex4ht</paragraph>
+    					<!--<br/>sudo apt-get install tex4ht--></paragraph>
     				</listitem>
   					<listitem>
     					<paragraph role="paragraph" xml-lang="en-US">Finally you should install viewers for DVI, PDF and PostScript files.

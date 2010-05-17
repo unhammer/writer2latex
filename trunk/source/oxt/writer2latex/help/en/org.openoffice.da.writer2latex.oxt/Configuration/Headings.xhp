@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer2latex-export" indexer="include">
+            <title xml-lang="en-US">Headings</title>
+            <filename>org.openoffice.da.writer2latex.oxt/Configuration/Headings.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Headings</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Define the conversion of headings in the document</paragraph>
+
+        <section id="howtoget" xml-lang="en-US">
+        	Choose <emph>Tools - Options - Writer2LaTeX - Headings</emph>
+        </section>
+        
+        <paragraph role="heading" level="2" xml-lang="en-US">Headings</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigMaxLevel" id="bm_configmaxlevel"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Heading levels to export</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Choose the number of heading levels you want to export as LaTeX sectioning commands.
+        Other headings are exported as ordinary paragraphs.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigWriterLevel" id="bm_configwriterlevel"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Writer level</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Choose a heading level to configure.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigLaTeXLevel" id="bm_configlatexlevel"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">LaTeX level</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Choose the heading level in LaTeX to use for the selected Writer level.</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">The standard document classes uses this level numbering</paragraph>
+        <list type="unordered">
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US"><emph>\part</emph>: Level -1</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US"><emph>\chapter</emph>: Level 0</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US"><emph>\section</emph>: Level 1</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US"><emph>\subsection</emph>: Level 2</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US"><emph>\subsubsection</emph>: Level 3</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US"><emph>\paragraph</emph>: Level 4</paragraph>
+			</listitem>
+			<listitem>
+				<paragraph role="paragraph" xml-lang="en-US"><emph>\supparagraph</emph>: Level 5</paragraph>
+			</listitem>
+		</list>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigLaTeXName" id="bm_configLaTeXName"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">LaTeX heading name</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Enter the name of the section command in LaTeX, e.g. <emph>section</emph> to
+        produce a \section, or select a standard section command from the list.</paragraph>
+        
+        <paragraph role="heading" level="2" xml-lang="en-US">Indexes and tables</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigNoIndex" id="bm_confignoindex"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Do not include indexes</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">If you check this option, Writer2LaTeX will not export indexes
+        (e.g. table of contents, bibliopgrahy). This option is intended for the case that the document is to be part
+        of a larger LaTeX document, which may contain global indexes.</paragraph>
+
+    </body>
+</helpdocument>

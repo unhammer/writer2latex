@@ -51,7 +51,8 @@
 			</listitem>
 			<listitem>
 				<paragraph role="paragraph" xml-lang="en-US"><emph>Custom</emph> is a user defined format. To configure the custom format,
-				choose <emph>Tools - Options - Writer2LaTeX</emph>.
+				choose <emph><link href="org.openoffice.da.writer2latex.oxt/Configuration/Introduction.xhp"
+				name="Custom configuration">Tools - Options - Writer2LaTeX</link></emph>.
 				</paragraph>
 			</listitem>
         </list>

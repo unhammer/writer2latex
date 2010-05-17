@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-05-09)
+ *  Version 1.2 (2010-05-13)
  *
  */
 
@@ -470,9 +470,10 @@ public class TextConverter extends ConverterHelper {
         if (nDontSplitLevel>1) { // we cannot split due to a nested structure
             return node;
         }
-        if (bAfterHeading && nLevel-nLastSplitLevel<=nRepeatLevels) {
+        if (!converter.isOPS() && bAfterHeading && nLevel-nLastSplitLevel<=nRepeatLevels) {
             // we cannot split because we are right after a heading and the
-            // maximum number of parent headings on the page is not reached  
+            // maximum number of parent headings on the page is not reached
+        	// TODO: Something wrong here....nLastSplitLevel is never set???
             return node;
         }
         if (nSplit>=nLevel && converter.outFileHasContent()) {
@@ -562,7 +563,14 @@ public class TextConverter extends ConverterHelper {
             ListCounter counter = getListCounter(listStyle); 
             if (bRestart) { counter.restart(nListLevel,nStartValue); }
             String sLabel = counter.step(nListLevel).getLabel();
-            insertListLabel(listStyle,nListLevel,"SectionNumber",sLabel,heading);
+            if (config.zenHack() && nLevel==2) {
+            	// Hack for ePub Zen Garden: Special style for the prefix at level 2
+            	// TODO: Replace by some proper style map construct...
+            	insertListLabel(listStyle,nListLevel,"SectionNumber",counter.getPrefix(),counter.getLabelAndSuffix(),heading);
+            }
+            else {
+            	insertListLabel(listStyle,nListLevel,"SectionNumber",null,sLabel,heading);            	
+            }
 
             // Add to toc
             if (!bInToc) {
@@ -642,7 +650,7 @@ public class TextConverter extends ConverterHelper {
         if (!bIsEmpty) {
             par = createTextBackground(par, sStyleName);
             if (config.listFormatting()==XhtmlConfig.HARD_LABELS) {
-            	insertListLabel(currentListStyle, nCurrentListLevel, "ItemNumber", sCurrentListLabel, par);
+            	insertListLabel(currentListStyle, nCurrentListLevel, "ItemNumber", null, sCurrentListLabel, par);
             }
             sCurrentListLabel = null;
             traverseInlineText(onode,par);
@@ -694,8 +702,14 @@ public class TextConverter extends ConverterHelper {
     }
     
     // Helper: Insert a list label formatted with a list style
-    private void insertListLabel(ListStyle style, int nLevel, String sDefaultStyle, String sLabel, Element hnode) {
+    private void insertListLabel(ListStyle style, int nLevel, String sDefaultStyle, String sPrefix, String sLabel, Element hnode) {
         if (sLabel!=null && sLabel.length()>0) {
+        	if (sPrefix!=null) {
+        		Element prefix = converter.createElement("span");
+        		prefix.setAttribute("class", "chapter-name");
+        		hnode.appendChild(prefix);
+        		prefix.appendChild( converter.createTextNode(sPrefix));
+        	}
             StyleInfo info = new StyleInfo();
             if (style!=null) {
                 String sTextStyleName = style.getLevelProperty(nLevel,XMLString.TEXT_STYLE_NAME);

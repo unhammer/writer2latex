@@ -16,17 +16,18 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *  MA  02111-1307  USA
  *
- *  Copyright: 2002-2008 by Henrik Just
+ *  Copyright: 2002-2010 by Henrik Just
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0 (2008-11-22)
+ *  Version 1.2 (2010-05-17)
  *
  */
 
 package writer2latex.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -331,6 +332,22 @@ public class Misc{
         }
         return "error";
     }
+    
+    /* utility method to convert a *relative* URL to a file name
+    (ie. replace %20 with spaces etc.)
+     */
+    public static String makeFileName(String sURL) {
+    	try {
+    		File file = new File(new java.net.URI("file:///"+sURL));
+    		return file.getName();	    
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return "error";
+    }
+ 
+    
 	
     /** <p>Read an <code>InputStream</code> into a <code>byte</code>array</p>
      *  @param is   the <code>InputStream</code> to read

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer2latex-configuration-fonts" indexer="include">
+            <title xml-lang="en-US">Fonts</title>
+            <filename>org.openoffice.da.writer2latex.oxt/Configuration/Fonts.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Fonts</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Define the font packages to use in the exported LaTeX document</paragraph>
+
+        <section id="howtoget" xml-lang="en-US">
+        	Choose <emph>Tools - Options - Writer2LaTeX - Fonts</emph>
+        </section>
+        
+        <paragraph role="heading" level="2" xml-lang="en-US">Font packages (not used for XeTeX)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">These options have no effect if the backend is XeTeX, which handles
+        fonts quite differently from "classic" LaTeX.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUsePifont" id="bm_configusepifont"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use pifont.sty (dingbats)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to use of symbol font Zapf Dingbats using the LaTeX package
+        pifont.sty.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseTipa" id="bm_configusetipa"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use tipa.sty and tipax.sty (phonetic symbols)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to use phonetic symbols using the LaTeX packages
+        tipa.sty and tipx.sty.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseEurosym" id="bm_configuseeurosym"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use eurosym.sty (euro currency symbol)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to use the eurosym font using the LaTeX package
+        eurosym.sty. This package provides a slightly better euro symbol than standard LaTeX.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseWasysym" id="bm_configusewasysym"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use wasysym.sty (various symbols)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to use the wasy symbol font using the LaTeX package
+        wasysym.sty.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseIfsym" id="bm_configuseifsym"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use ifsym.sty (geometric shapes)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to use the ifsym symbol font using the LaTeX package
+        ifsym.sty.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseBbding" id="bm_configusebbding"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use bbding.sty (metafont dingbats)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to use the bbding symbol font (a clone of Zapf Dingbats)
+        using the LaTeX package bbding.sty.</paragraph>
+    </body>
+</helpdocument>

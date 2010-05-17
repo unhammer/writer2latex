@@ -2,6 +2,25 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.3 ----------
 
+[w2l] Added help content for custom format
+
+[all] Filter: Fixed bug with filenames containing spaces and other special characters
+
+[w2x] EPUB bugfix: URL encode links to document parts in the .ncx and .opf files
+
+[w2x] EPUB export no longer generates a title page reference if there is no title page
+
+[w2x] Added (temporary) option zen_hack to support a special requirement from the ePub Zen Garden styles
+  (own style for number prefix. This should be replaced by a style map scheme later..)
+
+[w2x] Ignore linked images in EPUB export (EPUB files cannot reference external resources)
+
+[w2x] Added support for break-after and break-before
+
+[w2l] Features that were postponed to w2l 1.4 has been hidden from the UI
+
+[w4l] TeX import has been hidden from the UI (postponed to w2l 1.4)
+
 [w2l] Now exports apostrophe, single and double quotes using ' and ` characters (this creates nicer looking LaTeX files and
   fixes a problem with hyphenation of words containing apostrophes)
 

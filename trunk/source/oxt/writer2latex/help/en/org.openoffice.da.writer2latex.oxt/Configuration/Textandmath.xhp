@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer2latex-configuration-textandmath" indexer="include">
+            <title xml-lang="en-US">Text and math</title>
+            <filename>org.openoffice.da.writer2latex.oxt/Configuration/Textandmath.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Text and math</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Define how to convert text strings and math content.</paragraph>
+
+        <section id="howtoget" xml-lang="en-US">
+        	Choose <emph>Tools - Options - Writer2LaTeX - Text and math</emph>
+        </section>
+        
+        <paragraph role="heading" level="2" xml-lang="en-US">Math packages</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseOoomath" id="bm_configuseooomath"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use ooomath.sty (custom package supporting %PRODUCTNAME equations)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to use the LaTeX package ooomath.sty. This package defines a number of
+        LaTeX macros used to convert formulas from %PRODUCTNAME to LaTeX. If this package is not used, the necessary definitions will
+        be included in the LaTeX preamble, which may become quite long. Hence using ooomath.sty is recommended for documents with
+        formulas. The package is part of the complete
+        <link href="http://writer2latex.sourceforge.net" name="Writer2LaTeX home page">Writer2LaTeX distribution</link>.</paragraph>
+
+        <paragraph role="heading" level="2" xml-lang="en-US">Math symbols</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">In %PRODUCTNAME Math you can add user-defined symbols. Writer2LaTeX already
+        understands the predefined symbols such as %alpha. If you define your own symbols, you can define corresponding LaTeX
+        code here.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigMathSymbolName" id="bm_configmathsymbolname"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Name</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Select the name of the user-defined symbol.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigNewSymbol" id="bm_configdeletesymbol"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">New...</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Click this button to add a new symbol to the list. Select a symbol from the list
+        or type the name.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigDeleteSymbol" id="bm_configdeletesymbol"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Delete...</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Click this button to delete the current symbol from the list.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigMathLaTeX" id="bm_configmathlatex"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">LaTeX code</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Enter the LaTeX code corresponding to this symbol, e.g.
+        <emph>\Downarrow</emph>.</paragraph>
+
+        <paragraph role="heading" level="2" xml-lang="en-US">Text replace</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Often LaTeX requires special care to typeset certain constructions. For example
+        according to German typographical rules, an abbreviation like z.B. should be typeset with a small space before the B, which in
+        LaTeX code will be <emph>z.\,B</emph>. Another example is French quotations marks (« Je parle français ») which should be
+        converted to the LaTeX macros <emph>\fg</emph> and <emph>\og</emph>. A final example is translation of the text LaTeX to
+        <emph>\LaTeX</emph> to properly typeset the LaTeX logo.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigTextInput" id="bm_configtextinput"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Input</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Select a text string from the list</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigNewText" id="bm_confignewtext"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">New...</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Click this button to add a new text string to the list. Enter the original text as it appears
+        in the %PRODUCTNAME Writer document, or paste text from the clipboard.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigDeleteText" id="bm_configdeletetext"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Delete...</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Click this button to the delete the current text string. Writer2LaTeX has
+        a few predefined strings that cannot be deleted.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigTextLaTeX" id="bm_configtextlatex"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">LaTeX code</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Enter the LaTeX code to export for this text string.</paragraph>
+
+        <paragraph role="heading" level="2" xml-lang="en-US">Tab stops</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigTabStopLaTeX" id="bm_configtabstoplatex"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">LaTeX code</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Normally tab stops are converted to spaces, but in this field you can enter any
+        LaTeX code, that should be used instead. For example <emph>\quad{}</emph> or <emph>\hspace{2em}</emph>.</paragraph>
+    </body>
+</helpdocument>

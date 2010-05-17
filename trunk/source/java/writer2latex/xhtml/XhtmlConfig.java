@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-05-09)
+ *  Version 1.2 (2010-05-13)
  *
  */
 
@@ -41,7 +41,7 @@ import writer2latex.util.Misc;
 
 public class XhtmlConfig extends writer2latex.base.ConfigBase {
     // Implement configuration methods
-    protected int getOptionCount() { return 42; }
+    protected int getOptionCount() { return 43; }
     protected String getDefaultConfigPath() { return "/writer2latex/xhtml/config/"; }
 	
     // Override setOption: To be backwards compatible, we must accept options
@@ -119,6 +119,7 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     private static final int UPLINK = 39;
     private static final int DIRECTORY_ICON = 40;
     private static final int DOCUMENT_ICON = 41;
+    private static final int ZEN_HACK = 42; // temporary hack for ePub Zen Garden styles
 
     protected ComplexOption xheading = addComplexOption("heading-map");
     protected ComplexOption xpar = addComplexOption("paragraph-map");
@@ -197,6 +198,7 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
         options[UPLINK] = new Option("uplink","");
         options[DIRECTORY_ICON] = new Option("directory_icon","");
         options[DOCUMENT_ICON] = new Option("document_icon","");
+        options[ZEN_HACK] = new BooleanOption("zen_hack", "false");
     }
     
 	protected void readInner(Element elm) {
@@ -309,6 +311,7 @@ public class XhtmlConfig extends writer2latex.base.ConfigBase {
     public String getXhtmlUplink() { return options[UPLINK].getString(); }
     public String getXhtmlDirectoryIcon() { return options[DIRECTORY_ICON].getString(); }
     public String getXhtmlDocumentIcon() { return options[DOCUMENT_ICON].getString(); }
+    public boolean zenHack() { return ((BooleanOption) options[ZEN_HACK]).getValue(); }
 	
     public XhtmlStyleMap getXParStyleMap() { return getStyleMap(xpar); }
     public XhtmlStyleMap getXHeadingStyleMap() { return getStyleMap(xheading); }

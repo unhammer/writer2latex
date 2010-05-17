@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-03-03)
+ *  Version 1.2 (2010-05-13)
  *
  */
  
@@ -376,12 +376,14 @@ public class DrawConverter extends ConverterHelper {
         if (sHref!=null && sHref.length()>0 && !ofr.isInPackage(sHref)) {
             // Linked image is not yet handled by ImageLoader. This is a temp.
             // solution (will go away when ImageLoader is finished)
-            sFileName = sHref;
-            // In OpenDocument *package* format ../ means "leave the package"
-            if (ofr.isOpenDocument() && ofr.isPackageFormat() && sFileName.startsWith("../")) {
-                sFileName=sFileName.substring(3);
-            }
-            //String sExt = sHref.substring(sHref.lastIndexOf(".")).toLowerCase();
+        	if (!converter.isOPS()) { // Cannot have linked images in EPUB, ignore the image
+        		sFileName = sHref;
+        		// In OpenDocument *package* format ../ means "leave the package"
+        		if (ofr.isOpenDocument() && ofr.isPackageFormat() && sFileName.startsWith("../")) {
+        			sFileName=sFileName.substring(3);
+        		}
+        		//String sExt = sHref.substring(sHref.lastIndexOf(".")).toLowerCase();
+        	}
         }
         else { // embedded or base64 encoded image
             BinaryGraphicsDocument bgd = converter.getImageLoader().getImage(onode);

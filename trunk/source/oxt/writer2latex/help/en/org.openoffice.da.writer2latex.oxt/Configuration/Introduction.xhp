@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer2latex-configuration-introduction" indexer="include">
+            <title xml-lang="en-US">Custom format</title>
+            <filename>org.openoffice.da.writer2latex.oxt/Configuration/Introduction.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Custom format</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Define a custom format for the LaTeX export</paragraph>
+
+        <section id="howtoget" xml-lang="en-US">
+        	Choose <emph>Tools - Options - Writer2LaTeX</emph>
+        </section>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigIntroduction" id="bm_configintroduction"/>
+        <paragraph role="paragraph" xml-lang="en-US">Writer2LaTeX comes with a number of predefined LaTeX formats.
+        A format defines the kind of LaTeX document to generate (the document class to use and the packages to load).
+        It also defines a set of rules defining how content and formatting should be exported to LaTeX. Advanced users can define
+        their own format on these pages. This requires some knowledge of LaTeX.</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">To use the custom format, choose <emph>Custom</emph> in the export dialog.</paragraph>
+    </body>
+</helpdocument>

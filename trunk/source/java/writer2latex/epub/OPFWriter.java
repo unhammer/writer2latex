@@ -20,14 +20,13 @@
  *
  *  All Rights Reserved.
  * 
- *  version 1.2 (2010-03-29)
+ *  version 1.2 (2010-05-13)
  *
  */
 
 package writer2latex.epub;
 
 import java.util.Iterator;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,6 +40,7 @@ import org.w3c.dom.Element;
 import writer2latex.api.ContentEntry;
 import writer2latex.api.ConverterResult;
 import writer2latex.api.OutputFile;
+import writer2latex.util.Misc;
 import writer2latex.xmerge.NewDOMDocument;
 
 /** This class writes an OPF-file for an EPUB document (see http://www.idpf.org/2007/opf/OPF_2.0_final_spec.html).
@@ -105,7 +105,7 @@ public class OPFWriter extends NewDOMDocument {
         	OutputFile file = iterator.next();
         	Element item = contentDOM.createElement("item");
         	manifest.appendChild(item);
-        	item.setAttribute("href",file.getFileName());
+        	item.setAttribute("href",Misc.makeHref(file.getFileName()));
         	item.setAttribute("media-type", file.getMIMEType());
         	if (file.isMasterDocument()) {
         		String sId = "text"+(++nMasterCount);
@@ -147,7 +147,7 @@ public class OPFWriter extends NewDOMDocument {
 			reference.setAttribute("title", entry.getTitle());
 			String sHref = entry.getFile().getFileName();
 			if (entry.getTarget()!=null) { sHref+="#"+entry.getTarget(); }
-			reference.setAttribute("href", sHref);
+			reference.setAttribute("href", Misc.makeHref(sHref));
 			guide.appendChild(reference);
 		}
 	}

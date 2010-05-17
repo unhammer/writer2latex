@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer2latex-configuration-characters" indexer="include">
+            <title xml-lang="en-US">Characters</title>
+            <filename>org.openoffice.da.writer2latex.oxt/Configuration/Characters.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Characters</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Define how to convert character formatting</paragraph>
+
+        <section id="howtoget" xml-lang="en-US">
+        	Choose <emph>Tools - Options - Writer2LaTeX - Characters</emph>
+        </section>
+        
+        <paragraph role="heading" level="2" xml-lang="en-US">Character formatting packages</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseHyperref" id="bm_configusehyperref"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use hyperref.sty (support for hyperlinks)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this if you want to export hyperlinks using the LaTeX package
+        hyperref.sty. As a side effect this package will create links for cross references etc.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseColor" id="bm_configusecolor"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use color.sty (color support)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this if you want color support (text color only) using the
+        LaTeX package color.sty.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseUlem" id="bm_configuseulem"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use ulem.sty (underline and strike out text)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to support underlined and striked out text using the LaTeX
+        package ulem.sty. Note that this does not work well for longer passages of text. Writer2LaTeX will never export
+        underline and strike out for entire paragraphs.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigFormattingAttribute" id="bm_configformattingattribute"/>
+        <paragraph role="heading" level="2" xml-lang="en-US">Formatting attributes</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">For some formatting attributes you can directly control the generated LaTeX
+        code.</paragraph>
+
+        <paragraph role="heading" level="3" xml-lang="en-US">Formatting attribute</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Select the formatting attribute:</paragraph>
+        <list type="unordered">
+        	<listitem>
+        		<paragraph role="paragraph" xml-lang="en-US"><emph>Bold</emph>: Boldface text</paragraph>
+        	</listitem>
+        	<listitem>
+        		<paragraph role="paragraph" xml-lang="en-US"><emph>Italics</emph>: Italics text</paragraph>
+        	</listitem>
+        	<listitem>
+        		<paragraph role="paragraph" xml-lang="en-US"><emph>Small caps</emph>: Text formatted as small caps.</paragraph>
+        	</listitem>
+        	<listitem>
+        		<paragraph role="paragraph" xml-lang="en-US"><emph>Superscript</emph>: Text formatted as superscript.</paragraph>
+        	</listitem>
+        	<listitem>
+        		<paragraph role="paragraph" xml-lang="en-US"><emph>Subscript</emph>: Text formatted as subscript.</paragraph>
+        	</listitem>
+        </list>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigCustomAttribute" id="bm_configcustomattribute"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Apply custom LaTeX code</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this if you want to define custom LaTeX code for the currently selected
+        attribute. Otherwise Writer2LaTeX will use default code, e.g. \textbf for boldface text.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigAttributeBefore" id="bm_configattributebefore"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">LaTeX code before</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Enter the LaTeX code to add before the text, e.g. <emph>\emph{</emph></paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigAttributeAfter" id="bm_configattributeafter"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">LaTeX code after</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Enter the LaTeX code to add after the text, e.g. <emph>}</emph></paragraph>
+
+    </body>
+</helpdocument>

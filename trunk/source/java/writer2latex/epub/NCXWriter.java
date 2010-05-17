@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  version 1.2 (2010-03-30)
+ *  version 1.2 (2010-05-13)
  *
  */
 
@@ -39,6 +39,7 @@ import org.w3c.dom.Element;
 
 import writer2latex.api.ContentEntry;
 import writer2latex.api.ConverterResult;
+import writer2latex.util.Misc;
 import writer2latex.xmerge.NewDOMDocument;
 
 /** This class creates the required NXC file for an EPUB document
@@ -141,7 +142,7 @@ public class NCXWriter extends NewDOMDocument {
         	Element navPointContent = contentDOM.createElement("content");
         	String sHref = entry.getFile().getFileName();
         	if (entry.getTarget()!=null) { sHref+="#"+entry.getTarget(); }
-        	navPointContent.setAttribute("src", sHref);
+        	navPointContent.setAttribute("src", Misc.makeHref(sHref));
         	navPoint.appendChild(navPointContent);
         	
         	nDepth = Math.max(nDepth, nCurrentLevel);

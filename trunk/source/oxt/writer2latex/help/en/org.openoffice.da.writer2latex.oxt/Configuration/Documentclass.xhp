@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer2latex-documentclass" indexer="include">
+            <title xml-lang="en-US">Documentclass</title>
+            <filename>org.openoffice.da.writer2latex.oxt/Configuration/Documentclass.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Documentclass</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Define the documentclass for the LaTeX document</paragraph>
+
+        <section id="howtoget" xml-lang="en-US">
+        	Choose <emph>Tools - Options - Writer2LaTeX - Documentclass</emph>
+        </section>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigNoPreamble" id="bm_confignopreamble"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Do not include preamble</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">If you check this option, Writer2LaTeX will not create the a LaTeX preamble,
+        nor include \begin{document} and \end{document}. This is useful if the document is to be included in another LaTeX document.
+        Note that in this case you will have to make sure that all packages/definitions needed are available in the master
+        LaTeX document.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigDocumentclass" id="bm_configdocumentclass"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Documentclass</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Type the name of the LaTeX documentclass to use (e.g.
+        <emph>article</emph>, <emph>book</emph>).</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigGlobalOptions" id="bm_configglobaloptions"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Global options</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Type a list of global options to add to the documentclass, e.g. <emph>landscape</emph>
+        to get \documentclass[landscape]{article}.</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigCustomPreamble" id="bm_configcustompreamble"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Custom preamble</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">The text you type here will be copied verbatim into the LaTeX preamble.
+        For example <emph>\usepackage{palatino}</emph> to typeset your document using the postscript font Palatino.</paragraph>
+    </body>
+</helpdocument>

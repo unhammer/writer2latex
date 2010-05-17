@@ -2,27 +2,27 @@
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
 <dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Tables" dlg:left="139" dlg:top="84" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:moveable="true" dlg:title="Tables" dlg:withtitlebar="false">
  <dlg:bulletinboard>
-  <dlg:checkbox dlg:id="NoTables" dlg:tab-index="0" dlg:left="10" dlg:top="8" dlg:width="240" dlg:height="12" dlg:value="Do not export tables" dlg:checked="false">
+  <dlg:checkbox dlg:id="NoTables" dlg:tab-index="0" dlg:left="10" dlg:top="8" dlg:width="240" dlg:height="12" dlg:value="Do not export tables" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigNoTables">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:NoTablesChange" script:language="UNO"/>
   </dlg:checkbox>
-  <dlg:checkbox dlg:id="UseTabulary" dlg:tab-index="2" dlg:left="10" dlg:top="36" dlg:width="240" dlg:height="12" dlg:value="Use tabulary.sty (automatic column width)" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="UseMultirow" dlg:tab-index="3" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:value="Use multirow.sty (support for rowspan)" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="UseSupertabular" dlg:tab-index="4" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Use supertabular.sty (multipage tables)" dlg:checked="false">
+  <dlg:checkbox dlg:id="UseTabulary" dlg:tab-index="2" dlg:left="10" dlg:top="36" dlg:width="240" dlg:height="12" dlg:value="Use tabulary.sty (automatic column width)" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigUseTabulary"/>
+  <dlg:checkbox dlg:id="UseMultirow" dlg:visible="false" dlg:tab-index="3" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:value="Use multirow.sty (support for rowspan)" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigUseMultirow"/>
+  <dlg:checkbox dlg:id="UseSupertabular" dlg:tab-index="4" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Use supertabular.sty (multipage tables)" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigUseSupertabular">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:UseSupertabularChange" script:language="UNO"/>
   </dlg:checkbox>
-  <dlg:checkbox dlg:id="UseLongtable" dlg:tab-index="5" dlg:left="10" dlg:top="78" dlg:width="240" dlg:height="12" dlg:value="Use longtable.sty (multipage tables)" dlg:checked="false">
+  <dlg:checkbox dlg:id="UseLongtable" dlg:tab-index="5" dlg:left="10" dlg:top="78" dlg:width="240" dlg:height="12" dlg:value="Use longtable.sty (multipage tables)" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigUseLongtable">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:UseLongtableChange" script:language="UNO"/>
   </dlg:checkbox>
   <dlg:text dlg:id="TableFirstHeadLabel" dlg:tab-index="6" dlg:left="25" dlg:top="92" dlg:width="90" dlg:height="12" dlg:value="Style for first head"/>
   <dlg:text dlg:id="TableHeadLabel" dlg:tab-index="7" dlg:left="25" dlg:top="106" dlg:width="90" dlg:height="12" dlg:value="Style for head"/>
   <dlg:text dlg:id="TableFootLabel" dlg:tab-index="8" dlg:left="25" dlg:top="120" dlg:width="90" dlg:height="12" dlg:value="Style for foot"/>
   <dlg:text dlg:id="TableLastFootLabel" dlg:tab-index="9" dlg:left="25" dlg:top="134" dlg:width="90" dlg:height="12" dlg:value="Style for last foot"/>
-  <dlg:textfield dlg:id="TableFirstHeadStyle" dlg:tab-index="10" dlg:left="120" dlg:top="90" dlg:width="130" dlg:height="12"/>
-  <dlg:textfield dlg:id="TableHeadStyle" dlg:tab-index="11" dlg:left="120" dlg:top="104" dlg:width="130" dlg:height="12"/>
-  <dlg:textfield dlg:id="TableFootStyle" dlg:tab-index="12" dlg:left="120" dlg:top="118" dlg:width="130" dlg:height="12"/>
-  <dlg:textfield dlg:id="TableLastFootStyle" dlg:tab-index="13" dlg:left="120" dlg:top="132" dlg:width="130" dlg:height="12"/>
+  <dlg:textfield dlg:id="TableFirstHeadStyle" dlg:tab-index="10" dlg:left="120" dlg:top="90" dlg:width="130" dlg:height="12" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigTableFirstHeadStyle"/>
+  <dlg:textfield dlg:id="TableHeadStyle" dlg:tab-index="11" dlg:left="120" dlg:top="104" dlg:width="130" dlg:height="12" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigTableHeadStyle"/>
+  <dlg:textfield dlg:id="TableFootStyle" dlg:tab-index="12" dlg:left="120" dlg:top="118" dlg:width="130" dlg:height="12" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigTableFootStyle"/>
+  <dlg:textfield dlg:id="TableLastFootStyle" dlg:tab-index="13" dlg:left="120" dlg:top="132" dlg:width="130" dlg:height="12" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigTableLastFootStyle"/>
   <dlg:text dlg:id="TableSequenceLabel" dlg:tab-index="14" dlg:left="10" dlg:top="150" dlg:width="90" dlg:height="12" dlg:value="Table sequence name"/>
-  <dlg:textfield dlg:id="TableSequenceName" dlg:tab-index="15" dlg:left="120" dlg:top="148" dlg:width="130" dlg:height="12"/>
-  <dlg:checkbox dlg:id="UseColortbl" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="240" dlg:height="12" dlg:value="Use colortbl.sty (background color in cells)" dlg:checked="false"/>
+  <dlg:textfield dlg:id="TableSequenceName" dlg:tab-index="15" dlg:left="120" dlg:top="148" dlg:width="130" dlg:height="12" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigTableSequenceName"/>
+  <dlg:checkbox dlg:id="UseColortbl" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="240" dlg:height="12" dlg:value="Use colortbl.sty (background color in cells)" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigUseColortbl"/>
  </dlg:bulletinboard>
 </dlg:window>

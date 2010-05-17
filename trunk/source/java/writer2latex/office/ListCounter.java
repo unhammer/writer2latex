@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-05-04)
+ *  Version 1.2 (2010-05-13)
  *
  */
 
@@ -99,15 +99,25 @@ public class ListCounter {
     }
 	
     public String getLabel() {
+		return getPrefix()+getLabelAndSuffix(); 
+    }
+    
+    public String getPrefix() {
     	if (style.isNumber(nLevel)) {
+    		String sPrefix = style.getLevelProperty(nLevel,XMLString.STYLE_NUM_PREFIX);
+    		return sPrefix!=null ? sPrefix : "";
+    	}
+    	return "";
+    }
+    
+    public String getLabelAndSuffix() {
+    	if (style.isNumber(nLevel)) {
+    		String sLabel="";
     		if (sNumFormat[nLevel]==null) return "";
     		int nLevels = Misc.getPosInteger(style.getLevelProperty(nLevel,
     				XMLString.TEXT_DISPLAY_LEVELS),1);
-    		String sPrefix = style.getLevelProperty(nLevel,XMLString.STYLE_NUM_PREFIX);
     		String sSuffix = style.getLevelProperty(nLevel,XMLString.STYLE_NUM_SUFFIX);
     		String sSpace = "nothing".equals(style.getLevelStyleProperty(nLevel, XMLString.TEXT_LABEL_FOLLOWED_BY)) ? "" : " ";
-    		String sLabel=""; 
-    		if (sPrefix!=null) { sLabel+=sPrefix; }
     		for (int j=nLevel-nLevels+1; j<nLevel; j++) {
     			sLabel+=formatNumber(nCounter[j],sNumFormat[j],true)+".";
     		}
@@ -122,7 +132,7 @@ public class ListCounter {
     	}
     	else {
     		return "";
-    	}
+    	}    	
     }
 	
     // Utility method to generate number

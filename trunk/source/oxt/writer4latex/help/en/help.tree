@@ -6,6 +6,6 @@
       <topic id="writer4latex/org.openoffice.da.writer4latex.oxt/menu.xhp">Menu reference</topic>
       <topic id="writer4latex/org.openoffice.da.writer4latex.oxt/guidelines.xhp">Guidelines</topic>
       <topic id="writer4latex/org.openoffice.da.writer4latex.oxt/templates.xhp">Using the templates</topic>
-      <topic id="writer4latex/org.openoffice.da.writer4latex.oxt/import.xhp">Importing TeX files</topic>
+      <!--<topic id="writer4latex/org.openoffice.da.writer4latex.oxt/import.xhp">Importing TeX files</topic>-->
   </help_section>
 </tree_view>

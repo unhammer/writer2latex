@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer2latex-configuration-tables" indexer="include">
+            <title xml-lang="en-US">Tables</title>
+            <filename>org.openoffice.da.writer2latex.oxt/Configuration/Tables.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Tables</paragraph>
+
+        <paragraph role="paragraph" xml-lang="en-US">Define how to convert tables</paragraph>
+
+        <section id="howtoget" xml-lang="en-US">
+        	Choose <emph>Tools - Options - Writer2LaTeX - Tables</emph>
+        </section>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigNoTables" id="bm_confignotables"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Do not export tables</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this option to ignore all tables in the export.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseColortbl" id="bm_configusecolortbl"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use colortbl.sty (background color in cells)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this if you want to apply background color to tables using the
+        package colortbl.sty. This option has no effect unless you also check <emph>Use color.sty</emph> on the page
+        <emph>Characters</emph>.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseTabulary" id="bm_configusetabulary"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use tabulary.sty (automatic column width)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this if tabulary.sty should be used to export tables.
+        This package determines column widths automatically which can be useful for tables with a lot of text in each cell.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseSupertabular" id="bm_configusesupertabular"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use supertabular.sty (multipage tables)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to use the package supertabular.sty to export tables which may break
+        across pages.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseLongtable" id="bm_configuselongtable"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use longtable.sty (multipage tables)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to use the package longtable.sty to export tables which may break
+        across pages.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigTableFirstHeadStyle" id="bm_configtablefirstheadstyle"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Style for first head</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">This option is used to produce advanced tables, that are not supported in
+        %PRODUCTNAME Writer. Enter the name of a paragraph style. If the first paragraph of the first cell in a row is formatted
+        with this paragraph style, the row in question will be used for the first head in a multipage table.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigTableHeadStyle" id="bm_configtableheadstyle"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Style for head</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Likewise this option specifies a paragraph style that identifies a
+        repeating head in a multipage table (like a normal table head in %PRODUCTNAME Writer).</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigTableFootStyle" id="bm_configtablefootstyle"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Style for foot</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">This option specifies a paragraph style that identifies a repeating foot in a
+        multipage table.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigTableLastFootStyle" id="bm_configtablelastfootstyle"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Style for last foot</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">This option specifies a paragraph style that identifies the last foot in a
+        multipage table.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigTableSequenceName" id="bm_configtablesequencename"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Table sequence name</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">This option can be set to a sequence name in the source document.
+        OpenDocument has a very weak sense of table captions: A table caption is a paragraph containing a sequence number.
+        If you use %PRODUCTNAME's defaults, Writer2LaTeX can guess which sequence name to use.
+        If it fails, you can type the name here. Normally it should be left empty.</paragraph>
+    </body>
+</helpdocument>

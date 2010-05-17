@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer2latex-configuration-figures" indexer="include">
+            <title xml-lang="en-US">Styles</title>
+            <filename>org.openoffice.da.writer2latex.oxt/Configuration/Figures.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Figures</paragraph>
+        
+        <paragraph role="paragraph" xml-lang="en-US">Define how to convert figures</paragraph>
+
+        <section id="howtoget" xml-lang="en-US">
+        	Choose <emph>Tools - Options - Writer2LaTeX - Figures</emph>
+        </section>
+        
+        <paragraph role="heading" level="2" xml-lang="en-US">General</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigUseCaption" id="bm_configusecaption"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Use caption.sty to format captions (also for tables)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to take advantage of the LaTeX package caption.sty.
+        Currently Writer2LaTeX only uses the support for non-floating captions from this package.
+        This applies to all captions (figure and table captions).</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigAlignFrames" id="bm_configalignframes"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Center figures</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">If you check this, all graphics and text boxes will be centered.
+        Otherwise standard formatting is applied (this normally means that they will appear flush left).</paragraph>
+
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigFigureSequenceName" id="bm_configfiguresequencename"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Figure sequence names</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">This option can be set to a sequence name in the source document.
+        OpenDocument has a very weak sense of figure captions: A figure caption is a paragraph containing a sequence number.
+        If you use %PRODUCTNAME's defaults, Writer2LaTeX can guess which sequence name to use.
+        If it fails, you can type the name here. Normally it should be left empty.</paragraph>
+
+        <paragraph role="heading" level="2" xml-lang="en-US">Graphics</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigNoImages" id="bm_confignoimages"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Do not export graphics</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to ignore all graphics in the export.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigRemoveGraphicsExtension" id="bm_configremovegraphicsextension"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Omit file extension</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to export file names for images without file extension.
+        You will thus get eg. \includegraphics{myimage} rather than \includegraphics{myimage.png}.</paragraph>
+        
+    	<bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2latex.oxt:ConfigImageOptions" id="bm_configimageoptions"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Graphic options</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Type any options that should be applied to all images
+        (ie. all \includegraphics commands). For example <emph>width=\linewidth</emph>.</paragraph>
+    </body>
+</helpdocument>

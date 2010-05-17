@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-04-12)
+ *  Version 1.2 (2010-05-13)
  *
  */ 
  
@@ -40,12 +40,8 @@ import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XDialogProvider2;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.ui.dialogs.ExecutableDialogResults;
-import com.sun.star.ui.dialogs.XExecutableDialog;
-import com.sun.star.ui.dialogs.XFilePicker;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -320,7 +316,7 @@ public final class ConfigurationDialog
     			configureMikTeX(sMikTeXPath, ExternalApps.DVIPS, "dvips", "%s", info, true);
     			configureMikTeX(sMikTeXPath, ExternalApps.BIBTEX, "bibtex", "%s", info, true);
     			configureMikTeX(sMikTeXPath, ExternalApps.MAKEINDEX, "makeindex", "%s", info, true);
-    			configureMikTeX(sMikTeXPath, ExternalApps.MK4HT, "mk4ht", "%c %s", info, true);
+    			//configureMikTeX(sMikTeXPath, ExternalApps.MK4HT, "mk4ht", "%c %s", info, true);
     			configureMikTeX(sMikTeXPath, ExternalApps.DVIVIEWER, "yap", "--single-instance %s", info, true);
     			// MikTeX 2.8 provides texworks for pdf viewing
     			bFoundTexworks = configureMikTeX(sMikTeXPath, ExternalApps.PDFVIEWER, "texworks", "%s", info, true);
@@ -334,7 +330,7 @@ public final class ConfigurationDialog
     			externalApps.setApplication(ExternalApps.DVIPS, "dvips", "%s");
     			externalApps.setApplication(ExternalApps.BIBTEX, "bibtex", "%s");
     			externalApps.setApplication(ExternalApps.MAKEINDEX, "makeindex", "%s");
-    			externalApps.setApplication(ExternalApps.MK4HT, "mk4ht", "%c %s");
+    			//externalApps.setApplication(ExternalApps.MK4HT, "mk4ht", "%c %s");
     			externalApps.setApplication(ExternalApps.DVIVIEWER, "yap", "--single-instance %s");
     		}
     		info.append("\n");
@@ -368,7 +364,7 @@ public final class ConfigurationDialog
     		configureApp(ExternalApps.DVIPS, "dvips", "%s",info);
     		configureApp(ExternalApps.BIBTEX, "bibtex", "%s",info);
     		configureApp(ExternalApps.MAKEINDEX, "makeindex", "%s",info);
-    		configureApp(ExternalApps.MK4HT, "mk4ht", "%c %s",info);    		
+    		//configureApp(ExternalApps.MK4HT, "mk4ht", "%c %s",info);    		
     		// We have several possible viewers
     		String[] sDviViewers = {"evince", "okular", "xdvi"};
     		configureApp(ExternalApps.DVIVIEWER, sDviViewers, "%s",info);
@@ -398,10 +394,10 @@ public final class ConfigurationDialog
             case 3: return ExternalApps.DVIPS;
             case 4: return ExternalApps.BIBTEX;
             case 5: return ExternalApps.MAKEINDEX;
-            case 6: return ExternalApps.MK4HT;
-            case 7: return ExternalApps.DVIVIEWER;
-            case 8: return ExternalApps.PDFVIEWER;
-            case 9: return ExternalApps.POSTSCRIPTVIEWER;
+            //case 6: return ExternalApps.MK4HT;
+            case 6: return ExternalApps.DVIVIEWER;
+            case 7: return ExternalApps.PDFVIEWER;
+            case 8: return ExternalApps.POSTSCRIPTVIEWER;
         }
         return "???";
     }

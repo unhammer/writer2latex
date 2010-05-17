@@ -3,7 +3,7 @@
 <dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Styles" dlg:left="139" dlg:top="84" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:moveable="true" dlg:title="Styles" dlg:withtitlebar="false">
  <dlg:bulletinboard>
   <dlg:text dlg:id="StyleFamilyLabel" dlg:tab-index="0" dlg:left="10" dlg:top="8" dlg:width="60" dlg:height="12" dlg:value="Style family"/>
-  <dlg:menulist dlg:id="StyleFamily" dlg:tab-index="1" dlg:left="80" dlg:top="6" dlg:width="170" dlg:height="12" dlg:spin="true">
+  <dlg:menulist dlg:id="StyleFamily" dlg:tab-index="1" dlg:left="80" dlg:top="6" dlg:width="170" dlg:height="12" dlg:spin="true" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigStyleFamily">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Character"/>
     <dlg:menuitem dlg:value="Paragraph"/>
@@ -13,38 +13,42 @@
    </dlg:menupopup>
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:StyleFamilyChange" script:language="UNO"/>
   </dlg:menulist>
-  <dlg:menulist dlg:id="StyleName" dlg:tab-index="2" dlg:left="80" dlg:top="26" dlg:width="80" dlg:height="12" dlg:spin="true" dlg:linecount="10">
+  <dlg:menulist dlg:id="StyleName" dlg:tab-index="2" dlg:left="80" dlg:top="26" dlg:width="80" dlg:height="12" dlg:spin="true" dlg:linecount="10" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigStyleName">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:StyleNameChange" script:language="UNO"/>
   </dlg:menulist>
   <dlg:text dlg:id="StyleNameLabel" dlg:tab-index="3" dlg:left="10" dlg:top="28" dlg:width="60" dlg:height="12" dlg:value="Style name"/>
-  <dlg:button dlg:id="NewStyleButton" dlg:tab-index="4" dlg:left="165" dlg:top="26" dlg:width="40" dlg:height="12" dlg:value="New...">
+  <dlg:button dlg:id="NewStyleButton" dlg:tab-index="4" dlg:left="165" dlg:top="26" dlg:width="40" dlg:height="12" dlg:value="New..." dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigNewStyle">
    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:NewStyleClick" script:language="UNO"/>
   </dlg:button>
-  <dlg:button dlg:id="DeleteStyleButton" dlg:tab-index="5" dlg:left="210" dlg:top="26" dlg:width="40" dlg:height="12" dlg:value="Delete...">
+  <dlg:button dlg:id="DeleteStyleButton" dlg:tab-index="5" dlg:left="210" dlg:top="26" dlg:width="40" dlg:height="12" dlg:value="Delete..." dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigDeleteStyle">
    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:DeleteStyleClick" script:language="UNO"/>
   </dlg:button>
   <dlg:text dlg:id="BeforeLabel" dlg:tab-index="6" dlg:left="15" dlg:top="42" dlg:width="60" dlg:height="12" dlg:value="LaTeX code before"/>
-  <dlg:textfield dlg:id="Before" dlg:tab-index="7" dlg:left="80" dlg:top="40" dlg:width="170" dlg:height="12"/>
+  <dlg:textfield dlg:id="Before" dlg:tab-index="7" dlg:left="80" dlg:top="40" dlg:width="170" dlg:height="12" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigBefore"/>
   <dlg:text dlg:id="AfterLabel" dlg:tab-index="8" dlg:left="15" dlg:top="56" dlg:width="60" dlg:height="12" dlg:value="LaTeX code after"/>
-  <dlg:textfield dlg:id="After" dlg:tab-index="9" dlg:left="80" dlg:top="54" dlg:width="170" dlg:height="12"/>
-  <dlg:menulist dlg:id="Next" dlg:tab-index="10" dlg:left="80" dlg:top="68" dlg:width="80" dlg:height="12" dlg:spin="true"/>
-  <dlg:button dlg:id="AddNextButton" dlg:tab-index="11" dlg:left="165" dlg:top="68" dlg:width="40" dlg:height="12" dlg:value="Add...">
+  <dlg:textfield dlg:id="After" dlg:tab-index="9" dlg:left="80" dlg:top="54" dlg:width="170" dlg:height="12" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigAfter"/>
+  <dlg:menulist dlg:id="Next" dlg:tab-index="10" dlg:left="80" dlg:top="68" dlg:width="80" dlg:height="12" dlg:spin="true" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigNext"/>
+  <dlg:button dlg:id="AddNextButton" dlg:tab-index="11" dlg:left="165" dlg:top="68" dlg:width="40" dlg:height="12" dlg:value="Add..." dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigAddNext">
    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:AddNextClick" script:language="UNO"/>
   </dlg:button>
-  <dlg:button dlg:id="RemoveNextButton" dlg:tab-index="12" dlg:left="210" dlg:top="68" dlg:width="40" dlg:height="12" dlg:value="Remove...">
+  <dlg:button dlg:id="RemoveNextButton" dlg:tab-index="12" dlg:left="210" dlg:top="68" dlg:width="40" dlg:height="12" dlg:value="Remove..." dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigRemoveNext">
    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:RemoveNextClick" script:language="UNO"/>
   </dlg:button>
   <dlg:text dlg:id="NextLabel" dlg:tab-index="13" dlg:left="15" dlg:top="70" dlg:width="60" dlg:height="12" dlg:value="Next style(s)"/>
-  <dlg:checkbox dlg:id="LineBreak" dlg:tab-index="15" dlg:left="15" dlg:top="98" dlg:width="235" dlg:height="12" dlg:value="Line break inside" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="Verbatim" dlg:tab-index="14" dlg:left="15" dlg:top="84" dlg:width="235" dlg:height="12" dlg:value="Verbatim content" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigVerbatim"/>
+  <dlg:checkbox dlg:id="LineBreak" dlg:tab-index="15" dlg:left="15" dlg:top="98" dlg:width="235" dlg:height="12" dlg:value="Line break inside" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigLineBreak"/>
+  <dlg:button dlg:id="LoadDefaults" dlg:tab-index="16" dlg:left="10" dlg:top="112" dlg:width="120" dlg:height="14" dlg:value="Load default mappings" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigLoadDefaults">
+   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:LoadDefaultsClick" script:language="UNO"/>
+  </dlg:button>
   <dlg:text dlg:id="OtherStylesLabel" dlg:tab-index="17" dlg:left="10" dlg:top="138" dlg:width="65" dlg:height="12" dlg:value="Other styles"/>
-  <dlg:menulist dlg:id="OtherStyles" dlg:tab-index="18" dlg:left="80" dlg:top="136" dlg:width="170" dlg:height="12" dlg:spin="true">
+  <dlg:menulist dlg:id="OtherStyles" dlg:tab-index="18" dlg:left="80" dlg:top="136" dlg:width="170" dlg:height="12" dlg:spin="true" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigOtherStyles">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Ignore"/>
     <dlg:menuitem dlg:value="Convert"/>
    </dlg:menupopup>
   </dlg:menulist>
-  <dlg:checkbox dlg:id="Verbatim" dlg:tab-index="14" dlg:left="15" dlg:top="84" dlg:width="235" dlg:height="12" dlg:value="Verbatim content" dlg:checked="false"/>
-  <dlg:menulist dlg:id="Formatting" dlg:tab-index="20" dlg:left="80" dlg:top="150" dlg:width="170" dlg:height="12" dlg:spin="true">
+  <dlg:text dlg:id="FormattingLabel" dlg:tab-index="19" dlg:left="10" dlg:top="152" dlg:width="65" dlg:height="12" dlg:value="Other formatting"/>
+  <dlg:menulist dlg:id="Formatting" dlg:tab-index="20" dlg:left="80" dlg:top="150" dlg:width="170" dlg:height="12" dlg:spin="true" dlg:help-url="org.openoffice.da.writer2latex.oxt:ConfigFormatting">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Ignore all"/>
     <dlg:menuitem dlg:value="Ignore most"/>
@@ -53,9 +57,5 @@
     <dlg:menuitem dlg:value="Convert all"/>
    </dlg:menupopup>
   </dlg:menulist>
-  <dlg:text dlg:id="FormattingLabel" dlg:tab-index="19" dlg:left="10" dlg:top="152" dlg:width="65" dlg:height="12" dlg:value="Other formatting"/>
-  <dlg:button dlg:id="LoadDefaults" dlg:tab-index="16" dlg:left="10" dlg:top="112" dlg:width="120" dlg:height="14" dlg:value="Load default mappings">
-   <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:LoadDefaultsClick" script:language="UNO"/>
-  </dlg:button>
  </dlg:bulletinboard>
 </dlg:window>
