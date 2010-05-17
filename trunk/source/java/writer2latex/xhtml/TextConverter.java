@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-05-13)
+ *  Version 1.2 (2010-05-17)
  *
  */
 
@@ -580,7 +580,7 @@ public class TextConverter extends ConverterHelper {
                 // Add in external content. For single file output we include all level 1 headings + their target
                 // For multi-file output, the included heading levels depends on the split leve, and we don't include targets 
                 if (nLevel<=Math.max(nSplit,1)) {
-                	converter.addContentEntry(sLabel+(sLabel.length()>0 ? " " : "")+Misc.getPCDATA(onode), nLevel,
+                	converter.addContentEntry(sLabel+(sLabel.length()>0 ? " " : "")+converter.getPlainInlineText(onode), nLevel,
                 			nSplit==0 ? sTarget : null);
                 }
 

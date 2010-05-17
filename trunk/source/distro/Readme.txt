@@ -14,5 +14,5 @@ Bugs and feature requests should be reported to
   henrikjust (at) openoffice.org
   
 
-April 2010
+May 2010
 Henrik Just

@@ -2,6 +2,10 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.3 ----------
 
+[w2x] The standard configuration cleanxhtml.xml now maps footnote and endnote references to <sup>
+
+[w2x] EPUB bugfix: Now includes the entire heading in NCX even if it contains formatting (which is ignored)
+
 [w2l] Added help content for custom format
 
 [all] Filter: Fixed bug with filenames containing spaces and other special characters

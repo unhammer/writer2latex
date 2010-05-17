@@ -72,7 +72,7 @@ In addition to oxt, the build file supports the following targets:
     clean
 
 
-Henrik Just, April 2010
+Henrik Just, May 2010
 
 
 Thanks to Michael Niedermair for writing the original ant build file

@@ -426,7 +426,7 @@ public class Converter extends ConverterBase {
     }
     
     /* get inline text, ignoring any draw objects, footnotes, formatting and hyperlinks */
-    private String getPlainInlineText(Node node) {
+    protected String getPlainInlineText(Node node) {
     	StringBuffer buf = new StringBuffer();
         Node child = node.getFirstChild();
         while (child!=null) {

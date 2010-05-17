@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- cleanxhtml.xml
+<!-- cleanxhtml.xml 2010-05-17
      This is a sample configuration file for Writer2xhtml.
      The options are set to produce a clean XHTML file using
      standard XHTML elements, using a custom style sheet for
@@ -45,6 +45,9 @@ block-element="blockquote" block-css="(none)" element="p" css="(none)" />
   <xhtml-style-map name="Teletype" family="text" element="tt" css="(none)" />
   <xhtml-style-map name="User entry" family="text" element="kbd" css="(none)" />
   <xhtml-style-map name="Variable" family="text" element="var" css="(none)" />
+  
+  <xhtml-style-map name="Footnote anchor" family="text" element="sup" css="(none)" />
+  <xhtml-style-map name="Endnote anchor" family="text" element="sup" css="(none)" />
   
   <!-- map OOo hard formatting attributes to xhtml elements -->
   <xhtml-style-map name="bold" family="attribute" element="b" css="(none)" />
