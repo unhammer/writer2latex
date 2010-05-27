@@ -4,7 +4,7 @@
  <dlg:bulletinboard>
   <dlg:text dlg:id="StyleMappingsLabel" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="245" dlg:height="12" dlg:value="Style mappings"/>
   <dlg:text dlg:id="StyleFamilyLabel" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="60" dlg:height="12" dlg:value="Style family"/>
-  <dlg:menulist dlg:id="StyleFamily" dlg:tab-index="2" dlg:left="80" dlg:top="20" dlg:width="170" dlg:height="12" dlg:spin="true" dlg:linecount="5">
+  <dlg:menulist dlg:id="StyleFamily" dlg:tab-index="2" dlg:left="80" dlg:top="20" dlg:width="170" dlg:height="12" dlg:spin="true" dlg:linecount="5" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:StyleFamily">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Character"/>
     <dlg:menuitem dlg:value="Paragraph"/>
@@ -15,24 +15,24 @@
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:StyleFamilyChange" script:language="UNO"/>
   </dlg:menulist>
   <dlg:text dlg:id="StyleNameLabel" dlg:tab-index="3" dlg:left="10" dlg:top="42" dlg:width="60" dlg:height="12" dlg:value="Style name"/>
-  <dlg:menulist dlg:id="StyleName" dlg:tab-index="4" dlg:left="80" dlg:top="40" dlg:width="80" dlg:height="12" dlg:spin="true" dlg:linecount="10">
+  <dlg:menulist dlg:id="StyleName" dlg:tab-index="4" dlg:left="80" dlg:top="40" dlg:width="80" dlg:height="12" dlg:spin="true" dlg:linecount="10" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:StyleName">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:StyleNameChange" script:language="UNO"/>
   </dlg:menulist>
-  <dlg:button dlg:id="NewStyleButton" dlg:tab-index="5" dlg:left="165" dlg:top="40" dlg:width="40" dlg:height="12" dlg:value="New...">
+  <dlg:button dlg:id="NewStyleButton" dlg:tab-index="5" dlg:left="165" dlg:top="40" dlg:width="40" dlg:height="12" dlg:value="New..." dlg:help-url="org.openoffice.da.writer2xhtml.oxt:NewStyle">
    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:NewStyleClick" script:language="UNO"/>
   </dlg:button>
-  <dlg:button dlg:id="DeleteStyleButton" dlg:tab-index="6" dlg:left="210" dlg:top="40" dlg:width="40" dlg:height="12" dlg:value="Delete...">
+  <dlg:button dlg:id="DeleteStyleButton" dlg:tab-index="6" dlg:left="210" dlg:top="40" dlg:width="40" dlg:height="12" dlg:value="Delete..." dlg:help-url="org.openoffice.da.writer2xhtml.oxt:DeleteStyle">
    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:DeleteStyleClick" script:language="UNO"/>
   </dlg:button>
   <dlg:text dlg:id="ElementLabel" dlg:tab-index="7" dlg:left="10" dlg:top="56" dlg:width="60" dlg:height="12" dlg:value="XHTML element"/>
-  <dlg:combobox dlg:id="Element" dlg:tab-index="8" dlg:left="80" dlg:top="54" dlg:width="170" dlg:height="12" dlg:spin="true" dlg:linecount="11"/>
+  <dlg:combobox dlg:id="Element" dlg:tab-index="8" dlg:left="80" dlg:top="54" dlg:width="170" dlg:height="12" dlg:spin="true" dlg:linecount="11" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:Element"/>
   <dlg:text dlg:id="CssLabel" dlg:tab-index="9" dlg:left="10" dlg:top="70" dlg:width="60" dlg:height="12" dlg:value="CSS class"/>
-  <dlg:textfield dlg:id="Css" dlg:tab-index="10" dlg:left="80" dlg:top="68" dlg:width="170" dlg:height="12"/>
+  <dlg:textfield dlg:id="Css" dlg:tab-index="10" dlg:left="80" dlg:top="68" dlg:width="170" dlg:height="12" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:Css"/>
   <dlg:text dlg:id="BlockElementLabel" dlg:tab-index="11" dlg:left="10" dlg:top="84" dlg:width="60" dlg:height="12" dlg:value="Block XHTML element"/>
-  <dlg:combobox dlg:id="BlockElement" dlg:tab-index="12" dlg:left="80" dlg:top="82" dlg:width="170" dlg:height="12" dlg:spin="true" dlg:linecount="10"/>
+  <dlg:combobox dlg:id="BlockElement" dlg:tab-index="12" dlg:left="80" dlg:top="82" dlg:width="170" dlg:height="12" dlg:spin="true" dlg:linecount="10" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:BlockElement"/>
   <dlg:text dlg:id="BlockCssLabel" dlg:tab-index="13" dlg:left="10" dlg:top="98" dlg:width="60" dlg:height="12" dlg:value="Block CSS class"/>
-  <dlg:textfield dlg:id="BlockCss" dlg:tab-index="14" dlg:left="80" dlg:top="96" dlg:width="170" dlg:height="12"/>
-  <dlg:button dlg:id="LoadDefaultsButton" dlg:tab-index="15" dlg:left="10" dlg:top="118" dlg:width="120" dlg:height="12" dlg:value="Load default mappings...">
+  <dlg:textfield dlg:id="BlockCss" dlg:tab-index="14" dlg:left="80" dlg:top="96" dlg:width="170" dlg:height="12" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:BlockCss"/>
+  <dlg:button dlg:id="LoadDefaultsButton" dlg:tab-index="15" dlg:left="10" dlg:top="118" dlg:width="120" dlg:height="12" dlg:value="Load default mappings..." dlg:help-url="org.openoffice.da.writer2xhtml.oxt:LoadDefaults">
    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:LoadDefaultsClick" script:language="UNO"/>
   </dlg:button>
  </dlg:bulletinboard>

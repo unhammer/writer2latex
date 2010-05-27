@@ -3,7 +3,7 @@
 <dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Formatting" dlg:left="139" dlg:top="84" dlg:width="258" dlg:height="172" dlg:closeable="true" dlg:moveable="true" dlg:title="Formatting" dlg:withtitlebar="false">
  <dlg:bulletinboard>
   <dlg:text dlg:id="FormattingLabel" dlg:tab-index="0" dlg:left="10" dlg:top="8" dlg:width="110" dlg:height="12" dlg:value="Formatting"/>
-  <dlg:menulist dlg:id="Formatting" dlg:tab-index="1" dlg:left="130" dlg:top="6" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="4">
+  <dlg:menulist dlg:id="Formatting" dlg:tab-index="1" dlg:left="130" dlg:top="6" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="4" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:Formatting">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Convert all"/>
     <dlg:menuitem dlg:value="Ignore styles"/>
@@ -12,7 +12,7 @@
    </dlg:menupopup>
   </dlg:menulist>
   <dlg:text dlg:id="FrameFormattingLabel" dlg:tab-index="2" dlg:left="10" dlg:top="22" dlg:width="110" dlg:height="12" dlg:value="Frame formatting"/>
-  <dlg:menulist dlg:id="FrameFormatting" dlg:tab-index="3" dlg:left="130" dlg:top="20" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="4">
+  <dlg:menulist dlg:id="FrameFormatting" dlg:tab-index="3" dlg:left="130" dlg:top="20" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="4" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:FrameFormatting">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Convert all"/>
     <dlg:menuitem dlg:value="Ignore styles"/>
@@ -20,18 +20,18 @@
     <dlg:menuitem dlg:value="Ignore all"/>
    </dlg:menupopup>
   </dlg:menulist>
-  <dlg:checkbox dlg:id="SectionFormatting" dlg:tab-index="4" dlg:left="10" dlg:top="36" dlg:width="240" dlg:height="12" dlg:value="Convert section formatting" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="TableFormatting" dlg:tab-index="5" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:value="Convert table formatting" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="IgnoreTableDimensions" dlg:tab-index="6" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Ignore table dimensions" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="SectionFormatting" dlg:tab-index="4" dlg:left="10" dlg:top="36" dlg:width="240" dlg:height="12" dlg:value="Convert section formatting" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:SectionFormatting"/>
+  <dlg:checkbox dlg:id="TableFormatting" dlg:tab-index="5" dlg:left="10" dlg:top="50" dlg:width="240" dlg:height="12" dlg:value="Convert table formatting" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:TableFormatting"/>
+  <dlg:checkbox dlg:id="IgnoreTableDimensions" dlg:tab-index="6" dlg:left="10" dlg:top="64" dlg:width="240" dlg:height="12" dlg:value="Ignore table dimensions" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:IgnoreTableDimensions"/>
   <dlg:text dlg:id="ListFormattingLabel" dlg:tab-index="7" dlg:left="10" dlg:top="78" dlg:width="110" dlg:height="12" dlg:value="List formatting"/>
-  <dlg:menulist dlg:id="ListFormatting" dlg:tab-index="8" dlg:left="130" dlg:top="76" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="3">
+  <dlg:menulist dlg:id="ListFormatting" dlg:tab-index="8" dlg:left="130" dlg:top="76" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="3" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:ListFormatting">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Use CSS1"/>
     <dlg:menuitem dlg:value="Use CSS1 and non-standard lists"/>
     <dlg:menuitem dlg:value="Use hard labels"/>
    </dlg:menupopup>
   </dlg:menulist>
-  <dlg:checkbox dlg:id="ConvertToPx" dlg:tab-index="9" dlg:visible="false" dlg:left="10" dlg:top="92" dlg:width="240" dlg:height="12" dlg:value="Convert units to px (pixels)" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="SeparateStylesheet" dlg:tab-index="10" dlg:visible="false" dlg:left="10" dlg:top="106" dlg:width="240" dlg:height="12" dlg:value="Create separate styles sheet on file split" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="ConvertToPx" dlg:tab-index="9" dlg:visible="false" dlg:left="10" dlg:top="92" dlg:width="240" dlg:height="12" dlg:value="Convert units to px (pixels)" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:ConvertToPx"/>
+  <dlg:checkbox dlg:id="SeparateStylesheet" dlg:tab-index="10" dlg:visible="false" dlg:left="10" dlg:top="106" dlg:width="240" dlg:height="12" dlg:value="Create separate styles sheet on file split" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:SeparateStyleSheet"/>
  </dlg:bulletinboard>
 </dlg:window>

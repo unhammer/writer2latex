@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer2xhtml-configuration-content" indexer="include">
+            <title xml-lang="en-US">Content</title>
+            <filename>org.openoffice.da.writer2xhtml.oxt/Configuration/Content.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Content</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US"></paragraph>
+
+        <section id="howtoget" xml-lang="en-US">
+        	Choose <emph>Tools - Options - Writer2xhtml - Content</emph>
+        </section>
+
+        <paragraph role="heading" level="2" xml-lang="en-US">Formulas</paragraph>
+
+        <bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:Formulas" id="bm_configformulas"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Include as</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Select how to export formulas if you are not using XHTML+MathML.</paragraph>
+        <list type="unordered">
+			<listitem>
+		        <paragraph role="paragraph" xml-lang="en-US"><emph>Image with StarMath code</emph>: Export formulas as images
+		        with the original StarMath formula in the alt attribute.</paragraph>
+			</listitem>
+			<listitem>
+		        <paragraph role="paragraph" xml-lang="en-US"><emph>Image with LaTeX code</emph>:  Export formulas as images
+		        with LaTeX code in the alt attribute.</paragraph>
+			</listitem>
+			<listitem>
+		        <paragraph role="paragraph" xml-lang="en-US"><emph>StarMath code</emph>: Export the original StarMath code directly
+		        in the text.</paragraph>
+			</listitem>
+			<listitem>
+		        <paragraph role="paragraph" xml-lang="en-US"><emph>LaTeX code</emph>: Export LaTeX code directly in the text.</paragraph>
+			</listitem>
+		</list>
+    </body>
+</helpdocument>

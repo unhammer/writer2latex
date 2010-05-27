@@ -4,5 +4,15 @@
       <!--<topic id="writer2xhtml/org.openoffice.da.writer2xhtml.oxt/general.xhp">General information</topic>-->
       <topic id="writer2xhtml/org.openoffice.da.writer2xhtml.oxt/export.xhp">XHTML and EPUB Export (Writer)</topic>
       <topic id="writer2xhtml/org.openoffice.da.writer2xhtml.oxt/export_calc.xhp">XHTML Export (Calc)</topic>
+      <node id="w2l0x_configuration" title="Custom style">
+      	<topic id="writer2latex/org.openoffice.da.writer2xhtml.oxt/Configuration/Introduction.xhp">Introduction</topic>
+      	<topic id="writer2latex/org.openoffice.da.writer2xhtml.oxt/Configuration/General.xhp">General</topic>
+      	<topic id="writer2latex/org.openoffice.da.writer2xhtml.oxt/Configuration/Template.xhp">Template</topic>
+      	<topic id="writer2latex/org.openoffice.da.writer2xhtml.oxt/Configuration/Stylesheets.xhp">Style sheets</topic>
+      	<topic id="writer2latex/org.openoffice.da.writer2xhtml.oxt/Configuration/Masterstyles.xhp">Master styles</topic>
+      	<topic id="writer2latex/org.openoffice.da.writer2xhtml.oxt/Configuration/Otherstyles.xhp">Other styles</topic>
+      	<topic id="writer2latex/org.openoffice.da.writer2xhtml.oxt/Configuration/Formatting.xhp">Formatting</topic>
+      	<topic id="writer2latex/org.openoffice.da.writer2xhtml.oxt/Configuration/Content.xhp">Content</topic>
+      </node>      
   </help_section>
 </tree_view>

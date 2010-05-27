@@ -1022,7 +1022,13 @@ public class OfficeReader {
             //collectMasterPage(getParStyle(node.getAttribute(XMLString.TEXT_STYLE_NAME)));
         }
         else if (sName.equals(XMLString.TEXT_H)) {
-            int nLevel = Misc.getPosInteger(node.getAttribute(XMLString.TEXT_OUTLINE_LEVEL),1);
+        	int nLevel;
+        	if (node.hasAttribute(XMLString.TEXT_OUTLINE_LEVEL)) {
+        		nLevel = Misc.getPosInteger(node.getAttribute(XMLString.TEXT_OUTLINE_LEVEL),1);
+        	}
+        	else {
+        		nLevel = Misc.getPosInteger(node.getAttribute(XMLString.TEXT_LEVEL),1);
+        	}
             StyleWithProperties style = getParStyle(node.getAttribute(XMLString.TEXT_STYLE_NAME));
             //collectMasterPage(style);
             if (1<=nLevel && nLevel<=10 && heading[nLevel]==null) {

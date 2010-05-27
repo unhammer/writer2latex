@@ -2,33 +2,33 @@
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
 <dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Template" dlg:left="139" dlg:top="84" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:moveable="true" dlg:title="Template" dlg:withtitlebar="false">
  <dlg:bulletinboard>
-  <dlg:checkbox dlg:id="UseCustomTemplate" dlg:tab-index="0" dlg:left="10" dlg:top="8" dlg:width="240" dlg:height="12" dlg:value="Use custom XHTML template" dlg:checked="false">
+  <dlg:checkbox dlg:id="UseCustomTemplate" dlg:tab-index="0" dlg:left="10" dlg:top="8" dlg:width="240" dlg:height="12" dlg:value="Use custom XHTML template" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:UseCustomTemplate">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:UseCustomTemplateChange" script:language="UNO"/>
   </dlg:checkbox>
-  <dlg:textfield dlg:id="CustomTemplate" dlg:tab-index="1" dlg:left="18" dlg:top="22" dlg:width="232" dlg:height="96" dlg:hscroll="true" dlg:vscroll="true" dlg:multiline="true"/>
-  <dlg:button dlg:id="LoadTemplateButton" dlg:tab-index="2" dlg:left="18" dlg:top="120" dlg:width="60" dlg:height="12" dlg:value="Load...">
+  <dlg:textfield dlg:id="CustomTemplate" dlg:tab-index="1" dlg:left="18" dlg:top="22" dlg:width="232" dlg:height="96" dlg:hscroll="true" dlg:vscroll="true" dlg:multiline="true" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:UseCustomTemplate"/>
+  <dlg:button dlg:id="LoadTemplateButton" dlg:tab-index="2" dlg:left="18" dlg:top="120" dlg:width="60" dlg:height="12" dlg:value="Load..." dlg:help-url="org.openoffice.da.writer2xhtml.oxt:LoadTemplate">
    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.UNO:LoadTemplateClick" script:language="UNO"/>
   </dlg:button>
   <dlg:text dlg:id="ContentIdLabel" dlg:tab-index="4" dlg:left="18" dlg:top="140" dlg:width="50" dlg:height="12" dlg:value="Content id"/>
-  <dlg:combobox dlg:id="ContentId" dlg:tab-index="5" dlg:left="72" dlg:top="138" dlg:width="50" dlg:height="12" dlg:spin="true">
+  <dlg:combobox dlg:id="ContentId" dlg:tab-index="5" dlg:left="72" dlg:top="138" dlg:width="50" dlg:height="12" dlg:spin="true" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:ContentId">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="content"/>
    </dlg:menupopup>
   </dlg:combobox>
   <dlg:text dlg:id="PanelIdLabel" dlg:tab-index="6" dlg:left="18" dlg:top="154" dlg:width="50" dlg:height="12" dlg:value="Panel id"/>
-  <dlg:combobox dlg:id="PanelId" dlg:tab-index="7" dlg:left="72" dlg:top="152" dlg:width="50" dlg:height="12" dlg:spin="true">
+  <dlg:combobox dlg:id="PanelId" dlg:tab-index="7" dlg:left="72" dlg:top="152" dlg:width="50" dlg:height="12" dlg:spin="true" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:PanelId">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="panel"/>
    </dlg:menupopup>
   </dlg:combobox>
   <dlg:text dlg:id="HeaderIdLabel" dlg:tab-index="8" dlg:left="146" dlg:top="140" dlg:width="50" dlg:height="12" dlg:value="Header id"/>
-  <dlg:combobox dlg:id="HeaderId" dlg:tab-index="9" dlg:left="200" dlg:top="138" dlg:width="50" dlg:height="12" dlg:spin="true">
+  <dlg:combobox dlg:id="HeaderId" dlg:tab-index="9" dlg:left="200" dlg:top="138" dlg:width="50" dlg:height="12" dlg:spin="true" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:HeaderId">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="header"/>
    </dlg:menupopup>
   </dlg:combobox>
   <dlg:text dlg:id="FooterIdLabel" dlg:tab-index="10" dlg:left="146" dlg:top="154" dlg:width="50" dlg:height="12" dlg:value="Footer id"/>
-  <dlg:combobox dlg:id="FooterId" dlg:tab-index="11" dlg:left="200" dlg:top="152" dlg:width="50" dlg:height="12" dlg:spin="true">
+  <dlg:combobox dlg:id="FooterId" dlg:tab-index="11" dlg:left="200" dlg:top="152" dlg:width="50" dlg:height="12" dlg:spin="true" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:FooterId">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="footer"/>
    </dlg:menupopup>

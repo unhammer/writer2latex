@@ -44,8 +44,8 @@
 			<listitem>
 				<paragraph role="paragraph" xml-lang="en-US"><emph>Custom</emph> is a user defined format. You can define your own
 				style by providing a CSS style sheet and a mapping from Writer styles to your CSS styles.
-				 To configure the custom format, choose <emph>Tools - Options - Writer2xhtml</emph>.
-				</paragraph>
+				 To configure the custom format, choose <emph><link href="org.openoffice.da.writer2xhtml.oxt/Configuration/Introduction.xhp"
+				name="Custom configuration">Tools - Options - Writer2xhtml</link></emph>.</paragraph>
 			</listitem>
         </list>
         <section id="split3">

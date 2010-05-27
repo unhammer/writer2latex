@@ -4,7 +4,7 @@
  <dlg:bulletinboard>
   <dlg:text dlg:id="HardFormattingLabel" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="245" dlg:height="12" dlg:value="Style mappings for hard formatting"/>
   <dlg:text dlg:id="FormattingAttributeLabel" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="100" dlg:height="12" dlg:value="Formatting attribute"/>
-  <dlg:menulist dlg:id="FormattingAttribute" dlg:tab-index="2" dlg:left="120" dlg:top="20" dlg:width="130" dlg:height="12" dlg:spin="true" dlg:linecount="7">
+  <dlg:menulist dlg:id="FormattingAttribute" dlg:tab-index="2" dlg:left="120" dlg:top="20" dlg:width="130" dlg:height="12" dlg:spin="true" dlg:linecount="7" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:FormattingAttribute">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Bold"/>
     <dlg:menuitem dlg:value="Italics"/>
@@ -16,15 +16,15 @@
    </dlg:menupopup>
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:FormattingAttributeChange" script:language="UNO"/>
   </dlg:menulist>
-  <dlg:checkbox dlg:id="CustomAttribute" dlg:tab-index="3" dlg:left="10" dlg:top="36" dlg:width="240" dlg:height="12" dlg:value="Apply custom style" dlg:checked="false">
+  <dlg:checkbox dlg:id="CustomAttribute" dlg:tab-index="3" dlg:left="10" dlg:top="36" dlg:width="240" dlg:height="12" dlg:value="Apply custom style" dlg:checked="false" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:CustomAttribute">
      <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:CustomAttributeChange" script:language="UNO"/>
   </dlg:checkbox>  
   <dlg:text dlg:id="ElementLabel" dlg:tab-index="4" dlg:left="10" dlg:top="50" dlg:width="100" dlg:height="12" dlg:value="XHTML element"/>
-  <dlg:combobox dlg:id="Element" dlg:tab-index="5" dlg:left="120" dlg:top="48" dlg:width="130" dlg:height="12" dlg:spin="true" dlg:linecount="10"/>
+  <dlg:combobox dlg:id="Element" dlg:tab-index="5" dlg:left="120" dlg:top="48" dlg:width="130" dlg:height="12" dlg:spin="true" dlg:linecount="10" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:AttributeElement"/>
   <dlg:text dlg:id="CssLabel" dlg:tab-index="6" dlg:left="10" dlg:top="64" dlg:width="100" dlg:height="12" dlg:value="CSS class"/>
-  <dlg:textfield dlg:id="Css" dlg:tab-index="7" dlg:left="120" dlg:top="62" dlg:width="130" dlg:height="12"/>
+  <dlg:textfield dlg:id="Css" dlg:tab-index="7" dlg:left="120" dlg:top="62" dlg:width="130" dlg:height="12" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:AttributeCss"/>
   <dlg:text dlg:id="OtherStylesLabel" dlg:tab-index="8" dlg:left="5" dlg:top="78" dlg:width="245" dlg:height="12" dlg:value="Other styles"/>
   <dlg:text dlg:id="TabstopLabel" dlg:tab-index="9" dlg:left="10" dlg:top="92" dlg:width="100" dlg:height="12" dlg:value="CSS class for tabulator stop"/>
-  <dlg:textfield dlg:id="TabstopStyle" dlg:tab-index="10" dlg:left="120" dlg:top="90" dlg:width="130" dlg:height="12"/>
+  <dlg:textfield dlg:id="TabstopStyle" dlg:tab-index="10" dlg:left="120" dlg:top="90" dlg:width="130" dlg:height="12" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:TabstopStyle"/>
  </dlg:bulletinboard>
 </dlg:window>

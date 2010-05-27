@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+	<meta>
+        <topic id="writer2xhtml-configuration-stylesheets" indexer="include">
+            <title xml-lang="en-US">Content</title>
+            <filename>org.openoffice.da.writer2xhtml.oxt/Configuration/Stylesheets.xhp</filename>
+        </topic>
+    </meta>
+    <body>
+        <paragraph role="heading" level="1" xml-lang="en-US">Stylesheets</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Use this page to provide your own style sheets for the exported documents.</paragraph>
+
+        <section id="howtoget" xml-lang="en-US">
+        	Choose <emph>Tools - Options - Writer2xhtml - Style sheets</emph>
+        </section>
+        
+        <paragraph role="heading" level="2" xml-lang="en-US">Custom style sheets</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">The custom style sheet can either be an embedded style sheet for the EPUB
+        export or a linked style sheet for the XHTML export.</paragraph>
+
+        <bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:LinkCustomStylesheet" id="bm_configlinkstylesheet"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Insert link to custom style sheet (XHTML export)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to link to your own, external CSS style sheet.
+        For more advanced solutions (eg. different style sheets for screen viewing and printing) you can use an
+        <link href="org.openoffice.da.writer2xhtml.oxt/Configuration/Template.xhp"
+		name="Template">XHTML template</link>.</paragraph>
+
+        <bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:CustomStylesheetURL" id="bm_configcustomstylesheeturl"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">URL</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Enter the URL for the style sheet.</paragraph>
+
+        <bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:UseCustomStylesheet" id="bm_configusecustomstylesheet"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Include custom style sheet (EPUB export)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to include a custom style sheet in the EPUB document.</paragraph>
+
+        <bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:LoadStylesheet" id="bm_configloadstylesheet"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Load...</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Click to load the style sheet from a file.</paragraph>
+
+    </body>
+</helpdocument>

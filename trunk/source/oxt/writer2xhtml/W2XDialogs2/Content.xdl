@@ -4,7 +4,7 @@
  <dlg:bulletinboard>
   <dlg:text dlg:id="FormulasHeadingLabel" dlg:tab-index="0" dlg:left="5" dlg:top="8" dlg:width="245" dlg:height="12" dlg:value="Formulas"/>
   <dlg:text dlg:id="FormulasLabel" dlg:tab-index="1" dlg:left="10" dlg:top="22" dlg:width="110" dlg:height="12" dlg:value="Include as"/>
-  <dlg:menulist dlg:id="Formulas" dlg:tab-index="2" dlg:left="130" dlg:top="20" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="4">
+  <dlg:menulist dlg:id="Formulas" dlg:tab-index="2" dlg:left="130" dlg:top="20" dlg:width="120" dlg:height="12" dlg:spin="true" dlg:linecount="4" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:Formulas">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="Image with StarMath code"/>
     <dlg:menuitem dlg:value="Image with LaTeX code"/>
