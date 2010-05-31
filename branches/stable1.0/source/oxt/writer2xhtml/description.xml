@@ -5,7 +5,7 @@
 			 
   <identifier value="org.openoffice.da.writer2xhtml.oxt" />
   
-  <version value="1.0.1" />
+  <version value="1.0.2" />
   
   <dependencies>
     <OpenOffice.org-minimal-version value="2.2" d:name="OpenOffice.org 2.2"/>
@@ -17,6 +17,7 @@
     <name lang="de">Writer2xhtml Exportfilter</name>
     <name lang="nl">Writer2xhtml exportfilters</name>
     <name lang="es">Writer2xhtml filtros para exportar</name>
+    <name lang="fi">Writer2xhtml vienti suodattimet</name>
     <name lang="fr">Filtres d'exportation Writer2xhtml</name>
     <name lang="it">Filtri di esportazione Writer2xhtml</name>
     <name lang="pt_BR">Filtros de exportação Writer2xhtml</name>

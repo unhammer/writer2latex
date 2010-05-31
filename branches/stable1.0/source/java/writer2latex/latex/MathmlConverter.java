@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.0.1 (2010-02-28)
+ *  Version 1.0.2 (2010-04-29)
  *
  */
 
@@ -236,6 +236,7 @@ public final class MathmlConverter extends ConverterHelper {
             if (formula==null) {
             	formula = Misc.getChildByTagName(node,XMLString.MATH_MATH);
             }
+            return formula;
         }
         return null;
     }

@@ -1,4 +1,10 @@
-Changelog for Writer2LaTeX version 0.5 -> 1.0.1
+Changelog for Writer2LaTeX version 0.5 -> 1.0.2
+
+---------- version 1.0.2 final --------
+
+[w2l] Bugfix: Display equations in flat XML are now again recognized correctly
+
+[all] Added Finnish translation from Samuli Selin
 
 ---------- version 1.0.1 final --------
 

@@ -64,7 +64,7 @@
   <dlg:checkbox dlg:id="SplitToplevelSections" dlg:tab-index="20" dlg:left="12" dlg:top="204" dlg:width="160" dlg:height="12" dlg:help-text="&amp;60.LaTeXOptions.SplitToplevelSections.HelpText" dlg:value="&amp;61.LaTeXOptions.SplitToplevelSections.Label" dlg:checked="false"/>
   <dlg:checkbox dlg:id="SaveImagesInSubdir" dlg:tab-index="21" dlg:left="12" dlg:top="218" dlg:width="149" dlg:height="12" dlg:help-text="&amp;62.LaTeXOptions.SaveImagesInSubdir.HelpText" dlg:value="&amp;63.LaTeXOptions.SaveImagesInSubdir.Label" dlg:checked="false"/>
   <dlg:text dlg:id="SpecialContentLabel" dlg:tab-index="22" dlg:left="186" dlg:top="8" dlg:width="156" dlg:height="12" dlg:help-text="&amp;64.LaTeXOptions.SpecialContentLabel.HelpText" dlg:value="&amp;65.LaTeXOptions.SpecialContentLabel.Label"/>
-  <dlg:text dlg:id="NotesLabel" dlg:tab-index="23" dlg:left="193" dlg:top="22" dlg:width="47" dlg:height="12" dlg:help-text="&amp;66.LaTeXOptions.NotesLabel.HelpText" dlg:value="&amp;67.LaTeXOptions.NotesLabel.Label"/>
+  <dlg:text dlg:id="NotesLabel" dlg:tab-index="23" dlg:left="193" dlg:top="22" dlg:width="51" dlg:height="12" dlg:help-text="&amp;66.LaTeXOptions.NotesLabel.HelpText" dlg:value="&amp;67.LaTeXOptions.NotesLabel.Label"/>
   <dlg:menulist dlg:id="Notes" dlg:tab-index="24" dlg:left="246" dlg:top="20" dlg:width="96" dlg:height="12" dlg:help-text="&amp;68.LaTeXOptions.Notes.HelpText" dlg:spin="true" dlg:linecount="4">
    <dlg:menupopup>
     <dlg:menuitem dlg:value="&amp;128.Notes.StringItemList"/>
