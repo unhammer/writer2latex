@@ -2,6 +2,8 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.4 ----------
 
+[w2x] Added Finnish translation from Samuli Selin (merged from 1.0.2)
+
 [w2x] Added help content for custom format
 
 [all] Bugfix: Heading styles are now recognized correctly again in old file format (sxw)
