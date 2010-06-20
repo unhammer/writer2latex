@@ -20,7 +20,7 @@
 *
 *  All Rights Reserved.
 * 
-*  Version 1.2 (2010-05-06)
+*  Version 1.2 (2010-06-20)
 *
 */ 
 
@@ -99,8 +99,8 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     	
     	@Override protected void setControls(DialogAccess dlg) {
     		checkBoxFromConfig(dlg, "NoDoctype", "no_doctype");
-    		checkBoxFromConfig(dlg, "AddBOM", "add_bom");
     		listBoxFromConfig(dlg, "Encoding", "encoding", sEncodingValues, (short) 0);
+    		checkBoxFromConfig(dlg, "AddBOM", "add_bom");
     		
     		if ("true".equals(config.getOption("hexadecimal_entities"))) {
     			dlg.setListBoxSelectedItem("HexadecimalEntities", (short) 0);
@@ -109,6 +109,7 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     			dlg.setListBoxSelectedItem("HexadecimalEntities", (short) 1);	
     		}
     		
+
     		checkBoxFromConfig(dlg, "UseNamedEntities", "use_named_entities");
     		checkBoxFromConfig(dlg, "Multilingual", "multilingual");
     		checkBoxFromConfig(dlg, "PrettyPrint", "pretty_print");
@@ -118,8 +119,8 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     	
     	@Override protected void getControls(DialogAccess dlg) {
     		checkBoxToConfig(dlg, "NoDoctype", "no_doctype");
-    		checkBoxToConfig(dlg, "AddBOM", "add_bom");
     		listBoxToConfig(dlg, "Encoding", "encoding", sEncodingValues);
+    		checkBoxToConfig(dlg, "AddBOM", "add_bom");
     		
     		config.setOption("hexadecimal_entities", Boolean.toString(dlg.getListBoxSelectedItem("HexadecimalEntities")==(short)0));
     		
@@ -137,9 +138,10 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     	}
 
     	private void updateControls(DialogAccess dlg) {
-    		boolean bUnicode = dlg.getListBoxSelectedItem("Encoding")<2;
-    		dlg.setControlEnabled("HexadecimalEntitiesLabel", !bUnicode);
-    		dlg.setControlEnabled("HexadecimalEntities", !bUnicode);
+    		int nEncoding = dlg.getListBoxSelectedItem("Encoding");
+    		dlg.setControlEnabled("AddBOM", nEncoding==0); // Only for UTF-8
+    		dlg.setControlEnabled("HexadecimalEntitiesLabel", nEncoding>1); // Not for UNICODE
+    		dlg.setControlEnabled("HexadecimalEntities", nEncoding>1); // Not for UNICODE
     	}
     	
     }
@@ -399,10 +401,12 @@ public class ConfigurationDialog extends ConfigurationDialogBase implements XSer
     	
     	@Override protected void setControls(DialogAccess dlg) {
     		listBoxFromConfig(dlg, "Formulas", "formulas", sFormulaValues, (short) 0);
+    		textFieldFromConfig(dlg, "EndnotesHeading", "endnotes_heading");
     	}
     	
     	@Override protected void getControls(DialogAccess dlg) {
     		listBoxToConfig(dlg, "Formulas", "formulas", sFormulaValues);
+    		textFieldToConfig(dlg, "EndnotesHeading", "endnotes_heading");
     	}
     	
     	@Override protected boolean handleEvent(DialogAccess dlg, String sMethod) {

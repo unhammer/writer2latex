@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-05-17)
+ *  Version 1.2 (2010-06-20)
  *
  */
 
@@ -501,11 +501,11 @@ public class TextConverter extends ConverterHelper {
 	
     private void handleHeading(Element onode, Node hnode, boolean bAfterSplit) {
         int nListLevel = getOutlineLevel((Element)onode);
-        boolean bUnNumbered = "true".equals(Misc.getAttribute(onode,XMLString.TEXT_IS_LIST_HEADER));
+        //boolean bUnNumbered = "true".equals(Misc.getAttribute(onode,XMLString.TEXT_IS_LIST_HEADER));
         boolean bRestart = "true".equals(Misc.getAttribute(onode,XMLString.TEXT_RESTART_NUMBERING));
         int nStartValue = Misc.getPosInteger(Misc.getAttribute(onode,XMLString.TEXT_START_VALUE),1)-1;
         handleHeading(onode, hnode, bAfterSplit, ofr.getOutlineStyle(),
-            nListLevel, bUnNumbered, bRestart, nStartValue);        
+            nListLevel, false, bRestart, nStartValue);        
     }
 
     /*
@@ -515,11 +515,21 @@ public class TextConverter extends ConverterHelper {
         ListStyle listStyle, int nListLevel, boolean bUnNumbered,
         boolean bRestart, int nStartValue) {
     	String sStyleName = onode.getAttribute(XMLString.TEXT_STYLE_NAME);
+    	if (!bUnNumbered) {
+    		// If the heading uses a paragraph style which sets an explicit empty list style name, it's unnumbered
+    		StyleWithProperties style = ofr.getParStyle(sStyleName);
+    		if (style!=null) {
+    			String sListStyleName = style.getListStyleName();
+    			if (sListStyleName!=null && sListStyleName.length()==0) {
+    				bUnNumbered = true;
+    			}
+    		}
+    	}
         // Note: nListLevel may in theory be different from the outline level,
         // though the ui in OOo does not allow this
 
         // Numbering: It is possible to define outline numbering in CSS2
-        // using counters; but this is not supported by Mozilla 1.0.
+        // using counters; but this is not supported in all browsers
         // TODO: Offer CSS2 solution as an alternative later.
 
         // Note: Conditional styles are not supported
@@ -560,16 +570,19 @@ public class TextConverter extends ConverterHelper {
             prependAsapNode(heading);
 			
             // Prepend numbering
-            ListCounter counter = getListCounter(listStyle); 
-            if (bRestart) { counter.restart(nListLevel,nStartValue); }
-            String sLabel = counter.step(nListLevel).getLabel();
-            if (config.zenHack() && nLevel==2) {
-            	// Hack for ePub Zen Garden: Special style for the prefix at level 2
-            	// TODO: Replace by some proper style map construct...
-            	insertListLabel(listStyle,nListLevel,"SectionNumber",counter.getPrefix(),counter.getLabelAndSuffix(),heading);
-            }
-            else {
-            	insertListLabel(listStyle,nListLevel,"SectionNumber",null,sLabel,heading);            	
+            String sLabel="";
+            if (!bUnNumbered) {
+            	ListCounter counter = getListCounter(listStyle); 
+            	if (bRestart) { counter.restart(nListLevel,nStartValue); }
+            	sLabel = counter.step(nListLevel).getLabel();
+            	if (config.zenHack() && nLevel==2) {
+            		// Hack for ePub Zen Garden: Special style for the prefix at level 2
+            		// TODO: Replace by some proper style map construct...
+            		insertListLabel(listStyle,nListLevel,"SectionNumber",counter.getPrefix(),counter.getLabelAndSuffix(),heading);
+            	}
+            	else {
+            		insertListLabel(listStyle,nListLevel,"SectionNumber",null,sLabel,heading);            	
+            	}
             }
 
             // Add to toc
@@ -1606,19 +1619,27 @@ public class TextConverter extends ConverterHelper {
 
     public void insertEndnotes(Node hnode) {
         int n = endnotes.size();
-        if (nSplit>0 && n>0) { hnode = converter.nextOutFile(); }
-        for (int i=0; i<n; i++) {
-            Node endnote = endnotes.get(i);
-            String sId = Misc.getAttribute(endnote,XMLString.TEXT_ID); 
-            Node citation = Misc.getChildByTagName(endnote,XMLString.TEXT_ENDNOTE_CITATION);
-            if (citation==null) { // try oasis
-                citation = Misc.getChildByTagName(endnote,XMLString.TEXT_NOTE_CITATION);
-            }
-            Node body = Misc.getChildByTagName(endnote,XMLString.TEXT_ENDNOTE_BODY);
-            if (body==null) { // try oasis
-                body = Misc.getChildByTagName(endnote,XMLString.TEXT_NOTE_BODY);
-            }
-            traverseNoteBody(sId,sEntCitStyle,citation,body,hnode);
+        if (n>0) {
+        	if (nSplit>0) { hnode = converter.nextOutFile(); }
+        	String sHeading = config.getEndnotesHeading();
+        	if (sHeading.length()>0) {
+        		Element heading = converter.createElement("h1");
+        		hnode.appendChild(heading);
+        		heading.appendChild(converter.createTextNode(sHeading));
+        	}
+        	for (int i=0; i<n; i++) {
+        		Node endnote = endnotes.get(i);
+        		String sId = Misc.getAttribute(endnote,XMLString.TEXT_ID); 
+        		Node citation = Misc.getChildByTagName(endnote,XMLString.TEXT_ENDNOTE_CITATION);
+        		if (citation==null) { // try oasis
+        			citation = Misc.getChildByTagName(endnote,XMLString.TEXT_NOTE_CITATION);
+        		}
+        		Node body = Misc.getChildByTagName(endnote,XMLString.TEXT_ENDNOTE_BODY);
+        		if (body==null) { // try oasis
+        			body = Misc.getChildByTagName(endnote,XMLString.TEXT_NOTE_BODY);
+        		}
+        		traverseNoteBody(sId,sEntCitStyle,citation,body,hnode);
+        	}
         }
     }
 

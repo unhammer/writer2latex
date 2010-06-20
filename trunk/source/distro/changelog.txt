@@ -2,6 +2,16 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.4 ----------
 
+[w2x] New option endnotes_heading: The value of this (if non-empty) is used as heading for the endnotes
+
+[w2x] The option add_bom now only has effect if the encoding is UTF-8
+
+[w2x] Filter bugfix: Added missing classes to produce LaTeX formulas
+
+[w2x] Bugfix: Pretty printing no longer results in unwanted spaces in the text
+
+[w2x] Added support for unnumbered headings
+
 [w2x] Added Finnish translation from Samuli Selin (merged from 1.0.2)
 
 [w2x] Added help content for custom format

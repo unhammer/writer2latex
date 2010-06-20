@@ -2,7 +2,7 @@
   ############################################################################
   # This is the Ant build file for writer2latex
   # Original: Sep 2004 (mgn)
-  # version 1.2 (2010-04-17)
+  # version 1.2 (2010-06-19)
   ############################################################################
 -->
 <project name="w2l" default="help" basedir=".">
@@ -35,7 +35,7 @@
     <!-- configure the directories -->
     <property name="jarfile" value="writer2latex"/>
     <property name="basename" value="writer2latex11"/>
-    <property name="distrofile" value="${basename}3alpha.zip" />
+    <property name="distrofile" value="${basename}4alpha.zip" />
     <!--<property name="sourcedistrofile" value="${basename}source.zip" />-->
     <property name="src" location="source/java"/>
     <property name="source.distro" location="source/distro" />
@@ -169,7 +169,16 @@
                 	<include name="writer2latex/xmerge/**/*.class"/>
                 	<!-- include the portions of w2l necessary to convert formulas -->
                 	<include name="writer2latex/latex/StarMathConverter.class"/>
+                	<include name="writer2latex/latex/CharClasses.class"/>
+                	<include name="writer2latex/latex/Token.class"/>
+                   	<include name="writer2latex/latex/TGroup.class"/>
+                   	<include name="writer2latex/latex/SmTokenTableEntry.class"/>
+                   	<include name="writer2latex/latex/SmTokenTable.class"/>
+                   	<include name="writer2latex/latex/SmToken.class"/>
                 	<include name="writer2latex/latex/LaTeXDocumentPortion.class"/>
+                	<include name="writer2latex/latex/LaTeXConfig.class"/>
+                	<include name="writer2latex/latex/util/HeadingMap.class"/>
+                    <include name="writer2latex/latex/util/StyleMap.class"/>
                 	<include name="writer2latex/latex/i18n/*.class"/>
                 </patternset>
             </fileset>

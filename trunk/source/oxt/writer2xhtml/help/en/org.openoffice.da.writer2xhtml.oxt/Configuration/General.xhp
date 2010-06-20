@@ -22,16 +22,17 @@
         <paragraph role="warning" xml-lang="en-US">The !DOCTYPE is required for a valid XHTML document: This option should only be
         used if you need to process the document further.</paragraph>
 
-        <bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:AddBOM" id="bm_configaddbom"/>
-        <paragraph role="heading" level="3" xml-lang="en-US">Add Byte Order Mark (BOM)</paragraph>
-        <paragraph role="paragraph" xml-lang="en-US">Check this to include a BOM (Byte Order Mark) to the XHTML document.
-        Most applications will not need this, but it may be required in rare cases.</paragraph>
-
         <bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:Encoding" id="bm_configencoding"/>
         <paragraph role="heading" level="3" xml-lang="en-US">Encoding</paragraph>
         <paragraph role="paragraph" xml-lang="en-US">Select the character encoding to use for the XHTML document. Currently supported
         encodings are <emph>UTF-8</emph> (recommended), <emph>UTF-16</emph>, <emph>ISO-8859-1</emph> and <emph>US-ASCII</emph>.
         Characters not supported by the encoding are exported as numeric character entities.</paragraph>
+
+        <bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:AddBOM" id="bm_configaddbom"/>
+        <paragraph role="heading" level="3" xml-lang="en-US">Add Byte Order Mark (BOM)</paragraph>
+        <paragraph role="paragraph" xml-lang="en-US">Check this to include a BOM (Byte Order Mark) to the XHTML document (UTF-8 only).
+        Normally this is not needed if you use UTF-8 encoding, but it may be required in rare cases.
+        </paragraph>
 
         <bookmark xml-lang="en-US" branch="hid/org.openoffice.da.writer2xhtml.oxt:HexadecimalEntities" id="bm_confighexadecimalentities"/>
         <paragraph role="heading" level="3" xml-lang="en-US">Numeric character entities</paragraph>

@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-04-23)
+ *  Version 1.2 (2010-06-19)
  *
  */
  
@@ -49,6 +49,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *  An implementation of <code>Document</code> for
@@ -65,15 +67,17 @@ public class XhtmlDocument extends DOMDocument {
     /** Constant to identify XHTML + MathML documents */
     public static final int XHTML_MATHML = 2;
 
-    /** Constant to identify XHTML + MathML documents using the xsl transformations
+    /** Constant to identify XHTML + MathML documents using the XSL transformations
      *  from w3c's math working group (http://www.w3.org/Math/XSL/)
      */
     public static final int XHTML_MATHML_XSL = 3;
-	
+    
+    // Some static data
     private static final String[] sExtension = { ".html", ".xhtml", ".xhtml", ".xml" };
 
-    private static final String[] sEmpty = { "base", "meta", "link", "hr", "br", "param", "img", "area", "input", "col" };
-	
+    private static Set<String> blockPrettyPrint;
+    private static Set<String> conditionalBlockPrettyPrint;
+    private static Set<String> emptyElements;
     private static String[] entities; // Not convenient to define directly due to a lot of null values
 
     // Type of document
@@ -101,6 +105,139 @@ public class XhtmlDocument extends DOMDocument {
     private Element panelNode = null;
     private Element headerNode = null;
     private Element footerNode = null;
+    
+    // Initialize static data
+    static {
+    	// Paragraphs and headings always block pretty printing
+    	blockPrettyPrint = new HashSet<String>();
+    	blockPrettyPrint.add("p");
+    	blockPrettyPrint.add("h1");
+    	blockPrettyPrint.add("h2");
+    	blockPrettyPrint.add("h3");
+    	blockPrettyPrint.add("h4");
+    	blockPrettyPrint.add("h5");
+    	blockPrettyPrint.add("h6");
+    	
+    	// List items and table cells may block pretty printing, depending on the context
+    	conditionalBlockPrettyPrint = new HashSet<String>();
+    	conditionalBlockPrettyPrint.add("li");
+    	conditionalBlockPrettyPrint.add("th");
+    	conditionalBlockPrettyPrint.add("td");
+
+    	// These elements are empty
+    	emptyElements = new HashSet<String>();
+    	emptyElements.add("base");
+    	emptyElements.add("meta");
+    	emptyElements.add("link");
+    	emptyElements.add("hr");
+    	emptyElements.add("br");
+    	emptyElements.add("param");
+    	emptyElements.add("img");
+    	emptyElements.add("area");
+    	emptyElements.add("input");
+    	emptyElements.add("col");    
+    	
+    	// Named character entities (currently only those within the ISO latin 1 range)
+    	entities = new String[256];
+    	// Latin 1 symbols
+    	entities[160]="&nbsp;";
+    	entities[161]="&iexcl;";
+    	entities[162]="&cent;";
+    	entities[163]="&pound;";
+    	entities[164]="&curren;";
+    	entities[165]="&yen;";
+    	entities[166]="&brvbar;";
+    	entities[167]="&sect;";
+    	entities[168]="&uml;";
+    	entities[169]="&copy;";
+    	entities[170]="&ordf;";
+    	entities[171]="&laquo;";
+    	entities[172]="&not;";
+    	entities[173]="&shy;";
+    	entities[174]="&reg;";
+    	entities[175]="&macr;";
+    	entities[176]="&deg;";
+    	entities[177]="&plusmn;";
+    	entities[178]="&sup2;";
+    	entities[179]="&sup3;";
+    	entities[180]="&acute;";
+    	entities[181]="&micro;";
+    	entities[182]="&para;";
+    	entities[183]="&middot;";
+    	entities[184]="&cedil;";
+    	entities[185]="&sup1;";
+    	entities[186]="&ordm;";
+    	entities[187]="&raquo;";
+    	entities[188]="&frac14;";
+    	entities[189]="&frac12;";
+    	entities[190]="&frac34;";
+    	entities[191]="&iquest;";
+    	entities[215]="&times;";
+    	entities[247]="&divide;";
+    	// Latin 1 characters
+    	entities[192]="&Agrave;";
+    	entities[193]="&Aacute;";
+    	entities[194]="&Acirc;";
+    	entities[195]="&Atilde;";
+    	entities[196]="&Auml;";
+    	entities[197]="&Aring;";
+    	entities[198]="&AElig;";
+    	entities[199]="&Ccedil;";
+    	entities[200]="&Egrave;";
+    	entities[201]="&Eacute;";
+    	entities[202]="&Ecirc;";
+    	entities[203]="&Euml;";
+    	entities[204]="&Igrave;";
+    	entities[205]="&Iacute;";
+    	entities[206]="&Icirc;";
+    	entities[207]="&Iuml;";
+    	entities[208]="&ETH;";
+    	entities[209]="&Ntilde;";
+    	entities[210]="&Ograve;";
+    	entities[211]="&Oacute;";
+    	entities[212]="&Ocirc;";
+    	entities[213]="&Otilde;";
+    	entities[214]="&Ouml;";
+    	entities[216]="&Oslash;";
+    	entities[217]="&Ugrave;";
+    	entities[218]="&Uacute;";
+    	entities[219]="&Ucirc;";
+    	entities[220]="&Uuml;";
+    	entities[221]="&Yacute;";
+    	entities[222]="&THORN;";
+    	entities[223]="&szlig;";
+    	entities[224]="&agrave;";
+    	entities[225]="&aacute;";
+    	entities[226]="&acirc;";
+    	entities[227]="&atilde;";
+    	entities[228]="&auml;";
+    	entities[229]="&aring;";
+    	entities[230]="&aelig;";
+    	entities[231]="&ccedil;";
+    	entities[232]="&egrave;";
+    	entities[233]="&eacute;";
+    	entities[234]="&ecirc;";
+    	entities[235]="&euml;";
+    	entities[236]="&igrave;";
+    	entities[237]="&iacute;";
+    	entities[238]="&icirc;";
+    	entities[239]="&iuml;";
+    	entities[240]="&eth;";
+    	entities[241]="&ntilde;";
+    	entities[242]="&ograve;";
+    	entities[243]="&oacute;";
+    	entities[244]="&ocirc;";
+    	entities[245]="&otilde;";
+    	entities[246]="&ouml;";
+    	entities[248]="&oslash;";
+    	entities[249]="&ugrave;";
+    	entities[250]="&uacute;";
+    	entities[251]="&ucirc;";
+    	entities[252]="&uuml;";
+    	entities[253]="&yacute;";
+    	entities[254]="&thorn;";
+    	entities[255]="&yuml;";
+    }
     
     public static final String getExtension(int nType) {
         return sExtension[nType];
@@ -322,7 +459,7 @@ public class XhtmlDocument extends DOMDocument {
             cLimit = 65535;
         }
         
-        bAddBOM = config.xhtmlAddBOM();
+        bAddBOM = config.xhtmlAddBOM() && sEncoding.equals("UTF-8");
         bNoDoctype = config.xhtmlNoDoctype();
         bPrettyPrint = config.prettyPrint();
         bUseNamedEntities = config.useNamedEntities();
@@ -341,6 +478,7 @@ public class XhtmlDocument extends DOMDocument {
 	
     public String getFileExtension() { return super.getFileExtension(); }
     
+    // Optimize the usage of xml:dir and xml:lang attributes
     private void optimize(Element node, String sLang, String sDir) {
     	if (node.hasAttribute("xml:lang")) {
     		if (node.getAttribute("xml:lang").equals(sLang)) {
@@ -378,9 +516,6 @@ public class XhtmlDocument extends DOMDocument {
      *  @throws  IOException  If any I/O error occurs.
      */
     public void write(OutputStream os) throws IOException {
-        // Prepare named entities
-        prepareEntities();
-
         OutputStreamWriter osw = new OutputStreamWriter(os,sEncoding);
         // Add a BOM if the user desires so
         if (bAddBOM) { osw.write("\uFEFF"); }
@@ -409,16 +544,42 @@ public class XhtmlDocument extends DOMDocument {
         }
         Element doc = getContentDOM().getDocumentElement(); 
         optimize(doc,null,null);
-        write(doc,0,osw);
+        write(doc,bPrettyPrint ? 0 : -1,osw);
         osw.flush();
         osw.close();
     }
+    
+    private static boolean blockThis(Element node) {
+    	String sTagName = node.getTagName();
+    	if (blockPrettyPrint.contains(sTagName)) {
+    		return true;
+    	}
+    	else if (conditionalBlockPrettyPrint.contains(sTagName)) {
+    		// Block pretty printing if the content is anything but elements that block pretty print
+    		Node child = node.getFirstChild();
+    		while (child!=null) {
+    			if (child.getNodeType()==Node.ELEMENT_NODE && !blockPrettyPrint.contains(child.getNodeName())) {
+    				return true;
+    			}
+    			child = child.getNextSibling();
+    		}
+    		return false;
+    	}
+    	else {
+    		// Other elements block pretty printing if they contain text nodes
+    		Node child = node.getFirstChild();
+    		while (child!=null) {
+    			if (child.getNodeType()==Node.TEXT_NODE) {
+    				return true;
+    			}
+    			child = child.getNextSibling();
+    		}
+    		return false;
+    	}
+    }
 
-    private boolean isEmpty(String sTagName) {
-        for (int i=0; i<sEmpty.length; i++) {
-            if (sEmpty[i].equals(sTagName)) { return true; }
-        }
-        return false;
+    private static boolean isEmpty(String sTagName) {
+        return emptyElements.contains(sTagName);
     }
 	
     // Write nodes; we only need element, text and comment nodes
@@ -427,40 +588,31 @@ public class XhtmlDocument extends DOMDocument {
         switch (nType) {
             case Node.ELEMENT_NODE:
                 if (isEmpty(node.getNodeName())) {
-                    // This node must be empty, we ignore childnodes
+                    // This node must be empty, we ignore child nodes
                     if (nLevel>=0) { writeSpaces(nLevel,osw); }
                     osw.write("<"+node.getNodeName());
                     writeAttributes(node,osw);
                     osw.write(" />");
-                    if (bPrettyPrint && nLevel>=0) { osw.write("\n"); }
+                    if (nLevel>=0) { osw.write("\n"); }
                 }
                 else if (node.hasChildNodes()) {
-                    // Block pretty print from this node?
-                    NodeList list = node.getChildNodes();
-                    int nLen = list.getLength();
-                    boolean bBlockPrettyPrint = false;
-                    if (nLevel>=0) {
-                        for (int i = 0; i < nLen; i++) {
-                            bBlockPrettyPrint |= list.item(i).getNodeType()==Node.TEXT_NODE;
-                        }
-                    }
+                    int nNextLevel = (nLevel<0 || blockThis((Element)node)) ? -1 : nLevel+1;
                     // Print start tag
                     if (nLevel>=0) { writeSpaces(nLevel,osw); }
                     osw.write("<"+node.getNodeName());
                     writeAttributes(node,osw);
                     osw.write(">");
-                    if (bPrettyPrint && nLevel>=0 && !bBlockPrettyPrint) { osw.write("\n"); }
+                    if (nNextLevel>=0) { osw.write("\n"); }
                     // Print children
-                    for (int i = 0; i < nLen; i++) {
-                        int nNextLevel;
-                        if (bBlockPrettyPrint || nLevel<0) { nNextLevel=-1; }
-                        else { nNextLevel=nLevel+1; }
-                        write(list.item(i),nNextLevel,osw);
+                    Node child = node.getFirstChild();
+                    while (child!=null) {
+                        write(child,nNextLevel,osw);
+                        child = child.getNextSibling();
                     }
                     // Print end tag
-                    if (nLevel>=0 && !bBlockPrettyPrint) { writeSpaces(nLevel,osw); }
+                    if (nNextLevel>=0) { writeSpaces(nLevel,osw); }
                     osw.write("</"+node.getNodeName()+">");
-                    if (bPrettyPrint && nLevel>=0) { osw.write("\n"); }
+                    if (nLevel>=0) { osw.write("\n"); }
                 }
                 else { // empty element
                     if (nLevel>=0) { writeSpaces(nLevel,osw); }
@@ -473,7 +625,7 @@ public class XhtmlDocument extends DOMDocument {
                     else {
                         osw.write(" />");
                     }
-                    if (bPrettyPrint && nLevel>=0) { osw.write("\n"); }
+                    if (nLevel>=0) { osw.write("\n"); }
                 }
                 break;
             case Node.TEXT_NODE:
@@ -484,7 +636,7 @@ public class XhtmlDocument extends DOMDocument {
                 osw.write("<!-- ");
                 write(node.getNodeValue(),osw);
                 osw.write(" -->");
-                if (bPrettyPrint && nLevel>=0) { osw.write("\n"); }
+                if (nLevel>=0) { osw.write("\n"); }
         }
     }
 	
@@ -502,9 +654,7 @@ public class XhtmlDocument extends DOMDocument {
     }
 
     private void writeSpaces(int nCount, OutputStreamWriter osw) throws IOException {
-    	if (bPrettyPrint) {
-    		for (int i=0; i<nCount; i++) { osw.write("  "); }
-    	}
+    	for (int i=0; i<nCount; i++) { osw.write("  "); }
     }
 	
     private void write(String s, OutputStreamWriter osw) throws IOException {
@@ -568,109 +718,6 @@ public class XhtmlDocument extends DOMDocument {
         }
     }
     
-    private static void prepareEntities() {
-        if (entities==null) {
-            entities = new String[256];
-            // Latin 1 symbols
-            entities[160]="&nbsp;";
-            entities[161]="&iexcl;";
-            entities[162]="&cent;";
-            entities[163]="&pound;";
-            entities[164]="&curren;";
-            entities[165]="&yen;";
-            entities[166]="&brvbar;";
-            entities[167]="&sect;";
-            entities[168]="&uml;";
-            entities[169]="&copy;";
-            entities[170]="&ordf;";
-            entities[171]="&laquo;";
-            entities[172]="&not;";
-            entities[173]="&shy;";
-            entities[174]="&reg;";
-            entities[175]="&macr;";
-            entities[176]="&deg;";
-            entities[177]="&plusmn;";
-            entities[178]="&sup2;";
-            entities[179]="&sup3;";
-            entities[180]="&acute;";
-            entities[181]="&micro;";
-            entities[182]="&para;";
-            entities[183]="&middot;";
-            entities[184]="&cedil;";
-            entities[185]="&sup1;";
-            entities[186]="&ordm;";
-            entities[187]="&raquo;";
-            entities[188]="&frac14;";
-            entities[189]="&frac12;";
-            entities[190]="&frac34;";
-            entities[191]="&iquest;";
-            entities[215]="&times;";
-            entities[247]="&divide;";
-            // Latin 1 characters
-            entities[192]="&Agrave;";
-            entities[193]="&Aacute;";
-            entities[194]="&Acirc;";
-            entities[195]="&Atilde;";
-            entities[196]="&Auml;";
-            entities[197]="&Aring;";
-            entities[198]="&AElig;";
-            entities[199]="&Ccedil;";
-            entities[200]="&Egrave;";
-            entities[201]="&Eacute;";
-            entities[202]="&Ecirc;";
-            entities[203]="&Euml;";
-            entities[204]="&Igrave;";
-            entities[205]="&Iacute;";
-            entities[206]="&Icirc;";
-            entities[207]="&Iuml;";
-            entities[208]="&ETH;";
-            entities[209]="&Ntilde;";
-            entities[210]="&Ograve;";
-            entities[211]="&Oacute;";
-            entities[212]="&Ocirc;";
-            entities[213]="&Otilde;";
-            entities[214]="&Ouml;";
-            entities[216]="&Oslash;";
-            entities[217]="&Ugrave;";
-            entities[218]="&Uacute;";
-            entities[219]="&Ucirc;";
-            entities[220]="&Uuml;";
-            entities[221]="&Yacute;";
-            entities[222]="&THORN;";
-            entities[223]="&szlig;";
-            entities[224]="&agrave;";
-            entities[225]="&aacute;";
-            entities[226]="&acirc;";
-            entities[227]="&atilde;";
-            entities[228]="&auml;";
-            entities[229]="&aring;";
-            entities[230]="&aelig;";
-            entities[231]="&ccedil;";
-            entities[232]="&egrave;";
-            entities[233]="&eacute;";
-            entities[234]="&ecirc;";
-            entities[235]="&euml;";
-            entities[236]="&igrave;";
-            entities[237]="&iacute;";
-            entities[238]="&icirc;";
-            entities[239]="&iuml;";
-            entities[240]="&eth;";
-            entities[241]="&ntilde;";
-            entities[242]="&ograve;";
-            entities[243]="&oacute;";
-            entities[244]="&ocirc;";
-            entities[245]="&otilde;";
-            entities[246]="&ouml;";
-            entities[248]="&oslash;";
-            entities[249]="&ugrave;";
-            entities[250]="&uacute;";
-            entities[251]="&ucirc;";
-            entities[252]="&uuml;";
-            entities[253]="&yacute;";
-            entities[254]="&thorn;";
-            entities[255]="&yuml;";
-        }
-    }
     
     // Translate character to MathML entity (contributed by Bruno Mascret)
     private String getMathMLEntity(char c) {

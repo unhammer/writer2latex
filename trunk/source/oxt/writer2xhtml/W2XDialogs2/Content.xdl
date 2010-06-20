@@ -12,5 +12,8 @@
     <dlg:menuitem dlg:value="LaTeX code"/>
    </dlg:menupopup>
   </dlg:menulist>
+  <dlg:text dlg:id="EndnotesCategoryHeadingLabel" dlg:tab-index="3" dlg:left="5" dlg:top="36" dlg:width="245" dlg:height="12" dlg:value="Endnotes"/>
+  <dlg:text dlg:id="EndnotesHeadingLabel" dlg:tab-index="4" dlg:left="10" dlg:top="50" dlg:width="110" dlg:height="12" dlg:value="Heading"/>
+  <dlg:textfield dlg:id="EndnotesHeading" dlg:tab-index="5" dlg:left="130" dlg:top="48" dlg:width="120" dlg:height="12" dlg:help-url="org.openoffice.da.writer2xhtml.oxt:EndnotesHeading"/>
  </dlg:bulletinboard>
 </dlg:window>
