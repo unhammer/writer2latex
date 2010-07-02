@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  Version 1.2 (2010-06-20)
+ *  Version 1.2 (2010-07-02)
  *
  */
 
@@ -1621,11 +1621,22 @@ public class TextConverter extends ConverterHelper {
         int n = endnotes.size();
         if (n>0) {
         	if (nSplit>0) { hnode = converter.nextOutFile(); }
+        	
         	String sHeading = config.getEndnotesHeading();
         	if (sHeading.length()>0) {
         		Element heading = converter.createElement("h1");
         		hnode.appendChild(heading);
         		heading.appendChild(converter.createTextNode(sHeading));
+
+        		// Add to external content.
+        		if (nSplit>0) {
+                	converter.addContentEntry(sHeading, 1, null);        			
+        		}
+        		else {
+        			//For single output file we need a target
+                    converter.addTarget(heading,"endnotes");                
+                	converter.addContentEntry(sHeading, 1, "endnotes");        			
+        		}
         	}
         	for (int i=0; i<n; i++) {
         		Node endnote = endnotes.get(i);

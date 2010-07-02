@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  version 1.2 (2010-05-13)
+ *  version 1.2 (2010-07-02)
  *
  */
 
@@ -140,9 +140,9 @@ public class NCXWriter extends NewDOMDocument {
         	navLabelText.appendChild(contentDOM.createTextNode(entry.getTitle()));
 
         	Element navPointContent = contentDOM.createElement("content");
-        	String sHref = entry.getFile().getFileName();
+        	String sHref = Misc.makeHref(entry.getFile().getFileName());
         	if (entry.getTarget()!=null) { sHref+="#"+entry.getTarget(); }
-        	navPointContent.setAttribute("src", Misc.makeHref(sHref));
+        	navPointContent.setAttribute("src", sHref);
         	navPoint.appendChild(navPointContent);
         	
         	nDepth = Math.max(nDepth, nCurrentLevel);

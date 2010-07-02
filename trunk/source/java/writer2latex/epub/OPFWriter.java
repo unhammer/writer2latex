@@ -20,7 +20,7 @@
  *
  *  All Rights Reserved.
  * 
- *  version 1.2 (2010-05-13)
+ *  version 1.2 (2010-07-02)
  *
  */
 
@@ -145,9 +145,9 @@ public class OPFWriter extends NewDOMDocument {
 			Element reference = contentDOM.createElement("reference");
 			reference.setAttribute("type", sType);
 			reference.setAttribute("title", entry.getTitle());
-			String sHref = entry.getFile().getFileName();
+			String sHref = Misc.makeHref(entry.getFile().getFileName());
 			if (entry.getTarget()!=null) { sHref+="#"+entry.getTarget(); }
-			reference.setAttribute("href", Misc.makeHref(sHref));
+			reference.setAttribute("href", sHref);
 			guide.appendChild(reference);
 		}
 	}

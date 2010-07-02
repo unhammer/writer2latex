@@ -2,6 +2,8 @@ Changelog for Writer2LaTeX version 1.0 -> 1.2
 
 ---------- version 1.1.4 ----------
 
+[w2x] EPUB bugfix: Fixed problem with URL encoding of fragment identifier in links to document parts
+
 [w2x] New option endnotes_heading: The value of this (if non-empty) is used as heading for the endnotes
 
 [w2x] The option add_bom now only has effect if the encoding is UTF-8
