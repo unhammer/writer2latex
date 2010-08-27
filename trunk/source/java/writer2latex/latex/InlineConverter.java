@@ -195,7 +195,17 @@ public class InlineConverter extends ConverterHelper {
                 case Node.TEXT_NODE:
                     String s = childNode.getNodeValue();
                     if (s.length() > 0) {
-                        ldp.append(palette.getI18n().convert(s, false, oc.getLang()));
+			if (oc.isZoteroText()) {
+			    // Within Zotero ref-marks, the citation is given in plain text
+                            // TODO: should we handle this in the if ref-marks section below?
+			    ldp.append("%\n\\begin{comment}\n");
+			    ldp.append(palette.getI18n().convert(s, false, oc.getLang()));
+			    ldp.append("\n\\end{comment}%\n");
+			    oc.setZoteroText(false);
+			}
+			else {
+			    ldp.append(palette.getI18n().convert(s, false, oc.getLang()));
+			}
                     }
                     break;
                         
@@ -348,7 +358,6 @@ public class InlineConverter extends ConverterHelper {
                     default:
                         // Do nothing
             }
-
             childNode = childNode.getNextSibling();
         }
 		

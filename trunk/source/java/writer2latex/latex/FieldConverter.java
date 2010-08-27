@@ -30,6 +30,8 @@ package writer2latex.latex;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -422,9 +424,183 @@ public class FieldConverter extends ConverterHelper {
                 palette.getInlineCv().traversePCDATA(node,ldp,oc);
             }
         }
-    } 
+    }
 
+    /** <p>Process the text:name of a Zotero reference</p>
+     * @param str the value of the text:name attribute
+     * @return a complete LaTeX \cite{} command string
+     */
+    private String zoteroHandleName(String str, Context oc) {
+	System.err.println("handling:\n"+str);
+	// pos marks how far we've read in str. Move now to the start of the first dict:
+	int pos = str.indexOf('{');
+	if (pos == -1) return ""; // TODO empty dict, output a warning?
+	else pos++;		  // Should now be within the outer dict
 
+	// citekeys will become the keys in \cite{key1;key2;...}
+	StringBuffer citekeys = new StringBuffer(); 
+	// cmdsuff is appended to \cite to create \citep or \citeyearpar
+	String cmdsuff = "p";	
+	String pages = "";
+	String prefix = "";
+	String suffix = "";
+	String locator = "";
+	String locatorType = "";
+	String key;		// used repeatedly below
+
+	// We match dict keys etc. on the substring starting at pos (therefore ^)
+	Pattern keyPat = Pattern.compile("^\\s*\"([^\"]+)\"\\s*:\\s*"); // eg. "citationItems":
+	Pattern listPat = Pattern.compile("^\\s*\\[");
+	Pattern dictPat = Pattern.compile("^\\s*\\{");
+	Pattern atomicPat = Pattern.compile("^\\s*(?:(true|false|[0-9]+)|\"([^\"]+)\")"); // value is in group(1) or group(2)
+	Pattern valEndPat = Pattern.compile("^\\s*[,\\}]");
+	Pattern listEndPat = Pattern.compile("^\\s*\\]");
+	// Not sure what the range of possible uri's could be, this might be too strict:
+	Pattern uriPat = Pattern.compile("^\\s*\\[\"http://zotero\\.org/(users|groups)/[0-9]+/items/([^\\]]+)\"\\]");
+	Matcher match; // used repeatedly below
+	/* I would have used find(pos) instead of creating new
+	 * matchers all the time, but unfortunately then I can't use ^
+	 * in matching, and we would allow intervening stuff between
+	 * each match -KBU
+	 */
+
+	for(match = keyPat.matcher(str.substring(pos)); match.find(); match = keyPat.matcher(str.substring(pos))) {
+	    System.err.println("whiling: " + Character.toString(str.charAt(pos)));
+	    pos += match.end();
+	    key = match.group(1);
+	    System.err.println("key: "+ key + ", pos: " + Integer.toString(pos));
+	    if(key.equals("sort")) {
+		// For multiple citations: keep them sorted. I don't think we can handle this...
+		match = atomicPat.matcher(str.substring(pos)); // skip value
+		if(match.find()) {
+		    pos += match.end();
+		}
+		System.err.println("key: "+ key + ", pos: " + Integer.toString(pos));
+	    }
+	    else if(key.equals("citationItems")) {
+		match = listPat.matcher(str.substring(pos));
+		if(match.find()) { // list (only one) of dicts of key:value pairs
+		    pos += match.end();
+		    for(match = dictPat.matcher(str.substring(pos)); match.find(); match = dictPat.matcher(str.substring(pos))) {
+			pos += match.end();
+			System.err.println("\tcitationItems dict");
+			for(match = keyPat.matcher(str.substring(pos)); match.find(); match = keyPat.matcher(str.substring(pos))) {
+			    pos += match.end();
+			    key = match.group(1);
+			    System.err.println("\t\tcitationItems key: "+ key + ", pos: " + Integer.toString(pos));
+			    if (key.equals("uri")) {
+				match = uriPat.matcher(str.substring(pos));
+				if (match.find()) {
+				    pos += match.end();
+				    String uri = match.group(2);
+				    System.err.println("\t\t\turi: "+ uri + ", pos: " + Integer.toString(pos));
+				    citekeys.append(uri + ";");
+				}
+			    }
+			    else if (key.equals("suppressAuthor")) {
+				match = atomicPat.matcher(str.substring(pos));
+				if(match.find()) {
+				    if (match.group(1).equals("true"))
+					cmdsuff = "yearpar";
+				    pos += match.end();
+				}
+				System.err.println("\t\t\tkey: "+ key + ", pos: " + Integer.toString(pos));
+			    }
+			    else if (key.equals("suffix")) {
+				match = atomicPat.matcher(str.substring(pos));
+				if(match.find()) {
+				    suffix += match.group(2);
+				    pos += match.end();
+				}
+				System.err.println("\t\t\tkey: "+ key + ", pos: " + Integer.toString(pos));
+			    }
+			    else if (key.equals("prefix")) {
+				match = atomicPat.matcher(str.substring(pos));
+				if(match.find()) {
+				    prefix += match.group(2);
+				    pos += match.end();
+				}
+				System.err.println("\t\t\tkey: "+ key + ", pos: " + Integer.toString(pos));
+			    }
+			    else if (key.equals("locator")) { // eg. page number
+				match = atomicPat.matcher(str.substring(pos));
+				if(match.find()) {
+				    locator += match.group(2);
+				    pos += match.end();
+				}
+				System.err.println("\t\t\tkey: "+ key + ", pos: " + Integer.toString(pos));
+			    }
+			    else if (key.equals("locatorType")) { // eg. page, book, verse
+				match = atomicPat.matcher(str.substring(pos));
+				if(match.find()) {
+				    locatorType += match.group(2) + "~";
+				    pos += match.end();
+				}
+				System.err.println("\t\t\tkey: "+ key + ", pos: " + Integer.toString(pos));
+			    }
+			    else {
+				match = atomicPat.matcher(str.substring(pos)); // skip value
+				if(match.find()) {
+				    pos += match.end();
+				}
+				System.err.println("\t\t\tkey: "+ key + ", pos: " + Integer.toString(pos));
+			    }
+			    match = valEndPat.matcher(str.substring(pos)); // skip to next
+			    if(match.find()) {
+				pos += match.end();
+				System.err.println("\t\t\tkey: "+ key + ", pos: " + Integer.toString(pos));
+			    }
+			} // for keys
+			match = listEndPat.matcher(str.substring(pos)); // skip to next
+			if(match.find()) {
+			    pos += match.end();
+			    System.err.println("\t\t/citationItems, pos: " + Integer.toString(pos));
+			}
+		    } // for dicts
+		}
+	    }
+	    match = valEndPat.matcher(str.substring(pos)); // skip to next
+	    if(match.find()) {
+		pos += match.end();
+	    }
+	} // for keys
+	
+	if (citekeys.length() > 0) {
+	    citekeys.deleteCharAt(citekeys.length() - 1); // Delete the last ';'
+	    prefix = palette.getI18n().convert(prefix,true,oc.getLang());
+	    suffix = palette.getI18n().convert(suffix,true,oc.getLang());
+	    if (!locator.equals("")) {
+		boolean multiple = false;
+		if (Pattern.compile("[0-9]+[^0-9]+[0-9]+").matcher(locator).find()) {
+		    multiple = true;
+		}
+		if(locatorType.equals("")) {
+		    if (multiple) {
+			locatorType = "pp.~";
+		    }
+		    else {
+			locatorType = "p.~";
+		    }
+		}
+		// TODO: can we translate with eg. palette.getIl8n(locatorType) ?
+	    }
+	    suffix += locatorType + locator;
+	    if (!suffix.equals("")) {
+		suffix = "[" + suffix + "]";
+	    }
+	    if (!prefix.equals("")) {
+		prefix = "[" + prefix + "]";
+		if (suffix.equals("")) {
+		    suffix = "[]";
+		}
+	    }
+	    return "\\cite" + cmdsuff + prefix + suffix + "{" + citekeys.toString() + "}";
+	}
+	else {
+	    return "% no citekeys found";		// TODO: found no citekeys, output a warning?
+	}
+    }
+	
     /** <p>Process a reference mark (text:reference-mark tag)</p>
      * @param node The element containing the reference mark 
      * @param ldp the <code>LaTeXDocumentPortion</code> to which
@@ -436,7 +612,16 @@ public class FieldConverter extends ConverterHelper {
             // Note: Always include \label here, even when it's not used
             String sName = node.getAttribute(XMLString.TEXT_NAME);
             if (sName!=null) {
-                ldp.append("\\label{ref:"+refnames.getExportName(sName)+"}");
+		if (sName.substring(0,11).equals("ZOTERO_ITEM")) {
+		    // TODO: a constant for the "ZOTERO_ITEM" string,
+		    // TODO: check a user-variable for "handle Zotero references"
+		    ldp.append(zoteroHandleName(sName, oc));
+		    // Make sure we comment out the plain-text citation that follows:
+		    oc.setZoteroText(true);
+		}
+		else {
+		    ldp.append("\\label{ref:"+refnames.getExportName(sName)+"}");
+		}
             }
         }
         else {
