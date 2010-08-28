@@ -494,7 +494,7 @@ public class FieldConverter extends ConverterHelper {
 				    pos += match.end();
 				    String uri = match.group(2);
 				    System.err.println("\t\t\turi: "+ uri + ", pos: " + Integer.toString(pos));
-				    citekeys.append(uri + ";");
+				    citekeys.append(uri + ",");
 				}
 			    }
 			    else if (key.equals("suppressAuthor")) {
