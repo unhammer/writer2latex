@@ -18,7 +18,7 @@ Compilation:
     $ edit build.xml # set OFFICE_CLASSES and URE_CLASSES
     $ ant oxt
 
-Also be sure to use (this patch for LyZ)[http://gist.github.com/553037]
+Also be sure to use [this patch for LyZ](http://gist.github.com/553037)
 with LyZ, in order to get the correct bibtex keys from Zotero:
 
     $ bzr checkout http://bazaar.launchpad.net/~petrsimon/lyz/trunk lyz
