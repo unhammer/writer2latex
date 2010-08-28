@@ -8,8 +8,8 @@
 <project name="w2l" default="help" basedir=".">
 
     <!-- set this property to the location of your SO/OOo installation -->
-	<property name="OFFICE_CLASSES" location="/usr/lib/openoffice/basis-link/program/classes" />
-	<property name="URE_CLASSES" location="/usr/lib/openoffice/basis-link/ure-link/share/java" />
+	<property name="OFFICE_CLASSES" location="/Applications/OpenOffice.org.app/Contents/basis-link/program/classes" />
+	<property name="URE_CLASSES" location="/Applications/OpenOffice.org.app/Contents/basis-link/ure-link/share/java" />
 
     <description>writer2latex - build file</description>
 
