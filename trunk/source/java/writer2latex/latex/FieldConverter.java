@@ -617,7 +617,7 @@ public class FieldConverter extends ConverterHelper {
 		    // TODO: check a user-variable for "handle Zotero references"
 		    ldp.append(zoteroHandleName(sName, oc));
 		    // Make sure we comment out the plain-text citation that follows:
-		    oc.setZoteroText(true);
+		    ldp.append("%\n\\begin{comment}\n");
 		}
 		else {
 		    ldp.append("\\label{ref:"+refnames.getExportName(sName)+"}");
@@ -642,7 +642,7 @@ public class FieldConverter extends ConverterHelper {
             if (sName!=null) {
 		if (sName.substring(0,11).equals("ZOTERO_ITEM")) {
 		    // Make sure we stop commenting out
-		    oc.setZoteroText(false);
+		    ldp.append("\n\\end{comment}%\n");
 		}
             }
         }

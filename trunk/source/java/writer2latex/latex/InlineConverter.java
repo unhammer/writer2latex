@@ -195,18 +195,7 @@ public class InlineConverter extends ConverterHelper {
                 case Node.TEXT_NODE:
                     String s = childNode.getNodeValue();
                     if (s.length() > 0) {
-			if (oc.isZoteroText()) {
-			    // Within Zotero ref-marks, the citation is given in plain text
-                            // TODO: should we handle this in the if ref-marks section below?
-			    // TODO: there is a call to handleReferenceMark in the "verbatim" function below
-			    // but I guess that is ignored anyway?
-			    ldp.append("%\n\\begin{comment}\n");
-			    ldp.append(palette.getI18n().convert(s, false, oc.getLang()));
-			    ldp.append("\n\\end{comment}%\n");
-			}
-			else {
-			    ldp.append(palette.getI18n().convert(s, false, oc.getLang()));
-			}
+			ldp.append(palette.getI18n().convert(s, false, oc.getLang()));
                     }
                     break;
                         

@@ -107,9 +107,6 @@ public class Context {
     // Inside an area, where lists are ignored
     private boolean bIgnoreLists = false;
 	
-    // Inside a Zotero reference-mark, where text should be commented out
-    private boolean bZoteroText = false;
-	
     // *** Accessor Methods ***
 	
     public void setBgColor(String sBgColor) { this.sBgColor = sBgColor; }
@@ -224,12 +221,6 @@ public class Context {
 	
     public boolean isIgnoreLists() { return bIgnoreLists; }
 	
-    public void setZoteroText(boolean bZoteroText) {
-        this.bZoteroText = bZoteroText;
-    }
-	
-    public boolean isZoteroText() { return bZoteroText; }
-	
     public void setNoLineBreaks(boolean bNoLineBreaks) {
         this.bNoLineBreaks = bNoLineBreaks;
     }
@@ -319,7 +310,6 @@ public class Context {
         newContext.setMathMode(bMathMode);
         newContext.setNoFootnotes(bNoFootnotes);
         newContext.setIgnoreLists(bIgnoreLists);
-        newContext.setZoteroText(bZoteroText);
         newContext.setNoLineBreaks(bNoLineBreaks);
 		
         return newContext;
