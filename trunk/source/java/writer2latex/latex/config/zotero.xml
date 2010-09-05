@@ -5,6 +5,7 @@
  -->
 <config>
  <custom-preamble>
- \usepackage{natbib}
+   \usepackage{verbatim} 
+   \usepackage{natbib}
  </custom-preamble>
 </config>
