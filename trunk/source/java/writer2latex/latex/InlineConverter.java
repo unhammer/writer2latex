@@ -269,7 +269,7 @@ public class InlineConverter extends ConverterHelper {
                         }
                         else if (sName.equals(XMLString.TEXT_LINE_BREAK)) {
                             if (!oc.isInHeaderFooter() && !config.ignoreHardLineBreaks()) {
-                                ldp.append("\\newline").nl();
+                                ldp.append("~\\newline").nl();
                             }
                             else { ldp.append(" "); }
                         }
