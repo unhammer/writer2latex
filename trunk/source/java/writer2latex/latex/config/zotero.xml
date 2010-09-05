@@ -4,6 +4,7 @@
      It sets no options, thus using defaults everywhere
  -->
 <config>
+  <option name="inputencoding" value="utf8" />
  <custom-preamble>
    \usepackage{verbatim} 
    \usepackage{natbib}
