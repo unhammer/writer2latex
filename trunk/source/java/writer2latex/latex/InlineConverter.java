@@ -198,10 +198,11 @@ public class InlineConverter extends ConverterHelper {
 			if (oc.isZoteroText()) {
 			    // Within Zotero ref-marks, the citation is given in plain text
                             // TODO: should we handle this in the if ref-marks section below?
+			    // TODO: there is a call to handleReferenceMark in the "verbatim" function below
+			    // but I guess that is ignored anyway?
 			    ldp.append("%\n\\begin{comment}\n");
 			    ldp.append(palette.getI18n().convert(s, false, oc.getLang()));
 			    ldp.append("\n\\end{comment}%\n");
-			    oc.setZoteroText(false);
 			}
 			else {
 			    ldp.append(palette.getI18n().convert(s, false, oc.getLang()));
@@ -328,6 +329,9 @@ public class InlineConverter extends ConverterHelper {
                             }
                             else if (sName.equals(XMLString.TEXT_REFERENCE_MARK_START)) {
                                 palette.getFieldCv().handleReferenceMark(child,ldp,oc);
+                            }
+                            else if (sName.equals(XMLString.TEXT_REFERENCE_MARK_END)) {
+                                palette.getFieldCv().handleReferenceMarkEnd(child,ldp,oc);
                             }
                             else if (sName.equals(XMLString.TEXT_REFERENCE_REF)) {
 	                            palette.getFieldCv().handleReferenceRef(child,ldp,oc);

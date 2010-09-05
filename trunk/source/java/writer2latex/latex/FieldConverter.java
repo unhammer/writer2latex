@@ -630,6 +630,24 @@ public class FieldConverter extends ConverterHelper {
         }
     }
 	
+    /** <p>Process a reference mark end (text:reference-mark tag)</p>
+     * @param node The element containing the reference mark 
+     * @param ldp the <code>LaTeXDocumentPortion</code> to which
+     * LaTeX code should be added
+     * @param oc the current context
+     */
+    public void handleReferenceMarkEnd(Element node, LaTeXDocumentPortion ldp, Context oc) {
+        if (!oc.isInSection() && !oc.isInCaption() && !oc.isVerbatim()) {
+            String sName = node.getAttribute(XMLString.TEXT_NAME);
+            if (sName!=null) {
+		if (sName.substring(0,11).equals("ZOTERO_ITEM")) {
+		    // Make sure we stop commenting out
+		    oc.setZoteroText(false);
+		}
+            }
+        }
+    }
+	
     /** <p>Process a reference (text:reference-ref tag)</p>
      * @param node The element containing the reference 
      * @param ldp the <code>LaTeXDocumentPortion</code> to which

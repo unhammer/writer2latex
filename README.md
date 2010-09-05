@@ -36,3 +36,16 @@ Usage:
 
 Now import the document as LaTeX from LyX, and change the citekey
 format in LyZ to "writer2latex".
+
+Issues:
+=======
+
+LyZ at the moment does not notice references that haven't been used
+before in the document, so you'll have to first make one citation of
+your whole library (which you can then delete).
+
+There is a small chance of name-collisions if you cite from several
+libraries, since we delete the library ID from the bibtex
+key. However, I don't use this with more than one library myself, and
+don't see a way to include the library ID in the bibtex key unless the
+Zotero OOo plugin changes its output format.
