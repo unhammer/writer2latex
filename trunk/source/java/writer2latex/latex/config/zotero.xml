@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- default.xml
-     This is a sample configuration file for Writer2LaTeX.
-     It sets no options, thus using defaults everywhere
- -->
 <config>
   <option name="inputencoding" value="utf8" />
  <custom-preamble>
