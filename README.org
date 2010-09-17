@@ -3,38 +3,39 @@ able to handle Zotero references in OpenOffice.org Writer documents,
 in order to import them into LyX for use with Zotero and LyZ.
 
 
-Relevant links:
-===============
+* Relevant links:
 - [the unpatched Writer2LaTeX](http://writer2latex.sourceforge.net/)
 - [Zotero](http://www.zotero.org/)
 - [LyX](http://www.lyx.org/)
 - [LyZ (LyX extension for Zotero)](https://addons.mozilla.org/en-US/firefox/addon/56806/)
 
 
-Compilation:
-============
+* Compilation:
 
+#+BEGIN_SRC
     $ cd trunk
     $ edit build.xml # set OFFICE_CLASSES and URE_CLASSES
     $ ant oxt
+#+END_SRC
 
 Also be sure to use [this patched version of LyZ](http://github.com/unhammer/lyz), 
 in order to get the correct bibtex keys from Zotero. Compile it with:
 
+#+BEGIN_SRC
     $ zip -r lyz.xpi ./*
+#+END_SRC
 
+* Usage:
 
-Usage:
-======
-
+#+BEGIN_SRC
     $ cd trunk/target
     $ java -jar lib/writer2latex.jar -config=classes/writer2latex/latex/config/zotero.xml -latex in.odt out.tex
+#+END_SRC
 
 Now import the document as LaTeX from LyX, and change the citekey
 format in LyZ to "writer2latex".
 
-Issues:
-=======
+* Issues:
 
 LyZ at the moment does not notice references that haven't been used
 before in the document, so you'll have to first make one citation of
