@@ -4,10 +4,10 @@ in order to import them into LyX for use with Zotero and LyZ.
 
 
 * Relevant links:
-- [the unpatched Writer2LaTeX](http://writer2latex.sourceforge.net/)
-- [Zotero](http://www.zotero.org/)
-- [LyX](http://www.lyx.org/)
-- [LyZ (LyX extension for Zotero)](https://addons.mozilla.org/en-US/firefox/addon/56806/)
+- [[http://writer2latex.sourceforge.net/][the unpatched Writer2LaTeX]]
+- [[http://www.zotero.org/][Zotero]]
+- [[http://www.lyx.org/][LyX]]
+- [[https://addons.mozilla.org/en-US/firefox/addon/56806/][LyZ (LyX extension for Zotero)]]
 
 
 * Compilation:
@@ -18,12 +18,17 @@ in order to import them into LyX for use with Zotero and LyZ.
     $ ant oxt
 #+END_SRC
 
-Also be sure to use [this patched version of LyZ](http://github.com/unhammer/lyz), 
-in order to get the correct bibtex keys from Zotero. Compile it with:
+Also be sure to use [[http://github.com/unhammer/lyz][this patched version of LyZ]], in order to get the
+correct bibtex keys from Zotero. Compile it with:
 
 #+BEGIN_SRC
     $ zip -r lyz.xpi ./*
 #+END_SRC
+
+You might also want [[http://github.com/unhammer/zotero-natbib][this patched BibTeX translator]] for Zotero, which
+adds the "lastchecked" field correctly in order to work with natbib
+(and empties the "howpublished" field), also adding ={}= around titles
+to capitalise them as in Zotero.
 
 * Usage:
 
