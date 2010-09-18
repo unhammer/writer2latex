@@ -663,6 +663,8 @@ public class ClassicI18n extends I18n {
         babelLanguages.put("it", "italian"); // latin1
         babelLanguages.put("nl", "dutch"); // latin1
         babelLanguages.put("no", "norsk"); // latin1
+        babelLanguages.put("nb", "norsk"); // latin1
+        babelLanguages.put("nn", "nynorsk"); // latin1
         babelLanguages.put("pl", "polish"); // latin2
         babelLanguages.put("pt", "portuges"); // latin1
         babelLanguages.put("ro", "romanian"); // latin2
