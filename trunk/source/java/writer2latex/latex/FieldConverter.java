@@ -426,8 +426,56 @@ public class FieldConverter extends ConverterHelper {
         }
     }
 
+    /** <p>Return the correctly translated locatorType </p>
+     * @param locatorType the original locatorType, eg. "pp.~"
+     * @param oc current context
+     * @return the translated locatorType, eg. "s.~"
+     */
+    private String translateLocatorType(String locatorType, Context oc) {
+	// TODO: this is a hack. Really should use the same method as
+	// whatever function is doing the interface translation.
+	if (oc.getLang().equals("no") || oc.getLang().equals("nb") || oc.getLang().equals("nn")) {
+	    // TODO: even though paragraph language is nb, it
+	    // might be that they want the whole document to use
+	    // the "en" locatorType... but this is a minor issue.
+	    if (locatorType.equals("p.~")) {
+		return "s.~";
+	    }
+	    else if (locatorType.equals("pp.~")) {
+		return "s.~";
+	    }
+	    else {
+		return locatorType; // should also be translated
+	    }
+	}
+	else {
+	    return locatorType;
+	}
+    }
+
+    /** <p>Return the corrected and translated locatorType </p>
+     * @param locatorType the original locatorType
+     * @param multiple whether there are several locators
+     * @param oc current context
+     * @return the translated/corrected locatorType, eg. "pp.~" or "s.~"
+     */
+    private String convertLocatorType(String locatorType, boolean multiple, Context oc) {
+	if(locatorType.equals("")) { // empty => page
+	    if (multiple) {
+		return translateLocatorType("pp.~", oc); 
+	    }
+	    else {
+		return translateLocatorType("pp.~", oc);
+	    }
+	}
+	else {
+	    return translateLocatorType(locatorType, oc); 
+	}
+    }
+
     /** <p>Process the text:name of a Zotero reference</p>
      * @param str the value of the text:name attribute
+     * @param oc current context
      * @return a complete LaTeX \cite{} command string
      */
     private String zoteroHandleName(String str, Context oc) {
@@ -574,17 +622,8 @@ public class FieldConverter extends ConverterHelper {
 		if (Pattern.compile("[0-9]+[^0-9]+[0-9]+").matcher(locator).find()) {
 		    multiple = true;
 		}
-		if(locatorType.equals("")) {
-		    if (multiple) {
-			locatorType = "pp.~";
-		    }
-		    else {
-			locatorType = "p.~";
-		    }
-		}
-		// TODO: can we translate with eg. palette.getIl8n(locatorType) ?
+		suffix += convertLocatorType(locatorType, multiple, oc) + locator;
 	    }
-	    suffix += locatorType + locator;
 	    if (!suffix.equals("")) {
 		suffix = "[" + suffix + "]";
 	    }
