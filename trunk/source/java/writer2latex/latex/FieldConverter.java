@@ -680,8 +680,16 @@ public class FieldConverter extends ConverterHelper {
             String sName = node.getAttribute(XMLString.TEXT_NAME);
             if (sName!=null) {
 		if (sName.substring(0,11).equals("ZOTERO_ITEM")) {
+		    String ldpBefore = ldp.toString();
 		    // Make sure we stop commenting out
 		    ldp.append("\n\\end{comment}%\n");
+		    // If the citation does not end in `)' -- I assume we're using APA -- then we probably have another Zotero/OO field-formatting error:
+		    if (ldpBefore.length()>1) {
+			String last = ldpBefore.substring(ldpBefore.length()-1, ldpBefore.length());
+			if (!last.equals(")")) {
+			ldp.append(last);
+			}
+		    }
 		}
             }
         }
